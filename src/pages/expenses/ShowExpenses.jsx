@@ -1,0 +1,122 @@
+import React from "react";
+import { Typography, Space, Row, Col, Button, Table } from "antd";
+import Layout from "antd/lib/layout/layout";
+import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import { getExpenses, deleteExpenses } from "../../store/actions";
+import { connect } from "react-redux";
+
+const { Title } = Typography;
+
+const ShowExpenses = ({ expense, getExpenses, deleteExpenses}) => {
+// console.log("expense",expense);
+
+  const navigate = useNavigate();
+  const mountedRef = React.useRef(true);
+  const getExpenseResult = async () => {
+    if (!mountedRef.current) return null;
+    try {
+      const response = await getExpenses();
+      const result = response.data;
+      console.log(result)
+      // setGetData(result);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+  React.useEffect(() => {
+    getExpenseResult();
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
+
+  const handleClick = (record) => {
+    // console.log(record.id)
+    navigate(`/admin/edit-expenses/${record.id}`);
+  };
+
+  const handleDelete = async (record) => {
+    await deleteExpenses(record.id);
+  };
+
+  const columns = [
+    // {
+    //   title: "ရက်စွဲ",
+    //   dataIndex: "date",
+    // },
+    {
+      title: "ကုန်ကျစရိတ်စုစုပေါင်း",
+      dataIndex: "name",
+    },
+    {
+      title: "Actions",
+      dataIndex: "action",
+      render: (_, record) => (
+        <Space direction="horizontal">
+          <Button type="primary"
+          onClick={() => handleClick(record) }
+          >Edit</Button>
+          <Button type="primary" danger
+          onClick={() => handleDelete(record) }
+          >
+            Delete
+          </Button>
+        </Space>
+      ),
+    },
+  ];
+
+  return (
+    <Layout style={{ margin: "20px" }}>
+      <Space direction="vertical" size="middle">
+        <Row gutter={[16, 16]}>
+          <Col span={18}>
+            <Title level={3}>ကုန်ကျစရိတ်စာရင်း</Title>
+          </Col>
+          <Col span={3}>
+            <Button
+              style={{
+                backgroundColor: "var(--secondary-color)",
+                color: "var(--white-color)",
+                borderRadius: "5px",
+              }}
+              size="middle"
+              onClick={() => navigate("/admin/create-expenses")}
+            >
+              <PlusSquareOutlined />
+              အသစ်ထည့်မည်
+            </Button>
+          </Col>
+          <Col span={3}>
+            <Button
+              style={{
+                backgroundColor: "var(--primary-color)",
+                color: "var(--white-color)",
+                borderRadius: "5px",
+              }}
+              size="middle"
+            >
+              <ExportOutlined />
+              Export
+            </Button>
+          </Col>
+        </Row>
+        <Table
+          bordered
+          columns={columns}
+          dataSource={expense.expenses}
+          rowKey={expense.expenses.key}
+          pagination={{ defaultPageSize: 10 }}
+        />
+      </Space>
+    </Layout>
+  );
+};
+
+const mapStateToProps = (store) => ({
+  expense: store.expense
+});
+
+export default connect(mapStateToProps, { getExpenses, deleteExpenses })(ShowExpenses);

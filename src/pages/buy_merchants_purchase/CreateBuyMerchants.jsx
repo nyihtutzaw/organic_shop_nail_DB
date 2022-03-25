@@ -1,0 +1,374 @@
+import React, { useEffect, useState } from "react";
+import {
+  Space,
+  Typography,
+  Form,
+  Input,
+  Button,
+  InputNumber,
+  Select,
+  Table,
+  Row,
+  Col,
+  message,
+} from "antd";
+import Layout from "antd/lib/layout/layout";
+import {
+  EditOutlined,
+  SaveOutlined,
+  PlusSquareOutlined,
+} from "@ant-design/icons";
+import { connect } from "react-redux";
+import { getMerchants } from "../../store/actions";
+
+const { Title, Text } = Typography;
+const { Option } = Select;
+
+const CreateBuyMerchants = ({ merchant, getMerchants }) => {
+  
+  const [buys, setBuys] = useState([]);
+  const [credit, setCredit] = useState(0);
+  const [paid, setPaid] = useState(null);
+  const [buyMerchant, setBuyMerchant] = useState(null);
+
+  const [form] = Form.useForm();
+  useEffect(() => {
+    const fetchData = async () => {
+      await getMerchants();
+    };
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getMerchants]);
+
+  const onFinish = (values) => {
+    setBuys([
+      ...buys,
+      {
+        ...values,
+        subtotal: values.quantity * values.price,
+        key: buys.length + 1,
+      },
+    ]);
+    form.resetFields();
+  };
+
+
+  const onChange = (value) => {
+    console.log(value)
+    if (value === undefined) {
+      setBuyMerchant(null);
+    } else {
+      const filterBuyMerchant = merchant.merchants.find(
+        (mer) => mer.id === value
+      );
+      setBuyMerchant(filterBuyMerchant);
+    }
+  };
+  // console.log(buyMerchant)
+
+
+
+  const handleDelete = (record) => {
+    const filterBuys = buys.filter((buy) => buy !== record);
+    setBuys(filterBuys);
+  };
+
+  const handleSave = () => {
+    if (buyMerchant === null) {
+      message.error("ကျေးဇူးပြု၍ ကုန်သည်အချက်အလက်ထည့်ပါ");
+    } else if (buys.length === 0) {
+      message.error("ကျေးဇူးပြု၍ ဝယ်ရန်ထည့်ပါ");
+    } else if (paid === null) {
+      message.error("ကျေးဇူးပြု၍ ပေးငွေထည့်ပါ");
+    } else {
+      const singleBuys = buys.map((buy) => {
+        return {
+          item_name: buy.item_name,
+          quantity: buy.quantity,
+          price: buy.price,
+          subtotal: buy.subtotal,
+        };
+      });
+
+      const saveBuy = {
+        single_buys: singleBuys,
+        merchant: buyMerchant.id,
+        paid: paid,
+        credit: credit,
+      };
+
+      console.log(saveBuy);
+    }
+  };
+
+  const buyTotal =
+    buys.length > 0
+      ? buys.map((buy) => buy.subtotal).reduce((a, b) => a + b)
+      : 0;
+
+  const handlePayment = (value) => {
+    setCredit(buyTotal - value);
+    setPaid(value);
+  };
+
+  const columns = [
+    {
+      title: "ပစ္စည်းအမည်",
+      dataIndex: "item_name",
+    },
+    {
+      title: "အရေအတွက်",
+      dataIndex: "quantity",
+    },
+    {
+      title: "တစ်ခုဈေးနှုန်း",
+      dataIndex: "price",
+    },
+    {
+      title: "စုစုပေါင်းပမာဏ",
+      dataIndex: "subtotal",
+    },
+    {
+      title: "Actions",
+      dataIndex: "action",
+      render: (_, record) => (
+        <Button type="primary" danger onClick={() => handleDelete(record)}>
+          Delete
+        </Button>
+      ),
+    },
+  ];
+
+  //  console.log(merchant.merchants)
+
+  return (
+    <Layout style={{ margin: "20px" }}>
+      <Space direction="vertical" size="middle">
+        <Title style={{ textAlign: "center" }} level={3}>
+          အဝယ်စာရင်းသွင်းရန်
+        </Title>
+        <Space
+          direction="horizontal"
+          style={{
+            width: "100%",
+            justifyContent: "center",
+            marginBottom: "10px",
+          }}
+          size="large"
+        >
+          <Text type="secondary">ကုန်သည်အမည်ရွေးပါ</Text>
+          <Select
+            showSearch
+            placeholder="ကျေးဇူးပြု၍ ကုန်သည်အမည်ရွေးပါ"
+            optionFilterProp="children"
+            onChange={onChange}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            allowClear={true}
+            size="large"
+            style={{ borderRadius: "10px" }}
+          >
+            {merchant.merchants.map((mer) => (
+              <Option key={mer.id} value={mer.id}>
+                {mer.name}
+              </Option>
+             ))} 
+             {/* <Option>{buyMerchant === null ? "-" : buyMerchant.company_name}</Option> */}
+          </Select>
+
+          {/* <Text type="secondary">ကုန်သည်ကုတ်ရွေးပါ</Text>
+          <Select
+            showSearch
+            placeholder="ကျေးဇူးပြု၍ ကုန်သည်ကုတ်ရွေးပါ"
+            optionFilterProp="children"
+            onChange={onChange}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            allowClear={true}
+            size="large"
+            style={{ borderRadius: "10px" }}
+          >
+            {merchant.merchants.map((mer) => (
+              <Option key={mer.id} value={mer.id}>
+                {mer.code}
+              </Option>
+            ))}
+          </Select> */}
+        </Space>
+        <Space
+          direction="horizontal"
+          style={{ width: "100%", justifyContent: "center" }}
+          size="large"
+        >
+          <Title level={4}>ကုန်သည်လုပ်ငန်းအမည် - </Title>
+          <Title level={4}>
+            {buyMerchant === null ? "-" : buyMerchant.company_name}
+          </Title>
+        </Space>
+        <Form
+          labelCol={{
+            span: 3,
+          }}
+          wrapperCol={{
+            span: 24,
+          }}
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={onFinish}
+          form={form}
+        >
+          <Form.Item
+            name="item_name"
+            label="ပစ္စည်းအမည်"
+            rules={[
+              {
+                required: true,
+                message: "ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ",
+              },
+            ]}
+          >
+            <Input
+              placeholder="ပစ္စည်းအမည်ထည့်ပါ"
+              prefix={<EditOutlined />}
+              style={{ borderRadius: "10px" }}
+              size="large"
+            />
+          </Form.Item>
+          <Form.Item
+            name="quantity"
+            label="အရေအတွက်"
+            rules={[
+              {
+                required: true,
+                message: "ကျေးဇူးပြု၍ အရေအတွက်ထည့်ပါ",
+              },
+            ]}
+          >
+            <InputNumber
+              placeholder="အရေအတွက်ထည့်ပါ"
+              prefix={<EditOutlined />}
+              style={{ borderRadius: "10px", width: "100%" }}
+              size="large"
+            />
+          </Form.Item>
+          <Form.Item
+            name="price"
+            label="တစ်ခုဈေးနှုန်း"
+            rules={[
+              {
+                required: true,
+                message: "ကျေးဇူးပြု၍ တစ်ခုဈေးနှုန်းထည့်ပါ",
+              },
+            ]}
+          >
+            <InputNumber
+              placeholder="တစ်ခုဈေးနှုန်းထည့်ပါ"
+              prefix={<EditOutlined />}
+              style={{ borderRadius: "10px", width: "100%" }}
+              size="large"
+            />
+          </Form.Item>
+          <Form.Item
+            name="total_amount"
+            label="စုစုပေါင်းပမာဏ"
+            rules={[
+              {
+                required: true,
+                message: "ကျေးဇူးပြု၍ စုစုပေါင်းပမာဏထည့်ပါ",
+              },
+            ]}
+          >
+            <InputNumber
+              placeholder="စုစုပေါင်းပမာဏထည့်ပါ"
+              prefix={<EditOutlined />}
+              style={{ borderRadius: "10px", width: "100%" }}
+              size="large"
+            />
+          </Form.Item>
+          <Form.Item style={{ textAlign: "right" }}>
+            <Button
+              style={{
+                backgroundColor: "var(--secondary-color)",
+                color: "var(--white-color)",
+                borderRadius: "10px",
+              }}
+              size="large"
+              htmlType="submit"
+            >
+              <PlusSquareOutlined />
+              အသစ်ထည့်မည်
+            </Button>
+          </Form.Item>
+        </Form>
+        <Table
+          bordered
+          columns={columns}
+          dataSource={buys}
+          pagination={{ position: ["none", "none"] }}
+        />
+        <Row>
+          <Col span={17} style={{ textAlign: "right" }}>
+            <Title level={4}>စုစုပေါင်း</Title>
+          </Col>
+          <Col span={2}></Col>
+          <Col span={5}>
+            <Title level={4}>{buyTotal} Ks</Title>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={17} style={{ textAlign: "right" }}>
+            <Title level={4}>ပေးငွေ</Title>
+          </Col>
+          <Col span={2}></Col>
+          <Col span={5}>
+            <InputNumber
+              placeholder="ပေးငွေ"
+              prefix={<EditOutlined />}
+              style={{ borderRadius: "10px", width: "100%" }}
+              size="large"
+              onChange={(value) => handlePayment(value)}
+            />
+          </Col>
+
+        </Row>
+        <Row>
+          <Col span={17} style={{ textAlign: "right" }}>
+            <Title level={4}>ပေးရန်ကျန်ငွေ</Title>
+          </Col>
+          <Col span={2}></Col>
+          <Col span={5}>
+            <Title level={4}>{credit} Ks</Title>
+          </Col>
+        </Row>
+        <Space
+          direction="horizontal"
+          style={{ width: "100%", justifyContent: "right" }}
+        >
+          <Button
+            style={{
+              backgroundColor: "var(--primary-color)",
+              color: "var(--white-color)",
+              borderRadius: "10px",
+            }}
+            size="large"
+            onClick={handleSave}
+          >
+            <SaveOutlined />
+            သိမ်းမည်
+          </Button>
+        </Space>
+      </Space>
+    </Layout>
+  );
+};
+
+const mapStateToProps = (store) => ({
+  merchant: store.merchant,
+});
+
+export default connect(mapStateToProps, { getMerchants })(CreateBuyMerchants);

@@ -1,0 +1,141 @@
+import React, { useState, useEffect } from "react";
+import { Typography, Space, Row, Col, Button, Table } from "antd";
+import Layout from "antd/lib/layout/layout";
+import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getMembers, deleteMembers } from "../../store/actions";
+import { connect } from "react-redux";
+
+const { Title } = Typography;
+
+const ShowMembers = ({ getMembers, deleteMembers }) => {
+  const navigate = useNavigate();
+  const members = useSelector((state) => state.member.members);
+
+  const result = members.map((member) => ({
+    id: member.id,
+    key: member.id,
+    code: member.code,
+    name: member.name,
+    phone: member.phone,
+    address: member.address,
+    points: "10"
+  }));
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await getMembers();
+    };
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getMembers]);
+
+  const handleClick = (record) => {
+    navigate(`/admin/edit-members/${record.id}`);
+  };
+
+  const handleDelete = async (record) => {
+    await deleteMembers(record.id);
+  };
+
+  const handleDetail = (record) => {
+    // console.log(record.id)
+    navigate(`/admin/detail-members/${record.id}`);
+
+  }
+  const columns = [
+    {
+      title: "မန်ဘာကုတ်",
+      dataIndex: "code"
+    },
+    {
+      title: "အမည်",
+      dataIndex: "name"
+    },
+    {
+      title: "ဖုန်းနံပါတ်",
+      dataIndex: "phone"
+    },
+    {
+      title: "နေရပ်လိပ်စာ",
+      dataIndex: "address"
+    },
+    {
+      title: "point စုစုပေါင်း",
+      dataIndex: "points"
+    },
+    {
+      title: "Actions",
+      dataIndex: "action",
+      render: (_, record) => (
+        <Space direction="horizontal">
+          <Button type="primary" 
+          style={{ background: "green", borderColor: "yellow" }}
+          onClick={() => handleDetail(record)}>
+            Details
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => handleClick(record)}
+          >
+            Edit
+          </Button>
+          <Button type="primary" danger onClick={() => handleDelete(record)}>
+            Delete
+          </Button>
+        </Space>
+      )
+    }
+  ];
+
+  return (
+    <Layout style={{ margin: "20px" }}>
+      <Space direction="vertical" size="middle">
+        <Row gutter={[16, 16]}>
+          <Col span={18}>
+            <Title level={3}>မန်ဘာစာရင်း</Title>
+          </Col>
+          <Col span={3}>
+            <Button
+              style={{
+                backgroundColor: "var(--primary-color)",
+                color: "var(--white-color)",
+                borderRadius: "5px"
+              }}
+              size="middle"
+              onClick={() => navigate("/admin/create-members")}
+            >
+              <PlusSquareOutlined />
+              New
+            </Button>
+          </Col>
+          <Col span={3}>
+            <Button
+              style={{
+                backgroundColor: "var(--primary-color)",
+                color: "var(--white-color)",
+                borderRadius: "5px"
+              }}
+              size="middle"
+            >
+              <ExportOutlined />
+              Export
+            </Button>
+          </Col>
+        </Row>
+        <Table
+          bordered
+          columns={columns}
+          dataSource={result}
+          // rowKey={result.key}
+          pagination={{ defaultPageSize: 10 }}
+        />
+      </Space>
+    </Layout>
+  );
+};
+
+export default connect(null, { getMembers, deleteMembers })(ShowMembers);
