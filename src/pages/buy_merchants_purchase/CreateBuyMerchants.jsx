@@ -45,6 +45,7 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
     };
   }, [getMerchants]);
 
+  
   useEffect(() => {
     const fetchData = async () => {
       await getItems();
@@ -81,8 +82,8 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
       setBuyMerchant(filterBuyMerchant);
     }
   };
+  
   const handleDelete = (record) => {
-    
     const filterBuys = buys.filter((buy) => buy !== record);
     setBuys(filterBuys);
   };

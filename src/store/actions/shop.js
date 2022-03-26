@@ -21,6 +21,7 @@ export const updateShops = (data) => ({
   data
 });
 
+
 export const getShops = () => {
   return async (dispatch) => {
     try {

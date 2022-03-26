@@ -1,5 +1,11 @@
-import { mockItems } from "../../mock";
-import { SHOW_ITEMS_TRANSFER, CREATE_ITEMS_TRANSFER } from "../type";
+import {
+  SHOW_ITEMS_TRANSFER,
+  CREATE_ITEMS_TRANSFER,
+  FILTER_ITEMS_TRANSFER,
+  UPDATE_ITEMS_TRANSFER,
+  ERROR_TRANSFERS,
+} from "../type";
+import axios from "axios";
 
 export const showItemTransfers = (itemTransfers) => ({
   type: SHOW_ITEMS_TRANSFER,
@@ -11,12 +17,16 @@ export const createItemTransfers = (itemTransfer) => ({
   itemTransfer,
 });
 
+export const setTransferErrors = (error) => ({
+  type: ERROR_TRANSFERS,
+  error
+});
 
 export const getItemTransfers = () => {
   return async (dispatch) => {
     try {
       // result => api
-      dispatch(showItemTransfers(mockItems));
+      // dispatch(showItemTransfers(mockItems));
     } catch (error) {}
   };
 };
@@ -24,12 +34,17 @@ export const getItemTransfers = () => {
 export const saveItemTransfers = (data) => {
   return async (dispatch) => {
     try {
-      data.forEach((element) => {
-        element.key = mockItems.length + 1;
-        mockItems.push(element);
-      });
-      //   dispatch(createItems(data));
-    } catch (error) {}
+      const response = await axios.post(
+        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/item-transfers/batchInsert",
+        data
+      );
+      console.log(response);
+    } catch (error) {
+      if (error) {
+        dispatch(setTransferErrors(error.response.data.data));
+      } else {
+        dispatch(setTransferErrors(error.response.data));
+      }
+    }
   };
 };
-

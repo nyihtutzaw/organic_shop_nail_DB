@@ -1,12 +1,17 @@
-import { SHOW_ITEMS_TRANSFER, CREATE_ITEMS_TRANSFER } from "../type";
+import {
+  SHOW_ITEMS_TRANSFER,
+  CREATE_ITEMS_TRANSFER,
+  FILTER_ITEMS_TRANSFER,
+  UPDATE_ITEMS_TRANSFER,
+  ERROR_TRANSFERS,
+} from "../type";
 
 const initialState = {
   itemTransfers: [],
-  itemTransfer: {},
+  error: {},
 };
 
 const item_transfer = (state = initialState, action) => {
-  
   switch (action.type) {
     case CREATE_ITEMS_TRANSFER:
       return {
@@ -24,4 +29,3 @@ const item_transfer = (state = initialState, action) => {
 };
 
 export default item_transfer;
-

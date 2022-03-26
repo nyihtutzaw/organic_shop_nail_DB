@@ -8,33 +8,56 @@ import {
   InputNumber,
   Select,
   Table,
-  message
+  message,
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   EditOutlined,
   SaveOutlined,
-  PlusSquareOutlined
+  PlusSquareOutlined,
 } from "@ant-design/icons";
 import { connect } from "react-redux";
-import { saveItemTransfers } from "../../store/actions";
+import { useSelector } from "react-redux";
+import { saveItemTransfers, getShops, getItems } from "../../store/actions";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-const CreateItemTransfer = ({ merchant, saveItemTransfers }) => {
+const CreateItemTransfer = ({
+  merchant,
+  getShops,
+  getItems,
+  saveItemTransfers,
+}) => {
   const [items, setItems] = useState([]);
   const [form] = Form.useForm();
+  const [shopData, setShopData] = useState(null);
+  const [itemData, setItemData] = useState(null);
+  const [buyShop, setBuyShop] = useState(null);
+  
+  const shops = useSelector((state) => state.shop.shops);
+  const AllItems = useSelector((state) => state.item.items);
+  // console.log(AllItems);
 
   useEffect(() => {
     const fetchData = async () => {
-      await saveItemTransfers();
+      await getShops();
     };
     fetchData();
     return () => {
       fetchData();
     };
-  }, [saveItemTransfers]);
+  }, [getShops]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await getItems();
+    };
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getItems]);
 
   var today = new Date(),
     date =
@@ -47,46 +70,75 @@ const CreateItemTransfer = ({ merchant, saveItemTransfers }) => {
   const onFinish = (values) => {
     setItems([...items, { ...values, Date: date, key: items.length + 1 }]);
     form.resetFields();
+
   };
 
-  console.log("first", items);
+  // console.log("first", items);
+
+  const onChange = (value) => {
+    if (value === undefined) {
+      setBuyShop(null);
+    } else {
+      const filterShops = shops.find(
+        (mer) => mer.id === value
+      );
+      setBuyShop(filterShops);
+    }
+  };
 
   const handleSave = async () => {
     if (items.length === 0) {
       message.error("ကျေးဇူးပြု၍ပစ္စည်းများထည့်ပါ");
-    } else {
-      await saveItemTransfers(items);
+    } else if (buyShop === null) {
+      message.error("ကျေးဇူးပြု၍ ဆိုင်အမည်ထည့်ပါ");
+    }else {
+      const itemTransfer = items.map((item) => {
+        return {
+          stock_id: item.stock_id,
+          quantity: item.quantity
+        }
+      });
+      const saveItem = {
+        item_transfers: itemTransfer,
+        to_shop_id: buyShop.id
+      }
+      console.log(saveItem)
+      await saveItemTransfers(saveItem);
       setItems([]);
+    setBuyShop(null);
+
     }
-    console.log("first33", items);
+    // console.log("first33", items);
+  };
+
+  const handleDelete = (record) => {
+    console.log(record.key);
+    const filter = items.filter((item) => item.key !== record.key)
+    setItems(filter)
   };
 
   const columns = [
     {
       title: "ပစ္စည်းအမည်",
-      dataIndex: "item_name"
+      dataIndex: "stock_id",
     },
-    {
-      title: "ပစ္စည်:ကုတ်",
-      dataIndex: "item_code"
-    },
+    // {
+    //   title: "ပစ္စည်:ကုတ်",
+    //   dataIndex: "item_code",
+    // },
     {
       title: "အရေအတွက်",
-      dataIndex: "quantity"
+      dataIndex: "quantity",
     },
     {
       title: "Actions",
       dataIndex: "action",
       render: (_, record) => (
-        <Button
-          type="primary"
-          danger
-          // onClick={() => handleDelete(record)}
-        >
+        <Button type="primary" danger onClick={() => handleDelete(record)}>
           Delete
         </Button>
-      )
-    }
+      ),
+    },
   ];
 
   return (
@@ -100,16 +152,16 @@ const CreateItemTransfer = ({ merchant, saveItemTransfers }) => {
           style={{
             width: "100%",
             justifyContent: "center",
-            marginBottom: "10px"
+            marginBottom: "10px",
           }}
           size="large"
         >
           <Select
             name="select"
             showSearch
-            placeholder="ကျေးဇူးပြု၍ ကုန်သည်အမည်ရွေးပါ"
+            placeholder="ကျေးဇူးပြု၍ ဆိုင်အမည်ရွေးပါ"
             optionFilterProp="children"
-            // onChange={onChange}
+            onChange={onChange}
             filterOption={(input, option) =>
               option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
@@ -117,74 +169,65 @@ const CreateItemTransfer = ({ merchant, saveItemTransfers }) => {
             size="large"
             style={{ borderRadius: "10px" }}
           >
-            <Option value="hh">HH</Option>
-            <Option value="jj">JJ</Option>
-            {/* {merchant.merchants.map((mer) => (
-              <Option key={mer.id} value={mer.id}>
-                {mer.name}
+            {shops.map((shop) => (
+              <Option key={shop.id} value={shop.id}>
+                {shop.name}
               </Option>
-            ))} */}
+            ))}
           </Select>
         </Space>
 
         <Form
           labelCol={{
             xl: {
-              span: 3
-            }
+              span: 3,
+            },
           }}
           wrapperCol={{
-            span: 24
+            span: 24,
           }}
           initialValues={{
-            remember: true
+            remember: true,
           }}
           onFinish={onFinish}
           form={form}
         >
           <Form.Item
-            name="item_name"
+            name="stock_id"
             label="ပစ္စည်းအမည်"
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
-              }
+                message: "ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ",
+              },
             ]}
           >
-            <Input
-              placeholder="ပစ္စည်းအမည်ထည့်ပါ"
-              prefix={<EditOutlined />}
-              style={{ borderRadius: "10px" }}
-              size="large"
-            />
-          </Form.Item>
-          <Form.Item
-            name="item_code"
-            label="ပစ္စည်:ကုတ်"
-            rules={[
-              {
-                required: true,
-                message: "ကျေးဇူးပြု၍ ပစ္စည်:ကုတ်ထည့်ပါ"
+            <Select
+              showSearch
+              placeholder="ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
-            ]}
-          >
-            <Input
-              placeholder="ပစ္စည်:ကုတ်ထည့်ပါ"
-              prefix={<EditOutlined />}
-              style={{ borderRadius: "10px" }}
+              allowClear={true}
               size="large"
-            />
+              style={{ borderRadius: "10px" }}
+            >
+              {AllItems.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
-
           <Form.Item
             name="quantity"
             label="အရေအတွက်"
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ အရေအတွက်ထည့်ပါ"
-              }
+                message: "ကျေးဇူးပြု၍ အရေအတွက်ထည့်ပါ",
+              },
             ]}
           >
             <InputNumber
@@ -200,7 +243,7 @@ const CreateItemTransfer = ({ merchant, saveItemTransfers }) => {
               style={{
                 backgroundColor: "var(--secondary-color)",
                 color: "var(--white-color)",
-                borderRadius: "10px"
+                borderRadius: "10px",
               }}
               size="large"
               htmlType="submit"
@@ -225,7 +268,7 @@ const CreateItemTransfer = ({ merchant, saveItemTransfers }) => {
             style={{
               backgroundColor: "var(--primary-color)",
               color: "var(--white-color)",
-              borderRadius: "10px"
+              borderRadius: "10px",
             }}
             size="large"
             onClick={handleSave}
@@ -239,4 +282,6 @@ const CreateItemTransfer = ({ merchant, saveItemTransfers }) => {
   );
 };
 
-export default connect(null, { saveItemTransfers })(CreateItemTransfer);
+export default connect(null, { getShops, getItems, saveItemTransfers })(
+  CreateItemTransfer
+);
