@@ -10,6 +10,7 @@ const { Title } = Typography;
 
 const ShowItems = ({ item, getItems, deleteItems, editItems }) => {
   const navigate = useNavigate();
+  
   useEffect(() => {
     const fetchData = async () => {
       await getItems();

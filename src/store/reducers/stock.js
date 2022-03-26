@@ -23,10 +23,10 @@ import {
           stocks: action.stocks
         };
       case FILTER_PURCHASES:
-        const filterItems = state.items.filter((item) => item.id !== action.id);
+        const filterStocks = state.stocks.filter((stock) => stock.id !== action.id);
         return {
           ...state,
-          items: filterItems
+          stocks: filterStocks
         };
       case UPDATE_PURCHASES:
         const index = state.items.findIndex((item) => item.id === action.data.id);

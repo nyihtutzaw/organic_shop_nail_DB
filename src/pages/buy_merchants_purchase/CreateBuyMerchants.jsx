@@ -19,17 +19,20 @@ import {
   PlusSquareOutlined,
 } from "@ant-design/icons";
 import { connect } from "react-redux";
-import { getMerchants } from "../../store/actions";
+import { getMerchants, getItems, savePurchases } from "../../store/actions";
+import { useNavigate } from "react-router-dom";
+
 
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-const CreateBuyMerchants = ({ merchant, getMerchants }) => {
-  
+const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurchases }) => {
   const [buys, setBuys] = useState([]);
   const [credit, setCredit] = useState(0);
   const [paid, setPaid] = useState(null);
   const [buyMerchant, setBuyMerchant] = useState(null);
+  const allItems = item.items;
+  const navigate = useNavigate();
 
   const [form] = Form.useForm();
   useEffect(() => {
@@ -41,6 +44,16 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
       fetchData();
     };
   }, [getMerchants]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await getItems();
+    };
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getItems]);
 
   const onFinish = (values) => {
     setBuys([
@@ -54,9 +67,11 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
     form.resetFields();
   };
 
+  let allTotal = [];
+  buys.forEach((buy) => allTotal.push(parseInt(buy.subtotal)));
+  const result = allTotal.reduce((a, b) => a + b, 0);
 
   const onChange = (value) => {
-    console.log(value)
     if (value === undefined) {
       setBuyMerchant(null);
     } else {
@@ -66,16 +81,13 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
       setBuyMerchant(filterBuyMerchant);
     }
   };
-  // console.log(buyMerchant)
-
-
-
   const handleDelete = (record) => {
+    
     const filterBuys = buys.filter((buy) => buy !== record);
     setBuys(filterBuys);
   };
 
-  const handleSave = () => {
+  const handleSave =async () => {
     if (buyMerchant === null) {
       message.error("ကျေးဇူးပြု၍ ကုန်သည်အချက်အလက်ထည့်ပါ");
     } else if (buys.length === 0) {
@@ -83,9 +95,9 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
     } else if (paid === null) {
       message.error("ကျေးဇူးပြု၍ ပေးငွေထည့်ပါ");
     } else {
-      const singleBuys = buys.map((buy) => {
+      const purchase_items = buys.map((buy) => {
         return {
-          item_name: buy.item_name,
+          item_id: buy.item_id,
           quantity: buy.quantity,
           price: buy.price,
           subtotal: buy.subtotal,
@@ -93,30 +105,31 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
       });
 
       const saveBuy = {
-        single_buys: singleBuys,
-        merchant: buyMerchant.id,
+        purchase_items: purchase_items,
+        merchant_id: buyMerchant.id,
         paid: paid,
         credit: credit,
+        whole_total: result,
       };
-
-      console.log(saveBuy);
+      await savePurchases(saveBuy)
     }
+    navigate("/admin/show-buy-merchants");
   };
 
-  const buyTotal =
-    buys.length > 0
-      ? buys.map((buy) => buy.subtotal).reduce((a, b) => a + b)
-      : 0;
+  // const buyTotal =
+  //   buys.length > 0
+  //     ? buys.map((buy) => buy.subtotal).reduce((a, b) => a + b)
+  //     : 0;
 
   const handlePayment = (value) => {
-    setCredit(buyTotal - value);
+    setCredit(result - value);
     setPaid(value);
   };
 
   const columns = [
     {
       title: "ပစ္စည်းအမည်",
-      dataIndex: "item_name",
+      dataIndex: "item_id",
     },
     {
       title: "အရေအတွက်",
@@ -134,7 +147,11 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
       title: "Actions",
       dataIndex: "action",
       render: (_, record) => (
-        <Button type="primary" danger onClick={() => handleDelete(record)}>
+        <Button
+          type="primary"
+          danger
+          onClick={() => handleDelete(record)}
+        >
           Delete
         </Button>
       ),
@@ -142,7 +159,6 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
   ];
 
   //  console.log(merchant.merchants)
-
   return (
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
@@ -175,8 +191,8 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
               <Option key={mer.id} value={mer.id}>
                 {mer.name}
               </Option>
-             ))} 
-             {/* <Option>{buyMerchant === null ? "-" : buyMerchant.company_name}</Option> */}
+            ))}
+            {/* <Option>{buyMerchant === null ? "-" : buyMerchant.company_name}</Option> */}
           </Select>
 
           {/* <Text type="secondary">ကုန်သည်ကုတ်ရွေးပါ</Text>
@@ -211,7 +227,9 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
         </Space>
         <Form
           labelCol={{
-            span: 3,
+            xl: {
+              span: 3,
+            },
           }}
           wrapperCol={{
             span: 24,
@@ -223,7 +241,35 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
           form={form}
         >
           <Form.Item
-            name="item_name"
+            name="item_id"
+            label="ပစ္စည်း"
+            rules={[
+              {
+                required: true,
+                message: "ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ",
+              },
+            ]}
+          >
+            <Select
+              showSearch
+              placeholder="ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              allowClear={true}
+              size="large"
+              style={{ borderRadius: "10px" }}
+            >
+              {allItems.map((item) => (
+                <Option key={item.id} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          {/* <Form.Item
+            name="item_id"
             label="ပစ္စည်းအမည်"
             rules={[
               {
@@ -238,7 +284,7 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
               style={{ borderRadius: "10px" }}
               size="large"
             />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             name="quantity"
             label="အရေအတွက်"
@@ -273,8 +319,8 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
               size="large"
             />
           </Form.Item>
-          <Form.Item
-            name="total_amount"
+          {/* <Form.Item
+            name="subtotal"
             label="စုစုပေါင်းပမာဏ"
             rules={[
               {
@@ -283,13 +329,13 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
               },
             ]}
           >
-            <InputNumber
+            <Input
               placeholder="စုစုပေါင်းပမာဏထည့်ပါ"
               prefix={<EditOutlined />}
               style={{ borderRadius: "10px", width: "100%" }}
               size="large"
             />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item style={{ textAlign: "right" }}>
             <Button
               style={{
@@ -317,7 +363,7 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
           </Col>
           <Col span={2}></Col>
           <Col span={5}>
-            <Title level={4}>{buyTotal} Ks</Title>
+            <Title level={4}>{result} Ks</Title>
           </Col>
         </Row>
         <Row>
@@ -334,7 +380,6 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
               onChange={(value) => handlePayment(value)}
             />
           </Col>
-
         </Row>
         <Row>
           <Col span={17} style={{ textAlign: "right" }}>
@@ -369,6 +414,9 @@ const CreateBuyMerchants = ({ merchant, getMerchants }) => {
 
 const mapStateToProps = (store) => ({
   merchant: store.merchant,
+  item: store.item,
 });
 
-export default connect(mapStateToProps, { getMerchants })(CreateBuyMerchants);
+export default connect(mapStateToProps, { getMerchants, getItems, savePurchases })(
+  CreateBuyMerchants
+);

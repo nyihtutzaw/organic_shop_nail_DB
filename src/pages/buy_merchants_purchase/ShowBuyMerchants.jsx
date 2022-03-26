@@ -4,20 +4,36 @@ import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
-import { getMerchants, getPurchases } from "../../store/actions";
+import {
+  getMerchants,
+  getPurchases,
+  deletePurchases,
+} from "../../store/actions";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-const ShowBuyMerchants = ({ merchant, getMerchants, getPurchases }) => {
+const ShowBuyMerchants = ({
+  purchase,
+  merchant,
+  getMerchants,
+  getPurchases,
+  deletePurchases,
+}) => {
   const navigate = useNavigate();
-  const allPurchases = useSelector((state) => state.purchase.purchases)
+  const allPurchases = useSelector((state) => state.purchase.purchases);
+  // const purchaseAll = purchase.purchases;
 
-let allCredit  =[];
-allPurchases.forEach((purchase) => allCredit.push(parseInt(purchase.credit)))
-  const finalCredit = allCredit.reduce((a,b) => a + b , 0);
+  const [myPurchase, setMyPurchase] = useState([]);
+  useEffect(() => {
+    setMyPurchase([...myPurchase, ...allPurchases]);
+  }, []);
 
-  // const onChange = (value) => {};
+  // console.log(myPurchase)
+
+  let allCredit = [];
+  allPurchases.forEach((purchase) => allCredit.push(parseInt(purchase.credit)));
+  const finalCredit = allCredit.reduce((a, b) => a + b, 0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +50,7 @@ allPurchases.forEach((purchase) => allCredit.push(parseInt(purchase.credit)))
       await getPurchases();
     };
     fetchData();
+
     return () => {
       fetchData();
     };
@@ -55,20 +72,25 @@ allPurchases.forEach((purchase) => allCredit.push(parseInt(purchase.credit)))
       // })
     }
   };
-  // console.log(showBuyMerchant)
 
- 
+  const handleDelete = async (record) => {
+     const filterMyPurchase = myPurchase.filter((purchase) => purchase.id !== record.id)
+     setMyPurchase(filterMyPurchase)
+    await deletePurchases(record.id);
+  };
 
   const columns = [
     {
       title: "ရက်စွဲ",
       dataIndex: ``,
-      // render: (_, record) => console.log(record),
     },
     {
       title: "ကုန်သည်လုပ်ငန်းအမည်",
       dataIndex: "company_name",
-      render: (_, record) =>showBuyMerchant === null ? record.merchant.company_name : showBuyMerchant[0].company_name
+      render: (_, record) =>
+        showBuyMerchant === null
+          ? record.merchant.company_name
+          : showBuyMerchant[0].company_name,
     },
     {
       title: "ပေးချေပြီးပမာဏ",
@@ -82,10 +104,10 @@ allPurchases.forEach((purchase) => allCredit.push(parseInt(purchase.credit)))
     {
       title: "Actions",
       dataIndex: "action",
-      render: (_) => (
+      render: (_, record) => (
         <Space direction="horizontal">
           <Button type="primary">Edit</Button>
-          <Button type="primary" danger>
+          <Button type="primary" danger onClick={() => handleDelete(record)}>
             Delete
           </Button>
         </Space>
@@ -174,7 +196,8 @@ allPurchases.forEach((purchase) => allCredit.push(parseInt(purchase.credit)))
         <Table
           bordered
           columns={columns}
-          dataSource={showBuyMerchant === null ? allPurchases : showBuyMerchant}
+          // dataSource={showBuyMerchant === null ? allPurchases : showBuyMerchant}
+          dataSource={allPurchases}
           pagination={{ defaultPageSize: 10 }}
         />
       </Space>
@@ -184,6 +207,11 @@ allPurchases.forEach((purchase) => allCredit.push(parseInt(purchase.credit)))
 
 const mapStateToProps = (store) => ({
   merchant: store.merchant,
+  purchase: store.purchase,
 });
 
-export default connect(mapStateToProps, { getMerchants, getPurchases })(ShowBuyMerchants);
+export default connect(mapStateToProps, {
+  getMerchants,
+  getPurchases,
+  deletePurchases,
+})(ShowBuyMerchants);

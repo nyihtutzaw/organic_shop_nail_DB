@@ -12,6 +12,7 @@ const { Title } = Typography;
 const ShowStocks = ({ stock, getStocks }) => {
   const navigate = useNavigate();
   const stockAll = stock.stocks;
+  console.log(stockAll)
   useEffect(() => {
     const fetchData = async () => {
       await getStocks();
@@ -27,7 +28,7 @@ const ShowStocks = ({ stock, getStocks }) => {
     {
       title: "ပစ္စည်းပုံ",
       dataIndex: "item",
-      // render: (_, record) => console.log(record),
+      render: (_, record) => console.log("s",record),
       // <img
       //   src={record.item.image}
       //   alt="ပစ္စည်းပုံ"

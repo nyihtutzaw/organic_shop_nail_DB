@@ -1,5 +1,5 @@
 import {
-    SHOW_PURCHASES,
+  SHOW_PURCHASES,
   CREATE_PURCHASES,
   UPDATE_PURCHASES,
   FILTER_PURCHASES,
@@ -23,10 +23,10 @@ import {
           purchases: action.purchases
         };
       case FILTER_PURCHASES:
-        const filterItems = state.items.filter((item) => item.id !== action.id);
+        const filterPurchases = state.purchases.filter((purchase) => purchase.id !== action.id);
         return {
           ...state,
-          items: filterItems
+          purchases: filterPurchases
         };
       case UPDATE_PURCHASES:
         const index = state.items.findIndex((item) => item.id === action.data.id);
@@ -43,6 +43,7 @@ import {
         return state;
     }
   };
+
   
   export default item;
   

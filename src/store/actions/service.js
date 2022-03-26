@@ -65,13 +65,12 @@ export const saveServices = (data) => {
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/batchInsert",
         data
       );
-
       // console.log(response.data.data);
       const result = {
         ...response.data.data,
         key: response.data.data.id
       };
-      console.log("services", result);
+      // console.log("services", result);
       if (response.status === 201) {
         dispatch(createServices(result));
       }

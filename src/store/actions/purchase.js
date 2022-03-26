@@ -12,6 +12,7 @@ export const showPurchases = (purchases) => ({
   purchases
 });
 
+
 export const createPurchases = (purchase) => ({
   type: CREATE_PURCHASES,
   purchase
@@ -62,10 +63,11 @@ export const savePurchases = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/batchInsert",
+        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases",
         data
       );
       // console.log(response);
+
     } catch (error) {
       if (error.response.status === 404) {
         dispatch(setPurchaseErrors(error.response.data.data));
@@ -80,18 +82,19 @@ export const deletePurchases = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}`
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases/${id}`
       );
-      // console.log(response)
-      if (response.status === 204) {
-        dispatch(filterPurchases(id));
-      }
+      console.log(response)
+      dispatch(filterPurchases(id));
+      // if (response.status === 204) {
+      // }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setPurchaseErrors(error.response.data.data));
-      } else {
-        dispatch(setPurchaseErrors(error.response.data));
-      }
+      console.log(error)
+      // if (error.response.status === 404) {
+      //   dispatch(setPurchaseErrors(error.response.data.data));
+      // } else {
+      //   dispatch(setPurchaseErrors(error.response.data));
+      // }
     }
   };
 };
