@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table } from "antd";
+import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -36,9 +36,16 @@ const ShowMembers = ({ getMembers, deleteMembers }) => {
   const handleClick = (record) => {
     navigate(`/admin/edit-members/${record.id}`);
   };
-
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Deleted Your Data',
+      description: 'Your data have been deleted.',
+      duration: 3
+    });
+  };
   const handleDelete = async (record) => {
     await deleteMembers(record.id);
+    openNotificationWithIcon('error')
   };
 
   const handleDetail = (record) => {

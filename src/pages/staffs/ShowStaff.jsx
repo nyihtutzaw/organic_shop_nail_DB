@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table } from "antd";
+import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ const { Title } = Typography;
 const ShowStaff = ({getStaffs, deleteStaffs}) => {
   const dispatch = useDispatch()
   const staffs = useSelector((state) => state.staff.staffs);
+  console.log(staffs);
   useEffect(() => {
     const fetchData = async () => {
       await getStaffs();
@@ -30,8 +31,17 @@ const ShowStaff = ({getStaffs, deleteStaffs}) => {
     navigate(`/admin/edit-staff/${record.id}`);
   };
 
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Delete Your Data',
+      description: 'Your data have been deleted.',
+      duration: 3
+    });
+  };
+  
   const handleDelete =async (record) => {
-    await deleteStaffs(record.id)
+    await deleteStaffs(record.id);
+    openNotificationWithIcon('error')
   }
 
   const columns = [

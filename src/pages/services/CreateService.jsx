@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Typography, Space, Button, Table, message } from "antd";
+import { Form, Input, Typography, Space, Button, Table, message, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   EditOutlined,
@@ -10,8 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getServices, saveServices } from "../../store/actions";
 import { connect } from "react-redux";
+import { ToastContainer, toast } from 'react-toastify';
 
-const { Title, Text } = Typography;
+
+const { Title } = Typography;
 
 const CreateService = ({ getServices, saveServices }) => {
   useEffect(() => {
@@ -30,6 +32,14 @@ const CreateService = ({ getServices, saveServices }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Save Your Data',
+      description: 'Your data have been saved.',
+      duration: 3
+    });
+  };
+
   const onFinish = (values) => {
     setSupplierTable(
       {
@@ -45,13 +55,14 @@ const CreateService = ({ getServices, saveServices }) => {
     form.resetFields();
   };
 
-
   const handleSave = async () => {
     if (supplierTable.services.length === 0) {
       message.error("ကျေးဇူးပြု၍ဝန်ဆောင်မှုအချက်အလက်များထည့်ပါ");
     } else {
       await saveServices(supplierTable);
-      navigate("/admin/show-service");
+      openNotificationWithIcon('success')
+      setSupplierTable([])
+      // navigate("/admin/show-service");
     }
   };
 
@@ -259,5 +270,6 @@ const CreateService = ({ getServices, saveServices }) => {
     </Layout>
   );
 };
+
 
 export default connect(null, { getServices, saveServices })(CreateService);

@@ -6,20 +6,40 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getServices, deleteServices } from "../../store/actions";
 import { connect } from "react-redux";
+import { notification } from 'antd';
+
 
 const { Title } = Typography;
 
 const ShowService = ({ service, getServices, deleteServices }) => {
-  const [getData, setGetData] = useState();
   const navigate = useNavigate();
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Delete Your Data',
+      description: 'Your data have been deleted.',
+      duration: 3
+    });
+  };
+  
+// const resultService = service.services.map((service) => ({
+//   code: service.code,
+//   price: service.price,
+//   category: service.category,
+//   percentage: service.percentage,
+//   code: service.code,
+//   code: service.code,
+//   key: service.key,
+//   id: service.id
+// }))
 
+// console.log(service.services)
   const mountedRef = React.useRef(true);
   const getShopYearly = async () => {
     if (!mountedRef.current) return null;
     try {
       const response = await getServices();
       const result = response.data;
-      console.log(result)
+      // console.log("result",result)
       // setGetData(result);
     } catch (error) {
       console.log(error.response);
@@ -38,8 +58,10 @@ const ShowService = ({ service, getServices, deleteServices }) => {
 
   const handleDelete = async (record) => {
     await deleteServices(record.id);
+    openNotificationWithIcon('error')
   };
 
+ 
   const columns = [
     {
       title: "ကုတ်",
@@ -57,10 +79,10 @@ const ShowService = ({ service, getServices, deleteServices }) => {
       title: "ရာခိုင်နှုန်း",
       dataIndex: "percentage"
     },
-    {
-      title: "ကော်မရှင်",
-      dataIndex: "commercial"
-    },
+    // {
+    //   title: "ကော်မရှင်",
+    //   dataIndex: "commercial"
+    // },
     {
       title: "Actions",
       dataIndex: "action",
@@ -117,6 +139,8 @@ const ShowService = ({ service, getServices, deleteServices }) => {
           columns={columns}
           pagination={{ defaultPageSize: 10 }}
           dataSource={service.services}
+          // dataSource={resultService}
+          // rowKey={resultService.key}
         />
       </Space>
     </Layout>

@@ -5,7 +5,8 @@ import {
   Typography,
   Space,
   Button,
-  message
+  message,
+  notification
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
@@ -23,6 +24,14 @@ const CreateStaff = ({saveStaffs}) => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Saved Your Data',
+      description: 'Your data have been saved.',
+      duration: 3
+    });
+  };
+  
   const onFinish =async (values) => {
     if (fileList.length === 0) {
       message.error("ကျေးဇူးပြု၍၀န်ထမ်:ပုံထည့်ပါ");
@@ -36,7 +45,10 @@ const CreateStaff = ({saveStaffs}) => {
       formData.append("salary", values.salary);
       formData.append("bank_account", values.bank_account);
       formData.append("image", fileList[0].originFileObj);
-      await saveStaffs(formData)
+      await saveStaffs(formData);
+    form.resetFields();
+
+      openNotificationWithIcon('success')
     }
   };
 

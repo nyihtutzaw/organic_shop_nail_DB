@@ -18,14 +18,26 @@ import {
   SaveOutlined,
   PlusSquareOutlined
 } from "@ant-design/icons";
-import { connect } from "react-redux";
-import { getMerchants } from "../../store/actions";
+import { saveBadItems, getStocks } from "../../store/actions";
+import { connect, useSelector } from "react-redux";
+import dateFormat, { masks } from "dateformat";
+const now = new Date();
 
-const CreateBadItem = ({ merchant, getMerchants }) => {
-  const { Title, Text } = Typography;
-  const { Option } = Select;
 
-  const [buys, setBuys] = useState([]);
+
+const { Title, Text } = Typography;
+const { Option } = Select;
+const CreateBadItem = ({getStocks, saveBadItems }) => {
+const stocks = useSelector((state) => state.stock.stocks)
+const allStocks =stocks.map((stock) => {
+  return {
+    id: stock.id,
+    name: stock.item.name
+  }
+})
+
+// console.log(allStocks)
+  const [bads, setBads] = useState([]);
   const [credit, setCredit] = useState(0);
   const [paid, setPaid] = useState(null);
   const [buyMerchant, setBuyMerchant] = useState(null);
@@ -34,84 +46,56 @@ const CreateBadItem = ({ merchant, getMerchants }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      //   await getMerchants();
+        await getStocks();
     };
     fetchData();
     return () => {
       fetchData();
     };
-  }, [getMerchants]);
+  }, [getStocks]);
 
   const onFinish = (values) => {
-    setBuys([
-      ...buys,
+    setBads([
+      ...bads,
       {
         ...values,
-        subtotal: values.quantity * values.price,
-        key: buys.length + 1
+        date: dateFormat(now, "mm/dd/yyyy"),
+        key: bads.length + 1
       }
     ]);
     form.resetFields();
   };
+  // console.log(bads)
 
-  const onChange = (value) => {
-    if (value === undefined) {
-      setBuyMerchant(null);
-    } else {
-      //   const filterBuyMerchant = merchant.merchants.find(
-      //     (mer) => mer.id === value
-      //   );
-      //   setBuyMerchant(filterBuyMerchant);
-    }
-  };
+  // const onChange = (value) => {
+  //   if (value === undefined) {
+  //     setBuyMerchant(null);
+  //   } else {
+  //     //   const filterBuyMerchant = merchant.merchants.find(
+  //     //     (mer) => mer.id === value
+  //     //   );
+  //     //   setBuyMerchant(filterBuyMerchant);
+  //   }
+  // };
 
   const handleDelete = (record) => {
-    const filterBuys = buys.filter((buy) => buy !== record);
-    setBuys(filterBuys);
+    const filterBads = bads.filter((bad) => bad !== record);
+    setBads(filterBads);
   };
 
-  const handleSave = () => {
-    if (buyMerchant === null) {
-      message.error("ကျေးဇူးပြု၍ ကုန်သည်အချက်အလက်ထည့်ပါ");
-    } else if (buys.length === 0) {
-      message.error("ကျေးဇူးပြု၍ ဝယ်ရန်ထည့်ပါ");
-    } else if (paid === null) {
-      message.error("ကျေးဇူးပြု၍ ပေးငွေထည့်ပါ");
-    } else {
-      const singleBuys = buys.map((buy) => {
-        return {
-          item_name: buy.item_name,
-          quantity: buy.quantity,
-          price: buy.price,
-          subtotal: buy.subtotal
-        };
-      });
-
-      const saveBuy = {
-        single_buys: singleBuys,
-        merchant: buyMerchant.id,
-        paid: paid,
-        credit: credit
-      };
-
-      console.log(saveBuy);
+  const handleSave =async () => {
+     if(bads.length === 0) {
+      message.error("ကျေးဇူးပြု၍ Itemထည့်ပါ");
+    }else {
+      console.log({...bads});
+      // await saveBadItems(bads);
     }
-  };
-
-  const buyTotal =
-    buys.length > 0
-      ? buys.map((buy) => buy.subtotal).reduce((a, b) => a + b)
-      : 0;
-
-  const handlePayment = (value) => {
-    setCredit(buyTotal - value);
-    setPaid(value);
   };
 
   const columns = [
     {
       title: "ပစ္စည်းအမည်/ကုတ်",
-      dataIndex: "item_name"
+      dataIndex: "stock_id"
     },
     {
       title: "အရေအတွက်",
@@ -121,7 +105,9 @@ const CreateBadItem = ({ merchant, getMerchants }) => {
       title: "Actions",
       dataIndex: "action",
       render: (_, record) => (
-        <Button type="primary" danger onClick={() => handleDelete(record)}>
+        <Button type="primary" danger 
+        onClick={() => handleDelete(record)}
+        >
           Delete
         </Button>
       )
@@ -161,7 +147,7 @@ const CreateBadItem = ({ merchant, getMerchants }) => {
           form={form}
         >
           <Form.Item
-            name="item_name"
+            name="stock_id"
             label="ပစ္စည်းကုတ်/အမည်"
             rules={[
               {
@@ -174,7 +160,7 @@ const CreateBadItem = ({ merchant, getMerchants }) => {
               showSearch
               placeholder="ကျေးဇူးပြု၍ ပစ္စည်းကုတ်/အမည်ရွေးပါ"
               optionFilterProp="children"
-              onChange={onChange}
+              // onChange={onChange}
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
@@ -182,11 +168,11 @@ const CreateBadItem = ({ merchant, getMerchants }) => {
               size="large"
               style={{ borderRadius: "10px" }}
             >
-              {/* {merchant.merchants.map((mer) => (
-              <Option key={mer.id} value={mer.id}>
-                {mer.name}
+              {allStocks.map((stock) => (
+              <Option key={stock.id} value={stock.id}>
+                {stock.name}
               </Option>
-            ))} */}
+            ))}
             </Select>
           </Form.Item>
 
@@ -226,7 +212,7 @@ const CreateBadItem = ({ merchant, getMerchants }) => {
         <Table
           bordered
           columns={columns}
-          dataSource={buys}
+          dataSource={bads}
           pagination={{ position: ["none", "none"] }}
         />
 
@@ -252,4 +238,4 @@ const CreateBadItem = ({ merchant, getMerchants }) => {
   );
 };
 
-export default CreateBadItem;
+export default connect(null, { saveBadItems, getStocks })(CreateBadItem);

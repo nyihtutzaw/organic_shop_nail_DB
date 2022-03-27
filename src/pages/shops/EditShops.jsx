@@ -8,28 +8,27 @@ import { editShops } from "../../store/actions";
 import { connect } from "react-redux";
 
 const { Title } = Typography;
-const EditShops = ({editShops}) => {
+const EditShops = ({ editShops }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
   const { id } = useParams();
   const shops = useSelector((state) => state.shop.shops);
   const currentShop = shops.find((shop) => shop.id === parseInt(id));
-  
+
   useEffect(() => {
     if (currentShop) {
       form.setFieldsValue({ name: currentShop.name });
     }
   }, [currentShop]);
 
-  
   const onFinish = async (values) => {
     const data = {
       id: parseInt(id),
       key: parseInt(id),
-      ...values
+      ...values,
     };
-    await editShops(data)
+    await editShops(data);
     form.resetFields();
     navigate("/admin/show-shops");
   };
@@ -43,14 +42,14 @@ const EditShops = ({editShops}) => {
         <Form
           labelCol={{
             xl: {
-              span: 3
-            }
+              span: 3,
+            },
           }}
           wrapperCol={{
-            span: 24
+            span: 24,
           }}
           initialValues={{
-            remember: true
+            remember: true,
           }}
           onFinish={onFinish}
           form={form}
@@ -61,8 +60,8 @@ const EditShops = ({editShops}) => {
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ ဆိုင်အမည်ထည့်ပါ"
-              }
+                message: "ကျေးဇူးပြု၍ ဆိုင်အမည်ထည့်ပါ",
+              },
             ]}
           >
             <Input
@@ -77,7 +76,7 @@ const EditShops = ({editShops}) => {
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "10px"
+                borderRadius: "10px",
               }}
               size="large"
               htmlType="submit"

@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Typography, Space, Button } from "antd";
+import { Form, Input, Typography, Space, Button, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { saveExpenseNames } from "../../store/actions";
@@ -12,11 +12,20 @@ const { Title } = Typography;
 const CreateExpenseNames = ({saveExpenseNames}) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Saved Your Data',
+      description: 'Your data have been saved.',
+      duration: 3
+    });
+  };
+
   const onFinish = async (values) => {
-    // console.log(values);
     await saveExpenseNames(values)
     form.resetFields();
-    navigate("/admin/show-expense-names");
+    openNotificationWithIcon('success')
+    // navigate("/admin/show-expense-names");
   };
 
   return (

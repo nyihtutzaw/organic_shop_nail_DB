@@ -7,6 +7,8 @@ import { Provider } from "react-redux";
 import store from "./store";
 import decode from "jwt-decode";
 import { setCurrentUser, addError, setToken, getUser } from "./store/actions";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const token = localStorage.getItem("jwtToken");
 

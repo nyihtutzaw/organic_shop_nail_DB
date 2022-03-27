@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table } from "antd";
+import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -21,12 +21,20 @@ const ShowMerchants = ({ merchant, getMerchants, deleteMerchants }) => {
   }, [getMerchants]);
 
   const handleClick = (record) => {
-    console.log(record.id);
+    // console.log(record.id);
     navigate(`/admin/edit-merchants/${record.id}`);
   };
 
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Delete Your Data',
+      description: 'Your data have been deleted.',
+      duration: 3
+    });
+  };
   const handleDelete = async (record) => {
     await deleteMerchants(record.id);
+    openNotificationWithIcon('error')
   };
 
   const columns = [

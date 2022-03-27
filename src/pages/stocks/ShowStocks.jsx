@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table } from "antd";
+import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { ExportOutlined, PlusSquareOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +23,13 @@ const ShowStocks = ({ stock, getStocks }) => {
       fetchData();
     };
   }, [getStocks]);
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Saved Your Data',
+      description: 'Your data have been saved.',
+      duration: 3
+    });
+  };
 
   const columns = [
     {

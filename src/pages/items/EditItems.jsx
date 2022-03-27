@@ -31,6 +31,7 @@ const EditItems = ({ editItems }) => {
   const { id } = useParams();
   const allItems = useSelector((state) => state.item.items);
   const currentItem = allItems.find((item) => item.id === parseInt(id));
+  // console.log(currentItem)
 
   useEffect(() => {
     if (currentItem) {

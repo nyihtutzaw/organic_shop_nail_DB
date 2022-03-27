@@ -7,7 +7,8 @@ import {
   Button,
   Table,
   InputNumber,
-  message
+  message,
+  notification
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
@@ -40,12 +41,21 @@ const CreateItems = ({ saveItems }) => {
       form.resetFields();
     }
   };
+console.log(items)
 
   const handleDelete = (record) => {
     const filterItems = items.filter((item) => item !== record);
     setItems(filterItems);
   };
 
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Saved Your Data',
+      description: 'Your data have been saved.',
+      duration: 3
+    });
+  };
+  
   const handleSave = async () => {
     if (items.length === 0) {
       message.error("ကျေးဇူးပြု၍ပစ္စည်းများထည့်ပါ");
@@ -61,6 +71,7 @@ const CreateItems = ({ saveItems }) => {
 // console.log(formData)
       await saveItems(formData);
       setItems([]);
+      openNotificationWithIcon('success')
     }
   };
   const columns = [

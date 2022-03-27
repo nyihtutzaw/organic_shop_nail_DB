@@ -33,6 +33,7 @@ const service = (state = initialState, action) => {
         services: filterServices
        
       };
+      
     case UPDATE_SERVICES:
       const index = state.services.findIndex(
         (service) => service.id === action.data.id

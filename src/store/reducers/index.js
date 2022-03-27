@@ -13,6 +13,7 @@ import service from "./service";
 import staff from "./staff";
 import purchase from "./purchase";
 import stock from "./stock";
+import bad_item from "./bad_item";
 
 
 const reducers = combineReducers({
@@ -30,6 +31,7 @@ const reducers = combineReducers({
   staff,
   purchase,
   stock,
+  bad_item,
 });
 
 export default reducers;

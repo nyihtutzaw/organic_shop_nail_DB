@@ -15,7 +15,7 @@ const item = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_ITEMS:
       return {
-        services: [...state.services, action.service]
+        items: [...state.items, action.item]
       };
     case SHOW_ITEMS:
       return {

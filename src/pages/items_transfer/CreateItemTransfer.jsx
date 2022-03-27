@@ -9,6 +9,7 @@ import {
   Select,
   Table,
   message,
+  notification,
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
@@ -34,7 +35,7 @@ const CreateItemTransfer = ({
   const [shopData, setShopData] = useState(null);
   const [itemData, setItemData] = useState(null);
   const [buyShop, setBuyShop] = useState(null);
-  
+
   const shops = useSelector((state) => state.shop.shops);
   const AllItems = useSelector((state) => state.item.items);
   // console.log(AllItems);
@@ -70,7 +71,6 @@ const CreateItemTransfer = ({
   const onFinish = (values) => {
     setItems([...items, { ...values, Date: date, key: items.length + 1 }]);
     form.resetFields();
-
   };
 
   // console.log("first", items);
@@ -79,11 +79,17 @@ const CreateItemTransfer = ({
     if (value === undefined) {
       setBuyShop(null);
     } else {
-      const filterShops = shops.find(
-        (mer) => mer.id === value
-      );
+      const filterShops = shops.find((mer) => mer.id === value);
       setBuyShop(filterShops);
     }
+  };
+
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: "Saved Your Data",
+      description: "Your data have been saved.",
+      duration: 3,
+    });
   };
 
   const handleSave = async () => {
@@ -91,30 +97,29 @@ const CreateItemTransfer = ({
       message.error("ကျေးဇူးပြု၍ပစ္စည်းများထည့်ပါ");
     } else if (buyShop === null) {
       message.error("ကျေးဇူးပြု၍ ဆိုင်အမည်ထည့်ပါ");
-    }else {
+    } else {
       const itemTransfer = items.map((item) => {
         return {
           stock_id: item.stock_id,
-          quantity: item.quantity
-        }
+          quantity: item.quantity,
+        };
       });
       const saveItem = {
         item_transfers: itemTransfer,
-        to_shop_id: buyShop.id
-      }
-      console.log(saveItem)
+        to_shop_id: buyShop.id,
+      };
+      // console.log(saveItem)
       await saveItemTransfers(saveItem);
       setItems([]);
-    setBuyShop(null);
-
+      setBuyShop(null);
+      openNotificationWithIcon("success");
     }
-    // console.log("first33", items);
   };
 
   const handleDelete = (record) => {
     console.log(record.key);
-    const filter = items.filter((item) => item.key !== record.key)
-    setItems(filter)
+    const filter = items.filter((item) => item.key !== record.key);
+    setItems(filter);
   };
 
   const columns = [

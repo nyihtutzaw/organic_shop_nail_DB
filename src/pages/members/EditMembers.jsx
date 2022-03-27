@@ -21,7 +21,7 @@ const { Option } = Select;
 const EditMembers = ({ editMembers, shop, getShops }) => {
   const { id } = useParams();
   const members = useSelector((state) => state.member.members);
-  console.log(members)
+  // console.log(members)
   const currentMember = members.find((member) => member.id === parseInt(id));
   const currentId = parseInt(currentMember.shop_id);
 

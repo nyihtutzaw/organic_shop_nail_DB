@@ -11,6 +11,7 @@ import {
   Row,
   Col,
   message,
+  notification
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
@@ -21,7 +22,6 @@ import {
 import { connect } from "react-redux";
 import { getMerchants, getItems, savePurchases } from "../../store/actions";
 import { useNavigate } from "react-router-dom";
-
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -88,6 +88,14 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
     setBuys(filterBuys);
   };
 
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Saved Your Data',
+      description: 'Your data have been saved.',
+      duration: 3
+    });
+  };
+
   const handleSave =async () => {
     if (buyMerchant === null) {
       message.error("ကျေးဇူးပြု၍ ကုန်သည်အချက်အလက်ထည့်ပါ");
@@ -113,6 +121,7 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
         whole_total: result,
       };
       await savePurchases(saveBuy)
+      openNotificationWithIcon('success')
     }
     navigate("/admin/show-buy-merchants");
   };

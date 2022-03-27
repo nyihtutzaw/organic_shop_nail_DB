@@ -66,9 +66,16 @@ export const saveItems = (data) => {
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/batchInsert",
         data
       );
-      // console.log(response);
+      const result = {
+        ...response.data.data,
+        key: response.data.data.id
+      };
+      if (response.status === 201) {
+        dispatch(createItems(result));
+      }
+        console.log(result);
     } catch (error) {
-      if (error.response.status === 404) {
+      if (error) {
         dispatch(setItemErrors(error.response.data.data));
       } else {
         dispatch(setItemErrors(error.response.data));
@@ -104,18 +111,21 @@ export const editItems = (id, data) => {
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}?_method=put`,
         data
       );
-      // console.log(response);
-      const result = response.data.data;
+      const result = {
+        ...response.data.data,
+        key: response.data.data.id
+      };
+      // console.log(result);
       if (response.status === 204) {
         dispatch(updateItems(result));
       }
     } catch (error) {
       console.log(error);
-      // if (error) {
-      //   dispatch(setItemErrors(error.response.data.data));
-      // } else {
-      //   dispatch(setItemErrors(error.response.data));
-      // }
+      if (error) {
+        dispatch(setItemErrors(error.response.data.data));
+      } else {
+        dispatch(setItemErrors(error.response.data));
+      }
     }
   };
 };

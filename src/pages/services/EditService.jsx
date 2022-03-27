@@ -38,7 +38,6 @@ const EditService = ({editServices}) => {
   }, [currentService]);
 
   const onFinish =async (values) => {
-    console.log(values);
     await editServices(id,values)
     // form.resetFields();
     navigate("/admin/show-service");
@@ -143,7 +142,7 @@ const EditService = ({editServices}) => {
             />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             name="commercial"
             label="ကော်မရှင်"
             rules={[
@@ -159,7 +158,7 @@ const EditService = ({editServices}) => {
               style={{ borderRadius: "10px", width: "100%" }}
               size="large"
             />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item style={{ textAlign: "right" }}>
             <Button
               style={{

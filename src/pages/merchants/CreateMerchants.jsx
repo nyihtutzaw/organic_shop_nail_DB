@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Form, Input, Typography, Space, Button, Select } from "antd";
+import { Form, Input, Typography, Space, Button, Select, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
@@ -25,11 +25,18 @@ const CreateMerchants = ({ saveMerchants, getShops }) => {
     };
   }, [getShops]);
 
-
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Saved Your Data',
+      description: 'Your data have been saved.',
+      duration: 3
+    });
+  };
   const onFinish = async (values) => {
     await saveMerchants(values)
     form.resetFields();
-    navigate("/admin/show-merchants");
+    openNotificationWithIcon('success')
+    // navigate("/admin/show-merchants");
   };
 
   return (

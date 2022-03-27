@@ -15,3 +15,4 @@ export * from "./item.js";
 export * from "./staff.js";
 export * from "./purchase.js";
 export * from "./stock.js";
+export * from "./bad_item.js";

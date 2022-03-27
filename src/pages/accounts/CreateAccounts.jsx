@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Form, Input, Typography, Space, Button, Select } from "antd";
+import { Form, Input, Typography, Space, Button, Select, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
@@ -26,10 +26,18 @@ const CreateAccounts = ({ saveAccounts, getShops }) => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Saved Your Data',
+      description: 'Your data have been saved.',
+      duration: 3
+    });
+  };
   const onFinish = async (values) => {
     await saveAccounts(values);
     form.resetFields();
-    navigate("/admin/show-accounts");
+    // navigate("/admin/show-accounts");
+    openNotificationWithIcon('success')
   };
 
   return (
@@ -40,7 +48,9 @@ const CreateAccounts = ({ saveAccounts, getShops }) => {
         </Title>
         <Form
           labelCol={{
-            span: 3
+            xl: {
+              span: 3
+            }
           }}
           wrapperCol={{
             span: 24

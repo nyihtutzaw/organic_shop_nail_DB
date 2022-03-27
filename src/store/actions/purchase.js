@@ -67,7 +67,6 @@ export const savePurchases = (data) => {
         data
       );
       // console.log(response);
-
     } catch (error) {
       if (error.response.status === 404) {
         dispatch(setPurchaseErrors(error.response.data.data));
@@ -84,7 +83,7 @@ export const deletePurchases = (id) => {
       const response = await axios.delete(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases/${id}`
       );
-      console.log(response)
+      // console.log(response)
       dispatch(filterPurchases(id));
       // if (response.status === 204) {
       // }

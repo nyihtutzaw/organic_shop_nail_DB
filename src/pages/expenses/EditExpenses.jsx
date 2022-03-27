@@ -28,11 +28,12 @@ const EditExpense = ({ editExpenses, getExpenseNames }) => {
   const { id } = useParams();
   const expenses = useSelector((state) => state.expense.expenses);
   const expenseNames = useSelector((state) => state.expense_name.expense_names);
+  // console.log(expenseNames);
+
   const currentExpenses = expenses.find(
     (expense) => expense.id === parseInt(id)
   );
   const currentName = currentExpenses.name;
-  // console.log(currentExpenses);
 
   const navigate = useNavigate();
   useEffect(() => {

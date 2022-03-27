@@ -9,7 +9,8 @@ import {
   InputNumber,
   message,
   Drawer,
-  Select
+  Select,
+  notification
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
@@ -88,12 +89,22 @@ const handleDelete = (record) => {
     // }
   // };
 
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Saved Your Data',
+      description: 'Your data have been saved.',
+      duration: 3
+    });
+  };
+
   const handleSave = async () => {
     if (expenseTable.expenses.length === 0) {
       message.error("ကျေးဇူးပြု၍ကုန်ကျစရိတ်အချက်အလက်များထည့်ပါ");
     } else {
       await saveExpenses(expenseTable);
-      navigate("/admin/show-expenses");
+      setExpenseTable([])
+      openNotificationWithIcon('success')
+      // navigate("/admin/show-expenses");
     }
   };
   const columns = [

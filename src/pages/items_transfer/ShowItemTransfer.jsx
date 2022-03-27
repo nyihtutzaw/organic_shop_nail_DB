@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table } from "antd";
+import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { ExportOutlined, PlusSquareOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +21,14 @@ const ShowItemTransfer = ({ item_transfer, getItemTransfers}) => {
     };
   }, [getItemTransfers]);
 
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Saved Your Data',
+      description: 'Your data have been saved.',
+      duration: 3
+    });
+  };
+  
   const columns = [
     {
       title: "ရက်စွဲ",
@@ -57,7 +65,7 @@ const ShowItemTransfer = ({ item_transfer, getItemTransfers}) => {
     }
   ];
 
-  console.log("first", item_transfer)
+  // console.log("first", item_transfer)
   return (
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">

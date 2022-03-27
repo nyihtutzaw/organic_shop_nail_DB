@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Space, Row, Col, Button, Table } from "antd";
+import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -9,16 +9,7 @@ const { Title } = Typography;
 
 const ShowAccounts = () => {
   const accounts = useSelector((state) => state.AccountReducer);
-  // console.log("accounts", accounts);
-  // const result = accounts.map((account) => ({
-  //   id: account.id,
-  //   key: account.id,
-  //   row: account.row,
-  //   name: account.name,
-  //   shop: account.shop
-  // }));
-
-  // console.log("result", result);
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -27,8 +18,17 @@ const ShowAccounts = () => {
     navigate(`/admin/edit-accounts/${record.id}`);
   };
 
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Deleted Your Data',
+      description: 'Your data have been deleted.',
+      duration: 3
+    });
+  };
+  
   const handleDelete = (record) => {
     dispatch({ type: "DELETE_ACCOUNTS", payload:record.id})
+    openNotificationWithIcon('error')
   }
 
 

@@ -1,5 +1,5 @@
 import React, { useEffect} from "react";
-import { Typography, Space, Row, Col, Button, Table } from "antd";
+import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -23,8 +23,17 @@ const ShowExpenseNames = ({ expenseNames, getExpenseNames, deleteExpenseNames })
     navigate(`/admin/edit-expense-names/${record.id}`);
   };
 
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Deleted Your Data',
+      description: 'Your data have been deleted.',
+      duration: 3
+    });
+  };
+
   const handleDelete = async (record) => {
     await deleteExpenseNames(record.id);
+    openNotificationWithIcon('error')
   };
 
   const columns = [

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, Select } from "antd";
+import { Typography, Space, Row, Col, Button, Table, Select, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -28,8 +28,6 @@ const ShowBuyMerchants = ({
   useEffect(() => {
     setMyPurchase([...myPurchase, ...allPurchases]);
   }, []);
-
-  // console.log(myPurchase)
 
   let allCredit = [];
   allPurchases.forEach((purchase) => allCredit.push(parseInt(purchase.credit)));
@@ -73,10 +71,19 @@ const ShowBuyMerchants = ({
     }
   };
 
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Deleted Your Data',
+      description: 'Your data have been deleted.',
+      duration: 3
+    });
+  };
+
   const handleDelete = async (record) => {
      const filterMyPurchase = myPurchase.filter((purchase) => purchase.id !== record.id)
      setMyPurchase(filterMyPurchase)
     await deletePurchases(record.id);
+    openNotificationWithIcon('error')
   };
 
   const columns = [

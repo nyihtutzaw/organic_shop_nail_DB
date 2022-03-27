@@ -7,7 +7,8 @@ import {
   Button,
   Table,
   InputNumber,
-  message
+  message,
+  notification
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
@@ -46,12 +47,21 @@ const CreateItems = ({ saveItems }) => {
     setItems(filterItems);
   };
 
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Saved Your Data',
+      description: 'Your data have been saved.',
+      duration: 3
+    });
+  };
+
   const handleSave = async () => {
     if (items.length === 0) {
       message.error("ကျေးဇူးပြု၍ပစ္စည်းများထည့်ပါ");
     } else {
       await saveItems(items);
       setItems([]);
+      
     }
   };
 

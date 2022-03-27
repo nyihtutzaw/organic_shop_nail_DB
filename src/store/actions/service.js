@@ -12,6 +12,7 @@ export const showServices = (services) => ({
   services
 });
 
+
 export const createServices = (service) => ({
   type: CREATE_SERVICES,
   service
@@ -44,7 +45,6 @@ export const getServices = () => {
           key: service.id
         };
       });
-      // console.log(result)
       if (response.status === 200) {
         dispatch(showServices(result));
       }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Space, Row, Col, Button, Table } from "antd";
+import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -24,9 +24,16 @@ const ShowShops = ({ shop, getShops, deleteShops }) => {
       fetchData();
     };
   }, [getShops]);
-
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Delete Your Data',
+      description: 'Your data have been deleted.',
+      duration: 3
+    });
+  };
   const handleDelete = async (record) => {
     await deleteShops(record.id);
+    openNotificationWithIcon('error')
   };
 
   const columns = [

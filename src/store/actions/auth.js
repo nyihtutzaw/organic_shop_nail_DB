@@ -9,7 +9,6 @@ export const setCurrentUser = (user) => ({
   user
 });
 
-
 export const setToken = (token) => setAccessToken(token);
 
 export const logout = () => {

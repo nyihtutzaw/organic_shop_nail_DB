@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Typography, Space, Button } from "antd";
+import { Form, Input, Typography, Space, Button, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
@@ -12,11 +12,19 @@ const { Title } = Typography;
 const CreateShops = ({saveShops}) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: 'Save Your Data',
+      description: 'Your data have been saved.',
+      duration: 3
+    });
+  };
 
   const onFinish = async (values) => {
     await saveShops(values)
     form.resetFields();
-    navigate("/admin/show-shops")
+    openNotificationWithIcon('success')
+    // navigate("/admin/show-shops")
   };
 
   return (
