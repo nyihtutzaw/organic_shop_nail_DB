@@ -1,54 +1,48 @@
 import React, { useState, useEffect } from "react";
-import {
-  Form,
-  Input,
-  Typography,
-  Space,
-  Button,
-  Table,
-  InputNumber,
-  message,
-  Image
-} from "antd";
+import { Form, Input, Typography, Space, Button } from "antd";
 import Layout from "antd/lib/layout/layout";
-import {
-  EditOutlined,
-  SaveOutlined,
-  PlusSquareOutlined
-} from "@ant-design/icons";
+import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import InputUpload from "../../components/InputUpload";
 import { connect, useSelector } from "react-redux";
-import { editItems } from "../../store/actions";
+import { editItems, getItem } from "../../store/actions";
 import { useNavigate, useParams } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
-const EditItems = ({ editItems }) => {
-  
+const EditItems = ({ editItems, getItem }) => {
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { id } = useParams();
-  const allItems = useSelector((state) => state.item.items);
-  const currentItem = allItems.find((item) => item.id === parseInt(id));
+  const param = useParams();
+
+  const item = useSelector((state) => state.item.item);
+  // const currentItem = allItems.find((item) => item.id === parseInt(id));
   // console.log(currentItem)
 
   useEffect(() => {
-    if (currentItem) {
-      form.setFieldsValue({ code: currentItem.code });
-      form.setFieldsValue({ name: currentItem.name });
-      form.setFieldsValue({ buy_price: currentItem.buy_price });
-      form.setFieldsValue({ sale_price: currentItem.sale_price });
-      setFileList([
-        {
-          uid: currentItem.image.uid,
-          name: currentItem.image.name,
-          status: "done",
-          url: currentItem.image
-        }
-      ]);
-    }
-  }, [currentItem]);
+    const fetchData = async () => {
+      await getItem(param?.id);
+    };
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getItem]);
+
+  useEffect(() => {
+    form.setFieldsValue({ code: item?.code });
+    form.setFieldsValue({ name: item?.name });
+    form.setFieldsValue({ buy_price: item?.buy_price });
+    form.setFieldsValue({ sale_price: item?.sale_price });
+    setFileList([
+      {
+        uid: item?.uid,
+        name: item?.name,
+        status: "done",
+        url: item?.image
+      }
+    ]);
+  }, [item]);
 
   const onFinish = async (values) => {
     const formData = new FormData();
@@ -59,8 +53,8 @@ const EditItems = ({ editItems }) => {
     if (fileList[0].status !== "done") {
       formData.append("image", fileList[0].originFileObj);
     }
-    await editItems(id, formData);
-    navigate('/admin/show-items')
+    await editItems(param?.id, formData);
+    navigate("/admin/show-items");
   };
 
   return (
@@ -192,4 +186,4 @@ const EditItems = ({ editItems }) => {
   );
 };
 
-export default connect(null, { editItems })(EditItems);
+export default connect(null, { editItems, getItem })(EditItems);

@@ -41,7 +41,6 @@ const CreateItems = ({ saveItems }) => {
       form.resetFields();
     }
   };
-console.log(items)
 
   const handleDelete = (record) => {
     const filterItems = items.filter((item) => item !== record);

@@ -4,11 +4,11 @@ import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { getItems,deleteItems, editItems } from "../../store/actions";
+import { getItems,deleteItems, editItems, getItem } from "../../store/actions";
 
 const { Title } = Typography;
 
-const ShowItems = ({ item, getItems, deleteItems, editItems }) => {
+const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +21,8 @@ const ShowItems = ({ item, getItems, deleteItems, editItems }) => {
   }, [getItems]);
 
   
-  const handleClick = (record) => {
+  const handleClick =async (record) => {
+    await getItem(record.id)
     navigate(`/admin/edit-items/${record.id}`);
   };
 
@@ -130,4 +131,4 @@ const mapStateToProps = (store) => ({
   item: store.item
 });
 
-export default connect(mapStateToProps, { getItems, deleteItems })(ShowItems);
+export default connect(mapStateToProps, { getItems, deleteItems, getItem })(ShowItems);

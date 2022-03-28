@@ -31,6 +31,7 @@ export const UPDATE_EXPENSES = 'UPDATE_EXPENSES';
 export const FILTER_EXPENSES = 'FILTER_EXPENSES';
 
 export const SHOW_ITEMS = 'SHOW_ITEMS';
+export const SHOW_ITEM = 'SHOW_ITEM';
 export const CREATE_ITEMS = 'CREATE_ITEMS';
 export const UPDATE_ITEMS = 'UPDATE_ITEMS';
 export const FILTER_ITEMS = 'FILTER_ITEMS';

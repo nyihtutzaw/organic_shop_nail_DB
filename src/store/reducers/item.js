@@ -1,5 +1,6 @@
 import {
   SHOW_ITEMS,
+  SHOW_ITEM,
   CREATE_ITEMS,
   UPDATE_ITEMS,
   FILTER_ITEMS,
@@ -8,6 +9,7 @@ import {
 
 const initialState = {
   items: [],
+  item: {},
   error: {}
 };
 
@@ -21,6 +23,11 @@ const item = (state = initialState, action) => {
       return {
         ...state,
         items: action.items
+      };
+    case SHOW_ITEM:
+      return {
+        ...state,
+        item: action.item
       };
     case FILTER_ITEMS:
       const filterItems = state.items.filter((item) => item.id !== action.id);
