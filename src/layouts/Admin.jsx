@@ -79,7 +79,7 @@ import EditShops from "../pages/shops/EditShops";
 import EditOwners from "../pages/owners/EditOwners";
 import EditAccounts from "../pages/accounts/EditAccounts";
 import {logout} from '../store/actions'
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import EditExpenseNames from "../pages/expense_names/EditExpenseNames";
 import EditMerchants from "../pages/merchants/EditMerchants";
 import EditExpenses from "../pages/expenses/EditExpenses";
@@ -96,6 +96,7 @@ const text = (
 const Admin = ({logout}) => {
   const [collapsed, setCollapsed] = useState(false);
   const { pathname } = useLocation();
+  const user=useSelector((state)=>state.auth.user);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -106,7 +107,8 @@ const Admin = ({logout}) => {
 
   const content = (
     <Space direction="vertical" style={{ textAlign: "center", width: "100%" }}>
-      <Title level={5}>Organic Nail Shop</Title>
+      <Title level={5}>{user?.name} ({user?.position})</Title>
+      <Title level={5}>{user?.shop?.name}</Title>
       <Button danger onClick={handleLogout}>
         Logout
       </Button>
@@ -312,6 +314,9 @@ const Admin = ({logout}) => {
               <Menu.Item key="CreateAccounts" icon={<SaveOutlined />}>
                 <Link to="/admin/create-accounts">Create</Link>
               </Menu.Item>
+              <Menu.Item key="ShowShops" icon={<UnorderedListOutlined />}>
+                <Link to="/admin/show-shops">ဆိုင်များ</Link>
+              </Menu.Item>
             </SubMenu>
 
             <SubMenu
@@ -338,75 +343,49 @@ const Admin = ({logout}) => {
               <Menu.Item key="CreateMembers" icon={<SaveOutlined />}>
                 <Link to="/admin/create-members">Create</Link>
               </Menu.Item>
-              {/* <Menu.Item key="DetailMembers" icon={<SaveOutlined />}>
-                <Link to="/admin/detail-members">Detail</Link>
-              </Menu.Item> */}
+           
+              
             </SubMenu>
-
-            {/* Supplier အချက်အလက်များသွင်းရန်စာမျက်နှာ */}
-            {/* <SubMenu
-              key="Supplier"
-              title="Supplier"
-              icon={<UsergroupAddOutlined />}
-            >
-              <Menu.Item key="ShowSupplier" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-supplier">List</Link>
-              </Menu.Item>
-              <Menu.Item key="CreateSupplier" icon={<SaveOutlined />}>
-                <Link to="/admin/create-supplier">Create</Link>
-              </Menu.Item>
-              <Menu.Item key="EditSupplier" icon={<SaveOutlined />}>
-                <Link to="/admin/edit-supplier/:id">Edit</Link>
-              </Menu.Item>
-            </SubMenu> */}
-
+           
             <SubMenu
-              key="Stock"
-              title="ပစ္စည်းအဝယ်သွင်းရန်"
+              key="Items"
+              title="ပစ္စည်းများ"
               icon={<DatabaseOutlined />}
             >
+              <Menu.Item key="ShowItems" icon={<UnorderedListOutlined />}>
+                <Link to="/admin/show-items">ပစ္စည်းများ</Link>
+              </Menu.Item>
               <Menu.Item key="ShowStocks" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-stocks">List</Link>
+                <Link to="/admin/show-stocks">ပစ္စည်းအဝယ်သွင်းရန်</Link>
               </Menu.Item>
-              <Menu.Item key="CreateStocks" icon={<SaveOutlined />}>
-                <Link to="/admin/create-stocks">Create</Link>
-              </Menu.Item>
-            </SubMenu>
-
-            <SubMenu
-              key="Item_Transfer"
-              title="ပစ္စည်းလွှဲပြောင်းရန်"
-              icon={<DatabaseOutlined />}
-            >
               <Menu.Item
                 key="ShowItemTransfer"
                 icon={<UnorderedListOutlined />}
               >
-                <Link to="/admin/show-item-transfer">List</Link>
+                <Link to="/admin/show-item-transfer">ပစ္စည်းလွှဲပြောင်းရန်</Link>
               </Menu.Item>
-              <Menu.Item key="CreateItemTransfer" icon={<SaveOutlined />}>
-                <Link to="/admin/create-item-transfer">Create</Link>
-              </Menu.Item>
-              <Menu.Item key="ShowItemChangeList" icon={<SaveOutlined />}>
-                <Link to="/admin/show-item-change-list">
-                  ပစ္စည်းလဲခြင်းစာရင်း
-                </Link>
-              </Menu.Item>
-            </SubMenu>
-
-            <SubMenu
-              key="BadItems"
-              title="ချို့ယွင်းချက်ရှိပစ္စည်း"
-              icon={<DatabaseOutlined />}
-            >
               <Menu.Item key="CreateBadItems" icon={<SaveOutlined />}>
-                <Link to="/admin/create-bad-item">Create</Link>
+                <Link to="/admin/create-bad-item">ချို့ယွင်းချက်ရှိပစ္စည်း</Link>
               </Menu.Item>
 
-              <Menu.Item key="ShowBadItems" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-bad-item">List</Link>
+            
+            </SubMenu>
+            
+
+
+            <SubMenu key="Service" title="ဝန်ဆောင်မှု" icon={<FlagOutlined />}>
+              <Menu.Item key="CreateService" icon={<SaveOutlined />}>
+                <Link to="/admin/create-service">Create</Link>
+              </Menu.Item>
+
+              <Menu.Item key="ShowService" icon={<UnorderedListOutlined />}>
+                <Link to="/admin/show-service">List</Link>
               </Menu.Item>
             </SubMenu>
+
+            
+
+            
 
             <SubMenu
               key="Staff"
@@ -427,15 +406,7 @@ const Admin = ({logout}) => {
                 </Link>
               </Menu.Item>
             </SubMenu>
-            <SubMenu key="Service" title="ဝန်ဆောင်မှု" icon={<FlagOutlined />}>
-              <Menu.Item key="CreateService" icon={<SaveOutlined />}>
-                <Link to="/admin/create-service">Create</Link>
-              </Menu.Item>
-
-              <Menu.Item key="ShowService" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-service">List</Link>
-              </Menu.Item>
-            </SubMenu>
+            
 
             <SubMenu key="Owner" title="Owners" icon={<UsergroupAddOutlined />}>
               <Menu.Item key="CreateOwner" icon={<SaveOutlined />}>
@@ -447,36 +418,7 @@ const Admin = ({logout}) => {
               </Menu.Item>
             </SubMenu>
 
-            <SubMenu key="Reports" title="Reports" icon={<FolderAddOutlined />}>
-              <Menu.Item key="ItemsReports" icon={<SaveOutlined />}>
-                <Link to="/admin/item-report">Item</Link>
-              </Menu.Item>
-
-              <Menu.Item key="VouchersReports" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/voucher-report">Voucher</Link>
-              </Menu.Item>
-              <Menu.Item key="ServicesReports" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/service-report">Service</Link>
-              </Menu.Item>
-              <Menu.Item key="ReportScreem" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/report-screem">Report Screem</Link>
-              </Menu.Item>
-            </SubMenu>
-
-            {/*end Supplier အချက်အလက်များသွင်းရန်စာမျက်နှာ */}
-
-            <SubMenu
-              key="Items"
-              title="ပစ္စည်းများ"
-              icon={<DatabaseOutlined />}
-            >
-              <Menu.Item key="ShowItems" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-items">List</Link>
-              </Menu.Item>
-              <Menu.Item key="CreateItems" icon={<SaveOutlined />}>
-                <Link to="/admin/create-items">Create</Link>
-              </Menu.Item>
-            </SubMenu>
+           
 
             <SubMenu
               key="BuyMerchants"
@@ -499,45 +441,30 @@ const Admin = ({logout}) => {
               icon={<CalculatorOutlined />}
             >
               <Menu.Item key="ShowExpenses" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-expenses">List</Link>
+                <Link to="/admin/show-expenses">ကုန်ကျစရိတ်များ</Link>
               </Menu.Item>
-              <Menu.Item key="CreateExpenses" icon={<SaveOutlined />}>
-                <Link to="/admin/create-expenses">Create</Link>
-              </Menu.Item>
-            </SubMenu>
-            <SubMenu
-              key="ExpenseNames"
-              title="ကုန်ကျစရိတ်အမည်များ"
-              icon={<CalculatorOutlined />}
-            >
               <Menu.Item
                 key="ShowExpenseNames"
                 icon={<UnorderedListOutlined />}
               >
-                <Link to="/admin/show-expense-names">List</Link>
-              </Menu.Item>
-              <Menu.Item key="CreateExpenseNames" icon={<SaveOutlined />}>
-                <Link to="/admin/create-expense-names">Create</Link>
+                <Link to="/admin/show-expense-names">ကုန်ကျစရိတ်အမည်များ</Link>
               </Menu.Item>
             </SubMenu>
-            <SubMenu key="Shops" title="ဆိုင်များ" icon={<ShopOutlined />}>
-              <Menu.Item key="ShowShops" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-shops">List</Link>
+           
+            
+            <SubMenu key="Reports" title="Reports" icon={<FolderAddOutlined />}>
+              <Menu.Item key="ItemsReports" icon={<SaveOutlined />}>
+                <Link to="/admin/item-report">Item</Link>
               </Menu.Item>
-              <Menu.Item key="CreateShops" icon={<SaveOutlined />}>
-                <Link to="/admin/create-shops">Create</Link>
+
+              <Menu.Item key="VouchersReports" icon={<UnorderedListOutlined />}>
+                <Link to="/admin/voucher-report">Voucher</Link>
               </Menu.Item>
-            </SubMenu>
-            <SubMenu
-              key="BuyItems"
-              title="အဝယ်ပစ္စည်းများ"
-              icon={<UnorderedListOutlined />}
-            >
-              <Menu.Item key="ShowBuyItems" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-buy-items">List</Link>
+              <Menu.Item key="ServicesReports" icon={<UnorderedListOutlined />}>
+                <Link to="/admin/service-report">Service</Link>
               </Menu.Item>
-              <Menu.Item key="CreateBuyItems" icon={<SaveOutlined />}>
-                <Link to="/admin/create-buy-items">Create</Link>
+              <Menu.Item key="ReportScreem" icon={<UnorderedListOutlined />}>
+                <Link to="/admin/report-screem">Report Screem</Link>
               </Menu.Item>
             </SubMenu>
           </Menu>

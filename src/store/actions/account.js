@@ -1,47 +1,48 @@
 import axios from "axios";
 import {
-    SHOW_ACCOUNTS,
-    CREATE_ACCOUNTS,
-    UPDATE_ACCOUNTS,
-    FILTER_ACCOUNTS,
-    ERROR_ACCOUNT
+  SHOW_ACCOUNTS,
+  CREATE_ACCOUNTS,
+  UPDATE_ACCOUNTS,
+  FILTER_ACCOUNTS,
+  ERROR_ACCOUNT,
 } from "../type";
 
 export const showAccounts = (accounts) => ({
   type: SHOW_ACCOUNTS,
-  accounts
+  accounts,
 });
 
 export const createAccounts = (account) => ({
   type: CREATE_ACCOUNTS,
-  account
+  account,
 });
 
 export const filterAccounts = (id) => ({
   type: FILTER_ACCOUNTS,
-  id
+  id,
 });
 
 export const updateAccounts = (data) => ({
   type: UPDATE_ACCOUNTS,
-  data
+  data,
 });
 
 export const setAccountErrors = (error) => ({
   type: ERROR_ACCOUNT,
-  error
+  error,
 });
 
 export const getAccounts = () => {
   return async (dispatch) => {
     try {
+      alert("hi");
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members"
+        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/user"
       );
       const result = response.data.data.map((member) => {
         return {
           ...member,
-          key: member.id
+          key: member.id,
         };
       });
       // console.log(response.status)
@@ -67,7 +68,7 @@ export const saveAccounts = (data) => {
       );
       const result = {
         ...response.data.data,
-        key: response.data.data.id
+        key: response.data.data.id,
       };
       // if (response.status === 201) {
       //   dispatch(createAccounts(result));

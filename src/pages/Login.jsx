@@ -9,9 +9,12 @@ const { Title } = Typography;
 const Login = ({ auth, authUser }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const [loading,setLoading]=React.useState(false);
 
   const onFinish = async (values) => {
+    setLoading(true);
     await authUser("io-login", values);
+    setLoading(false);
     if (auth.isAuthenticated) {
       navigate("/admin", { replace: true });
     }
@@ -66,6 +69,7 @@ const Login = ({ auth, authUser }) => {
 
           <Form.Item>
             <Button
+            disabled={loading}
               htmlType="submit"
               size="large"
               style={{

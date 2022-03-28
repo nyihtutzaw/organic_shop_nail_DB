@@ -4,6 +4,7 @@ import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { getAccounts } from "../../store/actions";
 
 const { Title } = Typography;
 
@@ -30,6 +31,10 @@ const ShowAccounts = () => {
     dispatch({ type: "DELETE_ACCOUNTS", payload:record.id})
     openNotificationWithIcon('error')
   }
+
+  React.useEffect(() => {
+    dispatch(getAccounts())
+  }, [getAccounts]);
 
 
   const columns = [
