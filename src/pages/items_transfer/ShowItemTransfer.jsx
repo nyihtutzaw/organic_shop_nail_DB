@@ -9,6 +9,8 @@ import { getItemTransfers } from "../../store/actions";
 const { Title } = Typography;
 
 const ShowItemTransfer = ({ item_transfer, getItemTransfers}) => {
+console.log(item_transfer.itemTransfers)
+
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -22,6 +22,8 @@ import {
 import { connect } from "react-redux";
 import { getMerchants, getItems, savePurchases } from "../../store/actions";
 import { useNavigate } from "react-router-dom";
+import dateFormat from "dateformat";
+
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -56,6 +58,9 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
     };
   }, [getItems]);
 
+  const now = new Date();
+  const date = dateFormat(now, "yyyy-mm-dd");
+
   const onFinish = (values) => {
     setBuys([
       ...buys,
@@ -63,10 +68,12 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
         ...values,
         subtotal: values.quantity * values.price,
         key: buys.length + 1,
+        data: date
       },
     ]);
     form.resetFields();
   };
+// console.log("dd",buys )
 
   let allTotal = [];
   buys.forEach((buy) => allTotal.push(parseInt(buy.subtotal)));
@@ -119,9 +126,12 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
         paid: paid,
         credit: credit,
         whole_total: result,
+        date: date
       };
       await savePurchases(saveBuy)
       openNotificationWithIcon('success')
+  // console.log("save", saveBuy)
+
     }
     navigate("/admin/show-buy-merchants");
   };

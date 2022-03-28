@@ -3,41 +3,39 @@ import { Form, Input, Typography, Space, Button, Select } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { connect, useSelector } from "react-redux";
-import { editMerchants, getShops } from "../../store/actions";
+import { editMerchants, getShops, getMerchant } from "../../store/actions";
 import { useNavigate, useParams } from "react-router-dom";
 
 const { Title } = Typography;
 const { Option } = Select;
 
-const EditMerchants = ({ editMerchants, getShops }) => {
+const EditMerchants = ({ editMerchants, getShops, getMerchant }) => {
   const [form] = Form.useForm();
-  const { id } = useParams();
-  const merchants = useSelector((state) => state.merchant.merchants);
-  const currentMerchant = merchants.find((merchant) => merchant.id === parseInt(id));
-  const currentId = parseInt(currentMerchant.shop_id);
-  const shops = useSelector((state) => state.shop.shops);
+  const param = useParams();
   const navigate = useNavigate();
+
+  const merchant = useSelector((state) => state.merchant.merchant);
+
   useEffect(() => {
     const fetchData = async () => {
       await getShops();
+      await getMerchant(param?.id);
     };
     fetchData();
     return () => {
       fetchData();
     };
-  }, [getShops]);
+  }, [getShops, getMerchant]);
 
   useEffect(() => {
-    if (currentMerchant) {
-      form.setFieldsValue({ code: currentMerchant.code });
-      form.setFieldsValue({ name: currentMerchant.name });
-      form.setFieldsValue({ company_name: currentMerchant.company_name });
-      form.setFieldsValue({ other: currentMerchant.other });
-    }
-  }, [currentMerchant]);
+    form.setFieldsValue({ code: merchant?.code });
+    form.setFieldsValue({ name: merchant?.name });
+    form.setFieldsValue({ company_name: merchant?.company_name });
+    form.setFieldsValue({ other: merchant?.other });
+  }, [merchant]);
 
   const onFinish = async (values) => {
-    await editMerchants(id, values)
+    await editMerchants(param?.id, values)
     form.resetFields();
     navigate("/admin/show-merchants");
   };
@@ -57,9 +55,8 @@ const EditMerchants = ({ editMerchants, getShops }) => {
           wrapperCol={{
             span: 24
           }}
-         
           initialValues={{
-            ["shop_id"]: currentId ,
+            // ["shop_id"]: currentId ,
             remember: true
           }}
           onFinish={onFinish}
@@ -133,6 +130,7 @@ const EditMerchants = ({ editMerchants, getShops }) => {
               size="large"
             />
           </Form.Item>
+
           {/* <Form.Item
             name="shop_id"
             label="ဆိုင်အမည်"
@@ -181,4 +179,6 @@ const EditMerchants = ({ editMerchants, getShops }) => {
   );
 };
 
-export default connect(null, { editMerchants, getShops })(EditMerchants);
+export default connect(null, { editMerchants, getShops, getMerchant })(
+  EditMerchants
+);

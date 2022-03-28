@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Typography, Space, Row, Col, Button, Table } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { ExportOutlined, PlusSquareOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
+import {getItemTransfers, item_transfer} from "../../store/actions";
 
 const { Title } = Typography;
 
-const ShowItemChangeList = () => {
+const ShowItemChangeList = ({getItemTransfers, item_transfer}) => {
+  console.log(item_transfer)
+  useEffect(() => {
+    const fetchData = async () => {
+      await getItemTransfers();
+    };
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getItemTransfers]);
+
   const navigate = useNavigate();
 
   const columns = [
@@ -51,4 +64,8 @@ const ShowItemChangeList = () => {
   );
 };
 
-export default ShowItemChangeList;
+const mapStateToProps = (store) => ({
+  item_transfer: store.item_transfer
+});
+
+export default connect(mapStateToProps, { getItemTransfers })(ShowItemChangeList);

@@ -1,36 +1,53 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table } from "antd";
+import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import dateFormat, { masks } from "dateformat";
+import {
+  saveOwners,
+  getOwners,
+  deleteOwners,
+  getOwner
+} from "../../store/actions";
+import { connect, useSelector } from "react-redux";
 
 const { Title } = Typography;
 
-const ShowOwners = () => {
-  const owners = useSelector((state) => state.OwnerReducer);
+const ShowOwners = ({ getOwners, deleteOwners, getOwner }) => {
+  const owners = useSelector((state) => state.owner.owners);
+  useEffect(() => {
+    const fetchData = async () => {
+      await getOwners();
+    };
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getOwners]);
+
   const now = new Date();
   const date = dateFormat(now, "mm/dd/yyyy");
-  const result = owners.map((owner) => ({
-    date: date,
-    id: owner.id,
-    key: owner.id,
-    item_code: owner.item_code,
-    item_name: owner.item_name,
-    item_total: owner.item_total,
-  }));
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
-  const handleClick = (record) => {
-    navigate(`/admin/edit-owner/${record.id}`);
+  const handleClick = async (id) => {
+    await getOwner(id);
+    navigate(`/admin/edit-owner/${id}`);
   };
 
-  const handleDelete = (record) => {
-    dispatch({ type: "DELETE_OWNERS", payload:record.id})
-  }
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: "Deleted Your Data",
+      description: "Your data have been deleted.",
+      duration: 3
+    });
+  };
+
+  const handleDelete = async (record) => {
+    await deleteOwners(record.id);
+    openNotificationWithIcon("error");
+  };
 
   const columns = [
     {
@@ -39,23 +56,27 @@ const ShowOwners = () => {
     },
     {
       title: "ပစ္စည်းအမည်",
-      dataIndex: "item_name"
+      dataIndex: "name",
+      render: (_, record) => record.stock.item.name
     },
     {
       title: "ပစ္စည်းကုတ်",
-      dataIndex: "item_code"
+      dataIndex: "code",
+      render: (_, record) => record.stock.item.code
     },
     {
       title: "အရေအတွက်",
-      dataIndex: "item_total"
+      dataIndex: "quantity"
     },
     {
       title: "Actions",
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          <Button type="primary" onClick={()=> handleClick(record)}>Edit</Button>
-          <Button type="primary" danger onClick={()=> handleDelete(record)}>
+          <Button type="primary" onClick={() => handleClick(record.id)}>
+            Edit
+          </Button>
+          <Button type="primary" danger onClick={() => handleDelete(record)}>
             Delete
           </Button>
         </Space>
@@ -89,11 +110,13 @@ const ShowOwners = () => {
           bordered
           columns={columns}
           pagination={{ defaultPageSize: 10 }}
-            dataSource={result}
+          dataSource={owners}
         />
       </Space>
     </Layout>
   );
 };
 
-export default ShowOwners;
+export default connect(null, { saveOwners, getOwners, deleteOwners, getOwner })(
+  ShowOwners
+);

@@ -1,31 +1,69 @@
-import React, { useState } from "react";
-import { Form, Input, Typography, Space, Button, InputNumber } from "antd";
+import React, { useState, useEffect } from "react";
+import {
+  Form,
+  Input,
+  Typography,
+  Space,
+  Button,
+  InputNumber,
+  Select,
+  notification
+} from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import dateFormat from "dateformat";
+import { saveOwners, getStocks } from "../../store/actions";
+import { connect, useSelector } from "react-redux";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
+const { Option } = Select;
 
-const CreateOwners = () => {
-  const owners = useSelector((state) => state.OwnerReducer);
+const CreateOwners = ({ saveOwners, getStocks }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const now = new Date();
-  const date = dateFormat(now, "mm/dd/yyyy");
-  const onFinish = (values) => {
-   
+  const date = dateFormat(now, "yyyy-mm-dd");
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      await getStocks();
+    };
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getStocks]);
+
+  const stocks = useSelector((state) => state.stock.stocks);
+  const allStocks = stocks.map((stock) => {
+    return {
+      id: stock.id,
+      name: stock.item.name
+    };
+  });
+
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: "Saved Your Data",
+      description: "Your data have been saved.",
+      duration: 3
+    });
+  };
+
+  const onFinish = async (values) => {
     const data = {
       date: date,
-      id: owners[owners.length - 1].id + 1,
-      key: owners[owners.length - 1].id + 1,
+      // id: stocks[stocks.length - 1].id + 1,
+      // key: stocks[stocks.length - 1].id + 1,
       ...values
     };
-    dispatch({ type: "ADD_OWNERS", payload: data });
+    await saveOwners(data);
+    openNotificationWithIcon("success");
     form.resetFields();
-    navigate("/admin/show-owner");
+    // navigate("/admin/show-owner");
   };
 
   return (
@@ -57,43 +95,38 @@ const CreateOwners = () => {
               marginBottom: "10px"
             }}
           ></Space>
+
           <Form.Item
-            name="item_code"
-            label="ပစ္စည်းကုတ်"
+            name="stock_id"
+            label="ပစ္စည်းကုတ်/အမည်"
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ ပစ္စည်းကုတ်ထည့်ပါ"
+                message: "ကျေးဇူးပြု၍ ပစ္စည်းကုတ်/အမည်ထည့်ပါ"
               }
             ]}
           >
-            <InputNumber
-              placeholder="ပစ္စည်းကုတ်ထည့်ပါ"
-              prefix={<EditOutlined />}
-              style={{ borderRadius: "10px", width: "100%" }}
+            <Select
+              showSearch
+              placeholder="ကျေးဇူးပြု၍ ပစ္စည်းကုတ်/အမည်ရွေးပါ"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              allowClear={true}
               size="large"
-            />
-          </Form.Item>
-          <Form.Item
-            name="item_name"
-            label="ပစ္စည်းအမည်"
-            rules={[
-              {
-                required: true,
-                message: "ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
-              }
-            ]}
-          >
-            <Input
-              placeholder="ပစ္စည်းအမည်ထည့်ပါ"
-              prefix={<EditOutlined />}
               style={{ borderRadius: "10px" }}
-              size="large"
-            />
+            >
+              {allStocks.map((stock) => (
+                <Option key={stock.id} value={stock.id}>
+                  {stock.name}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
 
           <Form.Item
-            name="item_total"
+            name="quantity"
             label="အရေအတွက်"
             rules={[
               {
@@ -130,4 +163,4 @@ const CreateOwners = () => {
   );
 };
 
-export default CreateOwners;
+export default connect(null, { saveOwners, getStocks })(CreateOwners);

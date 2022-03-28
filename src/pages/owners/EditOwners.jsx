@@ -1,36 +1,56 @@
-import React, { useEffect } from "react";
-import { Form, Input, Typography, Space, Button, InputNumber } from "antd";
+import React, { useState, useEffect } from "react";
+import {
+  Form,
+  Input,
+  Typography,
+  Space,
+  Button,
+  InputNumber,
+  Select
+} from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { getStocks, editOwners, getOwner } from "../../store/actions";
+import dateFormat from "dateformat";
 
 const { Title } = Typography;
+const { Option } = Select;
 
-const EditOwners = () => {
-  const { id } = useParams();
-  const owners = useSelector((state) => state.OwnerReducer);
-  const currentOwner = owners.find((owner) => owner.id === parseInt(id));
-  useEffect(() => {
-    if (currentOwner) {
-      form.setFieldsValue({ item_name: currentOwner.item_name });
-      form.setFieldsValue({ item_code: currentOwner.item_code });
-      form.setFieldsValue({ item_total: currentOwner.item_total });
-    }
-  }, [currentOwner]);
-  const dispatch = useDispatch();
+
+const EditOwners = ({ getStocks, getOwner, editOwners, owner }) => {
+  const param = useParams();
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      await getStocks();
+      await getOwner(param?.id);
+    };
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getStocks, getOwner]);
+
+  const stocks = useSelector((state) => state.stock.stocks);
+
+  useEffect(() => {
+    form.setFieldsValue({ quantity: owner.owner?.quantity });
+    form.setFieldsValue({ stock_id: owner.owner?.stock?.id });
+  }, [owner]);
+
+  const onFinish = async (values) => {
+    const now = new Date();
+    const date = dateFormat(now, "yyyy-mm-dd");
+
     const data = {
-      id: parseInt(id),
-      key: parseInt(id),
+      date: date,
       ...values
     };
-    dispatch({ type: "UPDATE_OWNERS", payload: data });
-    // console.log("data", data);
-    form.resetFields();
+    await editOwners(param?.id, data);
     navigate("/admin/show-owner");
   };
 
@@ -38,7 +58,7 @@ const EditOwners = () => {
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
-          လုပ်ငန်းရှင်မှပစ္စည်းထုတ်သုံးခြင်းစာမျက်နှာ {id}
+          လုပ်ငန်းရှင်မှပစ္စည်းထုတ်သုံးခြင်းစာမျက်နှာ
         </Title>
         <Form
           labelCol={{
@@ -63,43 +83,39 @@ const EditOwners = () => {
               marginBottom: "10px"
             }}
           ></Space>
+
           <Form.Item
-            name="item_code"
-            label="ပစ္စည်းကုတ်"
+            name="stock_id"
+            label="ပစ္စည်းကုတ်/အမည်"
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ ပစ္စည်းကုတ်ထည့်ပါ"
+                message: "ကျေးဇူးပြု၍ ပစ္စည်းကုတ်/အမည်ထည့်ပါ"
               }
             ]}
           >
-            <InputNumber
-              placeholder="ပစ္စည်းကုတ်ထည့်ပါ"
-              prefix={<EditOutlined />}
-              style={{ borderRadius: "10px", width: "100%" }}
+            <Select
+              showSearch
+              placeholder="ကျေးဇူးပြု၍ ပစ္စည်းကုတ်/အမည်ရွေးပါ"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              allowClear={true}
               size="large"
-            />
-          </Form.Item>
-          <Form.Item
-            name="item_name"
-            label="ပစ္စည်းအမည်"
-            rules={[
-              {
-                required: true,
-                message: "ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
-              }
-            ]}
-          >
-            <Input
-              placeholder="ပစ္စည်းအမည်ထည့်ပါ"
-              prefix={<EditOutlined />}
               style={{ borderRadius: "10px" }}
-              size="large"
-            />
+            >
+              {stocks.map((stock) => (
+                <Option key={stock.id} value={stock.id}>
+                  {stock.item.name}
+                </Option>
+
+              ))}
+            </Select>
           </Form.Item>
 
           <Form.Item
-            name="item_total"
+            name="quantity"
             label="အရေအတွက်"
             rules={[
               {
@@ -135,4 +151,10 @@ const EditOwners = () => {
   );
 };
 
-export default EditOwners;
+const mapStateToProps = (store) => ({
+  owner: store.owner
+});
+
+export default connect(mapStateToProps, { getStocks, editOwners, getOwner })(
+  EditOwners
+);

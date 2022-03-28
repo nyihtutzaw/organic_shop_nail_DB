@@ -1,5 +1,6 @@
 import {
   SHOW_MERCHANTS,
+  SHOW_MERCHANT,
   CREATE_MERCHANTS,
   UPDATE_MERCHANTS,
   FILTER_MERCHANTS,
@@ -8,6 +9,7 @@ import {
 
 const initialState = {
   merchants: [],
+  merchant: {},
   error: {}
 };
 
@@ -22,6 +24,12 @@ const merchant = (state = initialState, action) => {
       return {
         ...state,
         merchants: action.merchants
+      };
+
+    case SHOW_MERCHANT:
+      return {
+        ...state,
+        merchant: action.merchant
       };
     case FILTER_MERCHANTS:
       const filterMerchant = state.merchants.filter(

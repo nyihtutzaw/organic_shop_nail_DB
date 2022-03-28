@@ -7,6 +7,7 @@ import {
 } from "../type";
 import axios from "axios";
 
+
 export const showItemTransfers = (itemTransfers) => ({
   type: SHOW_ITEMS_TRANSFER,
   itemTransfers: itemTransfers,
@@ -25,10 +26,27 @@ export const setTransferErrors = (error) => ({
 export const getItemTransfers = () => {
   return async (dispatch) => {
     try {
-      // result => api
-      // dispatch(showItemTransfers(mockItems));
-    } catch (error) {}
-  };
+      const response = await axios.get(
+        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/item-transfers"
+      );
+      const result = response.data.data.map((item) => {
+        return {
+          ...item,
+          key: item.id
+        };
+      });
+      // console.log(response.status)
+      if (response.status === 200) {
+        dispatch(showItemTransfers(result));
+      }
+    } catch (error) {
+      if (error) {
+        dispatch(setTransferErrors(error));
+      } else {
+        dispatch(setTransferErrors(error));
+      }
+    }
+  }
 };
 
 export const saveItemTransfers = (data) => {

@@ -16,3 +16,4 @@ export * from "./staff.js";
 export * from "./purchase.js";
 export * from "./stock.js";
 export * from "./bad_item.js";
+export * from "./owner.js";

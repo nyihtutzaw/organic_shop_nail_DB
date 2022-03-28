@@ -4,11 +4,11 @@ import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { getMerchants, deleteMerchants } from "../../store/actions";
+import { getMerchants, deleteMerchants, getMerchant } from "../../store/actions";
 
 const { Title } = Typography;
 
-const ShowMerchants = ({ merchant, getMerchants, deleteMerchants }) => {
+const ShowMerchants = ({ merchant, getMerchants, deleteMerchants, getMerchant }) => {
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -20,8 +20,8 @@ const ShowMerchants = ({ merchant, getMerchants, deleteMerchants }) => {
     };
   }, [getMerchants]);
 
-  const handleClick = (record) => {
-    // console.log(record.id);
+  const handleClick =async (record) => {
+    await getMerchant(record.id)
     navigate(`/admin/edit-merchants/${record.id}`);
   };
 
@@ -120,6 +120,6 @@ const mapStateToProps = (store) => ({
   merchant: store.merchant
 });
 
-export default connect(mapStateToProps, { getMerchants, deleteMerchants })(
+export default connect(mapStateToProps, { getMerchants, deleteMerchants, getMerchant })(
   ShowMerchants
 );

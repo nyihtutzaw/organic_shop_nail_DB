@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   SHOW_MERCHANTS,
+  SHOW_MERCHANT,
   CREATE_MERCHANTS,
   UPDATE_MERCHANTS,
   FILTER_MERCHANTS,
@@ -10,6 +11,11 @@ import {
 export const showMerchants = (merchants) => ({
   type: SHOW_MERCHANTS,
   merchants
+});
+
+export const showMerchant = (merchant) => ({
+  type: SHOW_MERCHANT,
+  merchant
 });
 
 export const createMerchants = (merchant) => ({
@@ -54,6 +60,28 @@ export const getMerchants = () => {
         dispatch(setMerchantError(error.response.data.data));
       } else {
         dispatch(setMerchantError(error.response.data));
+      }
+    }
+  };
+};
+
+export const getMerchant = (id) => {
+  return async (dispatch) => {
+    try {
+      // console.log(id);
+      const response = await axios.get(
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/merchants/${id}`
+      );
+      const result = response.data.data;
+      // console.log(result);
+      if (response.status === 200) {
+        dispatch(showMerchant(result));
+      }
+    } catch (error) {
+      if (error) {
+        dispatch(setMerchantError(error));
+      } else {
+        dispatch(setMerchantError(error));
       }
     }
   };
@@ -110,13 +138,13 @@ export const editMerchants = (id, data) => {
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/merchants/${id}?_method=put`,
         data
       );
-      // console.log(response.data.data)
       // console.log(response.status);
       const result = response.data.data;
       const resultMerchant = {
         ...result,
         key: result.id
       };
+      // console.log(result)
       if (response.status === 201) {
         dispatch(updateMerchants(resultMerchant));
       }

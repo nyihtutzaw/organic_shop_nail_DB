@@ -10,7 +10,6 @@ const { Title } = Typography;
 
 const ShowItems = ({ item, getItems, deleteItems, editItems }) => {
   const navigate = useNavigate();
-  // console.log(item)
   useEffect(() => {
     const fetchData = async () => {
       await getItems();
@@ -21,6 +20,7 @@ const ShowItems = ({ item, getItems, deleteItems, editItems }) => {
     };
   }, [getItems]);
 
+  
   const handleClick = (record) => {
     navigate(`/admin/edit-items/${record.id}`);
   };

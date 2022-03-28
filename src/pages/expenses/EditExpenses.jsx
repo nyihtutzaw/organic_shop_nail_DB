@@ -35,6 +35,7 @@ const EditExpense = ({ editExpenses, getExpenseNames }) => {
   );
   const currentName = currentExpenses.name;
 
+  
   const navigate = useNavigate();
   useEffect(() => {
     if (currentExpenses) {

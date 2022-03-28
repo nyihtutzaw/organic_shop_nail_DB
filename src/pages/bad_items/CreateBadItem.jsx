@@ -24,7 +24,6 @@ import dateFormat, { masks } from "dateformat";
 const now = new Date();
 
 
-
 const { Title, Text } = Typography;
 const { Option } = Select;
 const CreateBadItem = ({getStocks, saveBadItems }) => {
