@@ -4,32 +4,42 @@ import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { editShops } from "../../store/actions";
+import { editShops, getShop} from "../../store/actions";
 import { connect } from "react-redux";
 
 const { Title } = Typography;
-const EditShops = ({ editShops }) => {
+const EditShops = ({ editShops,getShop }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const param = useParams();
 
-  const { id } = useParams();
-  const shops = useSelector((state) => state.shop.shops);
-  const currentShop = shops.find((shop) => shop.id === parseInt(id));
+  const shop = useSelector((state) => state.shop.shop);
 
   useEffect(() => {
-    if (currentShop) {
-      form.setFieldsValue({ name: currentShop.name });
-    }
-  }, [currentShop]);
+    const fetchData = async () => {
+      await getShop(param?.id);
+    };
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getShop]);
+
+
+  useEffect(() => {
+     
+      form.setFieldsValue({ name: shop.name });
+    
+  }, [shop]);
 
   const onFinish = async (values) => {
     const data = {
-      id: parseInt(id),
-      key: parseInt(id),
+      id: parseInt(param?.id),
+      key: parseInt(param?.id),
       ...values,
     };
-    await editShops(data);
-    form.resetFields();
+    await editShops(param?.id, data);
+    // form.resetFields();
     navigate("/admin/show-shops");
   };
 
@@ -70,6 +80,7 @@ const EditShops = ({ editShops }) => {
               style={{ borderRadius: "10px" }}
               size="large"
             />
+
           </Form.Item>
           <Form.Item style={{ textAlign: "right" }}>
             <Button
@@ -91,4 +102,4 @@ const EditShops = ({ editShops }) => {
   );
 };
 
-export default connect(null, { editShops })(EditShops);
+export default connect(null, { editShops, getShop })(EditShops);

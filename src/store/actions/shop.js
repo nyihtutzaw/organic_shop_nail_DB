@@ -1,9 +1,14 @@
 import axios from "axios";
-import { SHOW_SHOPS, CREATE_SHOPS, UPDATE_SHOPS, FILTER_SHOPS } from "../type";
+import { SHOW_SHOPS, SHOW_SHOP,  CREATE_SHOPS, UPDATE_SHOPS, FILTER_SHOPS, ERROR_SHOP } from "../type";
 
 export const showShops = (shops) => ({
   type: SHOW_SHOPS,
   shops
+});
+
+export const showShop = (shop) => ({
+  type: SHOW_SHOP,
+  shop
 });
 
 export const createShops = (shop) => ({
@@ -19,6 +24,11 @@ export const filterShops = (id) => ({
 export const updateShops = (data) => ({
   type: UPDATE_SHOPS,
   data
+});
+
+export const setShopErrors = (error) => ({
+  type: ERROR_SHOP,
+  error
 });
 
 
@@ -37,6 +47,29 @@ export const getShops = () => {
       dispatch(showShops(result));
     } catch (error) {
       console.log(error);
+    }
+  };
+};
+
+
+export const getShop = (id) => {
+  return async (dispatch) => {
+    try {
+      // console.log(id);
+      const response = await axios.get(
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${id}`
+      );
+      const result = response.data.data;
+      // console.log(result)
+      if (response.status === 200) {
+        dispatch(showShop(result));
+      }
+    } catch (error) {
+      if (error) {
+        dispatch(setShopErrors(error));
+      } else {
+        dispatch(setShopErrors(error));
+      }
     }
   };
 };
@@ -68,13 +101,14 @@ export const deleteShops = (id) => {
   };
 };
 
-export const editShops = (data) => {
+export const editShops = (id, data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${data.id}?_method=put`,
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${id}?_method=put`,
         data
       );
+
       dispatch(updateShops(data));
     } catch (error) {}
   };

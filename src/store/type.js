@@ -11,6 +11,7 @@ export const ERROR_STOCKS = "ERROR_STOCKS";
 export const ERROR_TRANSFERS = "ERROR_TRANSFERS";
 export const ERROR_BADITEMS = "ERROR_BADITEMS";
 export const ERROR_OWNER = "ERROR_OWNER";
+export const ERROR_SHOP = "ERROR_SHOP";
 
 export const SHOW_MERCHANTS = 'SHOW_MERCHANTS';
 export const SHOW_MERCHANT = 'SHOW_MERCHANT';
@@ -48,6 +49,7 @@ export const SHOW_ITEMS_IMPORTS = 'SHOW_ITEMS_IMPORTS';
 export const CREATE_ITEMS_IMPORTS = 'CREATE_ITEMS_IMPORTS';
 
 export const SHOW_SHOPS = 'SHOW_SHOPS';
+export const SHOW_SHOP = 'SHOW_SHOP';
 export const CREATE_SHOPS = 'CREATE_SHOPS';
 export const FILTER_SHOPS = 'FILTER_SHOPS';
 export const UPDATE_SHOPS = 'UPDATE_SHOPS';

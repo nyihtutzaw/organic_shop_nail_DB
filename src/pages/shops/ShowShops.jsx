@@ -4,13 +4,15 @@ import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { getShops, deleteShops } from "../../store/actions";
+import { getShops, deleteShops, getShop } from "../../store/actions";
 
 const { Title } = Typography;
 
-const ShowShops = ({ shop, getShops, deleteShops }) => {
+const ShowShops = ({ shop, getShops, deleteShops, getShop }) => {
   const navigate = useNavigate();
+
   const handleClick = async (record) => {
+     await getShop(record.id);
     navigate(`/admin/edit-shops/${record.id}`);
   };
 
@@ -24,16 +26,17 @@ const ShowShops = ({ shop, getShops, deleteShops }) => {
       fetchData();
     };
   }, [getShops]);
+
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Delete Your Data',
-      description: 'Your data have been deleted.',
+      message: "Delete Your Data",
+      description: "Your data have been deleted.",
       duration: 3
     });
   };
   const handleDelete = async (record) => {
     await deleteShops(record.id);
-    openNotificationWithIcon('error')
+    openNotificationWithIcon("error");
   };
 
   const columns = [
@@ -108,4 +111,4 @@ const mapStateToProps = (store) => ({
   shop: store.shop
 });
 
-export default connect(mapStateToProps, { getShops, deleteShops })(ShowShops);
+export default connect(mapStateToProps, { getShops, deleteShops, getShop })(ShowShops);

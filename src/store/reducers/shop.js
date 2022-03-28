@@ -1,8 +1,9 @@
-import { SHOW_SHOPS, CREATE_SHOPS, UPDATE_SHOPS, FILTER_SHOPS } from "../type";
+import { SHOW_SHOPS,SHOW_SHOP, CREATE_SHOPS, UPDATE_SHOPS, FILTER_SHOPS, ERROR_SHOP } from "../type";
 
 const initialState = {
-  shops: []
-  // shop: {},
+  shops: [],
+  shop: {},
+  error: {}
 };
 
 const shop = (state = initialState, action) => {
@@ -17,6 +18,11 @@ const shop = (state = initialState, action) => {
         ...state,
         shops: action.shops
       };
+    case SHOW_SHOP:
+      return {
+        ...state,
+        shop: action.shop
+      };
       case FILTER_SHOPS:
         const filterShop = state.shops.filter(shop => shop.id !== action.id);
         return {
@@ -29,6 +35,11 @@ const shop = (state = initialState, action) => {
           ...state,
           shops: updateShop
         };
+        case ERROR_SHOP:
+      return {
+        ...state,
+        error: action.error
+      };
     default:
       return state;
   }
