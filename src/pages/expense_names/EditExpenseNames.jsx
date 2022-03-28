@@ -2,33 +2,37 @@ import React, { useEffect } from "react";
 import { Form, Input, Typography, Space, Button } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
-import { editExpenseNames } from "../../store/actions";
+import { editExpenseNames, getExpenseName } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
-
 const { Title } = Typography;
 
-const EditExpenseNames = ({editExpenseNames}) => {
-  const { id } = useParams();
-  const expenseNames = useSelector((state) => state.expense_name.expense_names);
-  const currentexpenseName = expenseNames.find((expenseName) => expenseName.id === parseInt(id));
-    // console.log(currentexpenseName)
+const EditExpenseNames = ({ editExpenseNames, getExpenseName }) => {
+  const param = useParams();
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const onFinish = async (values) => {
-    // console.log(values);
-    await editExpenseNames(id, values)
-    form.resetFields();
-    navigate("/admin/show-expense-names");
-  };
 
+  const expenseName = useSelector((state) => state.expense_name.expense_name);
 
   useEffect(() => {
-    if (currentexpenseName) {
-      form.setFieldsValue({ name: currentexpenseName.name });
-    }
-  }, [currentexpenseName]);
+    const fetchData = async () => {
+      await getExpenseName(param?.id);
+    };
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getExpenseName]);
+
+  useEffect(() => {
+    form.setFieldsValue({ name: expenseName.name });
+  }, [expenseName]);
+
+  const onFinish = async (values) => {
+    await editExpenseNames(param?.id, values)
+    navigate("/admin/show-expense-names");
+  };
 
   return (
     <Layout style={{ margin: "20px" }}>
@@ -38,13 +42,13 @@ const EditExpenseNames = ({editExpenseNames}) => {
         </Title>
         <Form
           labelCol={{
-            span: 3,
+            span: 3
           }}
           wrapperCol={{
-            span: 24,
+            span: 24
           }}
           initialValues={{
-            remember: true,
+            remember: true
           }}
           onFinish={onFinish}
           form={form}
@@ -55,8 +59,8 @@ const EditExpenseNames = ({editExpenseNames}) => {
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ ကုန်ကျစရိတ်အမည်ထည့်ပါ",
-              },
+                message: "ကျေးဇူးပြု၍ ကုန်ကျစရိတ်အမည်ထည့်ပါ"
+              }
             ]}
           >
             <Input
@@ -71,7 +75,7 @@ const EditExpenseNames = ({editExpenseNames}) => {
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "10px",
+                borderRadius: "10px"
               }}
               size="large"
               htmlType="submit"
@@ -86,4 +90,6 @@ const EditExpenseNames = ({editExpenseNames}) => {
   );
 };
 
-export default connect(null, { editExpenseNames })(EditExpenseNames);
+export default connect(null, { editExpenseNames, getExpenseName })(
+  EditExpenseNames
+);

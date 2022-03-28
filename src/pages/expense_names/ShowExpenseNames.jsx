@@ -3,11 +3,11 @@ import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { getExpenseNames, deleteExpenseNames } from "../../store/actions";
+import { getExpenseNames, deleteExpenseNames, getExpenseName } from "../../store/actions";
 import { connect } from "react-redux";
 const { Title } = Typography;
 
-const ShowExpenseNames = ({ expenseNames, getExpenseNames, deleteExpenseNames }) => {
+const ShowExpenseNames = ({ expenseNames, getExpenseNames, deleteExpenseNames, getExpenseName }) => {
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +19,8 @@ const ShowExpenseNames = ({ expenseNames, getExpenseNames, deleteExpenseNames })
     };
   }, [getExpenseNames]);
 
-  const handleClick = (record) => {
+  const handleClick =async (record) => {
+    await getExpenseName(record.id)
     navigate(`/admin/edit-expense-names/${record.id}`);
   };
 
@@ -109,4 +110,4 @@ const mapStateToProps = (store) => ({
 });
 
 
-export default connect(mapStateToProps, { getExpenseNames, deleteExpenseNames })(ShowExpenseNames);
+export default connect(mapStateToProps, { getExpenseNames, deleteExpenseNames, getExpenseName })(ShowExpenseNames);

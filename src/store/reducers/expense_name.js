@@ -1,5 +1,6 @@
 import {
     SHOW_EXPENSENAMES,
+    SHOW_EXPENSENAME,
     CREATE_EXPENSENAMES,
     UPDATE_EXPENSENAMES,
     FILTER_EXPENSENAMES,
@@ -8,6 +9,7 @@ import {
   
   const initialState = {
     expense_names: [],
+    expense_name: [],
     error: {}
   };
   
@@ -22,6 +24,11 @@ import {
         return {
           ...state,
           expense_names: action.expenseNames
+        };
+      case SHOW_EXPENSENAME:
+        return {
+          ...state,
+          expense_name: action.expenseName
         };
       case FILTER_EXPENSENAMES:
         const filterShop = state.expense_names.filter(
