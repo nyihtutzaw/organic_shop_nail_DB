@@ -1,48 +1,34 @@
 import React, { useState, useEffect } from "react";
-import {
-  Form,
-  Input,
-  Typography,
-  Space,
-  Button,
-  Table,
-  InputNumber,
-  message,
-  Drawer,
-  Select
-} from "antd";
+import { Form, Input, Typography, Space, Button, Select } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   EditOutlined,
   SaveOutlined,
   PlusSquareOutlined
 } from "@ant-design/icons";
-import { editExpenses, getExpenseNames } from "../../store/actions";
+import { editExpenses, getExpenseNames, getExpense } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
 const { Title } = Typography;
 const { Option } = Select;
 
-const EditExpense = ({ editExpenses, getExpenseNames }) => {
-  const { id } = useParams();
-  const expenses = useSelector((state) => state.expense.expenses);
-  const expenseNames = useSelector((state) => state.expense_name.expense_names);
-  // console.log(expenseNames);
-
-  const currentExpenses = expenses.find(
-    (expense) => expense.id === parseInt(id)
-  );
-  const currentName = currentExpenses.name;
-
-  
+const EditExpense = ({ editExpenses, getExpenseNames, getExpense }) => {
+  const param = useParams();
   const navigate = useNavigate();
+  const [form] = Form.useForm();
+
+  const expense = useSelector((state) => state.expense.expense);
+
   useEffect(() => {
-    if (currentExpenses) {
-      form.setFieldsValue({ name: currentExpenses.name });
-      form.setFieldsValue({ amount: currentExpenses.amount });
-    }
-  }, [currentExpenses]);
+    const fetchData = async () => {
+      await getExpense(param?.id);
+    };
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getExpense]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,11 +40,16 @@ const EditExpense = ({ editExpenses, getExpenseNames }) => {
     };
   }, [getExpenseNames]);
 
-  const [form] = Form.useForm();
-  const onFinish = async (values) => {
-    await editExpenses(id, values);
-    navigate("/admin/show-expenses");
+  const expenseNames = useSelector((state) => state.expense_name.expense_names);
 
+  useEffect(() => {
+    form.setFieldsValue({ name: expense.name });
+    form.setFieldsValue({ amount: expense.amount });
+  }, [expense]);
+
+  const onFinish = async (values) => {
+    await editExpenses(param?.id, values);
+    navigate("/admin/show-expenses");
   };
 
   return (
@@ -88,7 +79,6 @@ const EditExpense = ({ editExpenses, getExpenseNames }) => {
               span: 24
             }}
             initialValues={{
-              ["name"]: currentName,
               remember: true
             }}
             onFinish={onFinish}
@@ -162,4 +152,6 @@ const EditExpense = ({ editExpenses, getExpenseNames }) => {
   );
 };
 
-export default connect(null, { editExpenses, getExpenseNames })(EditExpense);
+export default connect(null, { editExpenses, getExpenseNames, getExpense })(
+  EditExpense
+);

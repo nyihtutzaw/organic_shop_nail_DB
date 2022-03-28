@@ -1,15 +1,16 @@
 import {
   SHOW_EXPENSES,
+  SHOW_EXPENSE,
   CREATE_EXPENSES,
   UPDATE_EXPENSES,
   FILTER_EXPENSES,
-  ERROR_EXPENSE,
+  ERROR_EXPENSE
 } from "../type";
-
 
 const initialState = {
   expenses: [],
-  error: {},
+  expense: {},
+  error: {}
 };
 
 const expense = (state = initialState, action) => {
@@ -21,7 +22,12 @@ const expense = (state = initialState, action) => {
     case SHOW_EXPENSES:
       return {
         ...state,
-        expenses: action.expenses,
+        expenses: action.expenses
+      };
+    case SHOW_EXPENSE:
+      return {
+        ...state,
+        expense: action.expense
       };
     case FILTER_EXPENSES:
       const filterExpense = state.expenses.filter(
@@ -29,7 +35,7 @@ const expense = (state = initialState, action) => {
       );
       return {
         ...state,
-        expenses: filterExpense,
+        expenses: filterExpense
       };
     case UPDATE_EXPENSES:
       const index = state.expenses.findIndex(
@@ -37,12 +43,12 @@ const expense = (state = initialState, action) => {
       );
       state.expenses[index] = action.data;
       return {
-        ...state,
+        ...state
       };
     case ERROR_EXPENSE:
       return {
         ...state,
-        error: action.error,
+        error: action.error
       };
     default:
       return state;

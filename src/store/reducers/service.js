@@ -1,5 +1,6 @@
 import {
   SHOW_SERVICES,
+  SHOW_SERVICE,
   CREATE_SERVICES,
   UPDATE_SERVICES,
   FILTER_SERVICES,
@@ -8,6 +9,7 @@ import {
 
 const initialState = {
   services: [],
+  service: {},
   error: {}
 };
 
@@ -15,14 +17,18 @@ const service = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_SERVICES:
       return {
-        // ...state,
-        // services: [action.service, ...state.services]
         services: [...state.services, action.service]
       };
     case SHOW_SERVICES:
       return {
         ...state,
         services: action.services
+      };
+      
+    case SHOW_SERVICE:
+      return {
+        ...state,
+        service: action.service
       };
     case FILTER_SERVICES:
       const filterServices = state.services.filter(

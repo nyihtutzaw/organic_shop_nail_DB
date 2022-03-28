@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   SHOW_SERVICES,
+  SHOW_SERVICE,
   CREATE_SERVICES,
   UPDATE_SERVICES,
   FILTER_SERVICES,
@@ -10,6 +11,11 @@ import {
 export const showServices = (services) => ({
   type: SHOW_SERVICES,
   services
+});
+
+export const showService = (service) => ({
+  type: SHOW_SERVICE,
+  service
 });
 
 
@@ -58,6 +64,29 @@ export const getServices = () => {
   };
 };
 
+
+export const getService = (id) => {
+  return async (dispatch) => {
+    try {
+      // console.log(id);
+      const response = await axios.get(
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/${id}`
+      );
+      const result = response.data.data;
+      if (response.status === 200) {
+        dispatch(showService(result));
+      }
+    } catch (error) {
+      if (error) {
+        dispatch(setServiceError(error));
+      } else {
+        dispatch(setServiceError(error));
+      }
+    }
+  };
+};
+
+
 export const saveServices = (data) => {
   return async (dispatch) => {
     try {
@@ -70,7 +99,6 @@ export const saveServices = (data) => {
         ...response.data.data,
         key: response.data.data.id
       };
-      // console.log("services", result);
       if (response.status === 201) {
         dispatch(createServices(result));
       }

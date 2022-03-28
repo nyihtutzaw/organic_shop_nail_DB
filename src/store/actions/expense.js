@@ -1,15 +1,22 @@
 import axios from "axios";
 import {
   SHOW_EXPENSES,
+  SHOW_EXPENSE,
   CREATE_EXPENSES,
   UPDATE_EXPENSES,
   FILTER_EXPENSES,
   ERROR_EXPENSE
 } from "../type";
 
+
 export const showExpenses = (expenses) => ({
   type: SHOW_EXPENSES,
   expenses
+});
+
+export const showExpense = (expense) => ({
+  type: SHOW_EXPENSE,
+  expense
 });
 
 export const createExpenses = (expense) => ({
@@ -53,6 +60,28 @@ export const getExpenses = () => {
         dispatch(setExpenseError(error.response.data.data));
       } else {
         dispatch(setExpenseError(error.response.data));
+      }
+    }
+  };
+};
+
+export const getExpense = (id) => {
+  return async (dispatch) => {
+    try {
+      // console.log(id);
+      const response = await axios.get(
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expenses/${id}`
+      );
+      const result = response.data.data;
+      // console.log(result)
+      if (response.status === 200) {
+        dispatch(showExpense(result));
+      }
+    } catch (error) {
+      if (error) {
+        dispatch(setExpenseError(error));
+      } else {
+        dispatch(setExpenseError(error));
       }
     }
   };

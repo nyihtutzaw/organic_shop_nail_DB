@@ -3,14 +3,12 @@ import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { getExpenses, deleteExpenses } from "../../store/actions";
+import { getExpenses, deleteExpenses, getExpense } from "../../store/actions";
 import { connect } from "react-redux";
 
 const { Title } = Typography;
 
-const ShowExpenses = ({ expense, getExpenses, deleteExpenses}) => {
-// console.log("expense",expense);
-
+const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
   const navigate = useNavigate();
   const mountedRef = React.useRef(true);
   const getExpenseResult = async () => {
@@ -18,10 +16,10 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses}) => {
     try {
       const response = await getExpenses();
       const result = response.data;
-      console.log(result)
+      console.log(result);
       // setGetData(result);
     } catch (error) {
-      console.log(error.response);
+      // console.log(error.response);
     }
   };
   React.useEffect(() => {
@@ -31,23 +29,22 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses}) => {
     };
   }, []);
 
-
-  const handleClick = (record) => {
-    // console.log(record.id)
+  const handleClick = async (record) => {
+    await getExpense(record.id);
     navigate(`/admin/edit-expenses/${record.id}`);
   };
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Deleted Your Data',
-      description: 'Your data have been deleted.',
+      message: "Deleted Your Data",
+      description: "Your data have been deleted.",
       duration: 3
     });
   };
 
   const handleDelete = async (record) => {
     await deleteExpenses(record.id);
-    openNotificationWithIcon('error')
+    openNotificationWithIcon("error");
   };
 
   const columns = [
@@ -57,24 +54,22 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses}) => {
     // },
     {
       title: "ကုန်ကျစရိတ်စုစုပေါင်း",
-      dataIndex: "name",
+      dataIndex: "name"
     },
     {
       title: "Actions",
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          <Button type="primary"
-          onClick={() => handleClick(record) }
-          >Edit</Button>
-          <Button type="primary" danger
-          onClick={() => handleDelete(record) }
-          >
+          <Button type="primary" onClick={() => handleClick(record)}>
+            Edit
+          </Button>
+          <Button type="primary" danger onClick={() => handleDelete(record)}>
             Delete
           </Button>
         </Space>
-      ),
-    },
+      )
+    }
   ];
 
   return (
@@ -89,7 +84,7 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses}) => {
               style={{
                 backgroundColor: "var(--secondary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px",
+                borderRadius: "5px"
               }}
               size="middle"
               onClick={() => navigate("/admin/create-expenses")}
@@ -103,7 +98,7 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses}) => {
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px",
+                borderRadius: "5px"
               }}
               size="middle"
             >
@@ -128,4 +123,6 @@ const mapStateToProps = (store) => ({
   expense: store.expense
 });
 
-export default connect(mapStateToProps, { getExpenses, deleteExpenses })(ShowExpenses);
+export default connect(mapStateToProps, { getExpenses, deleteExpenses, getExpense })(
+  ShowExpenses
+);

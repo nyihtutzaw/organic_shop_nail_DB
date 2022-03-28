@@ -4,14 +4,13 @@ import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getServices, deleteServices } from "../../store/actions";
+import { getServices, deleteServices, getService } from "../../store/actions";
 import { connect } from "react-redux";
 import { notification } from 'antd';
 
-
 const { Title } = Typography;
 
-const ShowService = ({ service, getServices, deleteServices }) => {
+const ShowService = ({ service, getServices, deleteServices, getService }) => {
   const navigate = useNavigate();
   const openNotificationWithIcon = (type) => {
     notification[type]({
@@ -20,26 +19,13 @@ const ShowService = ({ service, getServices, deleteServices }) => {
       duration: 3
     });
   };
-  
-// const resultService = service.services.map((service) => ({
-//   code: service.code,
-//   price: service.price,
-//   category: service.category,
-//   percentage: service.percentage,
-//   code: service.code,
-//   code: service.code,
-//   key: service.key,
-//   id: service.id
-// }))
 
-// console.log(service.services)
   const mountedRef = React.useRef(true);
   const getShopYearly = async () => {
     if (!mountedRef.current) return null;
     try {
       const response = await getServices();
       const result = response.data;
-      // console.log("result",result)
       // setGetData(result);
     } catch (error) {
       console.log(error.response);
@@ -52,7 +38,8 @@ const ShowService = ({ service, getServices, deleteServices }) => {
     };
   }, []);
 
-  const handleClick = (record) => {
+  const handleClick =async (record) => {
+    await getService(record.id)
     navigate(`/admin/edit-service/${record.id}`);
   };
 
@@ -151,6 +138,6 @@ const mapStateToProps = (store) => ({
   service: store.service
 });
 
-export default connect(mapStateToProps, { getServices, deleteServices })(
+export default connect(mapStateToProps, { getServices, deleteServices, getService })(
   ShowService
 );
