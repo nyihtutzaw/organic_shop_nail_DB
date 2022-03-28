@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   SHOW_MEMBERS,
+  SHOW_MEMBER,
   CREATE_MEMBERS,
   UPDATE_MEMBERS,
   FILTER_MEMBERS,
@@ -10,6 +11,11 @@ import {
 export const showMembers = (members) => ({
   type: SHOW_MEMBERS,
   members
+});
+
+export const showMember = (member) => ({
+  type: SHOW_MEMBER,
+  member
 });
 
 export const createMembers = (member) => ({
@@ -31,6 +37,7 @@ export const setItemError = (error) => ({
   type: ERROR_ITEM,
   error
 });
+
 
 export const getMembers = () => {
   return async (dispatch) => {
@@ -57,6 +64,30 @@ export const getMembers = () => {
     }
   };
 };
+
+
+export const getMember = (id) => {
+  return async (dispatch) => {
+    try {
+      // console.log(id);
+      const response = await axios.get(
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members/${id}`
+      );
+      const result = response.data.data;
+      // console.log(result);
+      if (response.status === 200) {
+        dispatch(showMember(result));
+      }
+    } catch (error) {
+      if (error) {
+        dispatch(setItemError(error));
+      } else {
+        dispatch(setItemError(error));
+      }
+    }
+  };
+};
+
 
 export const saveMembers = (data) => {
   return async (dispatch) => {

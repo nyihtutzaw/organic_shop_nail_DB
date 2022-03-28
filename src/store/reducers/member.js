@@ -1,5 +1,6 @@
 import {
   SHOW_MEMBERS,
+  SHOW_MEMBER,
   CREATE_MEMBERS,
   UPDATE_MEMBERS,
   FILTER_MEMBERS,
@@ -8,6 +9,7 @@ import {
 
 const initialState = {
   members: [],
+  member: {},
   error: {}
   // member: {},
 };
@@ -24,17 +26,20 @@ const member = (state = initialState, action) => {
         ...state,
         members: action.members
       };
+    case SHOW_MEMBER:
+      return {
+        ...state,
+        member: action.member
+      };
     case FILTER_MEMBERS:
       const filterShop = state.members.filter(
         (member) => member.id !== action.id
       );
-      
       return {
         ...state,
         members: filterShop
       };
     case UPDATE_MEMBERS:
-      // const updateShop = state.members.map(member => member.id === action.data.id ? action.data : member);
       const index = state.members.findIndex(
         (member) => member.id === action.data.id
       );
@@ -45,7 +50,7 @@ const member = (state = initialState, action) => {
     case ERROR_ITEM:
       return {
         ...state,
-        error: action.error,
+        error: action.error
       };
     default:
       return state;

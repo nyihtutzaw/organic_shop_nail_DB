@@ -4,12 +4,12 @@ import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getMembers, deleteMembers } from "../../store/actions";
+import { getMembers, deleteMembers, getMember } from "../../store/actions";
 import { connect } from "react-redux";
 
 const { Title } = Typography;
 
-const ShowMembers = ({ getMembers, deleteMembers }) => {
+const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
   const navigate = useNavigate();
   const members = useSelector((state) => state.member.members);
 
@@ -33,9 +33,11 @@ const ShowMembers = ({ getMembers, deleteMembers }) => {
     };
   }, [getMembers]);
 
-  const handleClick = (record) => {
+  const handleClick =async (record) => {
+    await getMember(record.id)
     navigate(`/admin/edit-members/${record.id}`);
   };
+
   const openNotificationWithIcon = (type) => {
     notification[type]({
       message: 'Deleted Your Data',
@@ -49,10 +51,10 @@ const ShowMembers = ({ getMembers, deleteMembers }) => {
   };
 
   const handleDetail = (record) => {
-    // console.log(record.id)
     navigate(`/admin/detail-members/${record.id}`);
-
   }
+
+  
   const columns = [
     {
       title: "မန်ဘာကုတ်",
@@ -103,7 +105,7 @@ const ShowMembers = ({ getMembers, deleteMembers }) => {
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
           <Col span={18}>
-            <Title level={3}>မန်ဘာစာရင်း</Title>
+            <Title level={3}>Member စာရင်း</Title>
           </Col>
           <Col span={3}>
             <Button
@@ -145,4 +147,4 @@ const ShowMembers = ({ getMembers, deleteMembers }) => {
   );
 };
 
-export default connect(null, { getMembers, deleteMembers })(ShowMembers);
+export default connect(null, { getMembers, deleteMembers, getMember })(ShowMembers);

@@ -1,103 +1,59 @@
 import React, { useState, useEffect } from "react";
-import {
-  Form,
-  Input,
-  Typography,
-  Space,
-  Button,
-  InputNumber,
-  Select,
-  Table,
-  Col,
-  Row
-} from "antd";
+import { Form, Input, Typography, Space, Button, Select } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { connect } from "react-redux";
-import { editMembers, getShops, shop } from "../../store/actions";
+import {
+  editMembers,
+  getShops,
+  getMember,
+  getMembers
+} from "../../store/actions";
 
 const { Title } = Typography;
 const { Option } = Select;
 
-const DetailMembers = ({ editMembers, getShops }) => {
-  const { id } = useParams();
-  const members = useSelector((state) => state.member.members);
-  const currentMember = members.find((member) => member.id === parseInt(id));
-  const currentId = parseInt(currentMember.shop_id);
-
-  const shops = useSelector((state) => state.shop.shops);
-  // console.log(shop)
+const DetailMembers = ({ editMembers, getShops, getMember, getMembers }) => {
+  const param = useParams();
   const [form] = Form.useForm();
+  const navigate = useNavigate();
+
+  const member = useSelector((state) => state.member.member);
+  const shops = useSelector((state) => state.shop.shops);
 
   useEffect(() => {
     const fetchData = async () => {
       await getShops();
+      await getMember(param?.id);
+      await getMembers();
     };
     fetchData();
     return () => {
       fetchData();
     };
-  }, [getShops]);
+  }, [getShops, getMember, getMembers]);
 
   useEffect(() => {
-    if (currentMember) {
-      form.setFieldsValue({ code: currentMember.code });
-      form.setFieldsValue({ name: currentMember.name });
-      form.setFieldsValue({ phone: currentMember.phone });
-      form.setFieldsValue({ address: currentMember.address });
-    }
-  }, [currentMember]);
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+    form.setFieldsValue({ code: member?.code });
+    form.setFieldsValue({ name: member?.name });
+    form.setFieldsValue({ phone: member?.phone });
+    form.setFieldsValue({ address: member?.address });
+    form.setFieldsValue({ shop_id: member.shop_id });
+  }, [member, shops]);
 
   const onFinish = async (values) => {
-    await editMembers(id, values);
-    form.resetFields();
+    await editMembers(param?.id, values);
     navigate("/admin/show-members");
   };
-
-  const columns = [
-    {
-      title: "ရက်စွဲ",
-      dataIndex: "date"
-    },
-    {
-      title: "ဝယ်ယူခဲ့သောပမာဏ",
-      dataIndex: "amount"
-    },
-    {
-      title: "ပွိုင့်အရေအတွက်",
-      dataIndex: "points"
-    }
-  ];
 
   return (
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
-        <Row>
-        <Col span={12}>
-          <Title style={{ textAlign: "center" }} level={3}>
-            မန်ဘာအသေးစိတ်စာမျက်နှာ
-          </Title>
-        </Col>
-        <Col span={8}></Col>
-        <Col span={4}>
-          <Button
-            style={{
-              backgroundColor: "var(--primary-color)",
-              color: "var(--white-color)",
-              borderRadius: "5px"
-            }}
-            size="middle"
-            onClick={() => navigate("/admin/show-members")}
-          >
-            ပြန်သွားရန်
-          </Button>
-        </Col>
-        </Row>
+        <Title style={{ textAlign: "center" }} level={3}>
+          Member Detail စာမျက်နှာ
+        </Title>
         <Form
           labelCol={{
             xl: {
@@ -107,9 +63,7 @@ const DetailMembers = ({ editMembers, getShops }) => {
           wrapperCol={{
             span: 24
           }}
-          initialValues={{
-            ["shop_id"]: currentId
-          }}
+          initialValues={{}}
           onFinish={onFinish}
           form={form}
         >
@@ -185,42 +139,38 @@ const DetailMembers = ({ editMembers, getShops }) => {
               readOnly={true}
             />
           </Form.Item>
-
           <Form.Item
             name="shop_id"
             label="ဆိုင်အမည်"
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ ဆိုင်အမည်ရွေးပါ"
+                message: "ကျေးဇူးပြု၍ ဆိုင်အမည်ထည့်ပါ"
               }
             ]}
           >
-            <Select
-              showSearch
-              placeholder="ကျေးဇူးပြု၍ ဆိုင်အမည်ရွေးပါ"
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              allowClear={true}
-              size="large"
+            <Input
+              placeholder="ဆိုင်အမည်ထည့်ပါ"
+              prefix={<EditOutlined />}
               style={{ borderRadius: "10px" }}
+              size="large"
               readOnly={true}
-            >
-              {shops.map((shop) => (
-                <Option value={shop.id} key={shop.id}>
-                  {shop.name}
-                </Option>
-              ))}
-            </Select>
+            />
           </Form.Item>
-          <Table
-            bordered
-            columns={columns}
-            // dataSource={result}
-            pagination={{ defaultPageSize: 10 }}
-          />
+          <Form.Item style={{ textAlign: "right" }}>
+            <Button
+              style={{
+                backgroundColor: "var(--primary-color)",
+                color: "var(--white-color)",
+                borderRadius: "10px"
+              }}
+              size="large"
+              htmlType="submit"
+            >
+              <SaveOutlined />
+              သိမ်းမည်
+            </Button>
+          </Form.Item>
         </Form>
       </Space>
     </Layout>
@@ -231,6 +181,9 @@ const mapStateToProps = (store) => ({
   shop: store.shop
 });
 
-export default connect(mapStateToProps, { editMembers, getShops })(
-  DetailMembers
-);
+export default connect(mapStateToProps, {
+  editMembers,
+  getShops,
+  getMember,
+  getMembers
+})(DetailMembers);

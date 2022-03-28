@@ -10,49 +10,56 @@ import {
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { connect } from "react-redux";
-import { editMembers, getShops, shop } from "../../store/actions";
+import {
+  editMembers,
+  getShops,
+  shop,
+  getMember,
+  getMembers
+} from "../../store/actions";
 
 const { Title } = Typography;
 const { Option } = Select;
 
-const EditMembers = ({ editMembers, shop, getShops }) => {
-  const { id } = useParams();
-  const members = useSelector((state) => state.member.members);
-  // console.log(members)
-  const currentMember = members.find((member) => member.id === parseInt(id));
-  const currentId = parseInt(currentMember.shop_id);
-
-  const shops = useSelector((state) => state.shop.shops);
+const EditMembers = ({
+  editMembers,
+  shop,
+  getShops,
+  getMember,
+  getMembers
+}) => {
+  const param = useParams();
   const [form] = Form.useForm();
-  
+  const navigate = useNavigate();
+
+  const member = useSelector((state) => state.member.member);
+  const shops = useSelector((state) => state.shop.shops);
+
   useEffect(() => {
     const fetchData = async () => {
       await getShops();
+      await getMember(param?.id);
+      await getMembers();
     };
     fetchData();
     return () => {
       fetchData();
     };
-  }, [getShops]);
-
+  }, [getShops, getMember, getMembers]);
 
   useEffect(() => {
-    if (currentMember) {
-      form.setFieldsValue({ code: currentMember.code });
-      form.setFieldsValue({ name: currentMember.name });
-      form.setFieldsValue({ phone: currentMember.phone });
-      form.setFieldsValue({ address: currentMember.address });
-    }
-  }, [currentMember]);
+    form.setFieldsValue({ code: member?.code });
+    form.setFieldsValue({ name: member?.name });
+    form.setFieldsValue({ phone: member?.phone });
+    form.setFieldsValue({ address: member?.address });
+    form.setFieldsValue({ shop_id: member.shop_id });
+  }, [member, shops]);
 
-  const navigate = useNavigate();
-  
   const onFinish = async (values) => {
-    await editMembers(id, values);
-    form.resetFields();
+    await editMembers(param?.id, values);
     navigate("/admin/show-members");
   };
 
@@ -71,9 +78,7 @@ const EditMembers = ({ editMembers, shop, getShops }) => {
           wrapperCol={{
             span: 24
           }}
-          initialValues={{
-            ["shop_id"]: currentId ,
-          }}
+          initialValues={{}}
           onFinish={onFinish}
           form={form}
         >
@@ -92,7 +97,6 @@ const EditMembers = ({ editMembers, shop, getShops }) => {
               prefix={<EditOutlined />}
               style={{ borderRadius: "10px", width: "100%" }}
               size="large"
-              
             />
           </Form.Item>
           <Form.Item
@@ -166,12 +170,12 @@ const EditMembers = ({ editMembers, shop, getShops }) => {
               allowClear={true}
               size="large"
               style={{ borderRadius: "10px" }}
-              // defaultValue={currentId}
             >
               {shops.map((shop) => (
-                <Option  value={shop.id} key={shop.id}>{shop.name}</Option>
+                <Option value={shop.id} key={shop.id}>
+                  {shop.name}
+                </Option>
               ))}
-              
             </Select>
           </Form.Item>
           <Form.Item style={{ textAlign: "right" }}>
@@ -198,4 +202,9 @@ const mapStateToProps = (store) => ({
   shop: store.shop
 });
 
-export default connect(mapStateToProps, { editMembers, getShops })(EditMembers);
+export default connect(mapStateToProps, {
+  editMembers,
+  getShops,
+  getMember,
+  getMembers
+})(EditMembers);
