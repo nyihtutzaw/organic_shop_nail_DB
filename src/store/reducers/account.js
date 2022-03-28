@@ -22,22 +22,22 @@ import {
       case SHOW_ACCOUNTS:
         return {
           ...state,
-          members: action.members
+          accounts: action.accounts
         };
       case FILTER_ACCOUNTS:
-        const filterShop = state.members.filter(
+        const filterShop = state.accounts.filter(
           (member) => member.id !== action.id
         );
         return {
           ...state,
-          members: filterShop
+          accounts: filterShop
         };
       case UPDATE_ACCOUNTS:
         // const updateShop = state.members.map(member => member.id === action.data.id ? action.data : member);
-        const index = state.members.findIndex(
+        const index = state.accounts.findIndex(
           (member) => member.id === action.data.id
         );
-        state.members[index] = action.data;
+        state.accounts[index] = action.data;
         return {
           ...state
         };

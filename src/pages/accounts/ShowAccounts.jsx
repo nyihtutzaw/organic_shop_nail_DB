@@ -9,7 +9,7 @@ import { getAccounts } from "../../store/actions";
 const { Title } = Typography;
 
 const ShowAccounts = () => {
-  const accounts = useSelector((state) => state.AccountReducer);
+  const accounts = useSelector((state) => state.account.accounts);
   
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -44,11 +44,12 @@ const ShowAccounts = () => {
     },
     {
       title: "ရာထူး",
-      dataIndex: "row"
+      dataIndex: "position"
     },
     {
       title: "ဆိုင်အမည်",
-      dataIndex: "shop"
+      dataIndex: "shop",
+      render: (_, data) => data.shop.name,
     },
 
     {
@@ -103,7 +104,7 @@ const ShowAccounts = () => {
         <Table
           bordered
           columns={columns}
-          // dataSource={result}
+          dataSource={accounts}
           pagination={{ defaultPageSize: 10 }}
         />
       </Space>

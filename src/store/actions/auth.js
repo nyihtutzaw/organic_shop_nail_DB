@@ -26,11 +26,11 @@ export const authUser = (path, data) => {
     dispatch(setLoading());
     try {
       const response = await call("post", `${path}`, data);
-      const { name, phone, position, access_token } = response.data;
+      const { name, phone, position, access_token,shop } = response.data;
 
       localStorage.setItem("jwtToken", access_token);
       setAccessToken(access_token);
-      dispatch(setCurrentUser({ name, phone, position }));
+      dispatch(setCurrentUser({ name, phone, position,shop }));
       dispatch(removeError());
     } catch (error) {
       if (error.response.status === 401) {
@@ -50,10 +50,11 @@ export const getUser = () => {
     dispatch(setLoading());
     try {
       const response = await call("get", "user");
-      const { name, phone, position } = response.data;
+      const { name, phone, position,shop } = response.data;
+      
 
-      console.log(name);
-      dispatch(setCurrentUser({ name, phone, position }));
+     
+      dispatch(setCurrentUser({ name, phone, position,shop }));
       dispatch(removeError());
     } catch (error) {
       if (error.response.status === 401) {

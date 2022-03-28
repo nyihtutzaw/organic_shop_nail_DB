@@ -356,7 +356,13 @@ const Admin = ({logout}) => {
                 <Link to="/admin/show-items">ပစ္စည်းများ</Link>
               </Menu.Item>
               <Menu.Item key="ShowStocks" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-stocks">ပစ္စည်းအဝယ်သွင်းရန်</Link>
+                <Link to="/admin/show-stocks">Stock</Link>
+              </Menu.Item>
+              <Menu.Item
+                key="ShowBuyMerchants"
+                icon={<UnorderedListOutlined />}
+              >
+                <Link to="/admin/show-buy-merchants">ပစ္စည်းအဝယ်သွင်းရန်</Link>
               </Menu.Item>
               <Menu.Item
                 key="ShowItemTransfer"
@@ -364,9 +370,9 @@ const Admin = ({logout}) => {
               >
                 <Link to="/admin/show-item-transfer">ပစ္စည်းလွှဲပြောင်းရန်</Link>
               </Menu.Item>
-              <Menu.Item key="CreateBadItems" icon={<SaveOutlined />}>
+              {/* <Menu.Item key="CreateBadItems" icon={<SaveOutlined />}>
                 <Link to="/admin/create-bad-item">ချို့ယွင်းချက်ရှိပစ္စည်း</Link>
-              </Menu.Item>
+              </Menu.Item> */}
 
             
             </SubMenu>
@@ -420,21 +426,7 @@ const Admin = ({logout}) => {
 
            
 
-            <SubMenu
-              key="BuyMerchants"
-              title="အဝယ်စာရင်းသွင်းရန်"
-              icon={<ShoppingCartOutlined />}
-            >
-              <Menu.Item
-                key="ShowBuyMerchants"
-                icon={<UnorderedListOutlined />}
-              >
-                <Link to="/admin/show-buy-merchants">List</Link>
-              </Menu.Item>
-              <Menu.Item key="CreateBuyMerchants" icon={<SaveOutlined />}>
-                <Link to="/admin/create-buy-merchants">Create</Link>
-              </Menu.Item>
-            </SubMenu>
+            
             <SubMenu
               key="Expenses"
               title="ကုန်ကျစရိတ်များ"

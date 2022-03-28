@@ -70,18 +70,18 @@ const ShowStocks = ({ stock, getStocks }) => {
       title: "	အရေအတွက်",
       dataIndex: "quantity",
     },
-    {
-      title: "Actions",
-      dataIndex: "action",
-      render: (_) => (
-        <Space direction="horizontal">
-          <Button type="primary">Edit</Button>
-          <Button type="primary" danger>
-            Delete
-          </Button>
-        </Space>
-      ),
-    },
+    // {
+    //   title: "Actions",
+    //   dataIndex: "action",
+    //   render: (_) => (
+    //     <Space direction="horizontal">
+    //       <Button type="primary">Edit</Button>
+    //       <Button type="primary" danger>
+    //         Delete
+    //       </Button>
+    //     </Space>
+    //   ),
+    // },
   ];
 
   return (
@@ -99,7 +99,7 @@ const ShowStocks = ({ stock, getStocks }) => {
                 borderRadius: "5px",
               }}
               size="middle"
-              onClick={() => navigate("/admin/create-stocks")}
+              onClick={() => navigate("/admin/create-buy-merchants")}
             >
               <PlusSquareOutlined />
               New

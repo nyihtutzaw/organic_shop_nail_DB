@@ -72,10 +72,23 @@ console.log(item_transfer.itemTransfers)
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
-          <Col span={20}>
+          <Col span={18}>
             <Title level={3}>လွှဲပြောင်းခဲ့သောပစ္စည်းများ</Title>
           </Col>
-          
+          <Col span={3}>
+            <Button
+              style={{
+                backgroundColor: "var(--secondary-color)",
+                color: "var(--white-color)",
+                borderRadius: "5px",
+              }}
+              size="middle"
+              onClick={() => navigate("/admin/create-item-transfer")}
+            >
+              <PlusSquareOutlined />
+              New
+            </Button>
+          </Col>
           <Col span={3}>
             <Button
               style={{

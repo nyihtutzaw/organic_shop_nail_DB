@@ -36,7 +36,9 @@ const CreateItemTransfer = ({
   const [itemData, setItemData] = useState(null);
   const [buyShop, setBuyShop] = useState(null);
 
-  const shops = useSelector((state) => state.shop.shops);
+  let shops = useSelector((state) => state.shop.shops);
+  const user = useSelector((state) => state.auth.user);
+
   const AllItems = useSelector((state) => state.item.items);
   // console.log(AllItems);
 
@@ -150,7 +152,7 @@ const CreateItemTransfer = ({
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
-          ပစ္စည်းလွှဲပြောင်းရန်စာမျက်နှာ
+          ပစ္စည်းလွှဲပြောင်းရန်စာမျက်နှာ 
         </Title>
         <Space
           direction="horizontal"
@@ -174,11 +176,14 @@ const CreateItemTransfer = ({
             size="large"
             style={{ borderRadius: "10px" }}
           >
-            {shops.map((shop) => (
-              <Option key={shop.id} value={shop.id}>
-                {shop.name}
-              </Option>
-            ))}
+            {shops.map((shop) => {
+              if (shop.id!==parseInt(user?.shop?.id))
+              return (
+                <Option key={shop.id} value={shop.id}>
+                  {shop.name}
+                </Option>
+              );
+            })}
           </Select>
         </Space>
 

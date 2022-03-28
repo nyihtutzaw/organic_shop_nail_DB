@@ -35,14 +35,14 @@ export const setAccountErrors = (error) => ({
 export const getAccounts = () => {
   return async (dispatch) => {
     try {
-      alert("hi");
+     
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/user"
+        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/users"
       );
-      const result = response.data.data.map((member) => {
+      const result = response.data.data.map((account) => {
         return {
-          ...member,
-          key: member.id,
+          ...account,
+          key: account.id,
         };
       });
       // console.log(response.status)
