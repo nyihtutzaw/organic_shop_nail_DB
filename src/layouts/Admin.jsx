@@ -5,7 +5,7 @@ import {
   Route,
   useLocation,
   Navigate,
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 // ant design styles
 import { Layout, Menu, Avatar, Space, Popover, Button } from "antd";
@@ -27,7 +27,7 @@ import {
   FileImageOutlined,
   ContactsOutlined,
   FolderAddOutlined,
-  FlagOutlined
+  FlagOutlined,
 } from "@ant-design/icons";
 import Dashboard from "../pages/Dashboard";
 import SubMenu from "antd/lib/menu/SubMenu";
@@ -78,12 +78,11 @@ import EditStaff from "../pages/staffs/EditStaff";
 import EditShops from "../pages/shops/EditShops";
 import EditOwners from "../pages/owners/EditOwners";
 import EditAccounts from "../pages/accounts/EditAccounts";
-import {logout} from '../store/actions'
+import { logout } from "../store/actions";
 import { connect, useSelector } from "react-redux";
 import EditExpenseNames from "../pages/expense_names/EditExpenseNames";
 import EditMerchants from "../pages/merchants/EditMerchants";
 import EditExpenses from "../pages/expenses/EditExpenses";
-
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -93,10 +92,10 @@ const text = (
   </Title>
 );
 
-const Admin = ({logout}) => {
+const Admin = ({ logout }) => {
   const [collapsed, setCollapsed] = useState(false);
   const { pathname } = useLocation();
-  const user=useSelector((state)=>state.auth.user);
+  const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -107,7 +106,9 @@ const Admin = ({logout}) => {
 
   const content = (
     <Space direction="vertical" style={{ textAlign: "center", width: "100%" }}>
-      <Title level={5}>{user?.name} ({user?.position})</Title>
+      <Title level={5}>
+        {user?.name} ({user?.position})
+      </Title>
       <Title level={5}>{user?.shop?.name}</Title>
       <Button danger onClick={handleLogout}>
         Logout
@@ -129,7 +130,7 @@ const Admin = ({logout}) => {
     case "/admin/create-merchants":
       selectedKey = "CreateMerchants";
       break;
-      
+
     case "/admin/show-merchants":
       selectedKey = "ShowMerchants";
       break;
@@ -268,7 +269,7 @@ const Admin = ({logout}) => {
             float: "left",
             backgroundColor: "var(--primary-color)",
             color: "var(--white-color)",
-            marginRight: "3px"
+            marginRight: "3px",
           }}
         >
           {React.createElement(
@@ -343,10 +344,8 @@ const Admin = ({logout}) => {
               <Menu.Item key="CreateMembers" icon={<SaveOutlined />}>
                 <Link to="/admin/create-members">Create</Link>
               </Menu.Item>
-           
-              
             </SubMenu>
-           
+
             <SubMenu
               key="Items"
               title="ပစ္စည်းများ"
@@ -368,16 +367,14 @@ const Admin = ({logout}) => {
                 key="ShowItemTransfer"
                 icon={<UnorderedListOutlined />}
               >
-                <Link to="/admin/show-item-transfer">ပစ္စည်းလွှဲပြောင်းရန်</Link>
+                <Link to="/admin/show-item-transfer">
+                  ပစ္စည်းလွှဲပြောင်းရန်
+                </Link>
               </Menu.Item>
               {/* <Menu.Item key="CreateBadItems" icon={<SaveOutlined />}>
                 <Link to="/admin/create-bad-item">ချို့ယွင်းချက်ရှိပစ္စည်း</Link>
               </Menu.Item> */}
-
-            
             </SubMenu>
-            
-
 
             <SubMenu key="Service" title="ဝန်ဆောင်မှု" icon={<FlagOutlined />}>
               <Menu.Item key="CreateService" icon={<SaveOutlined />}>
@@ -389,21 +386,17 @@ const Admin = ({logout}) => {
               </Menu.Item>
             </SubMenu>
 
-            
-
-            
-
             <SubMenu
               key="Staff"
-              title="ဝန်ထမ်းစာရင်းသွင်းရန်"
+              title="ဝန်ထမ်းစာရင်း"
               icon={<ContactsOutlined />}
             >
               <Menu.Item key="CreateStaff" icon={<SaveOutlined />}>
-                <Link to="/admin/create-staff">Create</Link>
+                <Link to="/admin/create-staff">ဝန်ထမ်းစာရင်းသွင်းရန်</Link>
               </Menu.Item>
 
               <Menu.Item key="ShowStaff" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-staff">List</Link>
+                <Link to="/admin/show-staff">ဝန်ထမ်းစာရင်း</Link>
               </Menu.Item>
 
               <Menu.Item key="StaffCommession" icon={<UnorderedListOutlined />}>
@@ -412,9 +405,12 @@ const Admin = ({logout}) => {
                 </Link>
               </Menu.Item>
             </SubMenu>
-            
 
-            <SubMenu key="Owner" title="Owners" icon={<UsergroupAddOutlined />}>
+            <SubMenu
+              key="Owner"
+              title="ပစ္စည်းထုတ်သုံးခြင်"
+              icon={<UsergroupAddOutlined />}
+            >
               <Menu.Item key="CreateOwner" icon={<SaveOutlined />}>
                 <Link to="/admin/create-owner">Create</Link>
               </Menu.Item>
@@ -424,9 +420,6 @@ const Admin = ({logout}) => {
               </Menu.Item>
             </SubMenu>
 
-           
-
-            
             <SubMenu
               key="Expenses"
               title="ကုန်ကျစရိတ်များ"
@@ -442,8 +435,7 @@ const Admin = ({logout}) => {
                 <Link to="/admin/show-expense-names">ကုန်ကျစရိတ်အမည်များ</Link>
               </Menu.Item>
             </SubMenu>
-           
-            
+
             <SubMenu key="Reports" title="Reports" icon={<FolderAddOutlined />}>
               <Menu.Item key="ItemsReports" icon={<SaveOutlined />}>
                 <Link to="/admin/item-report">Item</Link>
@@ -467,7 +459,7 @@ const Admin = ({logout}) => {
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="create-accounts" element={<CreateAccounts />} />
               <Route path="show-accounts" element={<ShowAccounts />} />
-              <Route path="edit-accounts/:id" element={<EditAccounts/>} />
+              <Route path="edit-accounts/:id" element={<EditAccounts />} />
 
               <Route path="create-merchants" element={<CreateMerchants />} />
               <Route path="show-merchants" element={<ShowMerchants />} />
@@ -537,7 +529,10 @@ const Admin = ({logout}) => {
                 element={<CreateExpenseNames />}
               />
               <Route path="show-expense-names" element={<ShowExpenseNames />} />
-              <Route path="edit-expense-names/:id" element={<EditExpenseNames />} />
+              <Route
+                path="edit-expense-names/:id"
+                element={<EditExpenseNames />}
+              />
               <Route path="create-shops" element={<CreateShops />} />
               <Route path="show-shops" element={<ShowShops />} />
               <Route path="edit-shops/:id" element={<EditShops />} />
@@ -551,7 +546,7 @@ const Admin = ({logout}) => {
               backgroundColor: "var(--white-color)",
               textAlign: "center",
               fontWeight: "bold",
-              color: "var(--primary-color)"
+              color: "var(--primary-color)",
             }}
           >
             DEVELOP BY RCS

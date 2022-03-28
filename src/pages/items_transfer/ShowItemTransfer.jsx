@@ -5,11 +5,11 @@ import { ExportOutlined, PlusSquareOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { getItemTransfers } from "../../store/actions";
-
+import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 const { Title } = Typography;
 
-const ShowItemTransfer = ({ item_transfer, getItemTransfers}) => {
-console.log(item_transfer.itemTransfers)
+const ShowItemTransfer = ({ item_transfer, getItemTransfers }) => {
+  console.log(item_transfer.itemTransfers);
 
   const navigate = useNavigate();
 
@@ -25,34 +25,40 @@ console.log(item_transfer.itemTransfers)
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Saved Your Data',
-      description: 'Your data have been saved.',
-      duration: 3
+      message: "Saved Your Data",
+      description: "Your data have been saved.",
+      duration: 3,
     });
   };
-  
+
   const columns = [
     {
       title: "ရက်စွဲ",
-      dataIndex: "Date"
+      dataIndex: "created_at",
+      render: (_, record) => getReadableDateDisplay(record.created_at),
     },
     {
-        title: "ဆိုင်အမည်",
-        dataIndex: "store_name"
-      },
+      title: "ပစ္စည်းကုတ်",
+      render: (_, record) => record.stock.item.code,
+    },
     {
       title: "ပစ္စည်းအမည်",
-      dataIndex: "item_name"
+      render: (_, record) => record.stock.item.name,
     },
     {
-      title: "	ပစ္စည်းကုတ်",
-      dataIndex: "item_code"
+      title: "From ဆိုင်အမည်",
+      dataIndex: "shop.name",
+      render: (_, record) => record.shop.name,
+    },
+    {
+      title: "To ဆိုင်အမည်",
+      dataIndex: "to_shop.name",
+      render: (_, record) => record.to_shop.name,
     },
     {
       title: "	အရေအတွက်",
-      dataIndex: "quantity"
+      dataIndex: "quantity",
     },
-    
     {
       title: "Actions",
       dataIndex: "action",
@@ -63,8 +69,8 @@ console.log(item_transfer.itemTransfers)
             Delete
           </Button>
         </Space>
-      )
-    }
+      ),
+    },
   ];
 
   // console.log("first", item_transfer)
@@ -94,7 +100,7 @@ console.log(item_transfer.itemTransfers)
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px"
+                borderRadius: "5px",
               }}
               size="middle"
             >
@@ -115,12 +121,7 @@ console.log(item_transfer.itemTransfers)
 };
 
 const mapStateToProps = (store) => ({
-  item_transfer: store.item_transfer
+  item_transfer: store.item_transfer,
 });
 
-
 export default connect(mapStateToProps, { getItemTransfers })(ShowItemTransfer);
-
-
-
-

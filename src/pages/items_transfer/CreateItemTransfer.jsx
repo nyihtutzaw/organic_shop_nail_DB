@@ -19,7 +19,7 @@ import {
 } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { useSelector } from "react-redux";
-import { saveItemTransfers, getShops, getItems } from "../../store/actions";
+import { saveItemTransfers, getShops, getItems, getStocks } from "../../store/actions";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -27,6 +27,7 @@ const { Option } = Select;
 const CreateItemTransfer = ({
   merchant,
   getShops,
+  getStocks,
   getItems,
   saveItemTransfers,
 }) => {
@@ -39,28 +40,21 @@ const CreateItemTransfer = ({
   let shops = useSelector((state) => state.shop.shops);
   const user = useSelector((state) => state.auth.user);
 
-  const AllItems = useSelector((state) => state.item.items);
+  const stocks = useSelector((state) => state.stock.stocks);
   // console.log(AllItems);
 
   useEffect(() => {
     const fetchData = async () => {
       await getShops();
+      await getStocks();
     };
     fetchData();
     return () => {
       fetchData();
     };
-  }, [getShops]);
+  }, [getShops,getStocks]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await getItems();
-    };
-    fetchData();
-    return () => {
-      fetchData();
-    };
-  }, [getItems]);
+ 
 
   var today = new Date(),
     date =
@@ -223,9 +217,9 @@ const CreateItemTransfer = ({
               size="large"
               style={{ borderRadius: "10px" }}
             >
-              {AllItems.map((item) => (
+              {stocks.map((item) => (
                 <Option key={item.id} value={item.id}>
-                  {item.name}
+                  {item.item.name} ({item.quantity})
                 </Option>
               ))}
             </Select>
@@ -292,6 +286,6 @@ const CreateItemTransfer = ({
   );
 };
 
-export default connect(null, { getShops, getItems, saveItemTransfers })(
+export default connect(null, { getShops, getItems, saveItemTransfers,getStocks })(
   CreateItemTransfer
 );

@@ -5,7 +5,7 @@ import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getExpenses, deleteExpenses, getExpense } from "../../store/actions";
 import { connect } from "react-redux";
-
+import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 const { Title } = Typography;
 
 const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
@@ -38,7 +38,7 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
     notification[type]({
       message: "Deleted Your Data",
       description: "Your data have been deleted.",
-      duration: 3
+      duration: 3,
     });
   };
 
@@ -48,14 +48,20 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
   };
 
   const columns = [
-    // {
-    //   title: "ရက်စွဲ",
-    //   dataIndex: "date",
-    // },
     {
-      title: "ကုန်ကျစရိတ်စုစုပေါင်း",
-      dataIndex: "name"
+      title: "ရက်စွဲ",
+      dataIndex: "created_at",
+      render: (_, record) => getReadableDateDisplay(record.created_at),
     },
+    {
+      title: "ကုန်ကျစရိတ်",
+      dataIndex: "name",
+    },
+    {
+      title: "စုစုပေါင်း",
+      dataIndex: "amount",
+    },
+
     {
       title: "Actions",
       dataIndex: "action",
@@ -68,8 +74,8 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
             Delete
           </Button>
         </Space>
-      )
-    }
+      ),
+    },
   ];
 
   return (
@@ -84,7 +90,7 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
               style={{
                 backgroundColor: "var(--secondary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px"
+                borderRadius: "5px",
               }}
               size="middle"
               onClick={() => navigate("/admin/create-expenses")}
@@ -98,7 +104,7 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px"
+                borderRadius: "5px",
               }}
               size="middle"
             >
@@ -120,9 +126,11 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
 };
 
 const mapStateToProps = (store) => ({
-  expense: store.expense
+  expense: store.expense,
 });
 
-export default connect(mapStateToProps, { getExpenses, deleteExpenses, getExpense })(
-  ShowExpenses
-);
+export default connect(mapStateToProps, {
+  getExpenses,
+  deleteExpenses,
+  getExpense,
+})(ShowExpenses);

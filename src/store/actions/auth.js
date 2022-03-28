@@ -6,7 +6,7 @@ import { call } from "../../services/api.js";
 
 export const setCurrentUser = (user) => ({
   type: SET_CURRENT_USER,
-  user
+  user,
 });
 
 export const setToken = (token) => setAccessToken(token);
@@ -20,24 +20,24 @@ export const logout = () => {
   };
 };
 
-
 export const authUser = (path, data) => {
   return async (dispatch) => {
     dispatch(setLoading());
     try {
       const response = await call("post", `${path}`, data);
-      const { name, phone, position, access_token,shop } = response.data;
+      const { name, phone, position, access_token, shop } = response.data;
 
       localStorage.setItem("jwtToken", access_token);
       setAccessToken(access_token);
-      dispatch(setCurrentUser({ name, phone, position,shop }));
+      dispatch(setCurrentUser({ name, phone, position, shop }));
       dispatch(removeError());
     } catch (error) {
-      if (error.response.status === 401) {
-        dispatch(addError(error.response.data.data.message));
-      } else {
-        dispatch(addError(error.response.data.message));
-      }
+      alert("Login Failed");
+      // if (error.response.status === 401) {
+      //   dispatch(addError(error.response.data.data.message));
+      // } else {
+      //   dispatch(addError(error.response.data.message));
+      // }
       localStorage.removeItem("jwtToken");
       dispatch(setCurrentUser({}));
     }
@@ -50,11 +50,9 @@ export const getUser = () => {
     dispatch(setLoading());
     try {
       const response = await call("get", "user");
-      const { name, phone, position,shop } = response.data;
-      
+      const { name, phone, position, shop } = response.data;
 
-     
-      dispatch(setCurrentUser({ name, phone, position,shop }));
+      dispatch(setCurrentUser({ name, phone, position, shop }));
       dispatch(removeError());
     } catch (error) {
       if (error.response.status === 401) {

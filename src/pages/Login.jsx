@@ -9,7 +9,7 @@ const { Title } = Typography;
 const Login = ({ auth, authUser }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [loading,setLoading]=React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -27,7 +27,7 @@ const Login = ({ auth, authUser }) => {
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
-        height: "100vh"
+        height: "100vh",
       }}
     >
       <Space direction="vertical" size="middle">
@@ -39,8 +39,8 @@ const Login = ({ auth, authUser }) => {
             rules={[
               {
                 required: true,
-                message: "Please insert your phone!"
-              }
+                message: "Please insert your phone!",
+              },
             ]}
           >
             <Input
@@ -55,8 +55,8 @@ const Login = ({ auth, authUser }) => {
             rules={[
               {
                 required: true,
-                message: "Please input your password!"
-              }
+                message: "Please input your password!",
+              },
             ]}
           >
             <Input.Password
@@ -69,14 +69,14 @@ const Login = ({ auth, authUser }) => {
 
           <Form.Item>
             <Button
-            disabled={loading}
+              disabled={loading}
               htmlType="submit"
               size="large"
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
                 borderRadius: "10px",
-                width: "100%"
+                width: "100%",
               }}
             >
               Login
@@ -88,6 +88,6 @@ const Login = ({ auth, authUser }) => {
   );
 };
 const mapStateToProps = (store) => ({
-  auth: store.auth
+  auth: store.auth,
 });
 export default connect(mapStateToProps, { authUser })(Login);

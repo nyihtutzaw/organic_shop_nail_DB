@@ -35,13 +35,9 @@ const ShowStocks = ({ stock, getStocks }) => {
     {
       title: "ပစ္စည်းပုံ",
       dataIndex: "item",
-      render: (_, record) => console.log("s",record),
-      // <img
-      //   src={record.item.image}
-      //   alt="ပစ္စည်းပုံ"
-      //   width={100}
-      //   height={100}
-      // />
+      render: (_, record) => (
+        <img src={record.item.image} alt="ပစ္စည်းပုံ" width={100} height={100} />
+      )
     },
     {
       title: "ပစ္စည်းကုတ်",

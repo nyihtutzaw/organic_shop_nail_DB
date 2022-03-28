@@ -6,12 +6,12 @@ import {
   CREATE_PURCHASES,
   UPDATE_PURCHASES,
   FILTER_PURCHASES,
-  ERROR_STOCKS
+  ERROR_STOCKS,
 } from "../type";
 
 export const showStocks = (stocks) => ({
   type: SHOW_STOCKS,
-  stocks
+  stocks,
 });
 
 // export const createPurchases = (purchase) => ({
@@ -31,7 +31,7 @@ export const showStocks = (stocks) => ({
 
 export const setStockError = (error) => ({
   type: ERROR_STOCKS,
-  error
+  error,
 });
 
 export const getStocks = () => {
@@ -43,7 +43,7 @@ export const getStocks = () => {
       const result = response.data.data.map((stock) => {
         return {
           ...stock,
-          key: stock.id
+          key: stock.id,
         };
       });
       // console.log(response.status)

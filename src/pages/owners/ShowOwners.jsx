@@ -3,13 +3,13 @@ import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 import dateFormat, { masks } from "dateformat";
 import {
   saveOwners,
   getOwners,
   deleteOwners,
-  getOwner
+  getOwner,
 } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
 
@@ -40,7 +40,7 @@ const ShowOwners = ({ getOwners, deleteOwners, getOwner }) => {
     notification[type]({
       message: "Deleted Your Data",
       description: "Your data have been deleted.",
-      duration: 3
+      duration: 3,
     });
   };
 
@@ -52,21 +52,22 @@ const ShowOwners = ({ getOwners, deleteOwners, getOwner }) => {
   const columns = [
     {
       title: "ရက်စွဲ",
-      dataIndex: "date"
+      dataIndex: "created_at",
+      render: (_, record) => getReadableDateDisplay(record.created_at),
     },
     {
       title: "ပစ္စည်းအမည်",
       dataIndex: "name",
-      render: (_, record) => record.stock.item.name
+      render: (_, record) => record.stock.item.name,
     },
     {
       title: "ပစ္စည်းကုတ်",
       dataIndex: "code",
-      render: (_, record) => record.stock.item.code
+      render: (_, record) => record.stock.item.code,
     },
     {
       title: "အရေအတွက်",
-      dataIndex: "quantity"
+      dataIndex: "quantity",
     },
     {
       title: "Actions",
@@ -80,8 +81,8 @@ const ShowOwners = ({ getOwners, deleteOwners, getOwner }) => {
             Delete
           </Button>
         </Space>
-      )
-    }
+      ),
+    },
   ];
 
   return (
@@ -96,7 +97,7 @@ const ShowOwners = ({ getOwners, deleteOwners, getOwner }) => {
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px"
+                borderRadius: "5px",
               }}
               size="middle"
               onClick={() => navigate("/admin/create-owner")}

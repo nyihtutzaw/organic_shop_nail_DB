@@ -9,6 +9,7 @@ import {
   getPurchases,
   deletePurchases,
 } from "../../store/actions";
+import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -89,7 +90,8 @@ const ShowBuyMerchants = ({
   const columns = [
     {
       title: "ရက်စွဲ",
-      dataIndex: ``,
+      dataIndex: `created_at`,
+      render:(_,record)=>getReadableDateDisplay(record.created_at)
     },
     {
       title: "ကုန်သည်လုပ်ငန်းအမည်",

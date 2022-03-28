@@ -10,13 +10,13 @@ import {
   message,
   Drawer,
   Select,
-  notification
+  notification,
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   EditOutlined,
   SaveOutlined,
-  PlusSquareOutlined
+  PlusSquareOutlined,
 } from "@ant-design/icons";
 import { saveExpenses, getExpenseNames } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
@@ -25,8 +25,8 @@ import { useNavigate } from "react-router-dom";
 const { Title } = Typography;
 const { Option } = Select;
 
-const CreateExpenses = ({expense_name, saveExpenses, getExpenseNames }) => {
-  const expenseNames = expense_name.expense_names
+const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
+  const expenseNames = expense_name.expense_names;
   useEffect(() => {
     const fetchData = async () => {
       await getExpenseNames();
@@ -41,59 +41,55 @@ const CreateExpenses = ({expense_name, saveExpenses, getExpenseNames }) => {
   const [expenseFrom] = Form.useForm();
   const navigate = useNavigate();
 
-  const [expenseTable, setExpenseTable] = useState({expenses: []});
+  const [expenseTable, setExpenseTable] = useState({ expenses: [] });
   const onFinish = async (values) => {
     // console.log(values)
-    setExpenseTable(
-      {
-        expenses: [
-          ...expenseTable.expenses,
-          {
-            key: Math.random() * 100,
-            ...values
-          }
-        ]
-      }
-    );
+    setExpenseTable({
+      expenses: [
+        ...expenseTable.expenses,
+        {
+          key: Math.random() * 100,
+          ...values,
+        },
+      ],
+    });
     form.resetFields();
   };
-// console.log(expenseTable);
+  // console.log(expenseTable);
 
-const handleDelete = (record) => {
-  const filterExpenses = expenseTable.expenses.filter(
-    (expense) => expense.key !== record.key
-  );
-  setExpenseTable({
-    expenses: [
-        ...filterExpenses 
-    ]
-  });
-};
+  const handleDelete = (record) => {
+    const filterExpenses = expenseTable.expenses.filter(
+      (expense) => expense.key !== record.key
+    );
+    setExpenseTable({
+      expenses: [...filterExpenses],
+    });
+  };
 
   // const handleSave = async () => {
-    // if (expenses.length === 0) {
-    //   message.error("ကျေးဇူးပြု၍ကုန်ကျစရိတ်များထည့်ပါ");
-    // } else {
-    //   console.log({
-    //     expenses: expenses
-    //   });
-    // const saveExpense = expenses.map((expense) => {
-    //   return {
-    //     name: expense.name,
-    //     amount: expense.amount
-    //   };
-    // });
-    // await saveExpenses(saveExpense)
-    // console.log("saveE", saveExpense);
-    // setExpenses([]);
-    // }
+  // if (expenses.length === 0) {
+  //   message.error("ကျေးဇူးပြု၍ကုန်ကျစရိတ်များထည့်ပါ");
+  // } else {
+  //   console.log({
+  //     expenses: expenses
+  //   });
+  // const saveExpense = expenses.map((expense) => {
+  //   return {
+  //     name: expense.name,
+  //     amount: expense.amount
+  //   };
+  // });
+  // await saveExpenses(saveExpense)
+  // console.log("saveE", saveExpense);
+  // setExpenses([]);
+  // }
   // };
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Saved Your Data',
-      description: 'Your data have been saved.',
-      duration: 3
+      message: "Saved Your Data",
+      description: "Your data have been saved.",
+      duration: 3,
     });
   };
 
@@ -102,19 +98,19 @@ const handleDelete = (record) => {
       message.error("ကျေးဇူးပြု၍ကုန်ကျစရိတ်အချက်အလက်များထည့်ပါ");
     } else {
       await saveExpenses(expenseTable);
-      setExpenseTable([])
-      openNotificationWithIcon('success')
+      setExpenseTable([]);
+      openNotificationWithIcon("success");
       // navigate("/admin/show-expenses");
     }
   };
   const columns = [
     {
       title: "ကုန်ကျစရိတ်အမည်",
-      dataIndex: "name"
+      dataIndex: "name",
     },
     {
       title: "ပမာဏ",
-      dataIndex: "amount"
+      dataIndex: "amount",
     },
     {
       title: "Actions",
@@ -123,8 +119,8 @@ const handleDelete = (record) => {
         <Button type="primary" danger onClick={() => handleDelete(record)}>
           Delete
         </Button>
-      )
-    }
+      ),
+    },
   ];
 
   return (
@@ -136,7 +132,7 @@ const handleDelete = (record) => {
             style={{
               width: "100%",
               justifyContent: "center",
-              marginBottom: "10px"
+              marginBottom: "10px",
             }}
             size="large"
           >
@@ -147,7 +143,7 @@ const handleDelete = (record) => {
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px"
+                borderRadius: "5px",
               }}
               size="middle"
               onClick={() => setVisible(true)}
@@ -159,14 +155,14 @@ const handleDelete = (record) => {
           <Form
             labelCol={{
               xl: {
-                span: 3
-              }
+                span: 3,
+              },
             }}
             wrapperCol={{
-              span: 24
+              span: 24,
             }}
             initialValues={{
-              remember: true
+              remember: true,
             }}
             onFinish={onFinish}
             form={form}
@@ -177,8 +173,8 @@ const handleDelete = (record) => {
               rules={[
                 {
                   required: true,
-                  message: "ကျေးဇူးပြု၍ ကုန်ကျစရိတ်အမည်ရွေးပါ"
-                }
+                  message: "ကျေးဇူးပြု၍ ကုန်ကျစရိတ်အမည်ရွေးပါ",
+                },
               ]}
             >
               <Select
@@ -207,8 +203,8 @@ const handleDelete = (record) => {
               rules={[
                 {
                   required: true,
-                  message: "ကျေးဇူးပြု၍ ပမာဏထည့်ပါ"
-                }
+                  message: "ကျေးဇူးပြု၍ ပမာဏထည့်ပါ",
+                },
               ]}
             >
               <Input
@@ -223,7 +219,7 @@ const handleDelete = (record) => {
                 style={{
                   backgroundColor: "var(--secondary-color)",
                   color: "var(--white-color)",
-                  borderRadius: "10px"
+                  borderRadius: "10px",
                 }}
                 size="large"
                 htmlType="submit"
@@ -247,13 +243,13 @@ const handleDelete = (record) => {
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "10px"
+                borderRadius: "10px",
               }}
               size="large"
               onClick={handleSave}
             >
               <SaveOutlined />
-              သိမ်းမည်save22
+              သိမ်းမည်save
             </Button>
           </Space>
         </Space>
@@ -271,7 +267,7 @@ const handleDelete = (record) => {
       >
         <Form
           initialValues={{
-            remember: true
+            remember: true,
           }}
           // onFinish={handleSaveExpense}
           form={expenseFrom}
@@ -281,8 +277,8 @@ const handleDelete = (record) => {
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ ကုန်ကျစရိတ်အမည်ထည့်ပါ"
-              }
+                message: "ကျေးဇူးပြု၍ ကုန်ကျစရိတ်အမည်ထည့်ပါ",
+              },
             ]}
           >
             <Input
@@ -298,7 +294,7 @@ const handleDelete = (record) => {
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
                 borderRadius: "10px",
-                width: "100%"
+                width: "100%",
               }}
               size="large"
               htmlType="submit"
@@ -313,9 +309,10 @@ const handleDelete = (record) => {
   );
 };
 
-
 const mapStateToProps = (store) => ({
-  expense_name: store.expense_name
+  expense_name: store.expense_name,
 });
 
-export default connect(mapStateToProps, { saveExpenses, getExpenseNames })(CreateExpenses);
+export default connect(mapStateToProps, { saveExpenses, getExpenseNames })(
+  CreateExpenses
+);
