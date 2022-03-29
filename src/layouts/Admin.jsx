@@ -371,6 +371,9 @@ const Admin = ({ logout }) => {
                   ပစ္စည်းလွှဲပြောင်းရန်
                 </Link>
               </Menu.Item>
+              <Menu.Item key="ShowOwner" icon={<UnorderedListOutlined />}>
+                <Link to="/admin/show-owner">ပစ္စည်းထုတ်သုံးခြင်</Link>
+              </Menu.Item>
               {/* <Menu.Item key="CreateBadItems" icon={<SaveOutlined />}>
                 <Link to="/admin/create-bad-item">ချို့ယွင်းချက်ရှိပစ္စည်း</Link>
               </Menu.Item> */}
@@ -406,19 +409,7 @@ const Admin = ({ logout }) => {
               </Menu.Item>
             </SubMenu>
 
-            <SubMenu
-              key="Owner"
-              title="ပစ္စည်းထုတ်သုံးခြင်"
-              icon={<UsergroupAddOutlined />}
-            >
-              <Menu.Item key="CreateOwner" icon={<SaveOutlined />}>
-                <Link to="/admin/create-owner">Create</Link>
-              </Menu.Item>
-
-              <Menu.Item key="ShowOwner" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-owner">List</Link>
-              </Menu.Item>
-            </SubMenu>
+            
 
             <SubMenu
               key="Expenses"

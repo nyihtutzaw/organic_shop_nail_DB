@@ -62,33 +62,43 @@ const Sale = ({
 
   const handleAddSaleItem = (stock) => {
     const index = sales.findIndex(
-      (sale) => sale.sale_id === stock.item.id && sale.is_item
+      (sale) => sale.sale_id === parseInt(stock.id) && sale.is_item
     );
-    if (index === -1) {
-      const sale = {
-        key: sales.length === 0 ? 1 : sales[sales.length - 1].id + 1,
-        id: sales.length === 0 ? 1 : sales[sales.length - 1].id + 1,
-        sale_id: stock.id,
-        code: stock.item.code,
-        name: stock.item.name,
-        capital: stock.item.buy_price,
-        price: stock.item.sale_price,
-        quantity: 1,
-        subtotal: stock.item.sale_price * 1,
-        is_item: true,
-        staff_id: 1, // not need staff id for item. so, we need to change api
-      };
 
-      setSales([...sales, sale]);
+    
+   
+    if (index === -1) {
+      if (stock.quantity>0){
+        const sale = {
+          key: sales.length === 0 ? 1 : sales[sales.length - 1].id + 1,
+          id: sales.length === 0 ? 1 : sales[sales.length - 1].id + 1,
+          sale_id: stock.id,
+          code: stock.item.code,
+          name: stock.item.name,
+          capital: stock.item.buy_price,
+          price: stock.item.sale_price,
+          quantity: 1,
+          subtotal: stock.item.sale_price * 1,
+          is_item: true,
+          staff_id: 1, // not need staff id for item. so, we need to change api
+        };
+  
+        setSales([...sales, sale]);
+      }
+      
     } else {
       let cloneSales = [...sales];
+      if (cloneSales[index].quantity + 1<=stock.quantity){
+        
 
-      cloneSales[index] = {
-        ...cloneSales[index],
-        quantity: cloneSales[index].quantity + 1,
-        subtotal: cloneSales[index].price * (cloneSales[index].quantity + 1),
-      };
-      setSales(cloneSales);
+        cloneSales[index] = {
+          ...cloneSales[index],
+          quantity: cloneSales[index].quantity + 1,
+          subtotal: cloneSales[index].price * (cloneSales[index].quantity + 1),
+        };
+        setSales(cloneSales);
+      } 
+     
     }
   };
 
@@ -435,7 +445,8 @@ const Sale = ({
                     </Text>
                     <Image width={130} preview={false} src={stock.item.image} />
                     <Text style={{ color: "var(--black-color)" }}>
-                      {stock.item.name}
+                      {stock.item.name}<br/>
+                      ({stock.quantity})
                     </Text>
                   </Space>
                 </Col>
