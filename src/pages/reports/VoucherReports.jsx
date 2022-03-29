@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import { Typography, Space, Row, Col, Button, Table, DatePicker, Input, Select } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
+import queryString from 'query-string';
+import dayjs from "dayjs";
 import { getVouchers } from "../../store/actions";
 
 const { Title } = Typography;
@@ -11,14 +13,15 @@ const { Title } = Typography;
 const VoucherReports = ({ voucher, getVouchers}) => {
   const { Option } = Select;
   const { RangePicker } = DatePicker;
-  const navigate = useNavigate();
+  const location=useLocation();
+  
 
   console.log("vv",voucher.vouchers)
 
 
   useEffect(() => {
     const fetchData = async () => {
-      await getVouchers();
+      await getVouchers(queryString.parse(location.search));
     };
     fetchData();
     return () => {
@@ -40,11 +43,11 @@ const VoucherReports = ({ voucher, getVouchers}) => {
 
     {
       title: "ဝယ်သူအမည်",
-      dataIndex: "buy_name"
+      dataIndex: "customer_name"
     },
     {
       title: "ဝယ်ယူသောပမာဏ",
-      dataIndex: "buy_amount"
+      dataIndex: "total"
     },
     {
       title: "Actions",
@@ -72,7 +75,10 @@ const VoucherReports = ({ voucher, getVouchers}) => {
           <Col span={3}>    
           </Col>
         </Row>
-        <Space direction="vertical" size={12}><RangePicker /></Space>
+        <Space direction="vertical" size={12}><RangePicker onChange={(val)=>{
+          //alert(dayjs(val[0]).format("YYYY-MM-DD"))
+          window.location=`/admin/voucher-report?start_date=${dayjs(val[0]).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format("YYYY-MM-DD")}`;
+        }}/></Space>
         
         <Row>
           <Col span={5}>

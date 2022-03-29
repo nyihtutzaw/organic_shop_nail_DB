@@ -2,97 +2,145 @@ import React, { useEffect } from "react";
 import { Typography, Space, Row, Col, Button, Table, DatePicker } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
-import { getItems } from "../../store/actions";
-
+import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
+import { useLocation, useNavigate } from "react-router-dom";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { getBestService } from "../../store/actions";
+import queryString from "query-string";
+import dayjs from 'dayjs';
 const { Title } = Typography;
 
 const ServicesReport = () => {
   const { RangePicker } = DatePicker;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const services = useSelector((state) => state.service.services);
 
   useEffect(() => {
     const fetchData = async () => {
-      await getItems();
+      dispatch(getBestService(queryString.parse(location.search)));
     };
     fetchData();
     return () => {
       fetchData();
     };
-  }, [getItems]);
+  }, [getBestService, location]);
 
-  const columns = [
-    {
+  let columns;
+
+  if (!queryString.parse(location.search).best) {
+    columns = [
+      {
         title: "စည်",
-        dataIndex: "order"
+        dataIndex: "order",
       },
       {
         title: "ရက်စွဲ",
-        dataIndex: "date"
+        dataIndex: "invoice.created_at",
+        render: (_, record) =>
+          getReadableDateDisplay(record.invoice.created_at),
       },
       {
         title: "ဝန်ဆောင်မှုအမည်",
-        dataIndex: "service_name"
+        dataIndex: "service.category",
+        render: (_, record) => record.service.category,
       },
-  
+
       {
         title: "အရေအတွက်",
-        dataIndex: "quality"
+        dataIndex: "quantity",
       },
       {
         title: "စုစုပေါင်း",
-        dataIndex: "total"
+        dataIndex: "subtotal",
       },
-    {
-      title: "Actions",
-      dataIndex: "action",
-      render: (_) => (
-        <Space direction="horizontal">
-          <Button type="primary">Edit</Button>
-          <Button type="primary" danger>
-            Delete
-          </Button>
-        </Space>
-      )
-    }
-  ];
+    ];
+  } else {
+    columns = [
+      {
+        title: "စည်",
+        dataIndex: "order",
+      },
 
+      {
+        title: "ဝန်ဆောင်မှုအမည်",
+        dataIndex: "service.category",
+        render: (_, record) => record.service.category,
+      },
+
+      {
+        title: "အရေအတွက်",
+        dataIndex: "total_qty",
+      },
+      {
+        title: "စုစုပေါင်း",
+        render: (_, record) => record.service.price * record.total_qty,
+      },
+    ];
+  }
 
   return (
-     <Layout style={{ margin: "20px" }}>
+    <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
           <Col span={18}>
             <Title level={3}>ဝန်ဆောင်မှု မှတ်တမ်းစာမျက်နှာ</Title>
           </Col>
-          <Col span={3}>
-             
-          </Col>
-          <Col span={3}>
-             
-          </Col>
+          <Col span={3}></Col>
+          <Col span={3}></Col>
         </Row>
 
-        <Space direction="vertical" size={12}><RangePicker /></Space>
-        
+        <Space direction="vertical" size={12}>
+          <RangePicker
+            onChange={(val) => {
+              //alert(dayjs(val[0]).format("YYYY-MM-DD"))
+              if (queryString.parse(location.search).best){
+                window.location = `/admin/service-report?best=true&start_date=${dayjs(
+                  val[0]
+                ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                  "YYYY-MM-DD"
+                )}`;
+              }
+              else 
+              {
+                window.location = `/admin/service-report?start_date=${dayjs(
+                  val[0]
+                ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                  "YYYY-MM-DD"
+                )}`;
+              }
+            
+            }}
+          />
+        </Space>
+
         <Row>
           <Col span={5}>
-            <Button style={{
+            <Button
+              style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px"
-              }} block>
-             Sort by ( ဝန်ဆောင်မှုအမည် )
+                borderRadius: "5px",
+              }}
+              block
+            >
+              Sort by ( ဝန်ဆောင်မှုအမည် )
             </Button>
           </Col>
           <Col span={14}></Col>
-          <Col span={5} >
-            <Button style={{
+          <Col span={5}>
+            <Button
+              onClick={() => {
+                window.location = "/admin/service-report?best=true";
+              }}
+              style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px"
-              }} block>
+                borderRadius: "5px",
+              }}
+              block
+            >
               အရောင်းရဆုံးဝန်ဆောင်မှုများ
             </Button>
           </Col>
@@ -102,11 +150,11 @@ const ServicesReport = () => {
           bordered
           columns={columns}
           pagination={{ defaultPageSize: 10 }}
-          //   dataSource={item.items}
+          dataSource={services}
         />
       </Space>
     </Layout>
-  )
-}
+  );
+};
 
-export default ServicesReport
+export default ServicesReport;

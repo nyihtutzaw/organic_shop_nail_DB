@@ -39,6 +39,32 @@ export const setServiceError = (error) => ({
   error
 });
 
+export const getBestService=(query)=>{
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/bestService?${new URLSearchParams(query).toString()}`
+      );
+      const result = response.data.data.map((service) => {
+        return {
+          ...service,
+          key: service.id
+        };
+      });
+
+      
+        dispatch(showServices(result));
+      
+    } catch (error) {
+      if (error.response.status === 404) {
+        dispatch(setServiceError(error.response.data.data));
+      } else {
+        dispatch(setServiceError(error.response.data));
+      }
+    }
+  };
+}
+
 export const getServices = () => {
   return async (dispatch) => {
     try {

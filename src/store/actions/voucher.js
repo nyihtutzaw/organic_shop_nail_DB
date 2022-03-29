@@ -18,11 +18,11 @@ export const setVoucherErrors = (error) => ({
   error
 });
 
-export const getVouchers = () => {
+export const getVouchers = (query) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/invoices"
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/invoices?${new URLSearchParams(query).toString()}`
       );
       const result = response.data.data.map((voucher) => {
         return {
