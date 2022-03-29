@@ -52,9 +52,12 @@ const VoucherReports = ({ voucher, getVouchers}) => {
     {
       title: "Actions",
       dataIndex: "action",
-      render: (_) => (
+      render: (_,record) => (
         <Space direction="horizontal">
-          <Button type="primary">Edit</Button>
+        
+          <Button type="primary" onClick={()=>{
+            window.location=`/admin/sale/${record.id}`;
+          }}>Detail</Button>
           <Button type="primary" danger>
             Delete
           </Button>
