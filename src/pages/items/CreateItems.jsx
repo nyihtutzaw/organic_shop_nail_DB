@@ -23,7 +23,7 @@ import item from "../../store/reducers/item";
 
 const { Title, Text } = Typography;
 
-const CreateItems = ({ saveItems }) => {
+const CreateItems = ({ saveItems, error }) => {
   const [items, setItems] = useState([]);
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
@@ -49,12 +49,12 @@ const CreateItems = ({ saveItems }) => {
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Saved Your Data',
-      description: 'Your data have been saved.',
+      message: "Saved Your Data",
+      description: "Your data have been saved.",
       duration: 3
     });
   };
-  
+
   const handleSave = async () => {
     if (items.length === 0) {
       message.error("ကျေးဇူးပြု၍ပစ္စည်းများထည့်ပါ");
@@ -71,9 +71,24 @@ const CreateItems = ({ saveItems }) => {
       // console.log("formData",formData)
       await saveItems(formData);
       setItems([]);
-      openNotificationWithIcon('success')
+      openNotificationWithIcon("success");
     }
   };
+
+  //for barcode
+  const [barcodeInputValue, updateBarcodeInputValue] = useState("");
+  const barcodeAutoFocus = () => {
+    document.getElementById("SearchbyScanning").focus();
+  };
+  const onChangeBarcode = (event) => {
+    updateBarcodeInputValue(event.target.value);
+  };
+  const handleSearch = () => {
+    alert(barcodeInputValue);
+    updateBarcodeInputValue("");
+    document.getElementById("SearchbyScanning").focus();
+  };
+
   const columns = [
     {
       title: "ပစ္စည်းပုံ",
@@ -120,6 +135,7 @@ const CreateItems = ({ saveItems }) => {
         <Title style={{ textAlign: "center" }} level={3}>
           ပစ္စည်းအချက်အလက်သွင်းရန်စာမျက်နှာ
         </Title>
+        
         <Form
           labelCol={{
             xl: {
@@ -150,7 +166,22 @@ const CreateItems = ({ saveItems }) => {
             />
             <Text type="secondary">ကျေးဇူးပြု၍ပစ္စည်းပုံထည့်ပါ</Text>
           </Space>
-          <Form.Item
+
+          <div className="App">
+         <label htmlFor="">ပစ္စည်းကုတ်</label>
+          <input
+            autoFocus={true}
+            placeholder="Start Scanning"
+            id="SearchbyScanning"
+            className="SearchInput"
+            value={barcodeInputValue}
+            onChange={onChangeBarcode}
+            onBlur={barcodeAutoFocus}
+          />
+          <button onClick={handleSearch}>Search</button>
+        </div>
+        
+          {/* <Form.Item
             name="code"
             label="ပစ္စည်းကုတ်"
             rules={[
@@ -162,12 +193,23 @@ const CreateItems = ({ saveItems }) => {
             labelwidth={100}
           >
             <Input
+              autoFocus={true}
+              // placeholder="Start Scanning"
+              id="SearchbyScanning"
+              className="SearchInput"
+              value={barcodeInputValue}
+              onChange={onChangeBarcode}
+              onBlur={barcodeAutoFocus}
+
+
               placeholder="ပစ္စည်းကုတ်ထည့်ပါ"
               prefix={<EditOutlined />}
               style={{ borderRadius: "10px" }}
               size="large"
             />
-          </Form.Item>
+            <button onClick={handleSearch}>Search</button>
+          </Form.Item> */}
+
           <Form.Item
             name="name"
             label="ပစ္စည်းအမည်"
@@ -195,7 +237,6 @@ const CreateItems = ({ saveItems }) => {
                 message: "ကျေးဇူးပြု၍ ဝယ်ဈေးထည့်ပါ"
               }
             ]}
-           
           >
             <Input
               placeholder="ဝယ်ဈေးထည့်ပါ"
@@ -264,4 +305,8 @@ const CreateItems = ({ saveItems }) => {
   );
 };
 
-export default connect(null, { saveItems })(CreateItems);
+const mapStateToProps = (store) => ({
+  error: store.error
+});
+
+export default connect(mapStateToProps, { saveItems })(CreateItems);

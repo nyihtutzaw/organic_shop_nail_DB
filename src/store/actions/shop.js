@@ -1,5 +1,14 @@
 import axios from "axios";
-import { SHOW_SHOPS, SHOW_SHOP,  CREATE_SHOPS, UPDATE_SHOPS, FILTER_SHOPS, ERROR_SHOP } from "../type";
+import {
+  SHOW_SHOPS,
+  SHOW_SHOP,
+  CREATE_SHOPS,
+  UPDATE_SHOPS,
+  FILTER_SHOPS,
+  ERROR_SHOP,
+  IS_SUCCESS_SHOP,
+  CLEAR_ALERT
+} from "../type";
 
 export const showShops = (shops) => ({
   type: SHOW_SHOPS,
@@ -31,6 +40,14 @@ export const setShopErrors = (error) => ({
   error
 });
 
+export const shopSuccess = (isSuccess) => ({
+  type: IS_SUCCESS_SHOP,
+  isSuccess
+});
+
+export const clearAlert = () => ({
+  type: CLEAR_ALERT
+});
 
 export const getShops = () => {
   return async (dispatch) => {
@@ -44,31 +61,34 @@ export const getShops = () => {
           key: data.id
         };
       });
-      dispatch(showShops(result));
+      if (response.status === 200) {
+        dispatch(showShops(result));
+      }
     } catch (error) {
-      console.log(error);
+      if (error.response.status >= 400) {
+        dispatch(setShopErrors("There was an error during Showing....!"));
+      } else {
+        dispatch(setShopErrors("There was an error during Showing....!"));
+      }
     }
   };
 };
 
-
 export const getShop = (id) => {
   return async (dispatch) => {
     try {
-      // console.log(id);
       const response = await axios.get(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${id}`
       );
       const result = response.data.data;
-      // console.log(result)
       if (response.status === 200) {
         dispatch(showShop(result));
       }
     } catch (error) {
-      if (error) {
-        dispatch(setShopErrors(error));
+      if (error.response.status >= 400) {
+        dispatch(setShopErrors("There was an error during Updating a Data....!"));
       } else {
-        dispatch(setShopErrors(error));
+        dispatch(setShopErrors("There was an error during Updating a Data....!"));
       }
     }
   };
@@ -85,8 +105,16 @@ export const saveShops = (data) => {
         ...response.data.data,
         key: response.data.data.id
       };
-      dispatch(createShops(result));
-    } catch (error) {}
+      if (response.status === 201) {
+        dispatch(createShops(result));
+      }
+    } catch (error) {
+      if (error.response.status >= 400) {
+        dispatch(setShopErrors("There was an error during Creating....!"));
+      } else {
+        dispatch(setShopErrors("There was an error during Creating....!"));
+      }
+    }
   };
 };
 
@@ -96,8 +124,16 @@ export const deleteShops = (id) => {
       const response = await axios.delete(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${id}`
       );
-      dispatch(filterShops(id));
-    } catch (error) {}
+      if (response.status === 204) {
+        dispatch(filterShops(id));
+      }
+    } catch (error) {
+      if (error.response.status >= 400) {
+        dispatch(setShopErrors("There was an error during Deleting....!"));
+      } else {
+        dispatch(setShopErrors("There was an error during Deleting....!"));
+      }
+    }
   };
 };
 
@@ -108,8 +144,15 @@ export const editShops = (id, data) => {
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${id}?_method=put`,
         data
       );
-
-      dispatch(updateShops(data));
-    } catch (error) {}
+      if (response.status === 201) {
+        dispatch(updateShops(data));
+      }
+    } catch (error) {
+      if (error.response.status >= 400) {
+        dispatch(setShopErrors("There was an error during Updating....!"));
+      } else {
+        dispatch(setShopErrors("There was an error during Updating....!"));
+      }
+    }
   };
 };
