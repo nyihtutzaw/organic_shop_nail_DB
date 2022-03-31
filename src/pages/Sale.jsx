@@ -32,6 +32,7 @@ import {
   getMembers
 } from "../store/actions";
 import { call } from "../services/api";
+import { items } from "../mock";
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -320,6 +321,24 @@ const Sale = ({
     setBarcode(filterstocks);
   };
 
+  const onKeyDown=(e)=>{
+    if (e.keyCode===13){
+      updateBarcodeInputValue(e.target.value);
+    
+      const item=stock.stocks.find((s)=>s.item.code===e.target.value);
+      if (item) handleAddSaleItem(item);
+      else {
+        const item=service.services.find((s)=>s.code===e.target.value);
+        if (item){
+          handleAddSaleService(item);
+        }
+        else {
+          alert("Not Found");
+        }
+      }
+    }
+  }
+
   const columns = [
     {
       title: "စဥ်",
@@ -441,6 +460,7 @@ const Sale = ({
                   className="SearchInput"
                   value={barcodeInputValue}
                   onChange={onChangeBarcode}
+                  onKeyDown={onKeyDown}
                   onBlur={barcodeAutoFocus}
                 />
                 {/* <button >Search</button> */}

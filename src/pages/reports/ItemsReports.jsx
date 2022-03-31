@@ -1,62 +1,84 @@
 import React, { useEffect } from "react";
 import { Typography, Space, Row, Col, Button, Table, DatePicker } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
-import { getItems } from "../../store/actions";
+import queryString from "query-string";
+import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import dayjs from "dayjs";
+import { getBestItem } from "../../store/actions";
 
 const { Title } = Typography;
 
 const ItemsReports = () => {
-    const { RangePicker } = DatePicker;
-  const navigate = useNavigate();
-
+  const { RangePicker } = DatePicker;
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const items = useSelector((state) => state.item.items);
   useEffect(() => {
     const fetchData = async () => {
-      await getItems();
+      dispatch(getBestItem(queryString.parse(location.search)));
     };
     fetchData();
     return () => {
       fetchData();
     };
-  }, [getItems]);
+  }, [getBestItem, location]);
 
-  const columns = [
-    {
+  let columns = [];
+  
+  if (!queryString.parse(location.search).best) {
+    columns=[
+      {
         title: "စည်",
-        dataIndex: "order"
+        dataIndex: "order",
       },
       {
         title: "ရက်စွဲ",
-        dataIndex: "date"
+        dataIndex: "invoice.created_at",
+        render: (_, record) => getReadableDateDisplay(record.invoice.created_at),
       },
       {
         title: "ပစ္စည်းအမည်",
-        dataIndex: "item_name"
+        dataIndex: "invoice.stock",
+        render: (_, record) => record.stock.item?.name,
       },
   
       {
         title: "အရေအတွက်",
-        dataIndex: "quality"
+        dataIndex: "quantity",
       },
       {
         title: "စုစုပေါင်း",
-        dataIndex: "total"
+        render: (_, record) => record.price * record.quantity,
       },
-    {
-      title: "Actions",
-      dataIndex: "action",
-      render: (_) => (
-        <Space direction="horizontal">
-          <Button type="primary">Edit</Button>
-          <Button type="primary" danger>
-            Delete
-          </Button>
-        </Space>
-      )
-    }
-  ];
+    ];
+  }
+  else {
+    columns = [
+      {
+        title: "စည်",
+        dataIndex: "order",
+      },
+
+      {
+        title: "ပစ္စည်းအမည်",
+        dataIndex: "invoice.stock",
+        render: (_, record) => record.stock.item?.name,
+      },
+
+      {
+        title: "အရေအတွက်",
+        dataIndex: "total_qty",
+      },
+      {
+        title: "စုစုပေါင်း",
+        render: (_, record) => record.stock.item.sale_price*record.total_qty,
+      },
+    ];
+  }
+  
+  
 
   return (
     <Layout style={{ margin: "20px" }}>
@@ -65,33 +87,57 @@ const ItemsReports = () => {
           <Col span={18}>
             <Title level={3}>ပစ္စည်းအရောင်း မှတ်တမ်းစာမျက်နှာ</Title>
           </Col>
-          <Col span={3}>
-             
-          </Col>
-          <Col span={3}>
-             
-          </Col>
+          <Col span={3}></Col>
+          <Col span={3}></Col>
         </Row>
 
-        <Space direction="vertical" size={12}><RangePicker /></Space>
-        
+        <Space direction="vertical" size={12}>
+          <RangePicker
+            onChange={(val) => {
+              //alert(dayjs(val[0]).format("YYYY-MM-DD"))
+              if (queryString.parse(location.search).best) {
+                window.location = `/admin/item-report?best=true&start_date=${dayjs(
+                  val[0]
+                ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                  "YYYY-MM-DD"
+                )}`;
+              } else {
+                window.location = `/admin/item-report?start_date=${dayjs(
+                  val[0]
+                ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                  "YYYY-MM-DD"
+                )}`;
+              }
+            }}
+          />
+        </Space>
+
         <Row>
           <Col span={5}>
-            <Button style={{
+            <Button
+              style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px"
-              }} block>
-             Sort by ( ပစ္စည်းအမည် )
+                borderRadius: "5px",
+              }}
+              block
+            >
+              Sort by ( ပစ္စည်းအမည် )
             </Button>
           </Col>
           <Col span={14}></Col>
-          <Col span={5} >
-            <Button style={{
+          <Col span={5}>
+            <Button
+              style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px"
-              }} block>
+                borderRadius: "5px",
+              }}
+              block
+              onClick={() =>
+                (window.location = "/admin/item-report?best=true")
+              }
+            >
               အရောင်းရဆုံပစ္စည်းများ
             </Button>
           </Col>
@@ -101,7 +147,7 @@ const ItemsReports = () => {
           bordered
           columns={columns}
           pagination={{ defaultPageSize: 10 }}
-          //   dataSource={item.items}
+          dataSource={items}
         />
       </Space>
     </Layout>
