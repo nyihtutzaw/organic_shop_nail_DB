@@ -18,7 +18,7 @@ import {
   EditOutlined
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import {
   getShops,
   deleteShops,
@@ -26,13 +26,23 @@ import {
   clearAlert
 } from "../../store/actions";
 import store from "../../store";
+import ReactExport from "react-export-excel";
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 const { Title } = Typography;
 
 const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
   const navigate = useNavigate();
 
-  // console.log(shop.isSuccess);
+  const [getData, setGetData] = useState([]);
+  const shops = useSelector((state) => state.shop.shops);
+
+  useEffect(() => {
+    setGetData(shops);
+  }, [shops]);
 
   useEffect(() => {
     store.dispatch(clearAlert());
@@ -56,7 +66,6 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
 
   const handleDelete = async (record) => {
     await deleteShops(record.id);
-    // openNotificationWithIcon("error");
   };
 
   const columns = [
@@ -95,7 +104,7 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
 
       {shop.isSuccess && (
         <Alert message="Successfully Deleted" type="success" showIcon />
-      )} 
+      )}
 
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
@@ -117,17 +126,26 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
             </Button>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
+            <ExcelFile
+              data={shops}
+              element={
+                <button
+                  style={{
+                    backgroundColor: "var(--primary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                >
+                  <ExportOutlined />
+                  စာရင်းထုတ်မည်
+                </button>
+              }
             >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+              <ExcelSheet data={getData} name="Shops">
+                <ExcelColumn label="Id" value="id" />
+                <ExcelColumn label="Name" value="name" />
+              </ExcelSheet>
+            </ExcelFile>
           </Col>
         </Row>
         <Table
