@@ -1,14 +1,32 @@
 import React from "react";
 import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { PlusSquareOutlined, ExportOutlined,  DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  PlusSquareOutlined,
+  ExportOutlined,
+  DeleteOutlined,
+  EditOutlined
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getExpenses, deleteExpenses, getExpense } from "../../store/actions";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
+import ReactExport from "react-export-excel";
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+
 const { Title } = Typography;
 
 const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
+  const expenseAll = useSelector((state) => state.expense.expenses);
+  const result = expenseAll.map((data) => ({
+    ...data,
+    created_at: getReadableDateDisplay(data.created_at)
+  }));
+
+
   const navigate = useNavigate();
   const mountedRef = React.useRef(true);
   const getExpenseResult = async () => {
@@ -17,10 +35,7 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
       const response = await getExpenses();
       const result = response.data;
       console.log(result);
-      // setGetData(result);
-    } catch (error) {
-      // console.log(error.response);
-    }
+    } catch (error) {}
   };
   React.useEffect(() => {
     getExpenseResult();
@@ -38,7 +53,7 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
     notification[type]({
       message: "Deleted Your Data",
       description: "Your data have been deleted.",
-      duration: 3,
+      duration: 3
     });
   };
 
@@ -51,15 +66,15 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
     {
       title: "ရက်စွဲ",
       dataIndex: "created_at",
-      render: (_, record) => getReadableDateDisplay(record.created_at),
+      render: (_, record) => getReadableDateDisplay(record.created_at)
     },
     {
       title: "ကုန်ကျစရိတ်",
-      dataIndex: "name",
+      dataIndex: "name"
     },
     {
       title: "စုစုပေါင်း",
-      dataIndex: "amount",
+      dataIndex: "amount"
     },
 
     {
@@ -68,14 +83,14 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
       render: (_, record) => (
         <Space direction="horizontal">
           <Button type="primary" onClick={() => handleClick(record)}>
-          <EditOutlined/>
+            <EditOutlined />
           </Button>
           <Button type="primary" danger onClick={() => handleDelete(record)}>
-          <DeleteOutlined/>
+            <DeleteOutlined />
           </Button>
         </Space>
-      ),
-    },
+      )
+    }
   ];
 
   return (
@@ -90,7 +105,7 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
               style={{
                 backgroundColor: "var(--secondary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px",
+                borderRadius: "5px"
               }}
               size="middle"
               onClick={() => navigate("/admin/create-expenses")}
@@ -100,17 +115,26 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
             </Button>
           </Col>
           <Col span={3}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px",
-              }}
-              size="middle"
+            <ExcelFile
+              element={
+                <button
+                  style={{
+                    backgroundColor: "var(--primary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                >
+                  <ExportOutlined />
+                  စာရင်းထုတ်မည်
+                </button>
+              }
             >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+              <ExcelSheet data={result} name="Expenses">
+                <ExcelColumn label="Amount" value="amount" />
+                <ExcelColumn label="Date" value="created_at" />
+                <ExcelColumn label="Name" value="name" />
+              </ExcelSheet>
+            </ExcelFile>
           </Col>
         </Row>
         <Table
@@ -126,11 +150,11 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
 };
 
 const mapStateToProps = (store) => ({
-  expense: store.expense,
+  expense: store.expense
 });
 
 export default connect(mapStateToProps, {
   getExpenses,
   deleteExpenses,
-  getExpense,
+  getExpense
 })(ShowExpenses);

@@ -6,6 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getStaffs, deleteStaffs } from "../../store/actions";
 import { connect } from "react-redux";
+import ReactExport from "react-export-excel";
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 
 const { Title } = Typography;
@@ -13,7 +18,6 @@ const { Title } = Typography;
 const ShowStaff = ({getStaffs, deleteStaffs}) => {
   const dispatch = useDispatch()
   const staffs = useSelector((state) => state.staff.staffs);
-  // console.log(staffs);
   useEffect(() => {
     const fetchData = async () => {
       await getStaffs();
@@ -27,7 +31,6 @@ const ShowStaff = ({getStaffs, deleteStaffs}) => {
   const navigate = useNavigate();
 
   const handleClick = (record) => {
-    // console.log("record", record.id);
     navigate(`/admin/edit-staff/${record.id}`);
   };
 
@@ -51,7 +54,6 @@ const ShowStaff = ({getStaffs, deleteStaffs}) => {
       render: (_, record) => (
         <img
         src={`${record.image}`}
-          // alt="ပစ္စည်းပုံ"
           width={100}
           height={100}
         />
@@ -113,17 +115,29 @@ const ShowStaff = ({getStaffs, deleteStaffs}) => {
             </Button>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
+          <ExcelFile
+              element={
+                <button
+                  style={{
+                    backgroundColor: "var(--primary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                >
+                  <ExportOutlined />
+                  စာရင်းထုတ်မည်
+                </button>
+              }
             >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+              <ExcelSheet data={staffs} name="Stocks">
+                <ExcelColumn label="Name" value="name" />
+                <ExcelColumn label="Phone" value="phone" />
+                <ExcelColumn label="Bank Account" value="bank_account" />
+                <ExcelColumn label="Date of Birth" value="dob" />
+                <ExcelColumn label="Salary" value="salary" />
+                <ExcelColumn label="Start Work" value="start_work" />
+              </ExcelSheet>
+            </ExcelFile>
           </Col>
         </Row>
         <Table

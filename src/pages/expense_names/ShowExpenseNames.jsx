@@ -4,10 +4,18 @@ import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined,  DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getExpenseNames, deleteExpenseNames, getExpenseName } from "../../store/actions";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
+import ReactExport from "react-export-excel";
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+
 const { Title } = Typography;
 
 const ShowExpenseNames = ({ expenseNames, getExpenseNames, deleteExpenseNames, getExpenseName }) => {
+  const expenseNameAll = useSelector((state) => state.expense_name.expense_names);
+
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -82,17 +90,24 @@ const ShowExpenseNames = ({ expenseNames, getExpenseNames, deleteExpenseNames, g
             </Button>
           </Col>
           <Col span={3}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
+          <ExcelFile
+              element={
+                <button
+                  style={{
+                    backgroundColor: "var(--primary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                >
+                  <ExportOutlined />
+                  စာရင်းထုတ်မည်
+                </button>
+              }
             >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+              <ExcelSheet data={expenseNameAll} name="ExpenseNames">
+                <ExcelColumn label="Name" value="name" />
+              </ExcelSheet>
+            </ExcelFile>
           </Col>
         </Row>
         <Table

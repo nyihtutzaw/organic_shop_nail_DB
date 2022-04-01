@@ -22,7 +22,6 @@ const { Title } = Typography;
 
 const ShowService = ({ service, getServices, deleteServices, getService }) => {
   const serviceAll = useSelector((state) => state.service.services);
-  console.log(serviceAll);
 
   const navigate = useNavigate();
   const openNotificationWithIcon = (type) => {

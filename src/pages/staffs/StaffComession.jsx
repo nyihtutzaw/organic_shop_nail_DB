@@ -87,6 +87,7 @@ const StaffComession = () => {
     total += Number(commercial) + Number(filterStaff.salary);
   });
 
+  
   const handleOnChange = (value) => {
     if (value === undefined) {
       setFilterStaffs(staffs);
