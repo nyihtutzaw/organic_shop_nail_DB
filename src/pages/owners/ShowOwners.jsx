@@ -13,6 +13,7 @@ import {
 } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
 
+
 const { Title } = Typography;
 
 const ShowOwners = ({ getOwners, deleteOwners, getOwner }) => {

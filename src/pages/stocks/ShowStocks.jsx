@@ -15,8 +15,6 @@ const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 const { Title } = Typography;
 
 const ShowStocks = ({ stock, getStocks }) => {
-  // const stockAll = useSelector((state) => state.item.items);
-
   const stockAll = stock.stocks;
   const result = stockAll.map((data) => ({
     ...data,
@@ -25,8 +23,7 @@ const ShowStocks = ({ stock, getStocks }) => {
     buy_price:  data.item.buy_price,
     sale_price:  data.item.sale_price,
   }));
-  console.log("aa", stockAll)
-  console.log(result)
+
 
   const navigate = useNavigate();
   useEffect(() => {

@@ -84,7 +84,7 @@ const ShowBadItem = ({getBadItems, deleteBadItems}) => {
           <Col span={3}>
             <Button
               style={{
-                backgroundColor: "var(--primary-color)",
+                backgroundColor: "var(--secondary-color)",
                 color: "var(--white-color)",
                 borderRadius: "5px"
               }}
@@ -92,7 +92,7 @@ const ShowBadItem = ({getBadItems, deleteBadItems}) => {
               onClick={() => navigate("/admin/create-bad-item")}
             >
               <PlusSquareOutlined />
-              New
+              အသစ်ထည့်မည်
             </Button>
           </Col>
         </Row>

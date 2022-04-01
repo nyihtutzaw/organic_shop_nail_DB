@@ -1,7 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, Select, notification } from "antd";
+import {
+  Typography,
+  Space,
+  Row,
+  Col,
+  Button,
+  Table,
+  Select,
+  notification
+} from "antd";
 import Layout from "antd/lib/layout/layout";
-import { PlusSquareOutlined, ExportOutlined,  DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  PlusSquareOutlined,
+  ExportOutlined,
+  DeleteOutlined,
+  EditOutlined
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
 import {
@@ -11,6 +25,11 @@ import {
   getPurchase
 } from "../../store/actions";
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
+import ReactExport from "react-export-excel";
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -25,7 +44,11 @@ const ShowBuyMerchants = ({
 }) => {
   const navigate = useNavigate();
   const allPurchases = useSelector((state) => state.purchase.purchases);
-  // const purchaseAll = purchase.purchases;
+  const result = allPurchases.map((data) => ({
+    ...data,
+    company_name: data.merchant.company_name,
+  }));
+
 
   const [myPurchase, setMyPurchase] = useState([]);
   useEffect(() => {
@@ -71,21 +94,23 @@ const ShowBuyMerchants = ({
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Deleted Your Data',
-      description: 'Your data have been deleted.',
+      message: "Deleted Your Data",
+      description: "Your data have been deleted.",
       duration: 3
     });
   };
 
   const handleDelete = async (record) => {
-     const filterMyPurchase = myPurchase.filter((purchase) => purchase.id !== record.id)
-     setMyPurchase(filterMyPurchase)
+    const filterMyPurchase = myPurchase.filter(
+      (purchase) => purchase.id !== record.id
+    );
+    setMyPurchase(filterMyPurchase);
     await deletePurchases(record.id);
-    openNotificationWithIcon('error')
+    openNotificationWithIcon("error");
   };
 
-  const handleClick =async (record) => {
-    await getPurchase(record.id)
+  const handleClick = async (record) => {
+    await getPurchase(record.id);
     navigate(`/admin/edit-buy-merchants/${record.id}`);
   };
 
@@ -93,7 +118,7 @@ const ShowBuyMerchants = ({
     {
       title: "ရက်စွဲ",
       dataIndex: `created_at`,
-      render:(_,record)=>getReadableDateDisplay(record.created_at)
+      render: (_, record) => getReadableDateDisplay(record.created_at)
     },
     {
       title: "ကုန်သည်လုပ်ငန်းအမည်",
@@ -101,15 +126,15 @@ const ShowBuyMerchants = ({
       render: (_, record) =>
         showBuyMerchant === null
           ? record.merchant.company_name
-          : showBuyMerchant[0].company_name,
+          : showBuyMerchant[0].company_name
     },
     {
       title: "ပေးချေပြီးပမာဏ",
-      dataIndex: "paid",
+      dataIndex: "paid"
     },
     {
       title: "ပေးရန်ကျန်ငွေ",
-      dataIndex: "credit",
+      dataIndex: "credit"
     },
 
     {
@@ -117,16 +142,16 @@ const ShowBuyMerchants = ({
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          <Button type="primary"
-          onClick={() => handleClick(record)
-          }
-          > <EditOutlined/></Button>
+          <Button type="primary" onClick={() => handleClick(record)}>
+            {" "}
+            <EditOutlined />
+          </Button>
           <Button type="primary" danger onClick={() => handleDelete(record)}>
-          <DeleteOutlined/>
+            <DeleteOutlined />
           </Button>
         </Space>
-      ),
-    },
+      )
+    }
   ];
 
   return (
@@ -141,7 +166,7 @@ const ShowBuyMerchants = ({
               style={{
                 backgroundColor: "var(--secondary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px",
+                borderRadius: "5px"
               }}
               size="middle"
               onClick={() => navigate("/admin/create-buy-merchants")}
@@ -151,17 +176,28 @@ const ShowBuyMerchants = ({
             </Button>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px",
-              }}
-              size="middle"
+          <ExcelFile
+              element={
+                <button
+                  style={{
+                    backgroundColor: "var(--primary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                >
+                  <ExportOutlined />
+                  စာရင်းထုတ်မည်
+                </button>
+              }
             >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+              <ExcelSheet  data={result}   name="Stocks">
+                <ExcelColumn label="Date" value="date" />
+                <ExcelColumn label="Paid" value="paid" />
+                <ExcelColumn label="Whole Total" value="whole_total" />
+                <ExcelColumn label="Credit" value="credit" />
+                <ExcelColumn label="Company Name" value="company_name" />
+              </ExcelSheet>
+            </ExcelFile>
           </Col>
         </Row>
         <Row gutter={[16, 16]}>
@@ -170,7 +206,7 @@ const ShowBuyMerchants = ({
               direction="horizontal"
               style={{
                 width: "100%",
-                marginBottom: "10px",
+                marginBottom: "10px"
               }}
               size="large"
             >
@@ -210,7 +246,6 @@ const ShowBuyMerchants = ({
         <Table
           bordered
           columns={columns}
-          // dataSource={showBuyMerchant === null ? allPurchases : showBuyMerchant}
           dataSource={allPurchases}
           pagination={{ defaultPageSize: 10 }}
         />
@@ -221,7 +256,7 @@ const ShowBuyMerchants = ({
 
 const mapStateToProps = (store) => ({
   merchant: store.merchant,
-  purchase: store.purchase,
+  purchase: store.purchase
 });
 
 export default connect(mapStateToProps, {
