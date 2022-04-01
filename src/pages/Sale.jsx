@@ -321,24 +321,31 @@ const Sale = ({
     setBarcode(filterstocks);
   };
 
-  const onKeyDown=(e)=>{
-    if (e.keyCode===13){
+  const onKeyDown = (e) => {
+    if (e.keyCode === 13) {
       updateBarcodeInputValue(e.target.value);
-    
-      const item=stock.stocks.find((s)=>s.item.code===e.target.value);
-      if (item) handleAddSaleItem(item);
-      else {
-        const item=service.services.find((s)=>s.code===e.target.value);
-        if (item){
+
+      const item = stock.stocks.find((s) => s.item.code === e.target.value);
+      if (item) {
+        handleAddSaleItem(item);
+        updateBarcodeInputValue("")
+      } else {
+        const item = service.services.find((s) => s.code === e.target.value);
+        if (item) {
           handleAddSaleService(item);
-        }
-        else {
+        updateBarcodeInputValue("")
+
+        } else {
           alert("Not Found");
+          updateBarcodeInputValue("")
         }
       }
     }
-  }
+  };
 
+  const handleMember = () => {
+    navigate("/admin/create-members");
+  };
   const columns = [
     {
       title: "စဥ်",
@@ -461,7 +468,7 @@ const Sale = ({
                   value={barcodeInputValue}
                   onChange={onChangeBarcode}
                   onKeyDown={onKeyDown}
-                  onBlur={barcodeAutoFocus}
+                  // onBlur={barcodeAutoFocus}
                 />
                 {/* <button >Search</button> */}
               </Space>
@@ -507,6 +514,7 @@ const Sale = ({
                   color: "var(--white-color)"
                 }}
                 size="large"
+                onClick={handleMember}
               >
                 <PlusSquareOutlined />
                 New Member

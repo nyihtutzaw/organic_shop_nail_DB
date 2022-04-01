@@ -17,7 +17,6 @@ const { Title } = Typography;
 const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
   const navigate = useNavigate();
   const members = useSelector((state) => state.member.members);
-console.log(members)
   const result = members.map((member) => ({
     id: member.id,
     key: member.id,
