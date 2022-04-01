@@ -1,17 +1,47 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, notification, Alert } from "antd";
+import {
+  Typography,
+  Space,
+  Row,
+  Col,
+  Button,
+  Table,
+  notification,
+  Alert
+} from "antd";
 import Layout from "antd/lib/layout/layout";
-import { PlusSquareOutlined, ExportOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  PlusSquareOutlined,
+  ExportOutlined,
+  DeleteOutlined,
+  EditOutlined
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
-import { getMerchants, deleteMerchants, getMerchant, clearAlertMerchant } from "../../store/actions";
+import { connect, useSelector } from "react-redux";
+import {
+  getMerchants,
+  deleteMerchants,
+  getMerchant,
+  clearAlertMerchant
+} from "../../store/actions";
 import store from "../../store";
+import ReactExport from "react-export-excel";
 
-
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 const { Title } = Typography;
 
-const ShowMerchants = ({ merchant, getMerchants, deleteMerchants, getMerchant, clearAlertMerchant }) => {
+const ShowMerchants = ({
+  merchant,
+  getMerchants,
+  deleteMerchants,
+  getMerchant,
+  clearAlertMerchant
+}) => {
+  const merchantAll = useSelector((state) => state.merchant.merchants);
+
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -23,14 +53,12 @@ const ShowMerchants = ({ merchant, getMerchants, deleteMerchants, getMerchant, c
     };
   }, [getMerchants]);
 
-  // console.log(merchant.isSuccess)
-
   useEffect(() => {
     store.dispatch(clearAlertMerchant());
   }, []);
 
-  const handleClick =async (record) => {
-    await getMerchant(record.id)
+  const handleClick = async (record) => {
+    await getMerchant(record.id);
     navigate(`/admin/edit-merchants/${record.id}`);
   };
 
@@ -61,10 +89,10 @@ const ShowMerchants = ({ merchant, getMerchants, deleteMerchants, getMerchant, c
       render: (_, record) => (
         <Space direction="horizontal">
           <Button type="primary" onClick={() => handleClick(record)}>
-          <EditOutlined/>
+            <EditOutlined />
           </Button>
           <Button type="primary" danger onClick={() => handleDelete(record)}>
-          <DeleteOutlined/>
+            <DeleteOutlined />
           </Button>
         </Space>
       )
@@ -107,17 +135,27 @@ const ShowMerchants = ({ merchant, getMerchants, deleteMerchants, getMerchant, c
             </Button>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
+            <ExcelFile
+              element={
+                <button
+                  style={{
+                    backgroundColor: "var(--primary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                >
+                  <ExportOutlined />
+                  စာရင်းထုတ်မည်
+                </button>
+              }
             >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+              <ExcelSheet data={merchantAll} name="Accounts">
+                <ExcelColumn label="Name" value="name" />
+                <ExcelColumn label="Code" value="code" />
+                <ExcelColumn label="Company Name" value="company_name" />
+                <ExcelColumn label="other" value="other" />
+              </ExcelSheet>
+            </ExcelFile>
           </Col>
         </Row>
         <Table
@@ -135,6 +173,9 @@ const mapStateToProps = (store) => ({
   merchant: store.merchant
 });
 
-export default connect(mapStateToProps, { getMerchants, deleteMerchants, getMerchant, clearAlertMerchant })(
-  ShowMerchants
-);
+export default connect(mapStateToProps, {
+  getMerchants,
+  deleteMerchants,
+  getMerchant,
+  clearAlertMerchant
+})(ShowMerchants);

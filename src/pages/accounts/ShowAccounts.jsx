@@ -19,17 +19,11 @@ const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 const { Title } = Typography;
 
 const ShowAccounts = () => {
-  const [getData, setGetData] = useState([]);
-
   const accounts = useSelector((state) => state.account.accounts);
-  console.log(accounts);
-
   const result = accounts.map((data) => ({
     ...data,
     shop: data.shop.name
   }));
-
-  console.log(result)
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
