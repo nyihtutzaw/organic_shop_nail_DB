@@ -3,12 +3,19 @@ import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined,  DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { getItems,deleteItems, editItems, getItem } from "../../store/actions";
+import ReactExport from "react-export-excel";
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 const { Title } = Typography;
 
 const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
+  const itemAll = useSelector((state) => state.item.items);
+
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -102,17 +109,27 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
             </Button>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
+          <ExcelFile
+              element={
+                <button
+                  style={{
+                    backgroundColor: "var(--primary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                >
+                  <ExportOutlined />
+                  စာရင်းထုတ်မည်
+                </button>
+              }
             >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+              <ExcelSheet data={itemAll}  name="Items">
+                <ExcelColumn label="Buy_price" value="buy_price" />
+                <ExcelColumn label="Sale_price" value="sale_price" />
+                <ExcelColumn label="Name" value="name" />
+                <ExcelColumn label="Code" value="code" />
+              </ExcelSheet>
+            </ExcelFile>
           </Col>
         </Row>
         <Table

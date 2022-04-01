@@ -6,13 +6,18 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getMembers, deleteMembers, getMember } from "../../store/actions";
 import { connect } from "react-redux";
+import ReactExport from "react-export-excel";
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 const { Title } = Typography;
 
 const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
   const navigate = useNavigate();
   const members = useSelector((state) => state.member.members);
-
+console.log(members)
   const result = members.map((member) => ({
     id: member.id,
     key: member.id,
@@ -121,17 +126,27 @@ const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
             </Button>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
+          <ExcelFile
+              element={
+                <button
+                  style={{
+                    backgroundColor: "var(--primary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                >
+                  <ExportOutlined />
+                  စာရင်းထုတ်မည်
+                </button>
+              }
             >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+              <ExcelSheet data={members} name="Accounts">
+                <ExcelColumn label="Name" value="name" />
+                <ExcelColumn label="Phone" value="phone" />
+                <ExcelColumn label="Code" value="code" />
+                <ExcelColumn label="Address" value="address" />
+              </ExcelSheet>
+            </ExcelFile>
           </Col>
         </Row>
         <Table

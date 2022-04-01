@@ -6,13 +6,29 @@ import { useNavigate } from "react-router-dom";
 import { getStocks, deleteServices } from "../../store/actions";
 import { connect } from "react-redux";
 import { useSelector } from "react-redux";
+import ReactExport from "react-export-excel";
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 const { Title } = Typography;
 
 const ShowStocks = ({ stock, getStocks }) => {
-  const navigate = useNavigate();
+  // const stockAll = useSelector((state) => state.item.items);
+
   const stockAll = stock.stocks;
-  // console.log(stockAll)
+  const result = stockAll.map((data) => ({
+    ...data,
+    name: data.item.name,
+    code:  data.item.name,
+    buy_price:  data.item.buy_price,
+    sale_price:  data.item.sale_price,
+  }));
+  console.log("aa", stockAll)
+  console.log(result)
+
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       await getStocks();
@@ -23,13 +39,6 @@ const ShowStocks = ({ stock, getStocks }) => {
       fetchData();
     };
   }, [getStocks]);
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: 'Saved Your Data',
-      description: 'Your data have been saved.',
-      duration: 3
-    });
-  };
 
   const columns = [
     {
@@ -102,17 +111,28 @@ const ShowStocks = ({ stock, getStocks }) => {
             </Button>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px",
-              }}
-              size="middle"
+          <ExcelFile
+              element={
+                <button
+                  style={{
+                    backgroundColor: "var(--primary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                >
+                  <ExportOutlined />
+                  စာရင်းထုတ်မည်
+                </button>
+              }
             >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+              <ExcelSheet data={result}   name="Stocks">
+                <ExcelColumn label="Buy_price" value="buy_price" />
+                <ExcelColumn label="Sale_price" value="sale_price" />
+                <ExcelColumn label="Name" value="name" />
+                <ExcelColumn label="Code" value="code" />
+                <ExcelColumn label="Quantity" value="quantity" />
+              </ExcelSheet>
+            </ExcelFile>
           </Col>
         </Row>
         <Table
