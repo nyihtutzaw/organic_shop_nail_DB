@@ -153,7 +153,7 @@ const ShowItemTransfer = ({
                 </button>
               }
             >
-              <ExcelSheet data={result} name="Stocks">
+              <ExcelSheet data={result} name="Items Transfer">
                 <ExcelColumn label="Date" value="date" />
                 <ExcelColumn label="Code" value="code" />
                 <ExcelColumn label="Name" value="name" />

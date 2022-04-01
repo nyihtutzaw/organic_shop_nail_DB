@@ -149,7 +149,7 @@ const ShowMerchants = ({
                 </button>
               }
             >
-              <ExcelSheet data={merchantAll} name="Accounts">
+              <ExcelSheet data={merchantAll} name="Merchants">
                 <ExcelColumn label="Name" value="name" />
                 <ExcelColumn label="Code" value="code" />
                 <ExcelColumn label="Company Name" value="company_name" />

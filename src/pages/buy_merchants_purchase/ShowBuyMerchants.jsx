@@ -46,9 +46,8 @@ const ShowBuyMerchants = ({
   const allPurchases = useSelector((state) => state.purchase.purchases);
   const result = allPurchases.map((data) => ({
     ...data,
-    company_name: data.merchant.company_name,
+    company_name: data.merchant.company_name
   }));
-
 
   const [myPurchase, setMyPurchase] = useState([]);
   useEffect(() => {
@@ -176,7 +175,7 @@ const ShowBuyMerchants = ({
             </Button>
           </Col>
           <Col span={4}>
-          <ExcelFile
+            <ExcelFile
               element={
                 <button
                   style={{
@@ -190,7 +189,7 @@ const ShowBuyMerchants = ({
                 </button>
               }
             >
-              <ExcelSheet  data={result}   name="Stocks">
+              <ExcelSheet data={result} name="Items Import">
                 <ExcelColumn label="Date" value="date" />
                 <ExcelColumn label="Paid" value="paid" />
                 <ExcelColumn label="Whole Total" value="whole_total" />

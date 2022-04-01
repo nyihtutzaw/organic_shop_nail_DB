@@ -129,7 +129,7 @@ const ShowStaff = ({getStaffs, deleteStaffs}) => {
                 </button>
               }
             >
-              <ExcelSheet data={staffs} name="Stocks">
+              <ExcelSheet data={staffs} name="Staffs">
                 <ExcelColumn label="Name" value="name" />
                 <ExcelColumn label="Phone" value="phone" />
                 <ExcelColumn label="Bank Account" value="bank_account" />

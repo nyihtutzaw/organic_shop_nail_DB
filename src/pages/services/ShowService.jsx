@@ -134,7 +134,7 @@ const ShowService = ({ service, getServices, deleteServices, getService }) => {
                 </button>
               }
             >
-              <ExcelSheet data={serviceAll} name="Stocks">
+              <ExcelSheet data={serviceAll} name="Services">
                 <ExcelColumn label="Code" value="code" />
                 <ExcelColumn label="Percentage" value="percentage" />
                 <ExcelColumn label="Price" value="price" />

@@ -140,7 +140,7 @@ console.log(members)
                 </button>
               }
             >
-              <ExcelSheet data={members} name="Accounts">
+              <ExcelSheet data={members} name="Members">
                 <ExcelColumn label="Name" value="name" />
                 <ExcelColumn label="Phone" value="phone" />
                 <ExcelColumn label="Code" value="code" />
