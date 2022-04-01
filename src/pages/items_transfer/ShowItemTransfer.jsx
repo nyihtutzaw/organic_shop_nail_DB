@@ -39,8 +39,6 @@ const ShowItemTransfer = ({
     from_shop: data.shop.name,
     to_shop: data.to_shop.name
   }));
-  console.log("aa", allItem);
-  console.log("rr", result);
 
   const navigate = useNavigate();
 

@@ -1,21 +1,34 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Typography, Space, Row, Col, Button, Table } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { PlusSquareOutlined, ExportOutlined,  DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  PlusSquareOutlined,
+  ExportOutlined,
+  DeleteOutlined,
+  EditOutlined
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getServices, deleteServices, getService } from "../../store/actions";
 import { connect } from "react-redux";
-import { notification } from 'antd';
+import { notification } from "antd";
+import ReactExport from "react-export-excel";
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 const { Title } = Typography;
 
 const ShowService = ({ service, getServices, deleteServices, getService }) => {
+  const serviceAll = useSelector((state) => state.service.services);
+  console.log(serviceAll);
+
   const navigate = useNavigate();
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Delete Your Data',
-      description: 'Your data have been deleted.',
+      message: "Delete Your Data",
+      description: "Your data have been deleted.",
       duration: 3
     });
   };
@@ -38,17 +51,16 @@ const ShowService = ({ service, getServices, deleteServices, getService }) => {
     };
   }, []);
 
-  const handleClick =async (record) => {
-    await getService(record.id)
+  const handleClick = async (record) => {
+    await getService(record.id);
     navigate(`/admin/edit-service/${record.id}`);
   };
 
   const handleDelete = async (record) => {
     await deleteServices(record.id);
-    openNotificationWithIcon('error')
+    openNotificationWithIcon("error");
   };
 
- 
   const columns = [
     {
       title: "ကုတ်",
@@ -70,17 +82,17 @@ const ShowService = ({ service, getServices, deleteServices, getService }) => {
     //   title: "ကော်မရှင်",
     //   dataIndex: "commercial"
     // },
-    
+
     {
       title: "Actions",
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
           <Button type="primary" onClick={() => handleClick(record)}>
-          <EditOutlined/>
+            <EditOutlined />
           </Button>
           <Button type="primary" danger onClick={() => handleDelete(record)}>
-          <DeleteOutlined/>
+            <DeleteOutlined />
           </Button>
         </Space>
       )
@@ -109,17 +121,28 @@ const ShowService = ({ service, getServices, deleteServices, getService }) => {
             </Button>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
+            <ExcelFile
+              element={
+                <button
+                  style={{
+                    backgroundColor: "var(--primary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                >
+                  <ExportOutlined />
+                  စာရင်းထုတ်မည်
+                </button>
+              }
             >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+              <ExcelSheet data={serviceAll} name="Stocks">
+                <ExcelColumn label="Code" value="code" />
+                <ExcelColumn label="Percentage" value="percentage" />
+                <ExcelColumn label="Price" value="price" />
+                <ExcelColumn label="Category" value="category" />
+                <ExcelColumn label="Commercial" value="commercial" />
+              </ExcelSheet>
+            </ExcelFile>
           </Col>
         </Row>
         <Table
@@ -137,6 +160,8 @@ const mapStateToProps = (store) => ({
   service: store.service
 });
 
-export default connect(mapStateToProps, { getServices, deleteServices, getService })(
-  ShowService
-);
+export default connect(mapStateToProps, {
+  getServices,
+  deleteServices,
+  getService
+})(ShowService);
