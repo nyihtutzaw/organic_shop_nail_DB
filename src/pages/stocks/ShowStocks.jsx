@@ -64,7 +64,11 @@ const ShowStocks = ({ stock, getStocks }) => {
     },
     {
       title: "	အရေအတွက်",
-      dataIndex: "quantity",
+   
+      render: (_, record) => {
+        if (record.quantity<10) return <span style={{color:"red"}}>{record.quantity}</span>
+        else return <span>{record.quantity}</span>
+      },
     },
     // {
     //   title: "Actions",

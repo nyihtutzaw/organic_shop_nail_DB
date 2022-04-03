@@ -54,6 +54,16 @@ const CreateOwners = ({ saveOwners, getStocks }) => {
   };
 
   const onFinish = async (values) => {
+    const item=stocks.find(s=>s.id===values.stock_id);
+    if (values.quantity>item.quantity){
+      notification["error"]({
+        message: "Error",
+        description: "Quantity is greater than stock",
+        duration: 3
+      });
+      return ;
+    }
+  
     const data = {
       date: date,
       // id: stocks[stocks.length - 1].id + 1,

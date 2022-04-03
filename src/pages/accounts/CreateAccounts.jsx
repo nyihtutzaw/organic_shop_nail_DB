@@ -117,6 +117,7 @@ const CreateAccounts = ({ saveAccounts, getShops }) => {
               style={{ borderRadius: "10px" }}
             >
               <Option value="owner">Owner</Option>
+              <Option value="manager">Manager</Option>
               <Option value="casher">Casher</Option>
               <Option value="staff">Staff</Option>
             </Select>

@@ -219,7 +219,7 @@ const CreateItemTransfer = ({
             >
               {stocks.map((item) => (
                 <Option key={item.id} value={item.id}>
-                  {item.item.name} ({item.quantity})
+                  {item.item.name}
                 </Option>
               ))}
             </Select>

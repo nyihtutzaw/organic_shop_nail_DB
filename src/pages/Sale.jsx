@@ -333,11 +333,15 @@ const Sale = ({
           updateBarcodeInputValue("");
         } else {
           alert("Not Found");
+          updateBarcodeInputValue("")
         }
       }
     }
   };
 
+  const handleMember = () => {
+    navigate("/admin/create-members");
+  };
   const columns = [
     {
       title: "စဥ်",
@@ -463,7 +467,7 @@ const Sale = ({
               </Space>
             </Col>
             <Col xl={{ span: 10 }}></Col>
-            <Col xl={{ span: 7 }}>
+            <Col xl={{ span: 7 }}>a
               <Space>
                 <Text
                   style={{
@@ -503,6 +507,7 @@ const Sale = ({
                   color: "var(--white-color)"
                 }}
                 size="large"
+                onClick={handleMember}
               >
                 <PlusSquareOutlined />
                 New Member

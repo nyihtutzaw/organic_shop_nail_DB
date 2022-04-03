@@ -70,18 +70,30 @@ const ReportScreem = () => {
       {
         title: "ပစ္စည်းအရင်းစုစုပေါင်း",
         dataIndex: "item_buy_total",
+        render: (_, record) => (
+          <span style={{color:"red"}}>{record.item_buy_total}</span>
+        ),
       },
       {
         title: "ဝန်ထမ်းလစာစုစုပေါင်း",
         dataIndex: "staff_salary",
+        render: (_, record) => (
+          <span style={{color:"red"}}>{record.staff_salary}</span>
+        ),
       },
       {
         title: "ကော်မရှင်စုစုပေါင်း",
         dataIndex: "totalCommision",
+        render: (_, record) => (
+          <span style={{color:"red"}}>{record.totalCommision}</span>
+        ),
       },
       {
         title: "အထွေထွေကုန်ကျငွေစုစုပေါင်း",
         dataIndex: "expenseTotal",
+        render: (_, record) => (
+          <span style={{color:"red"}}>{record.expenseTotal}</span>
+        ),
       },
       {
         title: "အမြတ်စုစုပေါင်း",
