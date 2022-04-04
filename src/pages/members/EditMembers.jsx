@@ -38,14 +38,6 @@ const EditMembers = ({
   const member = useSelector((state) => state.member.member);
   const shops = useSelector((state) => state.shop.shops);
 
-  // console.log(shops[0].id)
-  // console.log(member.shop_id)
-  // const result = shops.map((shop) => ({
-  //   name: shop.name,
-  //   id: shop.id
-  // }))
-
-  // console.log(result.name)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,7 +58,7 @@ const EditMembers = ({
     form.setFieldsValue({ name: member?.name });
     form.setFieldsValue({ phone: member?.phone });
     form.setFieldsValue({ address: member?.address });
-    form.setFieldsValue({ shop_id: result?.name });
+    form.setFieldsValue({ shop_id: result?.id });
   }, [member, shops, result]);
 
   const onFinish = async (values) => {

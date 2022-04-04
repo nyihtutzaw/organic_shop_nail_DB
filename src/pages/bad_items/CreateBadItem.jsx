@@ -83,7 +83,7 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
           is_sale: bad.is_sale === undefined ? false : true
         };
       });
-      console.log(savedBads);
+      // console.log(savedBads);
       await saveBadItems({ damage_items: savedBads });
       setBads([]);
     }
