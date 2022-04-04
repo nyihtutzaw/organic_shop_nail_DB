@@ -32,19 +32,20 @@ const ServicesReport = () => {
   if (!queryString.parse(location.search).best) {
     columns = [
       {
-        title: "စည်",
+        title: "စဉ်",
         dataIndex: "order",
+        render: (_,record) => (record.id)
       },
       {
         title: "ရက်စွဲ",
         dataIndex: "invoice.created_at",
         render: (_, record) =>
-          getReadableDateDisplay(record.invoice.created_at),
+          getReadableDateDisplay(record.invoice?.created_at),
       },
       {
         title: "ဝန်ဆောင်မှုအမည်",
         dataIndex: "service.category",
-        render: (_, record) => record.service.category,
+        render: (_, record) => record.service?.category,
       },
 
       {
@@ -59,8 +60,9 @@ const ServicesReport = () => {
   } else {
     columns = [
       {
-        title: "စည်",
+        title: "စဉ်",
         dataIndex: "order",
+        render: (_, record) => (record.id)
       },
 
       {

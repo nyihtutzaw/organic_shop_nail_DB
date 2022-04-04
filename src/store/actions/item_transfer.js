@@ -24,6 +24,11 @@ export const createItemTransfers = (itemTransfer) => ({
   itemTransfer,
 });
 
+export const updateItemTransfers = (data) => ({
+  type: UPDATE_ITEMS_TRANSFER,
+  data
+});
+
 export const filterItemTransfers = (id) => ({
   type: FILTER_ITEMS_TRANSFER,
   id
@@ -63,7 +68,6 @@ export const getItemTransfers = () => {
 export const getItemTransfer = (id) => {
   return async (dispatch) => {
     try {
-      // console.log(id);
       const response = await axios.get(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/item-transfers/${id}`
       );
@@ -91,6 +95,33 @@ export const saveItemTransfers = (data) => {
       );
       // console.log(response);
     } catch (error) {
+      if (error) {
+        dispatch(setTransferErrors(error.response.data.data));
+      } else {
+        dispatch(setTransferErrors(error.response.data));
+      }
+    }
+  };
+};
+
+export const editItemTransfers = (id, data) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}?_method=put`,
+        data
+      );
+      console.log(response)
+      const result = {
+        ...response.data.data,
+        key: response.data.data.id
+      };
+      // console.log(result);
+      if (response.status === 204) {
+        dispatch(updateItemTransfers(result));
+      }
+    } catch (error) {
+      console.log(error);
       if (error) {
         dispatch(setTransferErrors(error.response.data.data));
       } else {

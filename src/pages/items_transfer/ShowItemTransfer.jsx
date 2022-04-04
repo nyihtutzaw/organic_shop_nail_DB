@@ -1,18 +1,43 @@
 import React, { useEffect } from "react";
 import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { ExportOutlined, PlusSquareOutlined,  DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  ExportOutlined,
+  PlusSquareOutlined,
+  DeleteOutlined,
+  EditOutlined
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
-import { getItemTransfers, deleteItemTransfers, getItemTransfer } from "../../store/actions";
+import { connect, useSelector } from "react-redux";
+import {
+  getItemTransfers,
+  deleteItemTransfers,
+  getItemTransfer
+} from "../../store/actions";
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
+import { ExportToExcel } from "../../excel/ExportToExcel";
+
 const { Title } = Typography;
 
-const ShowItemTransfer = ({ item_transfer, getItemTransfers, deleteItemTransfers, getItemTransfer }) => {
-  // console.log(item_transfer.itemTransfers);
+const ShowItemTransfer = ({
+  item_transfer,
+  getItemTransfers,
+  deleteItemTransfers,
+  getItemTransfer
+}) => {
+  const allItemTransfer = useSelector(
+    (state) => state.item_transfer.itemTransfers
+  );
+  const fileName = "ItemTransfers"; // here enter filename for your excel file
+  const result = allItemTransfer.map((transfer) => ({
+    Quantity: transfer.quantity,
+    From_Shop: transfer.shop.name,
+    To_Shop: transfer.to_shop.name,
+    Code: transfer.stock.item.code,
+    Date: getReadableDateDisplay(transfer.created_at)
+  }));
 
   const navigate = useNavigate();
-
   useEffect(() => {
     const fetchData = async () => {
       await getItemTransfers();
@@ -27,69 +52,67 @@ const ShowItemTransfer = ({ item_transfer, getItemTransfers, deleteItemTransfers
     notification[type]({
       message: "Deleted Your Data",
       description: "Your data have been deleted.",
-      duration: 3,
+      duration: 3
     });
   };
 
-  const handleClick =async (record) => {
-    console.log(record.id)
-    // await getItemTransfer(record.id)
+  const handleClick = async (record) => {
+    console.log(record.id);
+    await getItemTransfer(record.id);
     // navigate(`/admin/edit-item-transfer/${record.id}`);
   };
 
   const handleDelete = async (record) => {
-    console.log(record.id)
+    console.log(record.id);
     await deleteItemTransfers(record.id);
-    openNotificationWithIcon('error')
+    openNotificationWithIcon("error");
   };
 
   const columns = [
     {
       title: "ရက်စွဲ",
       dataIndex: "created_at",
-      render: (_, record) => getReadableDateDisplay(record.created_at),
+      render: (_, record) => getReadableDateDisplay(record.created_at)
     },
     {
       title: "ပစ္စည်းကုတ်",
-      render: (_, record) => record.stock.item.code,
+      render: (_, record) => record.stock.item.code
     },
     {
       title: "ပစ္စည်းအမည်",
-      render: (_, record) => record.stock.item.name,
+      render: (_, record) => record.stock.item.name
     },
     {
       title: "From ဆိုင်အမည်",
       dataIndex: "shop.name",
-      render: (_, record) => record.shop.name,
+      render: (_, record) => record.shop.name
     },
     {
       title: "To ဆိုင်အမည်",
       dataIndex: "to_shop.name",
-      render: (_, record) => record.to_shop.name,
+      render: (_, record) => record.to_shop.name
     },
     {
       title: "	အရေအတွက်",
-      dataIndex: "quantity",
+      dataIndex: "quantity"
     },
     {
       title: "Actions",
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          <Button type="primary"
-          onClick={() => handleClick(record)}
-          > <EditOutlined/></Button>
-          <Button type="primary" danger
-          onClick={() => handleDelete(record)}
-          >
-             <DeleteOutlined/>
+          <Button type="primary" onClick={() => handleClick(record)}>
+            {" "}
+            <EditOutlined />
+          </Button>
+          <Button type="primary" danger onClick={() => handleDelete(record)}>
+            <DeleteOutlined />
           </Button>
         </Space>
-      ),
-    },
+      )
+    }
   ];
 
-  // console.log("first", item_transfer)
   return (
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
@@ -102,7 +125,7 @@ const ShowItemTransfer = ({ item_transfer, getItemTransfers, deleteItemTransfers
               style={{
                 backgroundColor: "var(--secondary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px",
+                borderRadius: "5px"
               }}
               size="middle"
               onClick={() => navigate("/admin/create-item-transfer")}
@@ -112,17 +135,7 @@ const ShowItemTransfer = ({ item_transfer, getItemTransfers, deleteItemTransfers
             </Button>
           </Col>
           <Col span={3}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px",
-              }}
-              size="middle"
-            >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+            <ExportToExcel apiData={result} fileName={fileName} />
           </Col>
         </Row>
         <Table
@@ -137,7 +150,11 @@ const ShowItemTransfer = ({ item_transfer, getItemTransfers, deleteItemTransfers
 };
 
 const mapStateToProps = (store) => ({
-  item_transfer: store.item_transfer,
+  item_transfer: store.item_transfer
 });
 
-export default connect(mapStateToProps, { getItemTransfers, deleteItemTransfers, getItemTransfer })(ShowItemTransfer);
+export default connect(mapStateToProps, {
+  getItemTransfers,
+  deleteItemTransfers,
+  getItemTransfer
+})(ShowItemTransfer);

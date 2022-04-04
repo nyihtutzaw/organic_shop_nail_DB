@@ -17,19 +17,25 @@ import Layout from "antd/lib/layout/layout";
 import {
   EditOutlined,
   SaveOutlined,
-  PlusSquareOutlined,
+  PlusSquareOutlined
 } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { getMerchants, getItems, savePurchases } from "../../store/actions";
 import { useNavigate } from "react-router-dom";
 import dateFormat from "dateformat";
 
-
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurchases }) => {
+const CreateBuyMerchants = ({
+  item,
+  merchant,
+  getMerchants,
+  getItems,
+  savePurchases
+}) => {
   const [buys, setBuys] = useState([]);
+  const [dataMerchant, setDataMerchant] = useState([]);
   const [credit, setCredit] = useState(0);
   const [paid, setPaid] = useState(null);
   const [buyMerchant, setBuyMerchant] = useState(null);
@@ -46,7 +52,7 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
       fetchData();
     };
   }, [getMerchants]);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       await getItems();
@@ -60,18 +66,35 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
   const now = new Date();
   const date = dateFormat(now, "yyyy-mm-dd");
 
+  // console.log(allItems);
   const onFinish = (values) => {
+    const data = allItems.find((item) => item.id == values.item_id);
+    // console.log(data);
+
     setBuys([
       ...buys,
       {
         ...values,
+
         subtotal: values.quantity * values.price,
         key: buys.length + 1,
-        data: date,
-      },
+        data: date
+      }
+    ]);
+    setDataMerchant([
+      ...dataMerchant,
+      {
+        ...values,
+        item_id: data.name,
+        subtotal: values.quantity * values.price,
+        key: buys.length + 1,
+        data: date
+      }
     ]);
     form.resetFields();
   };
+  // console.log("buy", buys);
+  // console.log("merchant", dataMerchant);
 
   let allTotal = [];
   buys.forEach((buy) => allTotal.push(parseInt(buy.subtotal)));
@@ -87,7 +110,7 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
       setBuyMerchant(filterBuyMerchant);
     }
   };
-  
+
   const handleDelete = (record) => {
     const filterBuys = buys.filter((buy) => buy !== record);
     setBuys(filterBuys);
@@ -95,13 +118,13 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Saved Your Data',
-      description: 'Your data have been saved.',
+      message: "Saved Your Data",
+      description: "Your data have been saved.",
       duration: 3
     });
   };
 
-  const handleSave =async () => {
+  const handleSave = async () => {
     if (buyMerchant === null) {
       message.error("ကျေးဇူးပြု၍ ကုန်သည်အချက်အလက်ထည့်ပါ");
     } else if (buys.length === 0) {
@@ -114,7 +137,7 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
           item_id: buy.item_id,
           quantity: buy.quantity,
           price: buy.price,
-          subtotal: buy.subtotal,
+          subtotal: buy.subtotal
         };
       });
 
@@ -126,9 +149,13 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
         whole_total: result,
         date: date
       };
-      await savePurchases(saveBuy)
-      openNotificationWithIcon('success')
-
+      // console.log(saveBuy);
+      await savePurchases(saveBuy);
+      openNotificationWithIcon("success");
+      // setDataMerchant([]);
+      // setCredit(0);
+      // setPaid(0)
+      // result = 0;
     }
     navigate("/admin/show-buy-merchants");
   };
@@ -141,33 +168,29 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
   const columns = [
     {
       title: "ပစ္စည်းအမည်",
-      dataIndex: "item_id",
+      dataIndex: "item_id"
     },
     {
       title: "အရေအတွက်",
-      dataIndex: "quantity",
+      dataIndex: "quantity"
     },
     {
       title: "တစ်ခုဈေးနှုန်း",
-      dataIndex: "price",
+      dataIndex: "price"
     },
     {
       title: "စုစုပေါင်းပမာဏ",
-      dataIndex: "subtotal",
+      dataIndex: "subtotal"
     },
     {
       title: "Actions",
       dataIndex: "action",
       render: (_, record) => (
-        <Button
-          type="primary"
-          danger
-          onClick={() => handleDelete(record)}
-        >
+        <Button type="primary" danger onClick={() => handleDelete(record)}>
           Delete
         </Button>
-      ),
-    },
+      )
+    }
   ];
 
   return (
@@ -181,7 +204,7 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
           style={{
             width: "100%",
             justifyContent: "center",
-            marginBottom: "10px",
+            marginBottom: "10px"
           }}
           size="large"
         >
@@ -218,14 +241,14 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
         <Form
           labelCol={{
             xl: {
-              span: 3,
-            },
+              span: 3
+            }
           }}
           wrapperCol={{
-            span: 24,
+            span: 24
           }}
           initialValues={{
-            remember: true,
+            remember: true
           }}
           onFinish={onFinish}
           form={form}
@@ -236,8 +259,8 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ",
-              },
+                message: "ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
+              }
             ]}
           >
             <Select
@@ -258,15 +281,15 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
               ))}
             </Select>
           </Form.Item>
-         
+
           <Form.Item
             name="quantity"
             label="အရေအတွက်"
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ အရေအတွက်ထည့်ပါ",
-              },
+                message: "ကျေးဇူးပြု၍ အရေအတွက်ထည့်ပါ"
+              }
             ]}
           >
             <InputNumber
@@ -282,8 +305,8 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ တစ်ခုဈေးနှုန်းထည့်ပါ",
-              },
+                message: "ကျေးဇူးပြု၍ တစ်ခုဈေးနှုန်းထည့်ပါ"
+              }
             ]}
           >
             <InputNumber
@@ -293,13 +316,13 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
               size="large"
             />
           </Form.Item>
-          
+
           <Form.Item style={{ textAlign: "right" }}>
             <Button
               style={{
                 backgroundColor: "var(--secondary-color)",
                 color: "var(--white-color)",
-                borderRadius: "10px",
+                borderRadius: "10px"
               }}
               size="large"
               htmlType="submit"
@@ -312,7 +335,7 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
         <Table
           bordered
           columns={columns}
-          dataSource={buys}
+          dataSource={dataMerchant}
           pagination={{ position: ["none", "none"] }}
         />
         <Row>
@@ -356,7 +379,7 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
             style={{
               backgroundColor: "var(--primary-color)",
               color: "var(--white-color)",
-              borderRadius: "10px",
+              borderRadius: "10px"
             }}
             size="large"
             onClick={handleSave}
@@ -372,9 +395,11 @@ const CreateBuyMerchants = ({ item, merchant, getMerchants, getItems, savePurcha
 
 const mapStateToProps = (store) => ({
   merchant: store.merchant,
-  item: store.item,
+  item: store.item
 });
 
-export default connect(mapStateToProps, { getMerchants, getItems, savePurchases })(
-  CreateBuyMerchants
-);
+export default connect(mapStateToProps, {
+  getMerchants,
+  getItems,
+  savePurchases
+})(CreateBuyMerchants);

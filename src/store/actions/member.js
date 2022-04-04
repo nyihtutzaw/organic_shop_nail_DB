@@ -139,9 +139,9 @@ export const editMembers = (id, data) => {
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members/${id}?_method=put`,
         data
       );
-      // console.log(response.data.data)
       // console.log(response.status);
       const result = response.data.data;
+      // console.log(result)
       if (response.status === 201) {
         dispatch(updateMembers(result));
       }

@@ -14,7 +14,6 @@ const EditService = ({ editServices, getService }) => {
   const navigate = useNavigate();
 
   const service = useSelector((state) => state.service.service);
-// console.log("service",service)
 
   useEffect(() => {
     const fetchData = async () => {

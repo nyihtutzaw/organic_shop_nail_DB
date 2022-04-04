@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Typography,
-  Space,
-  Row,
-  Col,
-  Button,
-  Table,
-  notification,
-  message,
-  Alert
-} from "antd";
+import { Typography, Space, Row, Col, Button, Table, Alert } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
@@ -18,7 +8,7 @@ import {
   EditOutlined
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import {
   getShops,
   deleteShops,
@@ -26,13 +16,20 @@ import {
   clearAlert
 } from "../../store/actions";
 import store from "../../store";
+import { ExportToExcel } from "../../excel/ExportToExcel";
 
 const { Title } = Typography;
 
 const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
   const navigate = useNavigate();
+  const fileName = "Shops";
+  const shops = useSelector((state) => state.shop.shops);
+  const result = shops.map((shop) => ({
+    name: shop.name,
+    id: shop.id
+  }));
 
-  // console.log(shop.isSuccess);
+  // console.log(result);
 
   useEffect(() => {
     store.dispatch(clearAlert());
@@ -56,7 +53,6 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
 
   const handleDelete = async (record) => {
     await deleteShops(record.id);
-    // openNotificationWithIcon("error");
   };
 
   const columns = [
@@ -95,7 +91,7 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
 
       {shop.isSuccess && (
         <Alert message="Successfully Deleted" type="success" showIcon />
-      )} 
+      )}
 
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
@@ -117,17 +113,7 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
             </Button>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-            >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+            <ExportToExcel apiData={result} fileName={fileName} />
           </Col>
         </Row>
         <Table
