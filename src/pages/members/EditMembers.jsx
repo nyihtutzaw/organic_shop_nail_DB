@@ -38,6 +38,7 @@ const EditMembers = ({
   const member = useSelector((state) => state.member.member);
   const shops = useSelector((state) => state.shop.shops);
 
+
   useEffect(() => {
     const fetchData = async () => {
       await getShops();
@@ -50,15 +51,18 @@ const EditMembers = ({
     };
   }, [getShops, getMember, getMembers]);
 
+  const result = shops.find((shop) => shop.id == member.shop_id);
+
   useEffect(() => {
     form.setFieldsValue({ code: member?.code });
     form.setFieldsValue({ name: member?.name });
     form.setFieldsValue({ phone: member?.phone });
     form.setFieldsValue({ address: member?.address });
-    form.setFieldsValue({ shop_id: member.shop_id });
-  }, [member, shops]);
+    form.setFieldsValue({ shop_id: result?.id });
+  }, [member, shops, result]);
 
   const onFinish = async (values) => {
+    console.log(values)
     await editMembers(param?.id, values);
     navigate("/admin/show-members");
   };
@@ -67,7 +71,7 @@ const EditMembers = ({
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
-          Member စာရင်းသွင်းခြင်း စာမျက်နှာ
+          Member ပြုပြင်ခြင်းစာမျက်နှာ
         </Title>
         <Form
           labelCol={{

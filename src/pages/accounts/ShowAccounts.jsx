@@ -1,16 +1,29 @@
 import React from "react";
 import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { PlusSquareOutlined, ExportOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  PlusSquareOutlined,
+  ExportOutlined,
+  DeleteOutlined,
+  EditOutlined
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAccounts } from "../../store/actions";
+import { ExportToExcel } from "../../excel/ExportToExcel";
 
 const { Title } = Typography;
 
 const ShowAccounts = () => {
   const accounts = useSelector((state) => state.account.accounts);
-  
+  const fileName = "Accounts"; // here enter filename for your excel file
+  const result = accounts.map((account) => ({
+      name: account.name,
+      phone: account.phone,
+      position: account.position,
+      shop: account.shop.name,
+  }))
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -20,23 +33,17 @@ const ShowAccounts = () => {
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Deleted Your Data',
-      description: 'Your data have been deleted.',
+      message: "Deleted Your Data",
+      description: "Your data have been deleted.",
       duration: 3
     });
   };
-  
 
-  const handleDelete = (record) => {
-    
-    // dispatch({ type: "DELETE_ACCOUNTS", payload:record.id})
-    // openNotificationWithIcon('error')
-  }
+  const handleDelete = (record) => {};
 
   React.useEffect(() => {
-    dispatch(getAccounts())
+    dispatch(getAccounts());
   }, [getAccounts]);
-
 
   const columns = [
     {
@@ -50,7 +57,7 @@ const ShowAccounts = () => {
     {
       title: "ဆိုင်အမည်",
       dataIndex: "shop",
-      render: (_, data) => data.shop.name,
+      render: (_, data) => data.shop.name
     },
 
     {
@@ -58,9 +65,11 @@ const ShowAccounts = () => {
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          <Button type="primary" onClick={() => handleClick(record)}><EditOutlined /></Button>
+          <Button type="primary" onClick={() => handleClick(record)}>
+            <EditOutlined />
+          </Button>
           <Button type="primary" danger onClick={() => handleDelete(record)}>
-          <DeleteOutlined />
+            <DeleteOutlined />
           </Button>
         </Space>
       )
@@ -89,17 +98,7 @@ const ShowAccounts = () => {
             </Button>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-            >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+            <ExportToExcel apiData={result} fileName={fileName} />
           </Col>
         </Row>
         <Table

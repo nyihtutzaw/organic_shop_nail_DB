@@ -139,7 +139,7 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
             <Title style={{ textAlign: "center" }} level={3}>
               ကုန်ကျစရိတ်သွင်းရန်စာမျက်နှာ
             </Title>
-            <Button
+            {/* <Button
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
@@ -149,8 +149,8 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
               onClick={() => setVisible(true)}
             >
               <PlusSquareOutlined />
-              ကုန်ကျစရိတ်အမည်ထည့်ရန်1
-            </Button>
+              ကုန်ကျစရိတ်အမည်ထည့်ရန်
+            </Button> */}
           </Space>
           <Form
             labelCol={{
@@ -249,12 +249,12 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
               onClick={handleSave}
             >
               <SaveOutlined />
-              သိမ်းမည်save
+              သိမ်းမည်
             </Button>
           </Space>
         </Space>
       </Layout>
-      <Drawer
+      {/* <Drawer
         title="ကုန်ကျစရိတ်ထည့်ရန်"
         placement="right"
         visible={visible}
@@ -304,7 +304,7 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
             </Button>
           </Form.Item>
         </Form>
-      </Drawer>
+      </Drawer> */}
     </>
   );
 };

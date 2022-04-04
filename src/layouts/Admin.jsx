@@ -85,6 +85,7 @@ import EditMerchants from "../pages/merchants/EditMerchants";
 import EditExpenses from "../pages/expenses/EditExpenses";
 import EditBuyMerchants from "../pages/buy_merchants_purchase/EditBuyMerchants";
 import ShowPurchases from "../pages/buy_merchants_purchase/ShowPurchases";
+import EditBadItem from "../pages/bad_items/EditBadItem";
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -486,6 +487,7 @@ const Admin = ({ logout }) => {
 
               <Route path="create-bad-item" element={<CreateBadItem />} />
               <Route path="show-bad-item" element={<ShowBadItem />} />
+              <Route path="edit-bad-item/:id" element={<EditBadItem />} />
 
               <Route path="create-staff" element={<CreateStaff />} />
               <Route path="show-staff" element={<ShowStaff />} />

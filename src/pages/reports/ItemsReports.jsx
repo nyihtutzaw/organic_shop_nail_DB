@@ -23,20 +23,22 @@ const ItemsReports = () => {
     return () => {
       fetchData();
     };
-  }, [getBestItem, location]);
+  }, [getBestItem, location, items]);
 
   let columns = [];
   
   if (!queryString.parse(location.search).best) {
     columns=[
       {
-        title: "စည်",
+        title: "စဉ်",
         dataIndex: "order",
+        render: (_,record) => (record.id)
       },
       {
         title: "ရက်စွဲ",
         dataIndex: "invoice.created_at",
-        render: (_, record) => getReadableDateDisplay(record.invoice.created_at),
+        render: (_, record) => getReadableDateDisplay(record.invoice?.created_at),
+        // render: (_,record) => ("clg",console.log(record))
       },
       {
         title: "ပစ္စည်းအမည်",
@@ -57,10 +59,10 @@ const ItemsReports = () => {
   else {
     columns = [
       {
-        title: "စည်",
+        title: "စဉ်",
         dataIndex: "order",
+        render: (_,record) => (record.id)
       },
-
       {
         title: "ပစ္စည်းအမည်",
         dataIndex: "invoice.stock",

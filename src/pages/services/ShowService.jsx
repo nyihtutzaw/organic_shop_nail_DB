@@ -1,21 +1,37 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Typography, Space, Row, Col, Button, Table } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { PlusSquareOutlined, ExportOutlined,  DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  PlusSquareOutlined,
+  ExportOutlined,
+  DeleteOutlined,
+  EditOutlined
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getServices, deleteServices, getService } from "../../store/actions";
 import { connect } from "react-redux";
-import { notification } from 'antd';
+import { notification } from "antd";
+import { ExportToExcel } from "../../excel/ExportToExcel";
 
 const { Title } = Typography;
 
 const ShowService = ({ service, getServices, deleteServices, getService }) => {
+  const allServices = useSelector((state) => state.service.services);
+  const fileName = "Services"; // here enter filename for your excel file
+  const result = allServices.map((service) => ({
+    Code: service.code,
+    Commercial: service.commercial,
+    Category: service.category,
+    Percentage: service.percentage,
+    Price: service.price
+  }));
+
   const navigate = useNavigate();
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Delete Your Data',
-      description: 'Your data have been deleted.',
+      message: "Delete Your Data",
+      description: "Your data have been deleted.",
       duration: 3
     });
   };
@@ -38,17 +54,16 @@ const ShowService = ({ service, getServices, deleteServices, getService }) => {
     };
   }, []);
 
-  const handleClick =async (record) => {
-    await getService(record.id)
+  const handleClick = async (record) => {
+    await getService(record.id);
     navigate(`/admin/edit-service/${record.id}`);
   };
 
   const handleDelete = async (record) => {
     await deleteServices(record.id);
-    openNotificationWithIcon('error')
+    openNotificationWithIcon("error");
   };
 
- 
   const columns = [
     {
       title: "ကုတ်",
@@ -66,21 +81,16 @@ const ShowService = ({ service, getServices, deleteServices, getService }) => {
       title: "ရာခိုင်နှုန်း",
       dataIndex: "percentage"
     },
-    // {
-    //   title: "ကော်မရှင်",
-    //   dataIndex: "commercial"
-    // },
-    
     {
       title: "Actions",
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
           <Button type="primary" onClick={() => handleClick(record)}>
-          <EditOutlined/>
+            <EditOutlined />
           </Button>
           <Button type="primary" danger onClick={() => handleDelete(record)}>
-          <DeleteOutlined/>
+            <DeleteOutlined />
           </Button>
         </Space>
       )
@@ -109,17 +119,7 @@ const ShowService = ({ service, getServices, deleteServices, getService }) => {
             </Button>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-            >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+            <ExportToExcel apiData={result} fileName={fileName} />
           </Col>
         </Row>
         <Table
@@ -137,6 +137,8 @@ const mapStateToProps = (store) => ({
   service: store.service
 });
 
-export default connect(mapStateToProps, { getServices, deleteServices, getService })(
-  ShowService
-);
+export default connect(mapStateToProps, {
+  getServices,
+  deleteServices,
+  getService
+})(ShowService);
