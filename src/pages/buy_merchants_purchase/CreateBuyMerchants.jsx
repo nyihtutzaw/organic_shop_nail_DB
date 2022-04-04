@@ -69,7 +69,7 @@ const CreateBuyMerchants = ({
   // console.log(allItems);
   const onFinish = (values) => {
     const data = allItems.find((item) => item.id == values.item_id);
-    console.log(data);
+    // console.log(data);
 
     setBuys([
       ...buys,
@@ -152,8 +152,10 @@ const CreateBuyMerchants = ({
       // console.log(saveBuy);
       await savePurchases(saveBuy);
       openNotificationWithIcon("success");
-      setDataMerchant([]);
-      setCredit(0);
+      // setDataMerchant([]);
+      // setCredit(0);
+      // setPaid(0)
+      // result = 0;
     }
     navigate("/admin/show-buy-merchants");
   };
