@@ -1,14 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { PlusSquareOutlined, ExportOutlined,  DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  PlusSquareOutlined,
+  ExportOutlined,
+  DeleteOutlined,
+  EditOutlined
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
-import { getItems,deleteItems, editItems, getItem } from "../../store/actions";
+import { connect, useSelector } from "react-redux";
+import { getItems, deleteItems, editItems, getItem } from "../../store/actions";
+import { ExportToExcel } from "../../excel/ExportToExcel";
 
 const { Title } = Typography;
 
 const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
+  const allItems = useSelector((state) => state.item.items);
+  const fileName = "Items"; // here enter filename for your excel file
+  const result = allItems.map((item) => ({
+    Name: item.name,
+    Code: item.code,
+    Buy_Price: item.buy_price,
+    Sale_Price: item.sale_price
+  }));
+
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -19,23 +34,22 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
       fetchData();
     };
   }, [getItems]);
-  
-  const handleClick =async (record) => {
-    await getItem(record.id)
+
+  const handleClick = async (record) => {
+    await getItem(record.id);
     navigate(`/admin/edit-items/${record.id}`);
   };
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Deleted Your Data',
-      description: 'Your data have been deleted.',
+      message: "Deleted Your Data",
+      description: "Your data have been deleted.",
       duration: 3
     });
   };
   const handleDelete = async (record) => {
-    // console.log(record.id);
     await deleteItems(record.id);
-    openNotificationWithIcon('error')
+    openNotificationWithIcon("error");
   };
 
   const columns = [
@@ -43,7 +57,7 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
       title: "ပစ္စည်းပုံ",
       dataIndex: "image",
       render: (_, record) => (
-        <img src={record.image} alt="ပစ္စည်းပုံ" width={100} height={100} />
+        <img src={record.image} alt="ပစ္စည်းပုံ" width={80} height={80} />
       )
     },
     {
@@ -62,18 +76,17 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
       title: "ရောင်းဈေး",
       dataIndex: "sale_price"
     },
+
     {
       title: "Actions",
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
           <Button type="primary" onClick={() => handleClick(record)}>
-          <EditOutlined/>
+            <EditOutlined />
           </Button>
-          <Button type="primary" danger 
-          onClick={() => handleDelete(record)}
-          >
-            <DeleteOutlined/>
+          <Button type="primary" danger onClick={() => handleDelete(record)}>
+            <DeleteOutlined />
           </Button>
         </Space>
       )
@@ -102,17 +115,7 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
             </Button>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-            >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+            <ExportToExcel apiData={result} fileName={fileName} />
           </Col>
         </Row>
         <Table
@@ -130,4 +133,6 @@ const mapStateToProps = (store) => ({
   item: store.item
 });
 
-export default connect(mapStateToProps, { getItems, deleteItems, getItem })(ShowItems);
+export default connect(mapStateToProps, { getItems, deleteItems, getItem })(
+  ShowItems
+);

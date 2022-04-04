@@ -4,10 +4,17 @@ import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined,  DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getExpenseNames, deleteExpenseNames, getExpenseName } from "../../store/actions";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
+import { ExportToExcel } from "../../excel/ExportToExcel";
 const { Title } = Typography;
 
 const ShowExpenseNames = ({ expenseNames, getExpenseNames, deleteExpenseNames, getExpenseName }) => {
+  const allExpenseName = useSelector((state) => state.expense_name.expense_names);
+  const fileName = "Name Expenses"; // here enter filename for your excel file
+  const result = allExpenseName.map((expense) => ({
+    Name: expense.name
+  }));
+  
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -82,17 +89,7 @@ const ShowExpenseNames = ({ expenseNames, getExpenseNames, deleteExpenseNames, g
             </Button>
           </Col>
           <Col span={3}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-            >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+          <ExportToExcel apiData={result} fileName={fileName} />
           </Col>
         </Row>
         <Table

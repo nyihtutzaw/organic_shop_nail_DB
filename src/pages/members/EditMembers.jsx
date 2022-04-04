@@ -38,6 +38,15 @@ const EditMembers = ({
   const member = useSelector((state) => state.member.member);
   const shops = useSelector((state) => state.shop.shops);
 
+  // console.log(shops[0].id)
+  // console.log(member.shop_id)
+  // const result = shops.map((shop) => ({
+  //   name: shop.name,
+  //   id: shop.id
+  // }))
+
+  // console.log(result.name)
+
   useEffect(() => {
     const fetchData = async () => {
       await getShops();
@@ -50,13 +59,15 @@ const EditMembers = ({
     };
   }, [getShops, getMember, getMembers]);
 
+  const result = shops.find((shop) => shop.id == member.shop_id);
+  
   useEffect(() => {
     form.setFieldsValue({ code: member?.code });
     form.setFieldsValue({ name: member?.name });
     form.setFieldsValue({ phone: member?.phone });
     form.setFieldsValue({ address: member?.address });
-    form.setFieldsValue({ shop_id: member.shop_id });
-  }, [member, shops]);
+    form.setFieldsValue({ shop_id: result?.name });
+  }, [member, shops, result]);
 
   const onFinish = async (values) => {
     await editMembers(param?.id, values);
@@ -67,7 +78,7 @@ const EditMembers = ({
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
-          Member စာရင်းသွင်းခြင်း စာမျက်နှာ
+          Member ပြုပြင်ခြင်းစာမျက်နှာ
         </Title>
         <Form
           labelCol={{

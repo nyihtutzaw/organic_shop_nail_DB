@@ -4,11 +4,20 @@ import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, ExportOutlined,  DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getExpenses, deleteExpenses, getExpense } from "../../store/actions";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
+import { ExportToExcel } from "../../excel/ExportToExcel";
 const { Title } = Typography;
 
 const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
+  const allExpenses = useSelector((state) => state.expense.expenses);
+  const fileName = "Expenses"; // here enter filename for your excel file
+  const result = allExpenses.map((expense) => ({
+    Name: expense.name,
+    Amount: expense.amount,
+    Date: getReadableDateDisplay(expense?.created_at),
+  }));
+
   const navigate = useNavigate();
   const mountedRef = React.useRef(true);
   const getExpenseResult = async () => {
@@ -100,17 +109,7 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
             </Button>
           </Col>
           <Col span={3}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px",
-              }}
-              size="middle"
-            >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+          <ExportToExcel apiData={result} fileName={fileName} />
           </Col>
         </Row>
         <Table

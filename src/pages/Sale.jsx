@@ -333,7 +333,7 @@ const Sale = ({
           updateBarcodeInputValue("");
         } else {
           alert("Not Found");
-          updateBarcodeInputValue("")
+          updateBarcodeInputValue("");
         }
       }
     }
@@ -341,6 +341,10 @@ const Sale = ({
 
   const handleMember = () => {
     navigate("/admin/create-members");
+  };
+
+  const handleDashboard = () => {
+    navigate("/admin/dashboard");
   };
   const columns = [
     {
@@ -466,8 +470,8 @@ const Sale = ({
                 />
               </Space>
             </Col>
-            <Col xl={{ span: 10 }}></Col>
-            <Col xl={{ span: 7 }}>a
+            <Col xl={{ span: 5 }}></Col>
+            <Col xl={{ span: 7 }}>
               <Space>
                 <Text
                   style={{
@@ -511,6 +515,18 @@ const Sale = ({
               >
                 <PlusSquareOutlined />
                 New Member
+              </Button>
+            </Col>
+            <Col xl={{ span: 3 }}>
+              <Button
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  color: "var(--white-color)"
+                }}
+                size="large"
+                onClick={handleDashboard}
+              >
+                Go To Dashboard
               </Button>
             </Col>
           </Row>

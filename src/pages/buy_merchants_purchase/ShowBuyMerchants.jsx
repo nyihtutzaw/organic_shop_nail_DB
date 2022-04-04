@@ -26,6 +26,7 @@ import {
   getPurchase
 } from "../../store/actions";
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
+import { ExportToExcel } from "../../excel/ExportToExcel";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -40,6 +41,14 @@ const ShowBuyMerchants = ({
 }) => {
   const navigate = useNavigate();
   const allPurchases = useSelector((state) => state.purchase.purchases);
+  const fileName = "Purchases"; // here enter filename for your excel file
+  const result = allPurchases.map((purchase) => ({
+    Date: purchase.date,
+    Company_Name: purchase.merchant.company_name,
+    Whole_Total: purchase.whole_total,
+    Credit: purchase.credit,
+    Paid: purchase.paid
+  }));
 
   const [myPurchase, setMyPurchase] = useState([]);
   useEffect(() => {
@@ -138,9 +147,6 @@ const ShowBuyMerchants = ({
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          <Button type="primary" onClick={() => handleClick(record)}>
-            <EditOutlined />
-          </Button>
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
@@ -181,17 +187,7 @@ const ShowBuyMerchants = ({
             </Button>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-            >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+            <ExportToExcel apiData={result} fileName={fileName} />
           </Col>
         </Row>
         <Row gutter={[16, 16]}>

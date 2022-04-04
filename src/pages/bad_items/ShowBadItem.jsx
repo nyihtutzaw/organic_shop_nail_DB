@@ -7,10 +7,9 @@ import { getBadItems, deleteBadItems } from "../../store/actions";
 import { connect } from "react-redux";
 import { useDispatch, useSelector } from "react-redux";
 
-
 const { Title } = Typography;
 
-const ShowBadItem = ({getBadItems, deleteBadItems}) => {
+const ShowBadItem = ({ getBadItems, deleteBadItems }) => {
   const badItems = useSelector((state) => state.bad_item.bad_items);
   // console.log(badItems);
   useEffect(() => {
@@ -27,18 +26,22 @@ const ShowBadItem = ({getBadItems, deleteBadItems}) => {
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Delete Your Data',
-      description: 'Your data have been deleted.',
+      message: "Delete Your Data",
+      description: "Your data have been deleted.",
       duration: 3
     });
   };
-  
-  const handleDelete =async (record) => {
-    console.log(record.id)
-    await deleteBadItems(record.id);
-    openNotificationWithIcon('error')
-  }
 
+  const handleDelete = async (record) => {
+    await deleteBadItems(record.id);
+    openNotificationWithIcon("error");
+  };
+
+  const handleClick = async (record) => {
+    console.log(record.id);
+    // await deleteBadItems(record.id);
+    navigate(`/admin/edit-bad-item/${record.id}`);
+  };
   const columns = [
     {
       title: "ရက်စွဲ",
@@ -47,12 +50,12 @@ const ShowBadItem = ({getBadItems, deleteBadItems}) => {
     {
       title: "ပစ္စည်းအမည်",
       dataIndex: "item_name",
-      render: (_, record) => (record.stock.item.name)
+      render: (_, record) => record.stock.item.name
     },
     {
       title: "	ပစ္စည်းကုတ်",
       dataIndex: "item_code",
-      render: (_, record) => (record.stock.item.code)
+      render: (_, record) => record.stock.item.code
     },
     {
       title: "	အရေအတွက်",
@@ -63,10 +66,10 @@ const ShowBadItem = ({getBadItems, deleteBadItems}) => {
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          <Button type="primary">Edit</Button>
-          <Button type="primary" danger
-          onClick={() => handleDelete(record)}
-          >
+          <Button type="primary" onClick={() => handleClick(record)}>
+            Edit
+          </Button>
+          <Button type="primary" danger onClick={() => handleDelete(record)}>
             Delete
           </Button>
         </Space>
@@ -84,7 +87,7 @@ const ShowBadItem = ({getBadItems, deleteBadItems}) => {
           <Col span={3}>
             <Button
               style={{
-                backgroundColor: "var(--primary-color)",
+                backgroundColor: "var(--secondary-color)",
                 color: "var(--white-color)",
                 borderRadius: "5px"
               }}
@@ -92,7 +95,7 @@ const ShowBadItem = ({getBadItems, deleteBadItems}) => {
               onClick={() => navigate("/admin/create-bad-item")}
             >
               <PlusSquareOutlined />
-              New
+              အသစ်ထည့်မည်
             </Button>
           </Col>
         </Row>
