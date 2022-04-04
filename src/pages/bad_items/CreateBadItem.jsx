@@ -9,13 +9,13 @@ import {
   Table,
   message,
   Checkbox,
-  Alert,
+  Alert
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   EditOutlined,
   SaveOutlined,
-  PlusSquareOutlined,
+  PlusSquareOutlined
 } from "@ant-design/icons";
 import { saveBadItems, getStocks, clearAlert } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
@@ -31,7 +31,7 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
   const allStocks = stocks.map((stock) => {
     return {
       id: stock.id,
-      name: stock.item.name,
+      name: stock.item.name
     };
   });
 
@@ -48,7 +48,6 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
     };
   }, [getStocks]);
 
-
   useEffect(() => {
     store.dispatch(clearAlert());
   }, []);
@@ -61,8 +60,8 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
         ...values,
         name: stock.name,
         date: dateFormat(now, "yyyy-mm-dd"),
-        key: bads.length + 1,
-      },
+        key: bads.length + 1
+      }
     ]);
     form.resetFields();
   };
@@ -81,10 +80,10 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
           date: bad.date,
           stock_id: bad.stock_id,
           quantity: bad.quantity,
-          is_sale: bad.is_sale === undefined ? false : true,
+          is_sale: bad.is_sale === undefined ? false : true
         };
       });
-
+      console.log(savedBads);
       await saveBadItems({ damage_items: savedBads });
       setBads([]);
     }
@@ -93,11 +92,11 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
   const columns = [
     {
       title: "ပစ္စည်းအမည်/ကုတ်",
-      dataIndex: "name",
+      dataIndex: "name"
     },
     {
       title: "အရေအတွက်",
-      dataIndex: "quantity",
+      dataIndex: "quantity"
     },
     {
       title: "Actions",
@@ -106,8 +105,8 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
         <Button type="primary" danger onClick={() => handleDelete(record)}>
           Delete
         </Button>
-      ),
-    },
+      )
+    }
   ];
 
   return (
@@ -135,7 +134,7 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
           style={{
             width: "100%",
             justifyContent: "center",
-            marginBottom: "10px",
+            marginBottom: "10px"
           }}
           size="large"
         ></Space>
@@ -143,14 +142,14 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
         <Form
           labelCol={{
             xl: {
-              span: 3,
-            },
+              span: 3
+            }
           }}
           wrapperCol={{
-            span: 24,
+            span: 24
           }}
           initialValues={{
-            remember: true,
+            remember: true
           }}
           onFinish={onFinish}
           form={form}
@@ -161,8 +160,8 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ ပစ္စည်းကုတ်/အမည်ထည့်ပါ",
-              },
+                message: "ကျေးဇူးပြု၍ ပစ္စည်းကုတ်/အမည်ထည့်ပါ"
+              }
             ]}
           >
             <Select
@@ -190,8 +189,8 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ အရေအတွက်ထည့်ပါ",
-              },
+                message: "ကျေးဇူးပြု၍ အရေအတွက်ထည့်ပါ"
+              }
             ]}
           >
             <InputNumber
@@ -214,7 +213,7 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
               style={{
                 backgroundColor: "var(--secondary-color)",
                 color: "var(--white-color)",
-                borderRadius: "10px",
+                borderRadius: "10px"
               }}
               size="large"
               htmlType="submit"
@@ -239,7 +238,7 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
             style={{
               backgroundColor: "var(--primary-color)",
               color: "var(--white-color)",
-              borderRadius: "10px",
+              borderRadius: "10px"
             }}
             size="large"
             onClick={handleSave}
@@ -253,9 +252,12 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
   );
 };
 
-
 const mapStateToProps = (store) => ({
   bad_item: store.bad_item
 });
 
-export default connect(mapStateToProps, { saveBadItems, getStocks, clearAlert })(CreateBadItem);
+export default connect(mapStateToProps, {
+  saveBadItems,
+  getStocks,
+  clearAlert
+})(CreateBadItem);

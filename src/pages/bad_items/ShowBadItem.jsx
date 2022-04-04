@@ -3,13 +3,13 @@ import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { ExportOutlined, PlusSquareOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { getBadItems, deleteBadItems } from "../../store/actions";
+import { getBadItems, deleteBadItems, getBadItem } from "../../store/actions";
 import { connect } from "react-redux";
 import { useDispatch, useSelector } from "react-redux";
 
 const { Title } = Typography;
 
-const ShowBadItem = ({ getBadItems, deleteBadItems }) => {
+const ShowBadItem = ({ getBadItems, deleteBadItems, getBadItem }) => {
   const badItems = useSelector((state) => state.bad_item.bad_items);
   // console.log(badItems);
   useEffect(() => {
@@ -38,8 +38,7 @@ const ShowBadItem = ({ getBadItems, deleteBadItems }) => {
   };
 
   const handleClick = async (record) => {
-    console.log(record.id);
-    // await deleteBadItems(record.id);
+    await getBadItem(record.id);
     navigate(`/admin/edit-bad-item/${record.id}`);
   };
   const columns = [
@@ -50,12 +49,12 @@ const ShowBadItem = ({ getBadItems, deleteBadItems }) => {
     {
       title: "ပစ္စည်းအမည်",
       dataIndex: "item_name",
-      render: (_, record) => record.stock.item.name
+      render: (_, record) => record.stock?.item?.name
     },
     {
       title: "	ပစ္စည်းကုတ်",
       dataIndex: "item_code",
-      render: (_, record) => record.stock.item.code
+      render: (_, record) => record.stock?.item?.code
     },
     {
       title: "	အရေအတွက်",
@@ -110,4 +109,4 @@ const ShowBadItem = ({ getBadItems, deleteBadItems }) => {
   );
 };
 
-export default connect(null, { getBadItems, deleteBadItems })(ShowBadItem);
+export default connect(null, { getBadItems, deleteBadItems, getBadItem })(ShowBadItem);

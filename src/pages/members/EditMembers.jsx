@@ -60,7 +60,7 @@ const EditMembers = ({
   }, [getShops, getMember, getMembers]);
 
   const result = shops.find((shop) => shop.id == member.shop_id);
-  
+
   useEffect(() => {
     form.setFieldsValue({ code: member?.code });
     form.setFieldsValue({ name: member?.name });
@@ -70,6 +70,7 @@ const EditMembers = ({
   }, [member, shops, result]);
 
   const onFinish = async (values) => {
+    console.log(values)
     await editMembers(param?.id, values);
     navigate("/admin/show-members");
   };

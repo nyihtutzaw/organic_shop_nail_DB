@@ -9,31 +9,65 @@ import {
   Table,
   message,
   Checkbox,
-  Alert,
+  Alert
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   EditOutlined,
   SaveOutlined,
-  PlusSquareOutlined,
+  PlusSquareOutlined
 } from "@ant-design/icons";
-import { saveBadItems, getStocks, clearAlert } from "../../store/actions";
+import {
+  saveBadItems,
+  getStocks,
+  clearAlert,
+  getBadItem,
+  getItems,
+  editBadItems
+} from "../../store/actions";
 import { connect, useSelector } from "react-redux";
 import dateFormat from "dateformat";
 import store from "../../store";
+import { useNavigate, useParams } from "react-router-dom";
 
 const now = new Date();
 
 const { Title } = Typography;
 const { Option } = Select;
-const EditBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
+const EditBadItem = ({
+  getStocks,
+  saveBadItems,
+  clearAlert,
+  bad_item,
+  getBadItem,
+  getItems,
+  editBadItems
+}) => {
   const stocks = useSelector((state) => state.stock.stocks);
+  const badItems = useSelector((state) => state.bad_item.bad_item);
+  const param = useParams();
+  const navigate = useNavigate();
   const allStocks = stocks.map((stock) => {
     return {
       id: stock.id,
-      name: stock.item.name,
+      name: stock.item.name
     };
   });
+
+  const editBadItem = stocks.find(
+    (stock) => stock?.id == badItems?.stock?.id
+  );
+
+  // console.log("all", stocks.id)
+  // console.log("edit",editBadItem.id);
+  // console.log("get", badItems.stock.id)
+// console.log(editBadItem)
+
+  useEffect(() => {
+    form.setFieldsValue({ quantity: badItems?.quantity });
+    form.setFieldsValue({ stock_id: editBadItem?.id });
+    form.setFieldsValue({ is_sale: badItems?.is_sale });
+  }, [badItems]);
 
   const [bads, setBads] = useState([]);
   const [form] = Form.useForm();
@@ -41,74 +75,28 @@ const EditBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
   useEffect(() => {
     const fetchData = async () => {
       await getStocks();
+      await getItems();
+      await getBadItem(param?.id);
     };
     fetchData();
     return () => {
       fetchData();
     };
-  }, [getStocks]);
-
+  }, [getStocks, getBadItem, getItems]);
 
   useEffect(() => {
     store.dispatch(clearAlert());
   }, []);
 
-  const onFinish = (values) => {
-    const stock = allStocks.find((stock) => stock.id === values.stock_id);
-    setBads([
-      ...bads,
-      {
-        ...values,
-        name: stock.name,
-        date: dateFormat(now, "yyyy-mm-dd"),
-        key: bads.length + 1,
-      },
-    ]);
-    form.resetFields();
+  const onFinish = async (values) => {
+    const result = {
+      ...values,
+      date: dateFormat(now, "yyyy-mm-dd"),
+      is_sale: values.is_sale == 0 ? 0 : 1
+    };
+    await editBadItems(param?.id, result);
+    navigate("/admin/show-bad-item/")
   };
-
-  const handleDelete = (record) => {
-    const filterBads = bads.filter((bad) => bad !== record);
-    setBads(filterBads);
-  };
-
-  const handleSave = async () => {
-    if (bads.length === 0) {
-      message.error("ကျေးဇူးပြု၍ Itemထည့်ပါ");
-    } else {
-      const savedBads = bads.map((bad) => {
-        return {
-          date: bad.date,
-          stock_id: bad.stock_id,
-          quantity: bad.quantity,
-          is_sale: bad.is_sale === undefined ? false : true,
-        };
-      });
-
-      await saveBadItems({ damage_items: savedBads });
-      setBads([]);
-    }
-  };
-
-  const columns = [
-    {
-      title: "ပစ္စည်းအမည်/ကုတ်",
-      dataIndex: "name",
-    },
-    {
-      title: "အရေအတွက်",
-      dataIndex: "quantity",
-    },
-    {
-      title: "Actions",
-      dataIndex: "action",
-      render: (_, record) => (
-        <Button type="primary" danger onClick={() => handleDelete(record)}>
-          Delete
-        </Button>
-      ),
-    },
-  ];
 
   return (
     <Layout style={{ margin: "20px" }}>
@@ -135,7 +123,7 @@ const EditBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
           style={{
             width: "100%",
             justifyContent: "center",
-            marginBottom: "10px",
+            marginBottom: "10px"
           }}
           size="large"
         ></Space>
@@ -143,14 +131,14 @@ const EditBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
         <Form
           labelCol={{
             xl: {
-              span: 3,
-            },
+              span: 3
+            }
           }}
           wrapperCol={{
-            span: 24,
+            span: 24
           }}
           initialValues={{
-            remember: true,
+            remember: true
           }}
           onFinish={onFinish}
           form={form}
@@ -161,8 +149,8 @@ const EditBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ ပစ္စည်းကုတ်/အမည်ထည့်ပါ",
-              },
+                message: "ကျေးဇူးပြု၍ ပစ္စည်းကုတ်/အမည်ထည့်ပါ"
+              }
             ]}
           >
             <Select
@@ -190,8 +178,8 @@ const EditBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ အရေအတွက်ထည့်ပါ",
-              },
+                message: "ကျေးဇူးပြု၍ အရေအတွက်ထည့်ပါ"
+              }
             ]}
           >
             <InputNumber
@@ -203,59 +191,42 @@ const EditBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
           </Form.Item>
           <Form.Item
             name="is_sale"
-            valuePropName="checked"
+            valuePropName={
+              parseInt(badItems?.is_sale) === 1 ? "checked" : "unchecked"
+            }
             wrapperCol={{ offset: 3, span: 16 }}
           >
             <Checkbox>ရောင်းပြီးသားပစ္စည်းလာလဲခြင်းလား</Checkbox>
           </Form.Item>
-
           <Form.Item style={{ textAlign: "right" }}>
             <Button
               style={{
-                backgroundColor: "var(--secondary-color)",
+                backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "10px",
+                borderRadius: "10px"
               }}
               size="large"
               htmlType="submit"
             >
-              <PlusSquareOutlined />
-              အသစ်ထည့်မည်
+              <SaveOutlined />
+              သိမ်းမည်
             </Button>
           </Form.Item>
         </Form>
-        <Table
-          bordered
-          columns={columns}
-          dataSource={bads}
-          pagination={{ position: ["none", "none"] }}
-        />
-
-        <Space
-          direction="horizontal"
-          style={{ width: "100%", justifyContent: "right" }}
-        >
-          <Button
-            style={{
-              backgroundColor: "var(--primary-color)",
-              color: "var(--white-color)",
-              borderRadius: "10px",
-            }}
-            size="large"
-            onClick={handleSave}
-          >
-            <SaveOutlined />
-            သိမ်းမည်
-          </Button>
-        </Space>
       </Space>
     </Layout>
   );
 };
 
-
 const mapStateToProps = (store) => ({
   bad_item: store.bad_item
 });
 
-export default connect(mapStateToProps, { saveBadItems, getStocks, clearAlert })(EditBadItem);
+export default connect(mapStateToProps, {
+  saveBadItems,
+  getStocks,
+  clearAlert,
+  getBadItem,
+  getItems,
+  editBadItems
+})(EditBadItem);

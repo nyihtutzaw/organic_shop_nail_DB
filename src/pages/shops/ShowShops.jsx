@@ -29,7 +29,7 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
     id: shop.id
   }));
 
-  console.log(result);
+  // console.log(result);
 
   useEffect(() => {
     store.dispatch(clearAlert());
