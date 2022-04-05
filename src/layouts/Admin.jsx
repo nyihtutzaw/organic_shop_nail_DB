@@ -401,7 +401,7 @@ const Admin = ({ logout }) => {
                 <Link to="/admin/show-service">စာရင်း</Link>
               </Menu.Item>
             </SubMenu>
-
+            {(user?.position === "owner" || user?.position === "manager") && (
             <SubMenu
               key="Staff"
               title="ဝန်ထမ်းစာရင်း"
@@ -421,7 +421,7 @@ const Admin = ({ logout }) => {
                 </Link>
               </Menu.Item>
             </SubMenu>
-
+            )}
             <SubMenu
               key="Expenses"
               title="ကုန်ကျစရိတ်များ"
