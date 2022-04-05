@@ -98,12 +98,12 @@ const VoucherReports = ({ voucher, getVouchers}) => {
               }} block>
               ဝယ်ယူသူအမည်
             </Button> */}
-            <Input.Group compact style={{ width: "100%" }}>
+            {/* <Input.Group compact style={{ width: "100%" }}>
               <Select defaultValue="ဝယ်ယူသူအမည်">
                 <Option value="Option1">ဝယ်ယူသူအမည်1</Option>
                 <Option value="Option2">ဝယ်ယူသူအမည်2</Option>
               </Select>
-            </Input.Group>
+            </Input.Group> */}
           </Col>
         </Row>
 

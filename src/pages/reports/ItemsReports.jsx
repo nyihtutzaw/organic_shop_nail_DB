@@ -4,7 +4,7 @@ import Layout from "antd/lib/layout/layout";
 import queryString from "query-string";
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { getBestItem } from "../../store/actions";
 
@@ -15,6 +15,7 @@ const ItemsReports = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const items = useSelector((state) => state.item.items);
+
   useEffect(() => {
     const fetchData = async () => {
       dispatch(getBestItem(queryString.parse(location.search)));
@@ -33,17 +34,17 @@ const ItemsReports = () => {
         title: "စဉ်",
         dataIndex: "order",
         render: (_,record) => (record.id)
+        // render: (_,record) => (console.log(record.id))
       },
       {
         title: "ရက်စွဲ",
         dataIndex: "invoice.created_at",
         render: (_, record) => getReadableDateDisplay(record.invoice?.created_at),
-        // render: (_,record) => ("clg",console.log(record))
       },
       {
         title: "ပစ္စည်းအမည်",
         dataIndex: "invoice.stock",
-        render: (_, record) => record.stock.item?.name,
+        render: (_, record) => record.stock?.item?.name,
       },
   
       {
@@ -66,7 +67,7 @@ const ItemsReports = () => {
       {
         title: "ပစ္စည်းအမည်",
         dataIndex: "invoice.stock",
-        render: (_, record) => record.stock.item?.name,
+        render: (_, record) => record.stock?.item?.name,
       },
 
       {

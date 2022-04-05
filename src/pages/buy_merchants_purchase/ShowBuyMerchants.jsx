@@ -41,7 +41,6 @@ const ShowBuyMerchants = ({
 }) => {
   const navigate = useNavigate();
   const allPurchases = useSelector((state) => state.purchase.purchases);
-  console.log(purchase);
 
   const fileName = "Purchases"; // here enter filename for your excel file
   const result = allPurchases.map((purchase) => ({
@@ -131,6 +130,7 @@ const ShowBuyMerchants = ({
     {
       title: "ကုန်သည်လုပ်ငန်းအမည်",
       dataIndex: "company_name",
+      // render: (_, record) => (console.log(record.merchant.company_name))
       render: (_, record) =>
         showBuyMerchant === null
           ? record.merchant.company_name

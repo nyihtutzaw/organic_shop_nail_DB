@@ -8,21 +8,21 @@ import {
   EditOutlined
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getAccounts } from "../../store/actions";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { getAccounts, deleteAccounts } from "../../store/actions";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 
 const { Title } = Typography;
 
-const ShowAccounts = () => {
+const ShowAccounts = ({ deleteAccounts }) => {
   const accounts = useSelector((state) => state.account.accounts);
   const fileName = "Accounts"; // here enter filename for your excel file
   const result = accounts.map((account) => ({
-      name: account.name,
-      phone: account.phone,
-      position: account.position,
-      shop: account.shop.name,
-  }))
+    name: account.name,
+    phone: account.phone,
+    position: account.position,
+    shop: account.shop.name
+  }));
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -39,7 +39,10 @@ const ShowAccounts = () => {
     });
   };
 
-  const handleDelete = (record) => {};
+  const handleDelete = async (record) => {
+    await deleteAccounts(record.id);
+    openNotificationWithIcon("success");
+  };
 
   React.useEffect(() => {
     dispatch(getAccounts());
@@ -59,15 +62,14 @@ const ShowAccounts = () => {
       dataIndex: "shop",
       render: (_, data) => data.shop.name
     },
-
     {
       title: "Actions",
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          <Button type="primary" onClick={() => handleClick(record)}>
+          {/* <Button type="primary" onClick={() => handleClick(record)}>
             <EditOutlined />
-          </Button>
+          </Button> */}
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
@@ -112,4 +114,4 @@ const ShowAccounts = () => {
   );
 };
 
-export default ShowAccounts;
+export default connect(null, { deleteAccounts })(ShowAccounts);

@@ -40,6 +40,7 @@ export const setShopErrors = (error) => ({
   error
 });
 
+
 export const shopSuccess = (isSuccess) => ({
   type: IS_SUCCESS_SHOP,
   isSuccess
@@ -67,8 +68,6 @@ export const getShops = () => {
     } catch (error) {
       if (error.response.status >= 400) {
         dispatch(setShopErrors("There was an error during Showing....!"));
-      } else {
-        dispatch(setShopErrors("There was an error during Showing....!"));
       }
     }
   };
@@ -87,9 +86,7 @@ export const getShop = (id) => {
     } catch (error) {
       if (error.response.status >= 400) {
         dispatch(setShopErrors("There was an error during Updating a Data....!"));
-      } else {
-        dispatch(setShopErrors("There was an error during Updating a Data....!"));
-      }
+      } 
     }
   };
 };
@@ -111,8 +108,6 @@ export const saveShops = (data) => {
     } catch (error) {
       if (error.response.status >= 400) {
         dispatch(setShopErrors("There was an error during Creating....!"));
-      } else {
-        dispatch(setShopErrors("There was an error during Creating....!"));
       }
     }
   };
@@ -129,8 +124,6 @@ export const deleteShops = (id) => {
       }
     } catch (error) {
       if (error.response.status >= 400) {
-        dispatch(setShopErrors("There was an error during Deleting....!"));
-      } else {
         dispatch(setShopErrors("There was an error during Deleting....!"));
       }
     }
@@ -149,8 +142,6 @@ export const editShops = (id, data) => {
       }
     } catch (error) {
       if (error.response.status >= 400) {
-        dispatch(setShopErrors("There was an error during Updating....!"));
-      } else {
         dispatch(setShopErrors("There was an error during Updating....!"));
       }
     }

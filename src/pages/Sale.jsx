@@ -421,6 +421,7 @@ const Sale = ({
     }
   ];
 
+  // console.log(sales.length);
   return (
     <Layout>
       <Header style={{ backgroundColor: "var(--primary-color)" }}>
@@ -461,6 +462,7 @@ const Sale = ({
                   Search
                 </Text>
                 <Input
+                  autoFocus={true}
                   placeholder="Start Scanning"
                   id="SearchbyScanning"
                   className="SearchInput"
@@ -658,7 +660,8 @@ const Sale = ({
                 bordered
                 columns={columns}
                 dataSource={sales}
-                pagination={{ position: ["none", "none"] }}
+                // pagination={{ position: ["none", "none"] }}
+                pagination={{ defaultPageSize: 5 }}
               />
               <Row gutter={[16, 16]}>
                 <Col span={15} style={{ textAlign: "right" }}>
