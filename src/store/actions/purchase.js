@@ -64,7 +64,7 @@ export const getPurchases = () => {
       const response = await axios.get(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases"
       );
-      console.log(response);
+      // console.log(response);
 
       const result = response.data.data.map((purchase) => {
         return {

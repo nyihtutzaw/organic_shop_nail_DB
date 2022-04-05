@@ -315,7 +315,7 @@ const Admin = ({ logout }) => {
             <Menu.Item key="ChangePassword" icon={<LockOutlined />}>
               <Link to="/admin/change-password">Change Password</Link>
             </Menu.Item>
-            {(user?.position === "Owner" || user?.position === "manager") && (
+            {(user?.position === "owner" || user?.position === "manager") && (
               <SubMenu
                 key="Accounts"
                 title="အကောင့်များ"
@@ -438,7 +438,7 @@ const Admin = ({ logout }) => {
               </Menu.Item>
             </SubMenu>
 
-            {(user?.position === "Owner" || user?.position === "manager") && (
+            {(user?.position === "owner" || user?.position === "manager") && (
               <SubMenu
                 key="Reports"
                 title="Reports"

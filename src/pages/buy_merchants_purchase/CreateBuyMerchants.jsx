@@ -156,8 +156,8 @@ const CreateBuyMerchants = ({
       // setCredit(0);
       // setPaid(0)
       // result = 0;
+      navigate("/admin/show-buy-merchants");
     }
-    navigate("/admin/show-buy-merchants");
   };
 
   const handlePayment = (value) => {
