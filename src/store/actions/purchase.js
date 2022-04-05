@@ -8,7 +8,6 @@ import {
   ERROR_PURCHASES
 } from "../type";
 
-
 export const showPurchases = (purchases) => ({
   type: SHOW_PURCHASES,
   purchases
@@ -59,13 +58,14 @@ export const getPurchase = (id) => {
   };
 };
 
-
 export const getPurchases = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases"
       );
+      console.log(response);
+
       const result = response.data.data.map((purchase) => {
         return {
           ...purchase,
@@ -115,7 +115,7 @@ export const deletePurchases = (id) => {
       // if (response.status === 204) {
       // }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       // if (error.response.status === 404) {
       //   dispatch(setPurchaseErrors(error.response.data.data));
       // } else {

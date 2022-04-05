@@ -5,7 +5,7 @@ import {
   Route,
   useLocation,
   Navigate,
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 // ant design styles
 import { Layout, Menu, Avatar, Space, Popover, Button } from "antd";
@@ -27,7 +27,7 @@ import {
   FileImageOutlined,
   ContactsOutlined,
   FolderAddOutlined,
-  FlagOutlined
+  FlagOutlined,
 } from "@ant-design/icons";
 import Dashboard from "../pages/Dashboard";
 import SubMenu from "antd/lib/menu/SubMenu";
@@ -85,6 +85,7 @@ import EditMerchants from "../pages/merchants/EditMerchants";
 import EditExpenses from "../pages/expenses/EditExpenses";
 import EditBuyMerchants from "../pages/buy_merchants_purchase/EditBuyMerchants";
 import ShowPurchases from "../pages/buy_merchants_purchase/ShowPurchases";
+import EditBadItem from "../pages/bad_items/EditBadItem";
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -98,6 +99,7 @@ const Admin = ({ logout }) => {
   const [collapsed, setCollapsed] = useState(false);
   const { pathname } = useLocation();
   const user = useSelector((state) => state.auth.user);
+  
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -270,7 +272,7 @@ const Admin = ({ logout }) => {
             float: "left",
             backgroundColor: "var(--primary-color)",
             color: "var(--white-color)",
-            marginRight: "3px"
+            marginRight: "3px",
           }}
         >
           {React.createElement(
@@ -305,21 +307,23 @@ const Admin = ({ logout }) => {
             <Menu.Item key="Sale" icon={<ShopOutlined />}>
               <Link to="/admin/sale">Sale</Link>
             </Menu.Item>
-            <SubMenu
-              key="Accounts"
-              title="အကောင့်များ"
-              icon={<FileImageOutlined />}
-            >
-              <Menu.Item key="ShowAccounts" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-accounts">စာရင်း</Link>
-              </Menu.Item>
-              <Menu.Item key="CreateAccounts" icon={<SaveOutlined />}>
-                <Link to="/admin/create-accounts">အသစ်ဖန်တီးရန်</Link>
-              </Menu.Item>
-              <Menu.Item key="ShowShops" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-shops">ဆိုင်များ</Link>
-              </Menu.Item>
-            </SubMenu>
+            {(user?.position === "owner" || user?.position === "manager") && (
+              <SubMenu
+                key="Accounts"
+                title="အကောင့်များ"
+                icon={<FileImageOutlined />}
+              >
+                <Menu.Item key="ShowAccounts" icon={<UnorderedListOutlined />}>
+                  <Link to="/admin/show-accounts">စာရင်း</Link>
+                </Menu.Item>
+                <Menu.Item key="CreateAccounts" icon={<SaveOutlined />}>
+                  <Link to="/admin/create-accounts">အသစ်ဖန်တီးရန်</Link>
+                </Menu.Item>
+                <Menu.Item key="ShowShops" icon={<UnorderedListOutlined />}>
+                  <Link to="/admin/show-shops">ဆိုင်များ</Link>
+                </Menu.Item>
+              </SubMenu>
+            )}
 
             <SubMenu
               key="Merchants"
@@ -411,20 +415,6 @@ const Admin = ({ logout }) => {
             </SubMenu>
 
             <SubMenu
-              key="Owner"
-              title="ပစ္စည်းထုတ်သုံးခြင်"
-              icon={<UsergroupAddOutlined />}
-            >
-              <Menu.Item key="CreateOwner" icon={<SaveOutlined />}>
-                <Link to="/admin/create-owner">အသစ်ဖန်တီးရန်</Link>
-              </Menu.Item>
-
-              <Menu.Item key="ShowOwnerList" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-owner">စာရင်း</Link>
-              </Menu.Item>
-            </SubMenu>
-
-            <SubMenu
               key="Expenses"
               title="ကုန်ကျစရိတ်များ"
               icon={<CalculatorOutlined />}
@@ -440,7 +430,7 @@ const Admin = ({ logout }) => {
               </Menu.Item>
             </SubMenu>
 
-            <SubMenu key="Reports" title="Reports" icon={<FolderAddOutlined />}>
+            {(user?.position === "owner" || user?.position === "manager") && (<SubMenu key="Reports" title="Reports" icon={<FolderAddOutlined />}>
               <Menu.Item key="ItemsReports" icon={<SaveOutlined />}>
                 <Link to="/admin/item-report">Item</Link>
               </Menu.Item>
@@ -454,7 +444,7 @@ const Admin = ({ logout }) => {
               <Menu.Item key="ReportScreem" icon={<UnorderedListOutlined />}>
                 <Link to="/admin/report-screem">Report Screen</Link>
               </Menu.Item>
-            </SubMenu>
+            </SubMenu>)}
           </Menu>
         </Sider>
         <Layout>
@@ -497,6 +487,7 @@ const Admin = ({ logout }) => {
 
               <Route path="create-bad-item" element={<CreateBadItem />} />
               <Route path="show-bad-item" element={<ShowBadItem />} />
+              <Route path="edit-bad-item/:id" element={<EditBadItem />} />
 
               <Route path="create-staff" element={<CreateStaff />} />
               <Route path="show-staff" element={<ShowStaff />} />
@@ -533,10 +524,7 @@ const Admin = ({ logout }) => {
                 path="edit-buy-merchants/:id"
                 element={<EditBuyMerchants />}
               />
-              <Route
-                path="show-purchase/:id"
-                element={<ShowPurchases />}
-              />
+              <Route path="show-purchase/:id" element={<ShowPurchases />} />
 
               <Route path="create-expenses" element={<CreateExpenses />} />
               <Route path="show-expenses" element={<ShowExpenses />} />
@@ -563,7 +551,7 @@ const Admin = ({ logout }) => {
               backgroundColor: "var(--white-color)",
               textAlign: "center",
               fontWeight: "bold",
-              color: "var(--primary-color)"
+              color: "var(--primary-color)",
             }}
           >
             DEVELOP BY RCS

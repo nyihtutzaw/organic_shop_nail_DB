@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { PlusSquareOutlined, ExportOutlined,  DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  PlusSquareOutlined,
+  ExportOutlined,
+  DeleteOutlined,
+  EditOutlined
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getMembers, deleteMembers, getMember } from "../../store/actions";
 import { connect } from "react-redux";
+import { ExportToExcel } from "../../excel/ExportToExcel";
 
 const { Title } = Typography;
 
 const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
   const navigate = useNavigate();
   const members = useSelector((state) => state.member.members);
+  const fileName = "Members"; // here enter filename for your excel file
 
   const result = members.map((member) => ({
     id: member.id,
@@ -21,6 +28,13 @@ const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
     phone: member.phone,
     address: member.address,
     points: "10"
+  }));
+
+  const resultMember = members.map((member) => ({
+    code: member.code,
+    name: member.name,
+    phone: member.phone,
+    address: member.address
   }));
 
   useEffect(() => {
@@ -33,26 +47,26 @@ const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
     };
   }, [getMembers]);
 
-  const handleClick =async (record) => {
-    await getMember(record.id)
+  const handleClick = async (record) => {
+    await getMember(record.id);
     navigate(`/admin/edit-members/${record.id}`);
   };
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Deleted Your Data',
-      description: 'Your data have been deleted.',
+      message: "Deleted Your Data",
+      description: "Your data have been deleted.",
       duration: 3
     });
   };
   const handleDelete = async (record) => {
     await deleteMembers(record.id);
-    openNotificationWithIcon('error')
+    openNotificationWithIcon("error");
   };
 
   const handleDetail = (record) => {
     navigate(`/admin/detail-members/${record.id}`);
-  }
+  };
 
   const columns = [
     {
@@ -80,19 +94,18 @@ const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          <Button type="primary" 
-          style={{ background: "green", borderColor: "yellow" }}
-          onClick={() => handleDetail(record)}>
-            Details
-          </Button>
           <Button
             type="primary"
-            onClick={() => handleClick(record)}
+            style={{ background: "green", borderColor: "yellow" }}
+            onClick={() => handleDetail(record)}
           >
-             <EditOutlined/>
+            Details
+          </Button>
+          <Button type="primary" onClick={() => handleClick(record)}>
+            <EditOutlined />
           </Button>
           <Button type="primary" danger onClick={() => handleDelete(record)}>
-          <DeleteOutlined/>
+            <DeleteOutlined />
           </Button>
         </Space>
       )
@@ -121,24 +134,13 @@ const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
             </Button>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-            >
-              <ExportOutlined />
-              စာရင်းထုတ်မည်
-            </Button>
+            <ExportToExcel apiData={resultMember} fileName={fileName} />
           </Col>
         </Row>
         <Table
           bordered
           columns={columns}
           dataSource={result}
-          // rowKey={result.key}
           pagination={{ defaultPageSize: 10 }}
         />
       </Space>
@@ -146,5 +148,6 @@ const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
   );
 };
 
-export default connect(null, { getMembers, deleteMembers, getMember })(ShowMembers);
-
+export default connect(null, { getMembers, deleteMembers, getMember })(
+  ShowMembers
+);

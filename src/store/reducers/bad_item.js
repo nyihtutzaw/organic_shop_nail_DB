@@ -1,5 +1,6 @@
 import {
   SHOW_BADITEMS,
+  SHOW_BADITEM,
   CREATE_BADITEMS,
   UPDATE_BADITEMS,
   FILTER_BADITEMS,
@@ -10,6 +11,7 @@ import {
 
 const initialState = {
   bad_items: [],
+  bad_item: {},
   error: "",
   isSuccess: false,
 };
@@ -18,7 +20,7 @@ const item = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_BADITEMS:
       return {
-        bad_items: [...state.bad_items, action.baditem],
+        // bad_items: [...state.bad_items, action.baditem],
         isSuccess: true,
         error: ""
       };
@@ -26,6 +28,11 @@ const item = (state = initialState, action) => {
       return {
         ...state,
         bad_items: action.baditems,
+      };
+    case SHOW_BADITEM:
+      return {
+        ...state,
+        bad_item: action.baditem,
       };
     case FILTER_BADITEMS:
       const filterBadItems = state.bad_items.filter(
@@ -36,8 +43,8 @@ const item = (state = initialState, action) => {
         bad_items: filterBadItems,
       };
     case UPDATE_BADITEMS:
-      const index = state.items.findIndex((item) => item.id === action.data.id);
-      state.items[index] = action.data;
+      const index = state.bad_items.findIndex((item) => item.id === action.data.id);
+      state.bad_items[index] = action.data;
       return {
         ...state,
       };

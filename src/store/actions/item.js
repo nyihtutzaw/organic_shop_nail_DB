@@ -34,6 +34,7 @@ export const updateItems = (data) => ({
   data
 });
 
+
 export const setItemErrors = (error) => ({
   type: ERROR_ITEM,
   error
@@ -164,16 +165,14 @@ export const getBestItem=(query)=>{
       const response = await axios.get(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/bestItem?${new URLSearchParams(query).toString()}`
       );
+      // console.log(response)
       const result = response.data.data.map((item) => {
         return {
           ...item,
           key: item.id
         };
       });
-
-      
         dispatch(showItems(result));
-      
     } catch (error) {
       if (error.response.status === 404) {
         dispatch(setItemErrors(error.response.data.data));

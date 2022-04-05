@@ -333,11 +333,19 @@ const Sale = ({
           updateBarcodeInputValue("");
         } else {
           alert("Not Found");
+          updateBarcodeInputValue("");
         }
       }
     }
   };
 
+  const handleMember = () => {
+    navigate("/admin/create-members");
+  };
+
+  const handleDashboard = () => {
+    navigate("/admin/dashboard");
+  };
   const columns = [
     {
       title: "စဥ်",
@@ -462,7 +470,7 @@ const Sale = ({
                 />
               </Space>
             </Col>
-            <Col xl={{ span: 10 }}></Col>
+            <Col xl={{ span: 5 }}></Col>
             <Col xl={{ span: 7 }}>
               <Space>
                 <Text
@@ -503,9 +511,22 @@ const Sale = ({
                   color: "var(--white-color)"
                 }}
                 size="large"
+                onClick={handleMember}
               >
                 <PlusSquareOutlined />
                 New Member
+              </Button>
+            </Col>
+            <Col xl={{ span: 3 }}>
+              <Button
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  color: "var(--white-color)"
+                }}
+                size="large"
+                onClick={handleDashboard}
+              >
+                Go To Dashboard
               </Button>
             </Col>
           </Row>
