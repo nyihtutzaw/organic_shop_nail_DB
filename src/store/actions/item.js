@@ -5,39 +5,37 @@ import {
   CREATE_ITEMS,
   UPDATE_ITEMS,
   FILTER_ITEMS,
-  ERROR_ITEM
+  ERROR_ITEM,
 } from "../type";
-
 
 export const showItems = (items) => ({
   type: SHOW_ITEMS,
-  items
+  items,
 });
 
 export const showItem = (item) => ({
   type: SHOW_ITEM,
-  item
+  item,
 });
 
 export const createItems = (item) => ({
   type: CREATE_ITEMS,
-  item
+  item,
 });
 
 export const filterItems = (id) => ({
   type: FILTER_ITEMS,
-  id
+  id,
 });
 
 export const updateItems = (data) => ({
   type: UPDATE_ITEMS,
-  data
+  data,
 });
-
 
 export const setItemErrors = (error) => ({
   type: ERROR_ITEM,
-  error
+  error,
 });
 
 export const getItems = () => {
@@ -49,7 +47,7 @@ export const getItems = () => {
       const result = response.data.data.map((item) => {
         return {
           ...item,
-          key: item.id
+          key: item.id,
         };
       });
       // console.log(result)
@@ -97,13 +95,13 @@ export const saveItems = (data) => {
       );
       const result = {
         ...response.data.data,
-        key: response.data.data.id
+        key: response.data.data.id,
       };
       // console.log(result)
       dispatch(createItems(result));
     } catch (error) {
       if (error) {
-        console.log(error)
+        console.log(error);
         dispatch(setItemErrors(error.response.data.data));
       } else {
         dispatch(setItemErrors(error.response.data));
@@ -141,7 +139,7 @@ export const editItems = (id, data) => {
       );
       const result = {
         ...response.data.data,
-        key: response.data.data.id
+        key: response.data.data.id,
       };
       // console.log(result);
       if (response.status === 204) {
@@ -158,25 +156,37 @@ export const editItems = (id, data) => {
   };
 };
 
-
-export const getBestItem=(query)=>{
+export const getBestItem = (query) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/bestItem?${new URLSearchParams(query).toString()}`
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/bestItem?${new URLSearchParams(
+          query
+        ).toString()}`
       );
-      // console.log("rr",response)
-      const result = response.data.data.map((item) => {
-        return {
-          ...item,
-          key: item.id
-        };
-      });
+
+      console.log(query.best);
+      if (query.best) {
+        const result = response.data.data.map((item) => {
+          return {
+            ...item,
+            key: item.item_id,
+          };
+        });
         dispatch(showItems(result));
+      } else {
+        const result = response.data.data.map((item) => {
+          return {
+            ...item,
+            key: item.id,
+          };
+        });
+        dispatch(showItems(result));
+      }
     } catch (error) {
       if (error.response.status === 404) {
         dispatch(setItemErrors(error.response.data.data));
       }
     }
   };
-}
+};
