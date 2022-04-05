@@ -23,29 +23,30 @@ const ItemsReports = () => {
     return () => {
       fetchData();
     };
-  }, [getBestItem, location, items]);
+  }, [getBestItem, location]);
 
   let columns = [];
-  
+
   if (!queryString.parse(location.search).best) {
-    columns=[
+    columns = [
       {
         title: "စဉ်",
         dataIndex: "order",
-        render: (_,record) => (record.id)
+        render: (_, record) => record.id,
       },
       {
         title: "ရက်စွဲ",
         dataIndex: "invoice.created_at",
-        render: (_, record) => getReadableDateDisplay(record.invoice?.created_at),
+        render: (_, record) =>
+          getReadableDateDisplay(record.invoice?.created_at),
         // render: (_,record) => ("clg",console.log(record))
       },
       {
         title: "ပစ္စည်းအမည်",
         dataIndex: "invoice.stock",
-        render: (_, record) => record.stock.item?.name,
+        render: (_, record) => record.item?.name,
       },
-  
+
       {
         title: "အရေအတွက်",
         dataIndex: "quantity",
@@ -55,18 +56,17 @@ const ItemsReports = () => {
         render: (_, record) => record.price * record.quantity,
       },
     ];
-  }
-  else {
+  } else {
     columns = [
       {
         title: "စဉ်",
         dataIndex: "order",
-        render: (_,record) => (record.id)
+        render: (_, record) => record.item_id,
       },
       {
         title: "ပစ္စည်းအမည်",
         dataIndex: "invoice.stock",
-        render: (_, record) => record.stock.item?.name,
+        render: (_, record) => record.item?.name,
       },
 
       {
@@ -75,12 +75,11 @@ const ItemsReports = () => {
       },
       {
         title: "စုစုပေါင်း",
-        render: (_, record) => record.stock.item.sale_price*record.total_qty,
+        dataIndex: "total_subtotal",
+        // render: (_, record) => record.stock.item.sale_price*record.total_qty,
       },
     ];
   }
-  
-  
 
   return (
     <Layout style={{ margin: "20px" }}>
@@ -136,9 +135,7 @@ const ItemsReports = () => {
                 borderRadius: "5px",
               }}
               block
-              onClick={() =>
-                (window.location = "/admin/item-report?best=true")
-              }
+              onClick={() => (window.location = "/admin/item-report?best=true")}
             >
               အရောင်းရဆုံပစ္စည်းများ
             </Button>
