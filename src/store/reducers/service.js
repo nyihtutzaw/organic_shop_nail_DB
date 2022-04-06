@@ -37,7 +37,6 @@ const service = (state = initialState, action) => {
       return {
         ...state,
         services: filterServices
-       
       };
       
     case UPDATE_SERVICES:

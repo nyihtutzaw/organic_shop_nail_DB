@@ -86,10 +86,10 @@ const ShowBuyMerchants = ({
     if (value === undefined) {
       setshowBuyMerchant([]);
     } else {
-      const filterBuyMerchant = merchant.merchants.find(
-        (mer) => mer.id === value
+      const filterBuyMerchant = allPurchases.filter(
+        (mer) => mer.merchant.id === value
       );
-      setshowBuyMerchant([filterBuyMerchant]);
+      setshowBuyMerchant(filterBuyMerchant);
     }
   };
 
@@ -130,11 +130,10 @@ const ShowBuyMerchants = ({
     {
       title: "ကုန်သည်လုပ်ငန်းအမည်",
       dataIndex: "company_name",
-      // render: (_, record) => (console.log(record.merchant.company_name))
       render: (_, record) =>
         showBuyMerchant === null
-          ? record.merchant.company_name
-          : showBuyMerchant[0].company_name
+          ? record?.merchant?.company_name
+          : record?.merchant?.company_name
     },
     {
       title: "ပေးချေပြီးပမာဏ",
@@ -238,7 +237,7 @@ const ShowBuyMerchants = ({
         <Table
           bordered
           columns={columns}
-          dataSource={allPurchases}
+          dataSource={showBuyMerchant != null ? showBuyMerchant : allPurchases}
           pagination={{ defaultPageSize: 10 }}
         />
       </Space>

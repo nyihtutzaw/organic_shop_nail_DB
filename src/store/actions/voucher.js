@@ -13,6 +13,11 @@ export const showVouchers = (vouchers) => ({
   vouchers
 });
 
+export const filterVouchers = (id) => ({
+  type: FILTER_VOUCHERS,
+  id
+});
+
 export const setVoucherErrors = (error) => ({
   type: ERROR_VOUCHERS,
   error
@@ -43,6 +48,25 @@ export const getVouchers = (query) => {
     }
   };
 };
+
+export const deleteVouchers = (id) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.delete(
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/invoices/${id}`
+      );
+      console.log(response.data.data)
+      if (response.status === 204) {
+        dispatch(filterVouchers(id));
+      }
+    } catch (error) {
+      if (error.response.status === 404) {
+        dispatch(setVoucherErrors(error.response.data.data));
+      }
+    }
+  };
+};
+
 
 // export const getItem = (id) => {
 //   return async (dispatch) => {

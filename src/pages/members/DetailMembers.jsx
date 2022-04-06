@@ -34,13 +34,14 @@ const DetailMembers = ({ editMembers, getShops, getMember, getMembers }) => {
       fetchData();
     };
   }, [getShops, getMember, getMembers]);
+  const result = shops.find((shop) => shop.id == member.shop_id);
 
   useEffect(() => {
     form.setFieldsValue({ code: member?.code });
     form.setFieldsValue({ name: member?.name });
     form.setFieldsValue({ phone: member?.phone });
     form.setFieldsValue({ address: member?.address });
-    form.setFieldsValue({ shop_id: member.shop_id });
+    form.setFieldsValue({ shop_id: result?.name });
   }, [member, shops]);
 
   const onFinish = async (values) => {

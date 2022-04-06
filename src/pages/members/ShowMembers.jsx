@@ -85,10 +85,10 @@ const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
       title: "နေရပ်လိပ်စာ",
       dataIndex: "address"
     },
-    {
-      title: "point စုစုပေါင်း",
-      dataIndex: "points"
-    },
+    // {
+    //   title: "point စုစုပေါင်း",
+    //   dataIndex: "points"
+    // },
     {
       title: "Actions",
       dataIndex: "action",
