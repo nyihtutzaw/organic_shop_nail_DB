@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Typography, Space, Button, InputNumber, Select, notification } from "antd";
+import {
+  Form,
+  Input,
+  Typography,
+  Space,
+  Button,
+  InputNumber,
+  Select,
+  notification
+} from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,11 +19,11 @@ import { connect } from "react-redux";
 const { Title } = Typography;
 const { Option } = Select;
 
-const CreateMembers = ({ shop, saveMembers, getShops}) => {
+const CreateMembers = ({ shop, saveMembers, getShops }) => {
   const shops = useSelector((state) => state.shop.shops);
   const navigate = useNavigate();
   const [form] = Form.useForm();
-  
+
   useEffect(() => {
     const fetchData = async () => {
       await getShops();
@@ -27,15 +36,15 @@ const CreateMembers = ({ shop, saveMembers, getShops}) => {
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Saved Your Data',
-      description: 'Your data have been saved.',
+      message: "Saved Your Data",
+      description: "Your data have been saved.",
       duration: 3
     });
   };
   const onFinish = async (values) => {
-    await saveMembers(values)
+    await saveMembers(values);
     form.resetFields();
-    openNotificationWithIcon('success')
+    openNotificationWithIcon("success");
   };
 
   //for barcode
@@ -83,19 +92,11 @@ const CreateMembers = ({ shop, saveMembers, getShops}) => {
               className="SearchInput"
               value={barcodeInputValue}
               onChange={onChangeBarcode}
-             
               placeholder="မန်ဘာကုတ်ထည့်ပါ"
               prefix={<EditOutlined />}
               style={{ borderRadius: "10px" }}
               size="large"
             />
-
-            {/* <Input
-              placeholder="မန်ဘာကုတ်ထည့်ပါ"
-              prefix={<EditOutlined />}
-              style={{ borderRadius: "10px", width: "100%" }}
-              size="large"
-            /> */}
           </Form.Item>
           <Form.Item
             name="name"
@@ -148,34 +149,7 @@ const CreateMembers = ({ shop, saveMembers, getShops}) => {
               size="large"
             />
           </Form.Item>
-          <Form.Item
-            name="shop_id"
-            label="ဆိုင်အမည်"
-            rules={[
-              {
-                required: true,
-                message: "ကျေးဇူးပြု၍ ဆိုင်အမည်ရွေးပါ"
-              }
-            ]}
-          >
-            
-            <Select
-              showSearch
-              placeholder="ကျေးဇူးပြု၍ ဆိုင်အမည်ရွေးပါ"
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              allowClear={true}
-              size="large"
-              style={{ borderRadius: "10px" }}
-            >
-              {shops.map((shop) => (
-                <Option value={shop.id} key={shop.id}>{shop.name}</Option>
-              ))}
-              
-            </Select>
-          </Form.Item>
+
           <Form.Item style={{ textAlign: "right" }}>
             <Button
               style={{
@@ -200,4 +174,6 @@ const mapStateToProps = (store) => ({
   shop: store.shop
 });
 
-export default connect(mapStateToProps, { saveMembers, getShops })(CreateMembers);
+export default connect(mapStateToProps, { saveMembers, getShops })(
+  CreateMembers
+);

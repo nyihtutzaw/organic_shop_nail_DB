@@ -116,16 +116,7 @@ const ItemsReports = () => {
 
         <Row>
           <Col span={5}>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px",
-              }}
-              block
-            >
-              Sort by ( ပစ္စည်းအမည် )
-            </Button>
+            
           </Col>
           <Col span={14}></Col>
           <Col span={5}>

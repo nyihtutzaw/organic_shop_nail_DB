@@ -18,7 +18,6 @@ export const showService = (service) => ({
   service
 });
 
-
 export const createServices = (service) => ({
   type: CREATE_SERVICES,
   service
@@ -39,11 +38,13 @@ export const setServiceError = (error) => ({
   error
 });
 
-export const getBestService=(query)=>{
+export const getBestService = (query) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/bestService?${new URLSearchParams(query).toString()}`
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/bestService?${new URLSearchParams(
+          query
+        ).toString()}`
       );
       const result = response.data.data.map((service) => {
         return {
@@ -52,18 +53,14 @@ export const getBestService=(query)=>{
         };
       });
 
-      
-        dispatch(showServices(result));
-      
+      dispatch(showServices(result));
     } catch (error) {
       if (error.response.status === 404) {
         dispatch(setServiceError(error.response.data.data));
-      } else {
-        dispatch(setServiceError(error.response.data));
       }
     }
   };
-}
+};
 
 export const getServices = () => {
   return async (dispatch) => {
@@ -77,6 +74,7 @@ export const getServices = () => {
           key: service.id
         };
       });
+
       if (response.status === 200) {
         dispatch(showServices(result));
       }
@@ -89,7 +87,6 @@ export const getServices = () => {
     }
   };
 };
-
 
 export const getService = (id) => {
   return async (dispatch) => {
@@ -112,7 +109,6 @@ export const getService = (id) => {
   };
 };
 
-
 export const saveServices = (data) => {
   return async (dispatch) => {
     try {
@@ -120,11 +116,12 @@ export const saveServices = (data) => {
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/batchInsert",
         data
       );
-      // console.log(response.data.data);
-      const result = {
-        ...response.data.data,
-        key: response.data.data.id
-      };
+      const result = response.data.data.map((service) => {
+        return {
+          ...service,
+          key: service.id
+        };
+      });
       if (response.status === 201) {
         dispatch(createServices(result));
       }

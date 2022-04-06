@@ -60,7 +60,7 @@ const StaffComession = () => {
       title: "ကော်မရှင်",
       dataIndex: "",
       render: (_, record) => {
-        return record.services.length > 0 ? record.services
+        return record?.services?.length > 0 ? record.services
           .map((service) => service.service.commercial)
           .reduce((a, b) => Number(a) + Number(b)) : 0;
       },
@@ -69,7 +69,7 @@ const StaffComession = () => {
       title: "စုစုပေါင်း",
       dataIndex: "",
       render: (_, record) => {
-        const commercial = record.services.length > 0 ? record.services
+        const commercial = record?.services?.length > 0 ? record.services
           .map((service) => service.service.commercial)
           .reduce((a, b) => Number(a) + Number(b)) : 0;
         return Number(commercial) + Number(record.salary);
@@ -80,7 +80,7 @@ const StaffComession = () => {
   let total = 0;
 
   filterStaffs.forEach((filterStaff) => {
-    const commercial = filterStaff.services.length > 0 ? filterStaff.services
+    const commercial = filterStaff?.services?.length > 0 ? filterStaff?.services
       .map((service) => service.service.commercial)
       .reduce((a, b) => Number(a) + Number(b)) : 0;
 

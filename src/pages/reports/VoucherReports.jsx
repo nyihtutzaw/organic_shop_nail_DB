@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, DatePicker, Input, Select } from "antd";
+import { Typography, Space, Row, Col, Button, Table, DatePicker, Input, Select, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { PlusSquareOutlined, ExportOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import queryString from 'query-string';
 import dayjs from "dayjs";
-import { getVouchers } from "../../store/actions";
+import { getVouchers, deleteVouchers } from "../../store/actions";
 
 const { Title } = Typography;
 
-const VoucherReports = ({ voucher, getVouchers}) => {
+const VoucherReports = ({ voucher, getVouchers, deleteVouchers}) => {
   const { Option } = Select;
   const { RangePicker } = DatePicker;
   const location=useLocation();
@@ -25,8 +25,18 @@ const VoucherReports = ({ voucher, getVouchers}) => {
     };
   }, [getVouchers]);
 
-  const hell0 = voucher.vouchers;
-  
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: "Delete Your Data",
+      description: "Your data have been deleted.",
+      duration: 3
+    });
+  };
+
+const handleDelete = async (record) => {
+  await deleteVouchers(record.id)
+  openNotificationWithIcon("error")
+}
   const columns = [
     {
       title: "ရက်စွဲ",
@@ -54,7 +64,9 @@ const VoucherReports = ({ voucher, getVouchers}) => {
           <Button type="primary" onClick={()=>{
             window.location=`/admin/sale/${record.id}`;
           }}>Detail</Button>
-          <Button type="primary" danger>
+          <Button type="primary" danger
+          onClick={() => handleDelete(record)}
+          >
           <DeleteOutlined/>
           </Button>
         </Space>
@@ -79,15 +91,16 @@ const VoucherReports = ({ voucher, getVouchers}) => {
           window.location=`/admin/voucher-report?start_date=${dayjs(val[0]).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format("YYYY-MM-DD")}`;
         }}/></Space>
         
+        
         <Row>
           <Col span={5}>
-            <Button style={{
+            {/* <Button style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
                 borderRadius: "5px"
               }} block>
              SSort by ( ပမာဏ )
-            </Button>
+            </Button> */}
           </Col>
           <Col span={14}></Col>
           <Col span={5} >
@@ -122,4 +135,4 @@ const mapStateToProps = (store) => ({
   voucher: store.voucher
 });
 
-export default connect(mapStateToProps, { getVouchers })(VoucherReports);
+export default connect(mapStateToProps, { getVouchers, deleteVouchers })(VoucherReports);

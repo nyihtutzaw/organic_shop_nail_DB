@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 // ant design styles
-import { Layout, Row, Col, Typography, Button, Table } from "antd";
+import { Layout, Row, Col, Typography, Button, Table, Image } from "antd";
 import { PrinterOutlined } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
@@ -19,7 +19,7 @@ const PrintSale = () => {
   const param = useParams();
 
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    content: () => componentRef.current
   });
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const PrintSale = () => {
             name: item.stock.item.name,
             price: item.price,
             quantity: item.quantity,
-            subtotal: item.subtotal,
+            subtotal: item.subtotal
           });
         });
 
@@ -52,11 +52,12 @@ const PrintSale = () => {
             name: service.service.category,
             price: service.price,
             quantity: service.quantity,
-            subtotal: service.subtotal,
+            subtotal: service.subtotal
           });
         });
 
         setSales(transformSales);
+        console.log(transformSales)
       }
     };
 
@@ -66,34 +67,36 @@ const PrintSale = () => {
     };
   }, [param]);
 
+
+
   const columns = [
     {
       title: "စဥ်",
-      dataIndex: "id",
+      dataIndex: "id"
     },
     {
       title: "ကုတ်နံပါတ်",
-      dataIndex: "code",
+      dataIndex: "code"
     },
     {
       title: "ပစ္စည်း/ဝန်ဆောင်မှုအမည်",
-      dataIndex: "name",
+      dataIndex: "name"
     },
     {
       title: "ဈေးနှုန်း",
       dataIndex: "price",
-      align: "right",
+      align: "right"
     },
     {
       title: "အရေအတွက်",
       dataIndex: "quantity",
-      align: "right",
+      align: "right"
     },
     {
       title: "ကျသင့်ငွေ",
       dataIndex: "subtotal",
-      align: "right",
-    },
+      align: "right"
+    }
   ];
 
   if (!sale) {
@@ -104,7 +107,7 @@ const PrintSale = () => {
             style={{
               color: "var(--white-color)",
               textAlign: "center",
-              marginTop: "13px",
+              marginTop: "13px"
             }}
             level={3}
           >
@@ -124,7 +127,7 @@ const PrintSale = () => {
           style={{
             color: "var(--white-color)",
             textAlign: "center",
-            marginTop: "13px",
+            marginTop: "13px"
           }}
           level={3}
         >
@@ -136,7 +139,7 @@ const PrintSale = () => {
           <Button
             style={{
               backgroundColor: "var(--primary-color)",
-              color: "var(--white-color)",
+              color: "var(--white-color)"
             }}
             size="large"
             onClick={handlePrint}
@@ -146,88 +149,103 @@ const PrintSale = () => {
           </Button>
         </Col>
       </Row>
-      <div
-        style={{ height: "1276px", width: "909px", margin: "30px 10px" }}
-        ref={componentRef}
-      >
-        <Row gutter={[16, 16]}>
-          <Col span={24} style={{ textAlign: "center" }}>
-            <Title level={3}>Organic Nail Shop</Title>
+      <div style={{ width: "909px", margin: "30px 10px" }} ref={componentRef}>
+        <Row>
+          <Col span={3}></Col>
+          <Row>
+            <Col span={3}>
+              <Image
+                preview={false}
+                width={100}
+                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+              />
+            </Col>
+          </Row>
+          <Col span={18}>
+            <Row gutter={[16, 16]}>
+              <Col span={3}></Col>
+              <Col span={3}></Col>
+              <Col span={15} style={{ textAlign: "center" }}>
+                <Title level={3}>Organic Nail Shop</Title>
+              </Col>
+              <Col span={3}></Col>
+            </Row>
+            <Row gutter={[16, 16]}>
+              <Col span={17} style={{ textAlign: "right" }}>
+                <Title level={5}>Date</Title>
+              </Col>
+              <Col span={1} style={{ textAlign: "left" }}></Col>
+              <Col span={5} style={{ textAlign: "right" }}>
+                <Title level={5}>{getDate(sale.created_at)}</Title>
+              </Col>
+              <Col span={1}></Col>
+            </Row>
+            <Row gutter={[16, 16]}>
+              <Col span={17} style={{ textAlign: "right" }}>
+                <Title level={5}>Voucher Code</Title>
+              </Col>
+              <Col span={1} style={{ textAlign: "left" }}></Col>
+              <Col span={5} style={{ textAlign: "right" }}>
+                <Title level={5}>{sale.voucher_code}</Title>
+              </Col>
+              <Col span={1}></Col>
+            </Row>
+            <Row gutter={[16, 16]}>
+              <Col span={17} style={{ textAlign: "right" }}>
+                <Title level={5}>Customer Name</Title>
+              </Col>
+              <Col span={1} style={{ textAlign: "left" }}></Col>
+              <Col span={5} style={{ textAlign: "right" }}>
+                <Title level={5}>{sale.customer_name}</Title>
+              </Col>
+              <Col span={1}></Col>
+            </Row>
+            <Row gutter={[16, 16]}>
+              <Col span={17} style={{ textAlign: "right" }}>
+                <Title level={5}>Customer Phone No</Title>
+              </Col>
+              <Col span={1} style={{ textAlign: "left" }}></Col>
+              <Col span={5} style={{ textAlign: "right" }}>
+                <Title level={5}>{sale.customer_phone_no}</Title>
+              </Col>
+              <Col span={1}></Col>
+            </Row>
+            <Row gutter={[16, 16]}>
+              <Col span={17} style={{ textAlign: "right" }}>
+                <Title level={5}>Payment Method</Title>
+              </Col>
+              <Col span={1} style={{ textAlign: "left" }}></Col>
+              <Col span={5} style={{ textAlign: "right" }}>
+                <Title level={5}>{sale.payment_method}</Title>
+              </Col>
+              <Col span={1}></Col>
+            </Row>
           </Col>
-        </Row>
-        <Row gutter={[16, 16]}>
-          <Col span={15} style={{ textAlign: "right" }}>
-            <Title level={5}>Date</Title>
-          </Col>
-          <Col span={3} style={{ textAlign: "left" }}></Col>
-          <Col span={5} style={{ textAlign: "right" }}>
-            <Title level={5}>{getDate(sale.created_at)}</Title>
-          </Col>
-          <Col span={1}></Col>
-        </Row>
-        <Row gutter={[16, 16]}>
-          <Col span={15} style={{ textAlign: "right" }}>
-            <Title level={5}>Voucher Code</Title>
-          </Col>
-          <Col span={3} style={{ textAlign: "left" }}></Col>
-          <Col span={5} style={{ textAlign: "right" }}>
-            <Title level={5}>{sale.voucher_code}</Title>
-          </Col>
-          <Col span={1}></Col>
-        </Row>
-        <Row gutter={[16, 16]}>
-          <Col span={15} style={{ textAlign: "right" }}>
-            <Title level={5}>Customer Name</Title>
-          </Col>
-          <Col span={3} style={{ textAlign: "left" }}></Col>
-          <Col span={5} style={{ textAlign: "right" }}>
-            <Title level={5}>{sale.customer_name}</Title>
-          </Col>
-          <Col span={1}></Col>
-        </Row>
-        <Row gutter={[16, 16]}>
-          <Col span={15} style={{ textAlign: "right" }}>
-            <Title level={5}>Customer Phone No</Title>
-          </Col>
-          <Col span={3} style={{ textAlign: "left" }}></Col>
-          <Col span={5} style={{ textAlign: "right" }}>
-            <Title level={5}>{sale.customer_phone_no}</Title>
-          </Col>
-          <Col span={1}></Col>
-        </Row>
-        <Row gutter={[16, 16]}>
-          <Col span={15} style={{ textAlign: "right" }}>
-            <Title level={5}>Payment Method</Title>
-          </Col>
-          <Col span={3} style={{ textAlign: "left" }}></Col>
-          <Col span={5} style={{ textAlign: "right" }}>
-            <Title level={5}>{sale.payment_method}</Title>
-          </Col>
-          <Col span={1}></Col>
         </Row>
 
         <Table
           bordered
           columns={columns}
           dataSource={sales}
-          pagination={{ position: ["none", "none"] }}
+          // pagination={{ position: ["none", "none"] }}
+          pagination={{ defaultPageSize: 20, position: ["none", "none"] }}
           style={{ margin: "10px 20px" }}
         />
         <Row gutter={[16, 16]}>
-          <Col span={15} style={{ textAlign: "right" }}>
+          <Col span={17} style={{ textAlign: "right" }}>
             <Title level={5}>စုစုပေါင်း</Title>
           </Col>
-          <Col span={3}></Col>
+          <Col span={1}></Col>
           <Col span={5} style={{ textAlign: "right" }}>
             <Title level={5}>{sale.total}</Title>
           </Col>
           <Col span={1}></Col>
         </Row>
         <Row gutter={[16, 16]}>
-          <Col span={15} style={{ textAlign: "right" }}>
+          <Col span={17} style={{ textAlign: "right" }}>
             <Title level={5}>လျော့ဈေး</Title>
           </Col>
-          <Col span={3} style={{ textAlign: "left" }}>
+          <Col span={1} style={{ textAlign: "left" }}>
             <Title level={5}>{sale.discount}%</Title>
           </Col>
           <Col span={5} style={{ textAlign: "right" }}>
@@ -236,30 +254,30 @@ const PrintSale = () => {
           <Col span={1}></Col>
         </Row>
         <Row gutter={[16, 16]}>
-          <Col span={15} style={{ textAlign: "right" }}>
+          <Col span={17} style={{ textAlign: "right" }}>
             <Title level={5}>ပေးချေရမည့်စုစုပေါင်း</Title>
           </Col>
-          <Col span={3}></Col>
+          <Col span={1}></Col>
           <Col span={5} style={{ textAlign: "right" }}>
             <Title level={5}>{sale.final_total}</Title>
           </Col>
           <Col span={1}></Col>
         </Row>
         <Row gutter={[16, 16]}>
-          <Col span={15} style={{ textAlign: "right" }}>
+          <Col span={17} style={{ textAlign: "right" }}>
             <Title level={5}>ပေးငွေ</Title>
           </Col>
-          <Col span={3}></Col>
+          <Col span={1}></Col>
           <Col span={5} style={{ textAlign: "right" }}>
             <Title level={5}>{sale.paid}</Title>
           </Col>
           <Col span={1}></Col>
         </Row>
         <Row gutter={[16, 16]}>
-          <Col span={15} style={{ textAlign: "right" }}>
+          <Col span={17} style={{ textAlign: "right" }}>
             <Title level={5}>ပေးရန်ကျန်ငွေ</Title>
           </Col>
-          <Col span={3}></Col>
+          <Col span={1}></Col>
           <Col span={5} style={{ textAlign: "right" }}>
             <Title level={5}>{sale.credit}</Title>
           </Col>

@@ -94,11 +94,13 @@ export const saveExpenses = (data) => {
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expenses/batchInsert",
         data
       );
-      const result = {
-        ...response.data.data,
-        key: response.data.data.id
-      };
-      // console.log(response.data.data);
+      const result = response.data.data.map((expense) => {
+        return {
+          ...expense,
+          key: expense.id
+        };
+      });
+      console.log(result);
       if (response.status === 201) {
         dispatch(createExpenses(result));
       }
@@ -149,9 +151,7 @@ export const editExpenses = (id, data) => {
     } catch (error) {
       if (error.response.status === 404) {
         dispatch(setExpenseError(error.response.data.data));
-      } else {
-        dispatch(setExpenseError(error.response.data));
-      }
+      } 
     }
   };
 };

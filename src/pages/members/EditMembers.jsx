@@ -38,7 +38,6 @@ const EditMembers = ({
   const member = useSelector((state) => state.member.member);
   const shops = useSelector((state) => state.shop.shops);
 
-
   useEffect(() => {
     const fetchData = async () => {
       await getShops();
@@ -52,7 +51,6 @@ const EditMembers = ({
   }, [getShops, getMember, getMembers]);
 
   const result = shops.find((shop) => shop.id == member.shop_id);
-
   useEffect(() => {
     form.setFieldsValue({ code: member?.code });
     form.setFieldsValue({ name: member?.name });
@@ -62,7 +60,7 @@ const EditMembers = ({
   }, [member, shops, result]);
 
   const onFinish = async (values) => {
-    console.log(values)
+    console.log(values);
     await editMembers(param?.id, values);
     navigate("/admin/show-members");
   };
@@ -153,34 +151,6 @@ const EditMembers = ({
               style={{ borderRadius: "10px" }}
               size="large"
             />
-          </Form.Item>
-          <Form.Item
-            name="shop_id"
-            label="ဆိုင်အမည်"
-            rules={[
-              {
-                required: true,
-                message: "ကျေးဇူးပြု၍ ဆိုင်အမည်ရွေးပါ"
-              }
-            ]}
-          >
-            <Select
-              showSearch
-              placeholder="ကျေးဇူးပြု၍ ဆိုင်အမည်ရွေးပါ"
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              allowClear={true}
-              size="large"
-              style={{ borderRadius: "10px" }}
-            >
-              {shops.map((shop) => (
-                <Option value={shop.id} key={shop.id}>
-                  {shop.name}
-                </Option>
-              ))}
-            </Select>
           </Form.Item>
           <Form.Item style={{ textAlign: "right" }}>
             <Button

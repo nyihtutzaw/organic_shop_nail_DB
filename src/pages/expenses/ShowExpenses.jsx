@@ -18,6 +18,8 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
     Date: getReadableDateDisplay(expense?.created_at),
   }));
 
+  // console.log(expense.expenses)
+
   const navigate = useNavigate();
   const mountedRef = React.useRef(true);
   const getExpenseResult = async () => {
@@ -115,8 +117,8 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
         <Table
           bordered
           columns={columns}
-          dataSource={expense.expenses}
-          rowKey={expense.expenses.key}
+          dataSource={allExpenses}
+          rowKey={allExpenses.key}
           pagination={{ defaultPageSize: 10 }}
         />
       </Space>

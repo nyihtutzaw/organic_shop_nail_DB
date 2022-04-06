@@ -56,12 +56,6 @@ const ShowItemTransfer = ({
     });
   };
 
-  const handleClick = async (record) => {
-    console.log(record.id);
-    await getItemTransfer(record.id);
-    // navigate(`/admin/edit-item-transfer/${record.id}`);
-  };
-
   const handleDelete = async (record) => {
     console.log(record.id);
     await deleteItemTransfers(record.id);
@@ -101,10 +95,6 @@ const ShowItemTransfer = ({
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          <Button type="primary" onClick={() => handleClick(record)}>
-            {" "}
-            <EditOutlined />
-          </Button>
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>

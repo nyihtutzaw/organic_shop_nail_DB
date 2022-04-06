@@ -14,6 +14,7 @@ import { connect } from "react-redux";
 import { notification } from "antd";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 
+
 const { Title } = Typography;
 
 const ShowService = ({ service, getServices, deleteServices, getService }) => {
@@ -28,6 +29,7 @@ const ShowService = ({ service, getServices, deleteServices, getService }) => {
   }));
 
   const navigate = useNavigate();
+  
   const openNotificationWithIcon = (type) => {
     notification[type]({
       message: "Delete Your Data",
@@ -126,7 +128,7 @@ const ShowService = ({ service, getServices, deleteServices, getService }) => {
           bordered
           columns={columns}
           pagination={{ defaultPageSize: 10 }}
-          dataSource={service.services}
+          dataSource={allServices}
         />
       </Space>
     </Layout>

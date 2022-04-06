@@ -661,7 +661,7 @@ const Sale = ({
                 columns={columns}
                 dataSource={sales}
                 // pagination={{ position: ["none", "none"] }}
-                pagination={{ defaultPageSize: 5 }}
+                pagination={{ defaultPageSize: 20, position: ["none", "none"] }}
               />
               <Row gutter={[16, 16]}>
                 <Col span={15} style={{ textAlign: "right" }}>
