@@ -57,7 +57,7 @@ const PrintSale = () => {
         });
 
         setSales(transformSales);
-        console.log(transformSales)
+        console.log(transformSales);
       }
     };
 
@@ -66,8 +66,6 @@ const PrintSale = () => {
       fetchData();
     };
   }, [param]);
-
-
 
   const columns = [
     {
