@@ -346,6 +346,7 @@ const Sale = ({
   const handleDashboard = () => {
     navigate("/admin/dashboard");
   };
+  
   const columns = [
     {
       title: "စဥ်",

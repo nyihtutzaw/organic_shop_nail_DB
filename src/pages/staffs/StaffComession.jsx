@@ -16,6 +16,8 @@ import { getStaffReport } from "../../store/actions";
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
+import { ExportToExcel } from "../../excel/ExportToExcel";
+
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -104,7 +106,7 @@ const StaffComession = () => {
           </Col>
 
           <Col span={3}>
-            <Button
+            {/* <Button
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
@@ -114,7 +116,9 @@ const StaffComession = () => {
             >
               <ExportOutlined />
               Export
-            </Button>
+            </Button> */}
+            {/* <ExportToExcel apiData={result} fileName={fileName} /> */}
+
           </Col>
         </Row>
         <Row>

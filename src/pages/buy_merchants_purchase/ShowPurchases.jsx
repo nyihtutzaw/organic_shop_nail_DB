@@ -6,16 +6,20 @@ import {
   Button,
   InputNumber,
   Table,
+  Row,
+  Col
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import {
   getPurchase,
   getPurchases,
-  savePurchaseCredits
+  savePurchaseCredits,
+  deletePurchaseCredits
 } from "../../store/actions";
 import { useNavigate, useParams } from "react-router-dom";
+import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 
 const { Title } = Typography;
 
@@ -23,11 +27,19 @@ const ShowPurchases = ({
   getPurchase,
   purchase,
   getPurchases,
-  savePurchaseCredits
+  savePurchaseCredits,
+  deletePurchaseCredits
 }) => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const param = useParams();
+  const allPurchases = useSelector(
+    (state) => state.purchase.purchase.purchase_credits
+  );
+  const allCredits = useSelector((state) => state.purchase.purchase);
+  const getTotalCredit = useSelector((state) => state.purchase.purchases);
+  // console.log(getTotalCredit);
+  // console.log("one",allCredits.credit);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,39 +52,51 @@ const ShowPurchases = ({
     };
   }, [getPurchase, getPurchases]);
 
+  const result = allPurchases?.map((purchase) => ({
+    key: purchase.id,
+    amount: purchase.amount,
+    date: purchase.created_at,
+    id: purchase.id
+  }));
+  let allCredit = [];
+  result?.forEach((re) => allCredit.push(parseInt(re.amount)));
+  const finalCredit = allCredit.reduce((a, b) => a + b, 0);
+
   const onFinish = async (values) => {
     const result = {
       purchase_id: param.id,
       amount: values.amount
     };
-    console.log(result);
     await savePurchaseCredits(result);
     form.resetFields();
+    window.location.reload();
   };
 
-  const handleDelete = (record) => {
-      console.log(record.id)
-  }
+  const handleDelete = async (record) => {
+    await deletePurchaseCredits(record.id);
+    window.location.reload();
+  };
   const columns = [
     {
       title: "ရက်စွဲ",
-      dataIndex: `created_at`
+      dataIndex: "date",
+      render: (_, record) => getReadableDateDisplay(record.date)
     },
     {
-      title: "ပေးခဲ့သသည့်ငွေပမာဏ",
+      title: "ပေးခဲ့သည့်ငွေပမာဏ",
       dataIndex: "amount"
     },
     {
-        title: "Actions",
-        dataIndex: "action",
-        render: (_, record) => (
-          <Space direction="horizontal">
-            <Button type="primary" danger onClick={() => handleDelete(record)}>
-          <DeleteOutlined/>
+      title: "Actions",
+      dataIndex: "action",
+      render: (_, record) => (
+        <Space direction="horizontal">
+          <Button type="primary" danger onClick={() => handleDelete(record)}>
+            <DeleteOutlined />
           </Button>
-          </Space>
-        )
-      }
+        </Space>
+      )
+    }
   ];
 
   return (
@@ -127,10 +151,46 @@ const ShowPurchases = ({
             </Button>
           </Form.Item>
         </Form>
+        <Row>
+          <Col span={24}>
+            <Space
+              direction="horizontal"
+              style={{ width: "100%", justifyContent: "right" }}
+              size="large"
+            >
+              <Title level={4}>ကနဦးပေးချေခဲ့သည့်ပမာဏ - </Title>
+              <Title level={4}>{allCredits?.paid} Ks</Title>
+            </Space>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Space
+              direction="horizontal"
+              style={{ width: "100%", justifyContent: "right" }}
+              size="large"
+            >
+              <Title level={4}>ပေးချေခဲ့ပြီးပမာဏ - </Title>
+              <Title level={4}>{finalCredit} Ks</Title>
+            </Space>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Space
+              direction="horizontal"
+              style={{ width: "100%", justifyContent: "right" }}
+              size="large"
+            >
+              <Title level={4}>ပေးရန်ကျန်ငွေ - </Title>
+              <Title level={4}>{allCredits.credit} Ks</Title>
+            </Space>
+          </Col>
+        </Row>
         <Table
           bordered
           columns={columns}
-          dataSource={purchase.purchase.purchase_credits}
+          dataSource={result}
           pagination={{ defaultPageSize: 10 }}
         />
       </Space>
@@ -145,5 +205,6 @@ const mapStateToProps = (store) => ({
 export default connect(mapStateToProps, {
   getPurchase,
   getPurchases,
-  savePurchaseCredits
+  savePurchaseCredits,
+  deletePurchaseCredits
 })(ShowPurchases);
