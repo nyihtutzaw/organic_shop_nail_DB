@@ -374,18 +374,18 @@ const Admin = ({ logout }) => {
                 key="ShowBuyMerchants"
                 icon={<UnorderedListOutlined />}
               >
-                <Link to="/admin/show-buy-merchants">ပစ္စည်းအဝယ်သွင်းရန်</Link>
+                <Link to="/admin/show-buy-merchants">အဝယ်သွင်းရန်</Link>
               </Menu.Item>
               <Menu.Item
                 key="ShowItemTransfer"
                 icon={<UnorderedListOutlined />}
               >
                 <Link to="/admin/show-item-transfer">
-                  ပစ္စည်းလွှဲပြောင်းရန်
+                  ပြောင်းရန်
                 </Link>
               </Menu.Item>
               <Menu.Item key="ShowOwner" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-owner">ပစ္စည်းထုတ်သုံးခြင်:</Link>
+                <Link to="/admin/show-owner">ထုတ်သုံးခြင်:</Link>
               </Menu.Item>
               <Menu.Item key="CreateBadItems" icon={<UnorderedListOutlined />}>
                 <Link to="/admin/show-bad-item">ချို့ယွင်းချက်ရှိပစ္စည်း</Link>
@@ -408,16 +408,16 @@ const Admin = ({ logout }) => {
               icon={<ContactsOutlined />}
             >
               <Menu.Item key="CreateStaff" icon={<SaveOutlined />}>
-                <Link to="/admin/create-staff">ဝန်ထမ်းစာရင်းသွင်းရန်</Link>
+                <Link to="/admin/create-staff">အသစ်ဖန်တီးရန်</Link>
               </Menu.Item>
 
               <Menu.Item key="ShowStaff" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-staff">ဝန်ထမ်းစာရင်း</Link>
+                <Link to="/admin/show-staff">စာရင်း</Link>
               </Menu.Item>
 
               <Menu.Item key="StaffCommession" icon={<UnorderedListOutlined />}>
                 <Link to="/admin/show-staff-commession">
-                  ၀န်ထမ်းလခနှင့်ကော်မရှင်
+                  လခနှင့်ကော်မရှင်
                 </Link>
               </Menu.Item>
             </SubMenu>
@@ -434,7 +434,7 @@ const Admin = ({ logout }) => {
                 key="ShowExpenseNames"
                 icon={<UnorderedListOutlined />}
               >
-                <Link to="/admin/show-expense-names">ကုန်ကျစရိတ်အမည်များ</Link>
+                <Link to="/admin/show-expense-names">အမည်များ</Link>
               </Menu.Item>
             </SubMenu>
 

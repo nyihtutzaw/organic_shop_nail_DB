@@ -99,6 +99,8 @@ const ShowStaff = ({getStaffs, deleteStaffs}) => {
     }
   ];
 
+
+  
   return (
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">

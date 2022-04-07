@@ -58,9 +58,11 @@ const ShowPurchases = ({
     date: purchase.created_at,
     id: purchase.id
   }));
+
   let allCredit = [];
   result?.forEach((re) => allCredit.push(parseInt(re.amount)));
   const finalCredit = allCredit.reduce((a, b) => a + b, 0);
+  // console.log("allCredit", allCredit);
 
   const onFinish = async (values) => {
     const result = {
@@ -175,6 +177,7 @@ const ShowPurchases = ({
             </Space>
           </Col>
         </Row>
+
         <Row>
           <Col span={24}>
             <Space
