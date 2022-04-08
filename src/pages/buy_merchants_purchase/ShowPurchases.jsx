@@ -20,6 +20,7 @@ import {
 } from "../../store/actions";
 import { useNavigate, useParams } from "react-router-dom";
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
+import Text from "antd/lib/typography/Text";
 
 const { Title } = Typography;
 
@@ -108,6 +109,7 @@ const ShowPurchases = ({
           အကြွေးပေးချေရန်
         </Title>
         <Form
+        colon={false}
           labelCol={{
             xl: {
               span: 3
@@ -157,11 +159,19 @@ const ShowPurchases = ({
           <Col span={24}>
             <Space
               direction="horizontal"
-              style={{ width: "100%", justifyContent: "right" }}
+              style={{ width: "100%", justifyContent: "right", marginBottom: "10px" }}
               size="large"
             >
-              <Title level={4}>ကနဦးပေးချေခဲ့သည့်ပမာဏ - </Title>
-              <Title level={4}>{allCredits?.paid} Ks</Title>
+              <Text
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  padding: "10px",
+                  color: "var(--white-color)",
+                  borderRadius: "5px",
+                }}
+              >
+                ကနဦးပေးချေခဲ့သည့်ပမာဏ = {allCredits?.paid} Ks
+              </Text>
             </Space>
           </Col>
         </Row>
@@ -169,11 +179,19 @@ const ShowPurchases = ({
           <Col span={24}>
             <Space
               direction="horizontal"
-              style={{ width: "100%", justifyContent: "right" }}
+              style={{ width: "100%", justifyContent: "right", marginBottom: "10px" }}
               size="large"
             >
-              <Title level={4}>ပေးချေခဲ့ပြီးပမာဏ - </Title>
-              <Title level={4}>{finalCredit} Ks</Title>
+              <Text
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  padding: "10px",
+                  color: "var(--white-color)",
+                  borderRadius: "5px"
+                }}
+              >
+                ပေးချေခဲ့ပြီးပမာဏ = {finalCredit} Ks
+              </Text>
             </Space>
           </Col>
         </Row>
@@ -182,11 +200,22 @@ const ShowPurchases = ({
           <Col span={24}>
             <Space
               direction="horizontal"
-              style={{ width: "100%", justifyContent: "right" }}
+              style={{ width: "100%", justifyContent: "right", marginBottom: "10px" }}
               size="large"
             >
-              <Title level={4}>ပေးရန်ကျန်ငွေ - </Title>
-              <Title level={4}>{allCredits.credit} Ks</Title>
+              <Text
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  padding: "10px",
+                  color: "var(--white-color)",
+                  borderRadius: "5px"
+                }}
+              >
+                ပေးရန်ကျန်ငွေ = {allCredits?.credit} Ks
+              </Text>
+
+              {/* <Title level={4}>ပေးရန်ကျန်ငွေ - </Title>
+              <Title level={4}>{allCredits.credit} Ks</Title> */}
             </Space>
           </Col>
         </Row>

@@ -250,10 +250,17 @@ const ShowBuyMerchants = ({
               style={{ width: "100%", justifyContent: "right" }}
               size="large"
             >
-              <Title level={4}>ပေးရန်ကျန်ငွေစုစုပေါင်း - </Title>
-              <Title level={4}>
+              <Text
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  padding: "10px",
+                  color: "var(--white-color)",
+                  borderRadius: "5px"
+                }}
+              >
+                ပေးရန်ကျန်ငွေစုစုပေါင်း ={" "}
                 {showBuyMerchant != null ? finalCreditGet : finalCredit} Ks
-              </Title>
+              </Text>
             </Space>
           </Col>
         </Row>

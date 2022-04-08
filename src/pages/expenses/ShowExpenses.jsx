@@ -12,6 +12,7 @@ import { getExpenses, deleteExpenses, getExpense } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 import { ExportToExcel } from "../../excel/ExportToExcel";
+import Text from "antd/lib/typography/Text";
 const { Title } = Typography;
 
 const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
@@ -128,8 +129,16 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
               style={{ width: "100%", justifyContent: "right" }}
               size="large"
             >
-              <Title level={4}>စုစုပေါင်းကုန်ကျစရိတ် - </Title>
-              <Title level={4}>{allAmount} Ks</Title>
+              <Text
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  padding: "10px",
+                  color: "var(--white-color)",
+                  borderRadius: "5px"
+                }}
+              >
+                စုစုပေါင်းကုန်ကျစရိတ် = {allAmount} Ks
+              </Text>
             </Space>
           </Col>
         </Row>

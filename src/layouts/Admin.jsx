@@ -390,7 +390,7 @@ const Admin = ({ logout }) => {
                 <Link to="/admin/show-owner">ထုတ်သုံးခြင်:</Link>
               </Menu.Item>
               <Menu.Item key="CreateBadItems" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-bad-item">ချို့ယွင်းချက်ရှိပစ္စည်း</Link>
+                <Link to="/admin/show-bad-item">ချို့ယွင်းချက်ရှိ</Link>
               </Menu.Item>
             </SubMenu>
 

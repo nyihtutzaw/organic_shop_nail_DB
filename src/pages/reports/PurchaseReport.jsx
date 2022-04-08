@@ -112,7 +112,7 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
         </Row>
 
         <Row gutter={[16, 16]}>
-          <Col span={9}>
+          <Col span={8}>
             <RangePicker
               onChange={(val) => {
                 // alert(dayjs(val[0]).format("YYYY-MM-DD"))
@@ -132,8 +132,8 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
               }}
             />
           </Col>
-          <Col span={5}></Col>
-          <Col span={10}>
+          <Col span={2}></Col>
+          <Col span={14}>
             <Space
               direction="horizontal"
               style={{
