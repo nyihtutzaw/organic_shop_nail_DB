@@ -25,11 +25,10 @@ const ShowService = ({ service, getServices, deleteServices, getService }) => {
     Commercial: service.commercial,
     Category: service.category,
     Percentage: service.percentage,
-    Price: service.price
+    Price: service.price,
   }));
 
   const navigate = useNavigate();
-  
   const openNotificationWithIcon = (type) => {
     notification[type]({
       message: "Delete Your Data",

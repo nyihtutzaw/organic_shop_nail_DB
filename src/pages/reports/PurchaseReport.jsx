@@ -26,10 +26,7 @@ import dayjs from "dayjs";
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-const PurchaseReport = ({
-  getPurchaseReport,
-  getMerchants,
-}) => {
+const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   const { RangePicker } = DatePicker;
   const location = useLocation();
   const dispatch = useDispatch();
@@ -45,26 +42,27 @@ const PurchaseReport = ({
     key: p.merchant_id
   }));
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await getPurchaseReport();
+  //     await getMerchants();
+  //   };
+  //   fetchData();
+  //   return () => {
+  //     fetchData();
+  //   };
+  // }, [getPurchaseReport, getMerchants]);
+
   useEffect(() => {
     const fetchData = async () => {
-      await getPurchaseReport();
+      dispatch(getBestPurchase(queryString.parse(location.search)));
       await getMerchants();
     };
     fetchData();
     return () => {
       fetchData();
     };
-  }, [getPurchaseReport, getMerchants]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     dispatch(getBestPurchase(queryString.parse(location.search)));
-  //   };
-  //   fetchData();
-  //   return () => {
-  //     fetchData();
-  //   };
-  // }, [getBestPurchase, location]);
+  }, [getBestPurchase, location, getMerchants]);
 
   const [showBuyMerchant, setshowBuyMerchant] = useState(null);
   const onChange = (value) => {
@@ -113,29 +111,29 @@ const PurchaseReport = ({
           <Col span={4}></Col>
         </Row>
 
-        <Space direction="vertical" size={12}>
-          <RangePicker
-            onChange={(val) => {
-              // alert(dayjs(val[0]).format("YYYY-MM-DD"))
-              if (queryString.parse(location.search).best) {
-                window.location = `/admin/purchase-report?best=true&start_date=${dayjs(
-                  val[0]
-                ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
-                  "YYYY-MM-DD"
-                )}`;
-              } else {
-                window.location = `/admin/purchase-report?start_date=${dayjs(
-                  val[0]
-                ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
-                  "YYYY-MM-DD"
-                )}`;
-              }
-            }}
-          />
-        </Space>
-
         <Row gutter={[16, 16]}>
-          <Col span={15}>
+          <Col span={9}>
+            <RangePicker
+              onChange={(val) => {
+                // alert(dayjs(val[0]).format("YYYY-MM-DD"))
+                if (queryString.parse(location.search).best) {
+                  window.location = `/admin/purchase-report?best=true&start_date=${dayjs(
+                    val[0]
+                  ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                    "YYYY-MM-DD"
+                  )}`;
+                } else {
+                  window.location = `/admin/purchase-report?start_date=${dayjs(
+                    val[0]
+                  ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                    "YYYY-MM-DD"
+                  )}`;
+                }
+              }}
+            />
+          </Col>
+          <Col span={5}></Col>
+          <Col span={10}>
             <Space
               direction="horizontal"
               style={{
@@ -166,7 +164,6 @@ const PurchaseReport = ({
               </Select>
             </Space>
           </Col>
-          <Col span={9}></Col>
         </Row>
         <Table
           bordered

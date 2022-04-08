@@ -26,8 +26,6 @@ const ItemsReports = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const items = useSelector((state) => state.item.items);
-  console.log(items);
-
   useEffect(() => {
     const fetchData = async () => {
       dispatch(getBestItem(queryString.parse(location.search)));
@@ -40,7 +38,6 @@ const ItemsReports = () => {
 
   const [showBuyMerchant, setshowBuyMerchant] = useState(null);
   const onChange = (value) => {
-    console.log(value);
     if (value === undefined) {
       setshowBuyMerchant([]);
     } else {
@@ -48,8 +45,6 @@ const ItemsReports = () => {
       setshowBuyMerchant(filterBuyMerchant);
     }
   };
-
-  console.log("ss", showBuyMerchant);
 
   let columns = [];
 
@@ -65,7 +60,6 @@ const ItemsReports = () => {
         dataIndex: "invoice.created_at",
         render: (_, record) =>
           getReadableDateDisplay(record.invoice?.created_at)
-        // render: (_,record) => ("clg",console.log(record))
       },
       {
         title: "ပစ္စည်းအမည်",
@@ -88,6 +82,7 @@ const ItemsReports = () => {
         title: "စဉ်",
         dataIndex: "order",
         render: (_, record) => record.item_id
+        // render: (_, record) => console.log(record)
       },
       {
         title: "ပစ္စည်းအမည်",
@@ -102,7 +97,7 @@ const ItemsReports = () => {
       {
         title: "စုစုပေါင်း",
         dataIndex: "total_subtotal"
-        // render: (_, record) => record.stock.item.sale_price*record.total_qty,
+        // render: (_, record) => record?.stock?.item?.sale_price*record?.total_qty,
       }
     ];
   }
@@ -117,30 +112,30 @@ const ItemsReports = () => {
           <Col span={3}></Col>
           <Col span={3}></Col>
         </Row>
-
-        <Space direction="vertical" size={12}>
-          <RangePicker
-            onChange={(val) => {
-              //alert(dayjs(val[0]).format("YYYY-MM-DD"))
-              if (queryString.parse(location.search).best) {
-                window.location = `/admin/item-report?best=true&start_date=${dayjs(
-                  val[0]
-                ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
-                  "YYYY-MM-DD"
-                )}`;
-              } else {
-                window.location = `/admin/item-report?start_date=${dayjs(
-                  val[0]
-                ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
-                  "YYYY-MM-DD"
-                )}`;
-              }
-            }}
-          />
-        </Space>
+        <Space direction="vertical" size={12}></Space>
 
         <Row>
-          <Col span={15}>
+          <Col span={6}>
+            <RangePicker
+              onChange={(val) => {
+                //alert(dayjs(val[0]).format("YYYY-MM-DD"))
+                if (queryString.parse(location.search).best) {
+                  window.location = `/admin/item-report?best=true&start_date=${dayjs(
+                    val[0]
+                  ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                    "YYYY-MM-DD"
+                  )}`;
+                } else {
+                  window.location = `/admin/item-report?start_date=${dayjs(
+                    val[0]
+                  ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                    "YYYY-MM-DD"
+                  )}`;
+                }
+              }}
+            />
+          </Col>
+          <Col span={12}>
             <Space
               direction="horizontal"
               style={{
@@ -164,15 +159,15 @@ const ItemsReports = () => {
                 style={{ borderRadius: "10px" }}
               >
                 {items.map((item) => (
-                  <Option key={item.id} value={item.id}>
+                  <Option key={item.key} value={item.id}>
                     {item.item.name}
                   </Option>
                 ))}
               </Select>
             </Space>
           </Col>
-          <Col span={4}></Col>
-          <Col span={5}>
+
+          <Col span={4}>
             <Button
               style={{
                 backgroundColor: "var(--primary-color)",

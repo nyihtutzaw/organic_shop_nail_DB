@@ -61,7 +61,8 @@ export const getBestPurchase = (query) => {
         };
       });
       // console.log(result);
-      dispatch(showPurchases(result));
+      // dispatch(showPurchases(result));
+      dispatch(showPurchaseReport(result));
     } catch (error) {
       if (error.response.status === 404) {
         dispatch(setPurchaseErrors(error.response.data.data));

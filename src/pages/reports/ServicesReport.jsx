@@ -16,6 +16,10 @@ const ServicesReport = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const services = useSelector((state) => state.service.services);
+  const result = services.map((s) => ({
+    ...s,
+    key: Math.random() * 100
+  }));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,7 +44,6 @@ const ServicesReport = () => {
         title: "ရက်စွဲ",
         dataIndex: "invoice.created_at",
         render: (_, record) =>
-          // console.log(record)
           getReadableDateDisplay(record.invoice?.created_at)
       },
       {
@@ -60,13 +63,6 @@ const ServicesReport = () => {
     ];
   } else {
     columns = [
-      {
-        title: "စဉ်",
-        dataIndex: "order",
-        render: (_, record) => record.id
-        // render: (_, record) => console.log(record)
-      },
-
       {
         title: "ဝန်ဆောင်မှုအမည်",
         dataIndex: "service.category",
@@ -95,30 +91,11 @@ const ServicesReport = () => {
           <Col span={3}></Col>
         </Row>
 
-        <Space direction="vertical" size={12}>
-          <RangePicker
-            onChange={(val) => {
-              //alert(dayjs(val[0]).format("YYYY-MM-DD"))
-              if (queryString.parse(location.search).best) {
-                window.location = `/admin/service-report?best=true&start_date=${dayjs(
-                  val[0]
-                ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
-                  "YYYY-MM-DD"
-                )}`;
-              } else {
-                window.location = `/admin/service-report?start_date=${dayjs(
-                  val[0]
-                ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
-                  "YYYY-MM-DD"
-                )}`;
-              }
-            }}
-          />
-        </Space>
+        <Space direction="vertical" size={12}></Space>
 
         <Row>
           <Col span={5}>
-            <Button
+            {/* <Button
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
@@ -127,7 +104,25 @@ const ServicesReport = () => {
               block
             >
               Sort by ( ဝန်ဆောင်မှုအမည် )
-            </Button>
+            </Button> */}
+            <RangePicker
+              onChange={(val) => {
+                //alert(dayjs(val[0]).format("YYYY-MM-DD"))
+                if (queryString.parse(location.search).best) {
+                  window.location = `/admin/service-report?best=true&start_date=${dayjs(
+                    val[0]
+                  ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                    "YYYY-MM-DD"
+                  )}`;
+                } else {
+                  window.location = `/admin/service-report?start_date=${dayjs(
+                    val[0]
+                  ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                    "YYYY-MM-DD"
+                  )}`;
+                }
+              }}
+            />
           </Col>
           <Col span={14}></Col>
           <Col span={5}>
@@ -151,7 +146,7 @@ const ServicesReport = () => {
           bordered
           columns={columns}
           pagination={{ defaultPageSize: 10 }}
-          dataSource={services}
+          dataSource={result}
         />
       </Space>
     </Layout>

@@ -130,7 +130,7 @@ const PrintSale = () => {
   const discountAmount = sale.total * (sale.discount / 100);
 
   const handleDashboard = () => {
-    navigate("/admin/dashboard");
+    navigate("/admin/sale");
   };
 
   return (
@@ -171,7 +171,7 @@ const PrintSale = () => {
             size="large"
             onClick={handleDashboard}
           >
-            Go To Dashboard
+            Go To Sale
           </Button>
         </Col>
         <Col span={10}></Col>
