@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { getBestService } from "../../store/actions";
 import queryString from "query-string";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 const { Title } = Typography;
 
 const ServicesReport = () => {
@@ -34,51 +34,53 @@ const ServicesReport = () => {
       {
         title: "စဉ်",
         dataIndex: "order",
-        render: (_,record) => (record.id)
+        render: (_, record) => record.id
       },
       {
         title: "ရက်စွဲ",
         dataIndex: "invoice.created_at",
         render: (_, record) =>
-          getReadableDateDisplay(record.invoice?.created_at),
+          // console.log(record)
+          getReadableDateDisplay(record.invoice?.created_at)
       },
       {
         title: "ဝန်ဆောင်မှုအမည်",
         dataIndex: "service.category",
-        render: (_, record) => record.service?.category,
+        render: (_, record) => record.service?.category
       },
 
       {
         title: "အရေအတွက်",
-        dataIndex: "quantity",
+        dataIndex: "quantity"
       },
       {
         title: "စုစုပေါင်း",
-        dataIndex: "subtotal",
-      },
+        dataIndex: "subtotal"
+      }
     ];
   } else {
     columns = [
       {
         title: "စဉ်",
         dataIndex: "order",
-        render: (_, record) => (record.id)
+        render: (_, record) => record.id
+        // render: (_, record) => console.log(record)
       },
 
       {
         title: "ဝန်ဆောင်မှုအမည်",
         dataIndex: "service.category",
-        render: (_, record) => record.service.category,
+        render: (_, record) => record.service.category
       },
 
       {
         title: "အရေအတွက်",
-        dataIndex: "total_qty",
+        dataIndex: "total_qty"
       },
       {
         title: "စုစုပေါင်း",
-        render: (_, record) => record.service.price * record.total_qty,
-      },
+        render: (_, record) => record.service.price * record.total_qty
+      }
     ];
   }
 
@@ -97,22 +99,19 @@ const ServicesReport = () => {
           <RangePicker
             onChange={(val) => {
               //alert(dayjs(val[0]).format("YYYY-MM-DD"))
-              if (queryString.parse(location.search).best){
+              if (queryString.parse(location.search).best) {
                 window.location = `/admin/service-report?best=true&start_date=${dayjs(
                   val[0]
                 ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
                   "YYYY-MM-DD"
                 )}`;
-              }
-              else 
-              {
+              } else {
                 window.location = `/admin/service-report?start_date=${dayjs(
                   val[0]
                 ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
                   "YYYY-MM-DD"
                 )}`;
               }
-            
             }}
           />
         </Space>
@@ -123,7 +122,7 @@ const ServicesReport = () => {
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px",
+                borderRadius: "5px"
               }}
               block
             >
@@ -139,7 +138,7 @@ const ServicesReport = () => {
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "5px",
+                borderRadius: "5px"
               }}
               block
             >

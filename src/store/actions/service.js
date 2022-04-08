@@ -8,6 +8,7 @@ import {
   ERROR_ITEM
 } from "../type";
 
+
 export const showServices = (services) => ({
   type: SHOW_SERVICES,
   services
@@ -32,6 +33,7 @@ export const updateServices = (data) => ({
   type: UPDATE_SERVICES,
   data
 });
+
 
 export const setServiceError = (error) => ({
   type: ERROR_ITEM,
