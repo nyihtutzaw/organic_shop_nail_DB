@@ -7,7 +7,7 @@ import {
   ERROR_TRANSFERS,
 } from "../type";
 import axios from "axios";
-
+import { apiUrl } from "../../constants/url";
 
 export const showItemTransfers = (itemTransfers) => ({
   type: SHOW_ITEMS_TRANSFER,
@@ -43,7 +43,7 @@ export const getItemTransfers = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/item-transfers"
+        `${apiUrl}item-transfers`
       );
       const result = response.data.data.map((item) => {
         return {
@@ -69,7 +69,7 @@ export const getItemTransfer = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/item-transfers/${id}`
+        `${apiUrl}item-transfers/${id}`
       );
       const result = response.data.data;
       console.log(result)
@@ -90,7 +90,7 @@ export const saveItemTransfers = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/item-transfers/batchInsert",
+        `${apiUrl}item-transfers/batchInsert`,
         data
       );
       // console.log(response);
@@ -108,7 +108,7 @@ export const editItemTransfers = (id, data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}?_method=put`,
+        `${apiUrl}items/${id}?_method=put`,
         data
       );
       console.log(response)
@@ -135,7 +135,7 @@ export const deleteItemTransfers = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/item-transfers/${id}`
+        `${apiUrl}item-transfers/${id}`
       );
       console.log(response)
       if (response.status === 204) {

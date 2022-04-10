@@ -8,6 +8,7 @@ import {
   ERROR_BADITEMS,
   IS_SUCCESS_ERROR_BADITEMS
 } from "../type";
+import { apiUrl } from "../../constants/url";
 
 export const showBadItems = (baditems) => ({
   type: SHOW_BADITEMS,
@@ -51,7 +52,7 @@ export const getBadItems = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items"
+        `${apiUrl}damage-items`
       );
       const result = response.data.data.map((baditem) => {
         return {
@@ -77,7 +78,7 @@ export const getBadItem = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items/${id}`
+        `${apiUrl}damage-items/${id}`
       );
       const result = response.data.data;
       if (response.status === 200) {
@@ -96,7 +97,7 @@ export const saveBadItems = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items/batchInsert",
+        `${apiUrl}damage-items/batchInsert`,
         data
       );
       const result = response.data.data;
@@ -115,7 +116,7 @@ export const deleteBadItems = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items/${id}`
+        `${apiUrl}damage-items/${id}`
       );
       if (response.status === 204) {
       dispatch(filterBadItems(id));
@@ -133,7 +134,7 @@ export const editBadItems = (id, data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items/${id}?_method=put`,
+        `${apiUrl}damage-items/${id}?_method=put`,
         data
       );
       const result = response.data.data;

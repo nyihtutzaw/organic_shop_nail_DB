@@ -7,7 +7,7 @@ import {
   FILTER_EXPENSENAMES,
   ERROR_ITEM
 } from "../type";
-
+import { apiUrl } from "../../constants/url";
 export const showExpenseNames = (expenseNames) => ({
   type: SHOW_EXPENSENAMES,
   expenseNames
@@ -42,7 +42,7 @@ export const getExpenseNames = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names"
+        `${apiUrl}expense-names`
       );
       const result = response.data.data.map((name) => {
         return {
@@ -70,7 +70,7 @@ export const getExpenseName = (id) => {
     try {
       // console.log(id);
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names/${id}`
+        `${apiUrl}expense-names/${id}`
       );
       const result = response.data.data;
       // console.log(result)
@@ -91,7 +91,7 @@ export const saveExpenseNames = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names",
+        `${apiUrl}expense-names`,
         data
       );
       const result = {
@@ -115,7 +115,7 @@ export const deleteExpenseNames = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names/${id}`
+        `${apiUrl}expense-names/${id}`
       );
       if (response.status === 204) {
         dispatch(filterExpenseNames(id));
@@ -135,7 +135,7 @@ export const editExpenseNames = (id, data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names/${id}?_method=put`,
+        `${apiUrl}expense-names/${id}?_method=put`,
         data
       );
       const result = response.data.data;

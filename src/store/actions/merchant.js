@@ -9,6 +9,7 @@ import {
   IS_SUCCESS_MERCHANT,
   CLEAR_ALERT
 } from "../type";
+import { apiUrl } from "../../constants/url";
 
 export const showMerchants = (merchants) => ({
   type: SHOW_MERCHANTS,
@@ -53,7 +54,7 @@ export const getMerchants = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/merchants"
+        `${apiUrl}merchants`
       );
       const result = response.data.data.map((merchant) => {
         return {
@@ -79,7 +80,7 @@ export const getMerchant = (id) => {
     try {
       // console.log(id);
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/merchants/${id}`
+        `${apiUrl}merchants/${id}`
       );
       const result = response.data.data;
       // console.log(result);
@@ -100,7 +101,7 @@ export const saveMerchants = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/merchants",
+        `${apiUrl}merchants`,
         data
       );
       const result = {
@@ -124,7 +125,7 @@ export const deleteMerchants = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/merchants/${id}`
+        `${apiUrl}merchants/${id}`
       );
       if (response.status === 204) {
         dispatch(filterMerchants(id));
@@ -143,7 +144,7 @@ export const editMerchants = (id, data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/merchants/${id}?_method=put`,
+        `${apiUrl}merchants/${id}?_method=put`,
         data
       );
       // console.log(response.status);

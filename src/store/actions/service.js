@@ -7,6 +7,7 @@ import {
   FILTER_SERVICES,
   ERROR_ITEM
 } from "../type";
+import { apiUrl } from "../../constants/url";
 
 export const showServices = (services) => ({
   type: SHOW_SERVICES,
@@ -42,7 +43,7 @@ export const getBestService = (query) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/bestService?${new URLSearchParams(
+        `${apiUrl}services/bestService?${new URLSearchParams(
           query
         ).toString()}`
       );
@@ -65,7 +66,7 @@ export const getServices = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services"
+        `${apiUrl}services`
       );
       const result = response.data.data.map((service) => {
         return {
@@ -92,7 +93,7 @@ export const getService = (id) => {
     try {
       // console.log(id);
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/${id}`
+        `${apiUrl}services/${id}`
       );
       const result = response.data.data;
       if (response.status === 200) {
@@ -112,7 +113,7 @@ export const saveServices = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/batchInsert",
+        `${apiUrl}services/batchInsert`,
         data
       );
       const result = response.data.data.map((service) => {
@@ -136,7 +137,7 @@ export const deleteServices = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/${id}`
+        `${apiUrl}services/${id}`
       );
       if (response.status === 204) {
         dispatch(filterServices(id));
@@ -155,7 +156,7 @@ export const editServices = (id, data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/${id}?_method=put`,
+        `${apiUrl}services/${id}?_method=put`,
         data
       );
       const result = {

@@ -9,6 +9,7 @@ import {
   IS_SUCCESS_SHOP,
   CLEAR_ALERT
 } from "../type";
+import { apiUrl } from "../../constants/url";
 
 export const showShops = (shops) => ({
   type: SHOW_SHOPS,
@@ -54,7 +55,7 @@ export const getShops = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops"
+        `${apiUrl}shops`
       );
       const result = response.data.data.map((data) => {
         return {
@@ -77,7 +78,7 @@ export const getShop = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${id}`
+        `${apiUrl}shops/${id}`
       );
       const result = response.data.data;
       if (response.status === 200) {
@@ -95,7 +96,7 @@ export const saveShops = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops",
+        `${apiUrl}shops`,
         data
       );
       const result = {
@@ -117,7 +118,7 @@ export const deleteShops = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${id}`
+        `${apiUrl}shops/${id}`
       );
       if (response.status === 204) {
         dispatch(filterShops(id));
@@ -134,7 +135,7 @@ export const editShops = (id, data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${id}?_method=put`,
+        `${apiUrl}shops/${id}?_method=put`,
         data
       );
       if (response.status === 201) {

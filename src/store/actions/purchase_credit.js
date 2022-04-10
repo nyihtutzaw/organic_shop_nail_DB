@@ -5,6 +5,7 @@ import {
   ERROR_PURCHASE_CREDITS,
   IS_SUCCESS_PURCHASE_CREDITS
 } from "../type";
+import { apiUrl } from "../../constants/url";
 
 export const createPurchaseCredits = (purchase_credit) => ({
   type: CREATE_PURCHASE_CREDITS,
@@ -30,7 +31,7 @@ export const savePurchaseCredits = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchase-credits",
+        `${apiUrl}purchase-credits`,
         data
       );
       const result = {
@@ -55,7 +56,7 @@ export const deletePurchaseCredits = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchase-credits/${id}`
+        `${apiUrl}purchase-credits/${id}`
       );
       console.log(response)
       if (response.status === 204) {

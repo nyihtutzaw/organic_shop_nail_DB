@@ -6,6 +6,7 @@ import {
   FILTER_STAFFS,
   ERROR_STAFFS,
 } from "../type";
+import { apiUrl } from "../../constants/url";
 
 export const showStaffs = (staffs) => ({
   type: SHOW_STAFFS,
@@ -36,7 +37,7 @@ export const getStaffs = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs"
+        `${apiUrl}staffs`
       );
       const result = response.data.data.map((item) => {
         return {
@@ -62,7 +63,7 @@ export const saveStaffs = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs",
+        `${apiUrl}staffs`,
         data
       );
       // console.log(response);
@@ -80,7 +81,7 @@ export const deleteStaffs = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs/${id}`
+        `${apiUrl}staffs/${id}`
       );
       if (response.status === 204) {
         dispatch(filterStaffs(id));
@@ -99,7 +100,7 @@ export const editStaffs = (id, data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs/${id}?_method=put`,
+        `${apiUrl}staffs/${id}?_method=put`,
         data
       );
       //   console.log(response);
@@ -122,7 +123,7 @@ export const getStaffReport = (query) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffReport?${new URLSearchParams(
+        `${apiUrl}staffReport?${new URLSearchParams(
           query
         ).toString()}`
       );

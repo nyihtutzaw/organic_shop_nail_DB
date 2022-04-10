@@ -7,6 +7,7 @@ import {
   FILTER_ITEMS,
   ERROR_ITEM
 } from "../type";
+import { apiUrl } from "../../constants/url";
 
 export const showItems = (items) => ({
   type: SHOW_ITEMS,
@@ -42,7 +43,7 @@ export const getItems = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items"
+        `${apiUrl}items`
       );
       const result = response.data.data.map((item) => {
         return {
@@ -69,7 +70,7 @@ export const getItem = (id) => {
     try {
       // console.log(id);
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}`
+        `${apiUrl}items/${id}`
       );
       const result = response.data.data;
       // console.log(result)
@@ -90,7 +91,7 @@ export const saveItems = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/batchInsert",
+        `${apiUrl}items/batchInsert`,
         data
       );
       const result = {
@@ -114,7 +115,7 @@ export const deleteItems = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}`
+        `${apiUrl}/items/${id}`
       );
       // console.log(response)
       if (response.status === 204) {
@@ -134,7 +135,7 @@ export const editItems = (id, data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}?_method=put`,
+        `${apiUrl}items/${id}?_method=put`,
         data
       );
       const result = {
@@ -160,7 +161,7 @@ export const getBestItem = (query) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/bestItem?${new URLSearchParams(
+        `${apiUrl}items/bestItem?${new URLSearchParams(
           query
         ).toString()}`
       );

@@ -9,6 +9,7 @@ import {
   CLEAR_ALERT_ACCOUNT,
   CHANGE_PASSWORD,
 } from "../type";
+import { apiUrl } from "../../constants/url";
 
 export const showAccounts = (accounts) => ({
   type: SHOW_ACCOUNTS,
@@ -52,7 +53,7 @@ export const getAccounts = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/users"
+        `${apiUrl}users`
       );
       const result = response.data.data.map((account) => {
         return {
@@ -78,7 +79,7 @@ export const saveAccounts = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/io-register",
+        `${apiUrl}io-register`,
         data
       );
       const result = {
@@ -102,7 +103,7 @@ export const deleteAccounts = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/users/${id}`
+        `${apiUrl}users/${id}`
       );
       if (response.status === 204) {
         dispatch(filterAccounts(id));
@@ -144,7 +145,7 @@ export const changePassword = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/io-change-password`, data
+        `${apiUrl}io-change-password`, data
       );
       // console.log(response.data.data);
       const result = response.data.data;

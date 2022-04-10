@@ -7,6 +7,7 @@ import {
   FILTER_OWNERS,
   ERROR_OWNER
 } from "../type";
+import { apiUrl } from "../../constants/url";
 
 export const showOwners = (owners) => ({
   type: SHOW_OWNERS,
@@ -42,7 +43,7 @@ export const getOwners = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items"
+        `${apiUrl}owner-used-items`
       );
       const result = response.data.data.map((owner) => {
         return {
@@ -68,7 +69,7 @@ export const getOwner = (id) => {
     try {
       // console.log(id);
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items/${id}`
+        `${apiUrl}owner-used-items/${id}`
       );
       const result = response.data.data;
 
@@ -89,7 +90,7 @@ export const saveOwners = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items",
+        `${apiUrl}owner-used-items`,
         data
       );
       const result = {
@@ -114,7 +115,7 @@ export const deleteOwners = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items/${id}`
+        `${apiUrl}owner-used-items/${id}`
       );
       //   console.log(response)
       if (response.status === 204) {
@@ -134,7 +135,7 @@ export const editOwners = (id, data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items/${id}?_method=put`,
+        `${apiUrl}owner-used-items/${id}?_method=put`,
         data
       );
       const result = {

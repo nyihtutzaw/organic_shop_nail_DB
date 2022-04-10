@@ -8,6 +8,7 @@ import {
   FILTER_PURCHASES,
   ERROR_STOCKS,
 } from "../type";
+import { apiUrl } from "../../constants/url";
 
 export const showStocks = (stocks) => ({
   type: SHOW_STOCKS,
@@ -38,7 +39,7 @@ export const getStocks = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/stocks"
+        `${apiUrl}stocks`
       );
       const result = response.data.data.map((stock) => {
         return {

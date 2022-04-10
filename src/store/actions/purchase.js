@@ -8,7 +8,7 @@ import {
   FILTER_PURCHASES,
   ERROR_PURCHASES
 } from "../type";
-
+import { apiUrl } from "../../constants/url";
 export const showPurchases = (purchases) => ({
   type: SHOW_PURCHASES,
   purchases
@@ -49,7 +49,7 @@ export const getBestPurchase = (query) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchaseReport?${new URLSearchParams(
+        `${apiUrl}purchaseReport?${new URLSearchParams(
           query
         ).toString()}`
       );
@@ -75,7 +75,7 @@ export const getPurchase = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases/${id}`
+        `${apiUrl}purchases/${id}`
       );
       const result = response.data.data;
       if (response.status === 200) {
@@ -93,7 +93,7 @@ export const getPurchases = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases"
+        `${apiUrl}purchases`
       );
       // console.log('ss',response);
 
@@ -121,7 +121,7 @@ export const savePurchases = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases",
+        `${apiUrl}purchases`,
         data
       );
       // console.log(response);
@@ -139,7 +139,7 @@ export const deletePurchases = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases/${id}`
+        `${apiUrl}purchases/${id}`
       );
       // console.log(response)
       dispatch(filterPurchases(id));
@@ -160,7 +160,7 @@ export const editPurchases = (id, data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}?_method=put`,
+        `${apiUrl}items/${id}?_method=put`,
         data
       );
       // console.log(response);
@@ -183,7 +183,7 @@ export const getPurchaseReport = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchaseReport"
+        `${apiUrl}purchaseReport`
       );
       const result = response.data.data.map((purchase) => {
         return {

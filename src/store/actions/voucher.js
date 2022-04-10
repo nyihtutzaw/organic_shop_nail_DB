@@ -7,6 +7,7 @@ import {
   FILTER_VOUCHERS,
   ERROR_VOUCHERS
 } from "../type";
+import { apiUrl } from "../../constants/url";
 
 export const showVouchers = (vouchers) => ({
   type: SHOW_VOUCHERS,
@@ -27,7 +28,7 @@ export const getVouchers = (query) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/invoices?${new URLSearchParams(query).toString()}`
+        `${apiUrl}invoices?${new URLSearchParams(query).toString()}`
       );
       const result = response.data.data.map((voucher) => {
         return {
@@ -53,7 +54,7 @@ export const deleteVouchers = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/invoices/${id}`
+        `${apiUrl}invoices/${id}`
       );
       console.log(response.data.data)
       if (response.status === 204) {

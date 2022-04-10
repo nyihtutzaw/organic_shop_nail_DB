@@ -7,7 +7,7 @@ import {
   FILTER_EXPENSES,
   ERROR_EXPENSE
 } from "../type";
-
+import { apiUrl } from "../../constants/url";
 
 export const showExpenses = (expenses) => ({
   type: SHOW_EXPENSES,
@@ -43,7 +43,7 @@ export const getExpenses = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expenses"
+        `${apiUrl}expenses`
       );
       const result = response.data.data.map((expense) => {
         return {
@@ -69,7 +69,7 @@ export const getExpense = (id) => {
     try {
       // console.log(id);
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expenses/${id}`
+        `${apiUrl}expenses/${id}`
       );
       const result = response.data.data;
       // console.log(result)
@@ -90,7 +90,7 @@ export const saveExpenses = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expenses/batchInsert",
+        `${apiUrl}expenses/batchInsert`,
         data
       );
       const result = response.data.data.map((expense) => {
@@ -117,7 +117,7 @@ export const deleteExpenses = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expenses/${id}`
+        `${apiUrl}expenses/${id}`
       );
       if (response.status === 204) {
         dispatch(filterExpenses(id));
@@ -136,7 +136,7 @@ export const editExpenses = (id, data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expenses/${id}?_method=put`,
+        `${apiUrl}expenses/${id}?_method=put`,
         data
       );
       const result = {

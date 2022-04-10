@@ -61,36 +61,23 @@ const StaffComession = () => {
       title: "ကော်မရှင်",
       dataIndex: "",
       render: (_, record) => {
-<<<<<<< HEAD
-        return record?.services?.length > 0 ? record.services
-          .map((service) => service.service.commercial)
-          .reduce((a, b) => Number(a) + Number(b)) : 0;
-      },
-=======
         return record?.services?.length > 0
           ? record.services
               .map((service) => service.service.commercial)
               .reduce((a, b) => Number(a) + Number(b))
           : 0;
       }
->>>>>>> 5af86db0dcf70a5d9f0edb50145abc975f72f606
     },
     {
       title: "စုစုပေါင်း",
       dataIndex: "",
       render: (_, record) => {
-<<<<<<< HEAD
-        const commercial = record?.services?.length > 0 ? record.services
-          .map((service) => service.service.commercial)
-          .reduce((a, b) => Number(a) + Number(b)) : 0;
-=======
         const commercial =
           record?.services?.length > 0
             ? record.services
                 .map((service) => service.service.commercial)
                 .reduce((a, b) => Number(a) + Number(b))
             : 0;
->>>>>>> 5af86db0dcf70a5d9f0edb50145abc975f72f606
         return Number(commercial) + Number(record.salary);
       }
     }
@@ -99,18 +86,12 @@ const StaffComession = () => {
   let total = 0;
 
   filterStaffs.forEach((filterStaff) => {
-<<<<<<< HEAD
-    const commercial = filterStaff?.services?.length > 0 ? filterStaff?.services
-      .map((service) => service.service.commercial)
-      .reduce((a, b) => Number(a) + Number(b)) : 0;
-=======
     const commercial =
       filterStaff?.services?.length > 0
         ? filterStaff?.services
             .map((service) => service.service.commercial)
             .reduce((a, b) => Number(a) + Number(b))
         : 0;
->>>>>>> 5af86db0dcf70a5d9f0edb50145abc975f72f606
 
     total += Number(commercial) + Number(filterStaff.salary);
   });

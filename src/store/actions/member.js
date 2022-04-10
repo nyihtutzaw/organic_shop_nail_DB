@@ -7,7 +7,7 @@ import {
   FILTER_MEMBERS,
   ERROR_ITEM
 } from "../type";
-
+import { apiUrl } from "../../constants/url";
 export const showMembers = (members) => ({
   type: SHOW_MEMBERS,
   members
@@ -43,7 +43,7 @@ export const getMembers = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members"
+        `${apiUrl}members`
       );
       const result = response.data.data.map((member) => {
         return {
@@ -71,7 +71,7 @@ export const getMember = (id) => {
     try {
       // console.log(id);
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members/${id}`
+        `${apiUrl}members/${id}`
       );
       const result = response.data.data;
       // console.log(result);
@@ -93,7 +93,7 @@ export const saveMembers = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members",
+        `${apiUrl}members`,
         data
       );
       const result = {
@@ -117,7 +117,7 @@ export const deleteMembers = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members/${id}`
+        `${apiUrl}members/${id}`
       );
       if (response.status === 204) {
         dispatch(filterMembers(id));
@@ -136,7 +136,7 @@ export const editMembers = (id, data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members/${id}?_method=put`,
+        `${apiUrl}members/${id}?_method=put`,
         data
       );
       // console.log(response.status);
