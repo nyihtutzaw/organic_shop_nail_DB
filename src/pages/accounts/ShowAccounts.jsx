@@ -3,9 +3,7 @@ import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
-  ExportOutlined,
   DeleteOutlined,
-  EditOutlined
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { connect, useDispatch, useSelector } from "react-redux";
@@ -26,10 +24,6 @@ const ShowAccounts = ({ deleteAccounts }) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const handleClick = (record) => {
-    // navigate(`/admin/edit-accounts/${record.id}`);
-  };
 
   const openNotificationWithIcon = (type) => {
     notification[type]({

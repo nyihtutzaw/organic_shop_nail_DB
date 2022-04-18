@@ -6,7 +6,6 @@ export const setReport = (report) => ({
   report,
 });
 
-
 export const getReport = (query) => {
   return async (dispatch) => {
     try {

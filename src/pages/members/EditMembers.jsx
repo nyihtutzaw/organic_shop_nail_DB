@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Form,
   Input,
   Typography,
   Space,
   Button,
-  InputNumber,
-  Select
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
@@ -16,13 +14,11 @@ import { connect } from "react-redux";
 import {
   editMembers,
   getShops,
-  shop,
   getMember,
   getMembers
 } from "../../store/actions";
 
 const { Title } = Typography;
-const { Option } = Select;
 
 const EditMembers = ({
   editMembers,

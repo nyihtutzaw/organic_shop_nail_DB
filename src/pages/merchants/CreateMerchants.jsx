@@ -5,8 +5,6 @@ import {
   Typography,
   Space,
   Button,
-  Select,
-  notification,
   Alert
 } from "antd";
 import Layout from "antd/lib/layout/layout";
@@ -22,7 +20,6 @@ import { useNavigate } from "react-router-dom";
 import store from "../../store";
 
 const { Title } = Typography;
-const { Option } = Select;
 
 const CreateMerchants = ({
   saveMerchants,
@@ -31,9 +28,6 @@ const CreateMerchants = ({
   merchant
 }) => {
   const [form] = Form.useForm();
-  const shops = useSelector((state) => state.shop.shops);
-  const navigate = useNavigate();
-
   useEffect(() => {
     const fetchData = async () => {
       await getShops();

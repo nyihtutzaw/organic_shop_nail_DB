@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table } from "antd";
+import { Typography, Space, Row, Col, Table } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { ExportOutlined, PlusSquareOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import {getItemTransfers, item_transfer} from "../../store/actions";
+import {getItemTransfers } from "../../store/actions";
 
 const { Title } = Typography;
 
@@ -19,8 +18,6 @@ const ShowItemChangeList = ({getItemTransfers, item_transfer}) => {
       fetchData();
     };
   }, [getItemTransfers]);
-
-  const navigate = useNavigate();
 
   const columns = [
     {

@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Form, Input, Typography, Space, Button, Select } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   EditOutlined,
-  SaveOutlined,
-  PlusSquareOutlined
+  SaveOutlined
 } from "@ant-design/icons";
 import { editExpenses, getExpenseNames, getExpense } from "../../store/actions";
 import { connect, useSelector } from "react-redux";

@@ -11,7 +11,6 @@ const { Title } = Typography;
 
 const CreateExpenseNames = ({saveExpenseNames}) => {
   const [form] = Form.useForm();
-  const navigate = useNavigate();
 
   const openNotificationWithIcon = (type) => {
     notification[type]({

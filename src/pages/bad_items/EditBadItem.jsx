@@ -6,8 +6,6 @@ import {
   Button,
   InputNumber,
   Select,
-  Table,
-  message,
   Checkbox,
   Alert
 } from "antd";
@@ -15,7 +13,6 @@ import Layout from "antd/lib/layout/layout";
 import {
   EditOutlined,
   SaveOutlined,
-  PlusSquareOutlined
 } from "@ant-design/icons";
 import {
   saveBadItems,
@@ -69,7 +66,6 @@ const EditBadItem = ({
     form.setFieldsValue({ is_sale: badItems?.is_sale });
   }, [badItems]);
 
-  const [bads, setBads] = useState([]);
   const [form] = Form.useForm();
 
   useEffect(() => {

@@ -37,6 +37,7 @@ const ItemsReports = () => {
   }, [getBestItem, location]);
 
   const [showBuyMerchant, setshowBuyMerchant] = useState(null);
+
   const onChange = (value) => {
     if (value === undefined) {
       setshowBuyMerchant([]);
@@ -47,7 +48,6 @@ const ItemsReports = () => {
   };
 
   let columns = [];
-
   if (!queryString.parse(location.search).best) {
     columns = [
       {
@@ -117,6 +117,7 @@ const ItemsReports = () => {
         <Row>
           <Col span={6}>
             <RangePicker
+
               onChange={(val) => {
                 //alert(dayjs(val[0]).format("YYYY-MM-DD"))
                 if (queryString.parse(location.search).best) {

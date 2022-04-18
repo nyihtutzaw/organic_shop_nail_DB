@@ -19,7 +19,6 @@ const { Title } = Typography;
 const { Option } = Select;
 
 const CreateAccounts = ({ saveAccounts, getShops }) => {
-  const accounts = useSelector((state) => state.AccountReducer);
   const shops = useSelector((state) => state.shop.shops);
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +30,6 @@ const CreateAccounts = ({ saveAccounts, getShops }) => {
     };
   }, [getShops]);
 
-  const navigate = useNavigate();
   const [form] = Form.useForm();
 
   const openNotificationWithIcon = (type) => {

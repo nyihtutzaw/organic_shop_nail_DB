@@ -19,7 +19,6 @@ import {
   UnorderedListOutlined,
   SaveOutlined,
   DatabaseOutlined,
-  ShoppingCartOutlined,
   CalculatorOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,

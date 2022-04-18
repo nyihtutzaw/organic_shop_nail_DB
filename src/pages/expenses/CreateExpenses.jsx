@@ -6,9 +6,7 @@ import {
   Space,
   Button,
   Table,
-  InputNumber,
   message,
-  Drawer,
   Select,
   notification,
 } from "antd";
@@ -19,7 +17,7 @@ import {
   PlusSquareOutlined,
 } from "@ant-design/icons";
 import { saveExpenses, getExpenseNames } from "../../store/actions";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
@@ -36,10 +34,7 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
       fetchData();
     };
   }, [getExpenseNames]);
-  const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
-  const [expenseFrom] = Form.useForm();
-  const navigate = useNavigate();
 
   const [expenseTable, setExpenseTable] = useState({ expenses: [] });
   const onFinish = async (values) => {

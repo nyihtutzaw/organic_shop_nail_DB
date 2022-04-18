@@ -6,7 +6,6 @@ import {
   Space,
   Button,
   Table,
-  InputNumber,
   message,
   notification
 } from "antd";
@@ -19,7 +18,6 @@ import {
 import InputUpload from "../../components/InputUpload";
 import { connect } from "react-redux";
 import { saveItems } from "../../store/actions";
-import item from "../../store/reducers/item";
 
 const { Title, Text } = Typography;
 
@@ -77,9 +75,6 @@ const CreateItems = ({ saveItems, error }) => {
 
   //for barcode
   const [barcodeInputValue, updateBarcodeInputValue] = useState("");
-  const barcodeAutoFocus = () => {
-    document.getElementById("SearchbyScanning").focus();
-  };
   const onChangeBarcode = (event) => {
     updateBarcodeInputValue(event.target.value);
   };

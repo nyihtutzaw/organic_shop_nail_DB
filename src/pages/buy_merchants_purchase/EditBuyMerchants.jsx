@@ -3,7 +3,6 @@ import {
   Space,
   Typography,
   Form,
-  Input,
   Button,
   InputNumber,
   Select,
@@ -19,7 +18,7 @@ import {
   SaveOutlined,
   PlusSquareOutlined
 } from "@ant-design/icons";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import {
   getMerchants,
   getItems,

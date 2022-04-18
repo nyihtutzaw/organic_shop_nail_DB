@@ -14,11 +14,11 @@ const EditAccounts = () => {
   const currentAccount = accounts.find((account) => account.id === parseInt(id));
   // console.log("AC", currentAccount)
   useEffect(() => {
-    if (currentAccount) {
+     
       form.setFieldsValue({ name: currentAccount.name });
       form.setFieldsValue({ row: currentAccount.row });
       form.setFieldsValue({ shop: currentAccount.shop });
-    }
+    
   }, [currentAccount]);
 
   const [form] = Form.useForm();

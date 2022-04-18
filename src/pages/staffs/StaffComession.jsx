@@ -1,90 +1,149 @@
 import React, { useState, useEffect } from "react";
-import {
-  Typography,
-  Space,
-  Row,
-  Col,
-  Button,
-  Table,
-  Select,
-  DatePicker
-} from "antd";
+import { Typography, Space, Row, Col, Table, Select, DatePicker } from "antd";
 import Layout from "antd/lib/layout/layout";
 import queryString from "query-string";
-import { ExportOutlined } from "@ant-design/icons";
-import { getStaffReport } from "../../store/actions";
+import { getStaffReport, getDailyStaffs, getBestDailyStaff } from "../../store/actions";
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
-import { useDispatch, useSelector } from "react-redux";
-import { ExportToExcel } from "../../excel/ExportToExcel";
+import { connect, useDispatch, useSelector } from "react-redux";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-const StaffComession = () => {
+const StaffComession = ({ getDailyStaffs, getBestDailyStaff }) => {
   const [filterStaffs, setFilterStaffs] = useState([]);
   const { RangePicker } = DatePicker;
   const dispatch = useDispatch();
   const location = useLocation();
   const staffs = useSelector((state) => state.staff.staffs);
+  const dailyStaffsFree = useSelector((state) => state.daily.dailys);
+  // console.log(dailyStaffsFree);
+  // console.log("ss",staffs);
+
   useEffect(() => {
     const fetchData = () => {
       dispatch(getStaffReport(queryString.parse(location.search)));
+      // dispatch(getBestDailyStaff(queryString.parse(location.search)));
+    };
+
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getStaffReport, location]);
+
+  useEffect(() => {
+    setFilterStaffs(staffs);
+    const fetchData = async () => {
+      await getDailyStaffs();
     };
     fetchData();
     return () => {
       fetchData();
     };
-  }, [getStaffReport]);
+  }, [staffs, getDailyStaffs]);
 
-  useEffect(() => {
-    setFilterStaffs(staffs);
-  }, [staffs]);
+  let columns;
 
-  const columns = [
-    {
-      title: "အမည်",
-      dataIndex: "name"
-    },
-    {
-      title: "လခ",
-      dataIndex: "salary"
-    },
-    {
-      title: "ရက်မှန်ကြေး",
-      dataIndex: "",
-      render: (_) => {
-        return 0;
-      }
-    },
-    {
-      title: "ကော်မရှင်",
-      dataIndex: "",
-      render: (_, record) => {
-        return record?.services?.length > 0
-          ? record.services
-              .map((service) => service.service.commercial)
-              .reduce((a, b) => Number(a) + Number(b))
-          : 0;
-      }
-    },
-    {
-      title: "စုစုပေါင်း",
-      dataIndex: "",
-      render: (_, record) => {
-        const commercial =
-          record?.services?.length > 0
+  if (!queryString.parse(location.search).best) {
+    columns = [
+      {
+        title: "အမည်",
+        dataIndex: "name"
+      },
+      {
+        title: "လခ",
+        dataIndex: "salary"
+      },
+      {
+        title: "ရက်မှန်ကြေး",
+        dataIndex: "fee",
+        render: (_, record) => {
+          // console.log("dd",record)
+          let result = dailyStaffsFree.find((d) => d?.staff?.id === record?.id);
+          // console.log("aa",result.amount)
+          return result?.amount;
+        }
+      },
+      {
+        title: "ကော်မရှင်",
+        dataIndex: "",
+        render: (_, record) => {
+          return record?.services?.length > 0
             ? record.services
                 .map((service) => service.service.commercial)
                 .reduce((a, b) => Number(a) + Number(b))
             : 0;
-        return Number(commercial) + Number(record.salary);
+        }
+      },
+      {
+        title: "စုစုပေါင်း",
+        dataIndex: "",
+        render: (_, record) => {
+          const commercial =
+            record?.services?.length > 0
+              ? record.services
+                  .map((service) => service.service.commercial)
+                  .reduce((a, b) => Number(a) + Number(b))
+              : 0;
+          let result = dailyStaffsFree.find((d) => d?.staff?.id === record?.id);
+          return (
+            Number(commercial) + Number(record.salary) + Number(result?.amount)
+          );
+        }
       }
-    }
-  ];
+    ];
+  } else {
+    columns = [
+      {
+        title: "အမည်",
+        dataIndex: "name"
+      },
+      {
+        title: "လခ",
+        dataIndex: "salary"
+      },
+      {
+        title: "ရက်မှန်ကြေး",
+        dataIndex: "fee",
+        render: (_, record) => {
+          // console.log("dd",record)
+          let result = dailyStaffsFree.find((d) => d?.staff?.id === record?.id);
+          // console.log("aa",result.amount)
+          return result?.amount;
+        }
+      },
+      {
+        title: "ကော်မရှင်",
+        dataIndex: "",
+        render: (_, record) => {
+          return record?.services?.length > 0
+            ? record.services
+                .map((service) => service.service.commercial)
+                .reduce((a, b) => Number(a) + Number(b))
+            : 0;
+        }
+      },
+      {
+        title: "စုစုပေါင်း",
+        dataIndex: "",
+        render: (_, record) => {
+          const commercial =
+            record?.services?.length > 0
+              ? record.services
+                  .map((service) => service.service.commercial)
+                  .reduce((a, b) => Number(a) + Number(b))
+              : 0;
+          let result = dailyStaffsFree.find((d) => d?.staff?.id === record?.id);
+          return (
+            Number(commercial) + Number(record.salary) + Number(result?.amount)
+          );
+        }
+      }
+    ];
+  }
 
   let total = 0;
-
   filterStaffs.forEach((filterStaff) => {
     const commercial =
       filterStaff?.services?.length > 0
@@ -92,8 +151,10 @@ const StaffComession = () => {
             .map((service) => service.service.commercial)
             .reduce((a, b) => Number(a) + Number(b))
         : 0;
+    let result = dailyStaffsFree.find((d) => d?.staff?.id === filterStaff?.id);
 
-    total += Number(commercial) + Number(filterStaff.salary);
+    total +=
+      Number(commercial) + Number(filterStaff.salary) + Number(result?.amount);
   });
 
   const handleOnChange = (value) => {
@@ -132,11 +193,19 @@ const StaffComession = () => {
             <Space direction="vertical" size={12}>
               <RangePicker
                 onChange={(val) => {
-                  window.location = `/admin/show-staff-commession?start_date=${dayjs(
-                    val[0]
-                  ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
-                    "YYYY-MM-DD"
-                  )}`;
+                  if (queryString.parse(location.search).best) {
+                    window.location = `/admin/show-staff-commession?best=true&start_date=${dayjs(
+                      val[0]
+                    ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                      "YYYY-MM-DD"
+                    )}`;
+                  } else {
+                    window.location = `/admin/show-staff-commession?start_date=${dayjs(
+                      val[0]
+                    ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                      "YYYY-MM-DD"
+                    )}`;
+                  }
                 }}
               />
             </Space>
@@ -184,4 +253,4 @@ const StaffComession = () => {
   );
 };
 
-export default StaffComession;
+export default connect(null, { getDailyStaffs, getBestDailyStaff })(StaffComession);

@@ -12,10 +12,7 @@ import {
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
-  ExportOutlined,
   DeleteOutlined,
-  EditOutlined,
-  FileSearchOutlined
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { connect, useSelector } from "react-redux";

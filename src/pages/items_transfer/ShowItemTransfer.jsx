@@ -2,10 +2,8 @@ import React, { useEffect } from "react";
 import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
-  ExportOutlined,
   PlusSquareOutlined,
   DeleteOutlined,
-  EditOutlined
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { connect, useSelector } from "react-redux";

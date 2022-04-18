@@ -32,7 +32,6 @@ import {
   getMembers
 } from "../store/actions";
 import { call } from "../services/api";
-import { items } from "../mock";
 
 const { Header, Content } = Layout;
 const { Option } = Select;

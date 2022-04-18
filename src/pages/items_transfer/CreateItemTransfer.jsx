@@ -3,7 +3,6 @@ import {
   Space,
   Typography,
   Form,
-  Input,
   Button,
   InputNumber,
   Select,
@@ -26,7 +25,7 @@ import {
   getStocks,
 } from "../../store/actions";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 const { Option } = Select;
 
 const CreateItemTransfer = ({
@@ -38,8 +37,6 @@ const CreateItemTransfer = ({
 }) => {
   const [items, setItems] = useState([]);
   const [form] = Form.useForm();
-  const [shopData, setShopData] = useState(null);
-  const [itemData, setItemData] = useState(null);
   const [buyShop, setBuyShop] = useState(null);
 
   let shops = useSelector((state) => state.shop.shops);

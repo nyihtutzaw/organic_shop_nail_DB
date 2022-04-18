@@ -5,22 +5,19 @@ import {
   Typography,
   Space,
   Button,
-  InputNumber,
   Select,
   notification
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { saveMembers, shop, getShops } from "../../store/actions";
+import { saveMembers, getShops } from "../../store/actions";
 import { connect } from "react-redux";
 
 const { Title } = Typography;
-const { Option } = Select;
 
 const CreateMembers = ({ shop, saveMembers, getShops }) => {
-  const shops = useSelector((state) => state.shop.shops);
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
@@ -49,9 +46,6 @@ const CreateMembers = ({ shop, saveMembers, getShops }) => {
 
   //for barcode
   const [barcodeInputValue, updateBarcodeInputValue] = useState("");
-  const barcodeAutoFocus = () => {
-    document.getElementById("SearchbyScanning").focus();
-  };
   const onChangeBarcode = (event) => {
     updateBarcodeInputValue(event.target.value);
   };

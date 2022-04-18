@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { ExportOutlined, DeleteOutlined, EditOutlined, PlusSquareOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, PlusSquareOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getBadItems, deleteBadItems, getBadItem } from "../../store/actions";
 import { connect } from "react-redux";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const { Title } = Typography;
 
