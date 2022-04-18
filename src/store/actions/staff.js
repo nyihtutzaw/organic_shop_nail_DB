@@ -4,34 +4,57 @@ import {
   CREATE_STAFFS,
   UPDATE_STAFFS,
   FILTER_STAFFS,
-  ERROR_STAFFS,
+  ERROR_STAFFS
 } from "../type";
 
 export const showStaffs = (staffs) => ({
   type: SHOW_STAFFS,
-  staffs,
+  staffs
 });
 
 export const createStaffs = (staff) => ({
   type: CREATE_STAFFS,
-  staff,
+  staff
 });
 
 export const filterStaffs = (id) => ({
   type: FILTER_STAFFS,
-  id,
+  id
 });
 
 export const updateStaffs = (data) => ({
   type: UPDATE_STAFFS,
-  data,
+  data
 });
 
 export const setStaffErrors = (error) => ({
   type: ERROR_STAFFS,
-  error,
+  error
 });
 
+// export const getBestDailyStaff = (query) => {
+//   return async (dispatch) => {
+//     try {
+//       const response = await axios.get(
+//         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/daily-fees/bestDaily?${new URLSearchParams(
+//           query
+//         ).toString()}`
+//       );
+//       console.log("aa", query.best);
+//       const result = response.data.data.map((service) => {
+//         return {
+//           ...service,
+//           key: service.id
+//         };
+//       });
+//       dispatch(showStaffs(result));
+//     } catch (error) {
+//       if (error.response.status === 404) {
+//         dispatch(setStaffErrors(error.response.data.data));
+//       }
+//     }
+//   };
+// };
 
 export const getStaffs = () => {
   return async (dispatch) => {
@@ -42,7 +65,7 @@ export const getStaffs = () => {
       const result = response.data.data.map((item) => {
         return {
           ...item,
-          key: item.id,
+          key: item.id
         };
       });
       // console.log(response.status)
@@ -130,7 +153,7 @@ export const getStaffReport = (query) => {
       const result = response.data.map((report) => {
         return {
           ...report,
-          key: report.id,
+          key: report.id
         };
       });
       if (response.status === 200) {

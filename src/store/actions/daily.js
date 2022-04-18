@@ -38,15 +38,15 @@ export const setDailyStaffErrors = (error) => ({
   error
 });
 
-
 export const getBestDailyStaff = (query) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/daily-fees/bestService?${new URLSearchParams(
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/daily-fees/bestDaily?${new URLSearchParams(
           query
         ).toString()}`
       );
+      console.log("aa", query.best);
       const result = response.data.data.map((service) => {
         return {
           ...service,

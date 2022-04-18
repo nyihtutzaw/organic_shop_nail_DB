@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Typography, Space, Row, Col, Table, Select, DatePicker } from "antd";
 import Layout from "antd/lib/layout/layout";
 import queryString from "query-string";
-import { getStaffReport, getDailyStaffs, getBestDailyStaff } from "../../store/actions";
+import {
+  getStaffReport,
+  getDailyStaffs,
+  getBestDailyStaff
+} from "../../store/actions";
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import { connect, useDispatch, useSelector } from "react-redux";
@@ -10,7 +14,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-const StaffComession = ({ getDailyStaffs, getBestDailyStaff }) => {
+const StaffComession = ({ getDailyStaffs }) => {
   const [filterStaffs, setFilterStaffs] = useState([]);
   const { RangePicker } = DatePicker;
   const dispatch = useDispatch();
@@ -23,14 +27,22 @@ const StaffComession = ({ getDailyStaffs, getBestDailyStaff }) => {
   useEffect(() => {
     const fetchData = () => {
       dispatch(getStaffReport(queryString.parse(location.search)));
-      // dispatch(getBestDailyStaff(queryString.parse(location.search)));
     };
-
     fetchData();
     return () => {
       fetchData();
     };
   }, [getStaffReport, location]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch(getBestDailyStaff(queryString.parse(location.search)));
+    };
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getBestDailyStaff, location]);
 
   useEffect(() => {
     setFilterStaffs(staffs);
@@ -148,7 +160,7 @@ const StaffComession = ({ getDailyStaffs, getBestDailyStaff }) => {
     const commercial =
       filterStaff?.services?.length > 0
         ? filterStaff?.services
-            .map((service) => service.service.commercial)
+            .map((service) => service?.service?.commercial)
             .reduce((a, b) => Number(a) + Number(b))
         : 0;
     let result = dailyStaffsFree.find((d) => d?.staff?.id === filterStaff?.id);
@@ -253,4 +265,4 @@ const StaffComession = ({ getDailyStaffs, getBestDailyStaff }) => {
   );
 };
 
-export default connect(null, { getDailyStaffs, getBestDailyStaff })(StaffComession);
+export default connect(null, { getDailyStaffs })(StaffComession);
