@@ -1,18 +1,22 @@
 import React, { useEffect } from "react";
 import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { PlusSquareOutlined, ExportOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  PlusSquareOutlined,
+  ExportOutlined,
+  DeleteOutlined,
+  EditOutlined
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getStaffs, deleteStaffs } from "../../store/actions";
 import { connect } from "react-redux";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 
-
 const { Title } = Typography;
 
-const ShowStaff = ({getStaffs, deleteStaffs}) => {
-  const dispatch = useDispatch()
+const ShowStaff = ({ getStaffs, deleteStaffs }) => {
+  const dispatch = useDispatch();
   const staffs = useSelector((state) => state.staff.staffs);
   const fileName = "Staffs"; // here enter filename for your excel file
   const result = staffs.map((staff) => ({
@@ -21,7 +25,7 @@ const ShowStaff = ({getStaffs, deleteStaffs}) => {
     Name: staff.name,
     Phone: staff.phone,
     Salary: staff.salary,
-    Start_Work: staff.start_work,
+    Start_Work: staff.start_work
   }));
 
   useEffect(() => {
@@ -42,15 +46,19 @@ const ShowStaff = ({getStaffs, deleteStaffs}) => {
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
-      message: 'Delete Your Data',
-      description: 'Your data have been deleted.',
+      message: "Delete Your Data",
+      description: "Your data have been deleted.",
       duration: 3
     });
   };
-  
-  const handleDelete =async (record) => {
+
+  const handleDelete = async (record) => {
     await deleteStaffs(record.id);
-    openNotificationWithIcon('error')
+    openNotificationWithIcon("error");
+  };
+
+  const handleDailyRecord = async (record) => {
+    navigate(`/admin/dailyAttendance-staff/${record.id}`);
   }
 
   const columns = [
@@ -58,11 +66,7 @@ const ShowStaff = ({getStaffs, deleteStaffs}) => {
       title: "ဓါတ်ပုံ",
       dataIndex: "image",
       render: (_, record) => (
-        <img
-        src={`${record.image}`}
-          width={80}
-          height={80}
-        />
+        <img src={`${record.image}`} width={80} height={80} />
       )
     },
     {
@@ -90,9 +94,15 @@ const ShowStaff = ({getStaffs, deleteStaffs}) => {
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          <Button type="primary" onClick={() => handleClick(record)}> <EditOutlined/></Button>
-          <Button type="primary" danger onClick={ () =>handleDelete(record) }>
-          <DeleteOutlined/>
+          <Button type="primary" onClick={() => handleClick(record)}>
+            {" "}
+            <EditOutlined />
+          </Button>
+          <Button type="primary" danger onClick={() => handleDelete(record)}>
+            <DeleteOutlined />
+          </Button>
+          <Button type="primary" style={{ backgroundColor: "#ad6800" }} danger onClick={() => handleDailyRecord(record)}>
+            ရက်မှန်ကြေးထည့်ရန်
           </Button>
         </Space>
       )
@@ -121,7 +131,7 @@ const ShowStaff = ({getStaffs, deleteStaffs}) => {
             </Button>
           </Col>
           <Col span={4}>
-          <ExportToExcel apiData={result} fileName={fileName} />
+            <ExportToExcel apiData={result} fileName={fileName} />
           </Col>
         </Row>
         <Table
@@ -132,7 +142,7 @@ const ShowStaff = ({getStaffs, deleteStaffs}) => {
         />
       </Space>
     </Layout>
-  )
-}
+  );
+};
 
 export default connect(null, { getStaffs, deleteStaffs })(ShowStaff);

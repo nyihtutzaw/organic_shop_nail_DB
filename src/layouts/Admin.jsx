@@ -89,6 +89,7 @@ import ShowPurchases from "../pages/buy_merchants_purchase/ShowPurchases";
 import EditBadItem from "../pages/bad_items/EditBadItem";
 import ChangePassword from "../pages/change_password/ChangePassword";
 import PurchaseReport from "../pages/reports/PurchaseReport";
+import DailyAttendance from "../pages/staffs/DailyAttendance";
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -523,6 +524,8 @@ const Admin = ({ logout }) => {
               <Route path="create-staff" element={<CreateStaff />} />
               <Route path="show-staff" element={<ShowStaff />} />
               <Route path="edit-staff/:id" element={<EditStaff />} />
+              <Route path="dailyAttendance-staff/:id" element={<DailyAttendance />} />
+              <Route path="editDailyAttendance-staff/:id" element={<DailyAttendance />} />
               <Route
                 path="show-staff-commession"
                 element={<StaffComession />}

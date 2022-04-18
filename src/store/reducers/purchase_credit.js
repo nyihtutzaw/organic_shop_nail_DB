@@ -5,7 +5,6 @@ import {
     IS_SUCCESS_PURCHASE_CREDITS,
   } from "../type";
 
-  
   const initialState = {
     purchase_credits: [],
     purchase_credit: {},

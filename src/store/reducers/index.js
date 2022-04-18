@@ -17,6 +17,7 @@ import bad_item from "./bad_item";
 import owner from "./owner";
 import voucher from "./voucher";
 import report from "./report";
+import daily from "./daily";
 
 
 const reducers = combineReducers({
@@ -38,6 +39,7 @@ const reducers = combineReducers({
   owner,
   voucher,
   report,
+  daily,
 });
 
 export default reducers;

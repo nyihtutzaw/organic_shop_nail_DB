@@ -20,3 +20,4 @@ export * from "./owner.js";
 export * from "./voucher.js";
 export * from "./purchase_credit.js";
 export * from "./report.js";
+export * from "./daily.js";

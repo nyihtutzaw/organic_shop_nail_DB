@@ -7,28 +7,34 @@ import {
   InputNumber,
   Table,
   Row,
-  Col
+  Col,
+  Select,
+  Input
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { connect, useSelector } from "react-redux";
 import {
   getPurchase,
-  getPurchases,
-  savePurchaseCredits,
-  deletePurchaseCredits
+  getDailyStaffs,
+  getDailyStaff,
+  saveDailyStaffs,
+  deleteDailyStaffs
 } from "../../store/actions";
 import { useNavigate, useParams } from "react-router-dom";
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 import Text from "antd/lib/typography/Text";
 
+const { Option } = Select;
 const { Title } = Typography;
-const ShowPurchases = ({
+
+const EditDailyAttendance = ({
   getPurchase,
   purchase,
-  getPurchases,
-  savePurchaseCredits,
-  deletePurchaseCredits
+  getDailyStaffs,
+  getDailyStaff,
+  saveDailyStaffs,
+  deleteDailyStaffs
 }) => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
@@ -36,21 +42,23 @@ const ShowPurchases = ({
   const allPurchases = useSelector(
     (state) => state.purchase.purchase.purchase_credits
   );
+  const [staff, setStaff] = useState(null);
+
   const allCredits = useSelector((state) => state.purchase.purchase);
-  const getTotalCredit = useSelector((state) => state.purchase.purchases);
-  // console.log(getTotalCredit);
-  // console.log("one",allCredits.credit);
+  const DailyStaffs = useSelector((state) => state.daily.dailys);
+  const DailyStaffOne = useSelector((state) => state.daily.daily);
+  console.log("aa", DailyStaffOne);
 
   useEffect(() => {
     const fetchData = async () => {
       await getPurchase(param?.id);
-      await getPurchases();
+      await getDailyStaffs();
     };
     fetchData();
     return () => {
       fetchData();
     };
-  }, [getPurchase, getPurchases]);
+  }, [getPurchase, getDailyStaffs]);
 
   const result = allPurchases?.map((purchase) => ({
     key: purchase.id,
@@ -66,27 +74,43 @@ const ShowPurchases = ({
 
   const onFinish = async (values) => {
     const result = {
-      purchase_id: param.id,
-      amount: values.amount
+      month: values.month,
+      year: values.year,
+      amount: values.amount,
+      staff_id: param?.id
     };
-    await savePurchaseCredits(result);
+    // console.log(result);
+
+    await saveDailyStaffs(result);
     form.resetFields();
     window.location.reload();
   };
 
   const handleDelete = async (record) => {
-    await deletePurchaseCredits(record.id);
-    window.location.reload();
+    await deleteDailyStaffs(record.id);
   };
+
+  const handleClick = async (record) => {
+    console.log(record.id);
+    await getDailyStaff(record.id);
+    // setStaff(DailyStaffOne);
+    // navigate(`/admin/edit-staff/${record.id}`);
+  };
+
   const columns = [
     {
       title: "ရက်စွဲ",
       dataIndex: "date",
-      render: (_, record) => getReadableDateDisplay(record.date)
+      render: (_, record) => getReadableDateDisplay(record.created_at)
     },
     {
-      title: "ပေးခဲ့သည့်ငွေပမာဏ",
+      title: "ပေးခဲ့သည့်ရက်မှန်ကြေး",
       dataIndex: "amount"
+    },
+    {
+      title: "ဝန်ထမ်းအမည်",
+      dataIndex: "name",
+      render: (_, record) => record?.staff?.name
     },
     {
       title: "Actions",
@@ -95,6 +119,9 @@ const ShowPurchases = ({
         <Space direction="horizontal">
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
+          </Button>
+          <Button type="primary" onClick={() => handleClick(record)}>
+            <EditOutlined />
           </Button>
         </Space>
       )
@@ -105,7 +132,7 @@ const ShowPurchases = ({
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
-          အကြွေးပေးချေရန်
+          ရက်မှန်ကြေးထည့်ရန်စာမျက်နှာ
         </Title>
         <Form
           colon={false}
@@ -124,17 +151,69 @@ const ShowPurchases = ({
           form={form}
         >
           <Form.Item
-            name="amount"
-            label="ပေးချေမည့်ပမာဏ"
+            name="month"
+            label="လ"
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ ပေးချေမည့်ပမာဏထည့်ပါ"
+                message: "ကျေးဇူးပြု၍ လထည့်ပါ"
+              }
+            ]}
+          >
+            <Select
+              showSearch
+              placeholder="လထည့်ပါ"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              allowClear={true}
+              size="large"
+              style={{ borderRadius: "10px" }}
+            >
+              <Option value="01">01</Option>
+              <Option value="02">02</Option>
+              <Option value="03">03</Option>
+              <Option value="04">04</Option>
+              <Option value="05">05</Option>
+              <Option value="06">06</Option>
+              <Option value="07">07</Option>
+              <Option value="08">08</Option>
+              <Option value="09">09</Option>
+              <Option value="10">10</Option>
+              <Option value="11">11</Option>
+              <Option value="12">12</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="year"
+            label="နှစ်"
+            rules={[
+              {
+                required: true,
+                message: "ကျေးဇူးပြု၍ နှစ်ထည့်ပါ"
               }
             ]}
           >
             <InputNumber
-              placeholder="ပေးချေမည့်ပမာဏထည့်ပါ"
+              placeholder="နှစ်ထည့်ပါ(2022)"
+              prefix={<EditOutlined />}
+              style={{ borderRadius: "10px", width: "100%" }}
+              size="large"
+            />
+          </Form.Item>
+          <Form.Item
+            name="amount"
+            label="ပေးမည့်ပမာဏ"
+            rules={[
+              {
+                required: true,
+                message: "ကျေးဇူးပြု၍ ပေးမည့်ပမာဏထည့်ပါ"
+              }
+            ]}
+          >
+            <Input
+              placeholder="ပေးမည့်ပမာဏထည့်ပါ"
               prefix={<EditOutlined />}
               style={{ borderRadius: "10px", width: "100%" }}
               size="large"
@@ -202,7 +281,6 @@ const ShowPurchases = ({
             </Space>
           </Col>
         </Row>
-
         <Row>
           <Col span={24}>
             <Space
@@ -233,7 +311,7 @@ const ShowPurchases = ({
         <Table
           bordered
           columns={columns}
-          dataSource={result}
+          dataSource={DailyStaffs}
           pagination={{ defaultPageSize: 10 }}
         />
       </Space>
@@ -247,7 +325,8 @@ const mapStateToProps = (store) => ({
 
 export default connect(mapStateToProps, {
   getPurchase,
-  getPurchases,
-  savePurchaseCredits,
-  deletePurchaseCredits
-})(ShowPurchases);
+  getDailyStaffs,
+  getDailyStaff,
+  saveDailyStaffs,
+  deleteDailyStaffs
+})(EditDailyAttendance);

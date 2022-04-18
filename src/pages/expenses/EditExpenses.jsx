@@ -106,6 +106,7 @@ const EditExpense = ({ editExpenses, getExpenseNames, getExpense }) => {
                 size="large"
                 style={{ borderRadius: "10px" }}
               >
+                
                 {expenseNames.map((expense) => (
                   <Option value={expense.name} key={expense.id}>
                     {expense.name}
