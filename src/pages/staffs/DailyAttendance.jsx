@@ -29,7 +29,6 @@ const { Option } = Select;
 const { Title } = Typography;
 
 const DailyAttendance = ({
-  getPurchase,
   getDailyStaffs,
   getDailyStaff,
   saveDailyStaffs,
@@ -39,10 +38,9 @@ const DailyAttendance = ({
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const param = useParams();
-  const [staff, setStaff] = useState(null);
   const DailyStaffs = useSelector((state) => state.daily.dailys);
   const DailyStaffOne = useSelector((state) => state.daily.daily);
-  //   console.log("aa", DailyStaffOne);
+  // console.log("aa", DailyStaffOne);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,7 +62,7 @@ const DailyAttendance = ({
   }, [getDailyStaffs, DailyStaffOne]);
 
   const onFinish = async (values) => {
-    if (!DailyStaffOne) {
+    if (DailyStaffOne == null) {
       const result = {
         month: values.month,
         year: values.year,
@@ -85,7 +83,7 @@ const DailyAttendance = ({
     }
 
     form.resetFields();
-    // window.location.reload();
+    window.location.reload();
   };
 
   const handleDelete = async (record) => {
@@ -189,16 +187,16 @@ const DailyAttendance = ({
           </Form.Item>
           <Form.Item
             name="year"
-            label="နှစ်"
+            label="ခုနှစ်"
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ နှစ်ထည့်ပါ"
+                message: "ကျေးဇူးပြု၍ ခုနှစ်ထည့်ပါ"
               }
             ]}
           >
             <InputNumber
-              placeholder="နှစ်ထည့်ပါ(2022)"
+              placeholder="ခုနှစ်ထည့်ပါ  ဥပမာ(2022)"
               prefix={<EditOutlined />}
               style={{ borderRadius: "10px", width: "100%" }}
               size="large"

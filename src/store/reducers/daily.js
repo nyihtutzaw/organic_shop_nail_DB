@@ -9,7 +9,7 @@ import {
 
 const initialState = {
   dailys: [],
-  daily: {},
+  daily: null,
   error: {}
 };
 
