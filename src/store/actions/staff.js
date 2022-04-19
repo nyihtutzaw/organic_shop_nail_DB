@@ -4,7 +4,9 @@ import {
   CREATE_STAFFS,
   UPDATE_STAFFS,
   FILTER_STAFFS,
-  ERROR_STAFFS
+  ERROR_STAFFS,
+  IS_SUCCESS_STAFFS,
+  CLEAR_ALERT_STAFFS
 } from "../type";
 
 export const showStaffs = (staffs) => ({
@@ -31,6 +33,16 @@ export const setStaffErrors = (error) => ({
   type: ERROR_STAFFS,
   error
 });
+
+export const staffSuccess = (isSuccess) => ({
+  type: IS_SUCCESS_STAFFS,
+  isSuccess
+});
+
+export const clearAlertStaffs = () => ({
+  type: CLEAR_ALERT_STAFFS
+});
+
 
 // export const getBestDailyStaff = (query) => {
 //   return async (dispatch) => {
@@ -91,10 +103,8 @@ export const saveStaffs = (data) => {
       );
       // console.log(response);
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setStaffErrors(error.response.data.data));
-      } else {
-        dispatch(setStaffErrors(error.response.data));
+      if (error.response.status >= 400) {
+        dispatch(setStaffErrors("There was an error during Creating...!"));
       }
     }
   };
@@ -104,16 +114,14 @@ export const deleteStaffs = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs/${id}`
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffsc/${id}`
       );
       if (response.status === 204) {
         dispatch(filterStaffs(id));
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setStaffErrors(error.response.data.data));
-      } else {
-        dispatch(setStaffErrors(error.response.data));
+      if (error.response.status >= 400) {
+        dispatch(setStaffErrors("There was an error during Deleting..."));
       }
     }
   };

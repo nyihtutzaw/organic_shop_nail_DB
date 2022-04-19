@@ -1,20 +1,26 @@
-import { SHOW_STAFFS,
-    CREATE_STAFFS,
-    UPDATE_STAFFS,
-    FILTER_STAFFS,
-    ERROR_STAFFS
+import {
+  SHOW_STAFFS,
+  CREATE_STAFFS,
+  UPDATE_STAFFS,
+  FILTER_STAFFS,
+  ERROR_STAFFS,
+  IS_SUCCESS_STAFFS,
+  CLEAR_ALERT_STAFFS
 } from "../type";
 
 const initialState = {
   staffs: [],
-  error: {},
+  error: [],
+  isSuccess: false
 };
 
 const item = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_STAFFS:
       return {
-        staffs: [...state.staffs, action.staff]
+        staffs: [action.staff, ...state.staffs],
+        isSuccess: true,
+        error: []
       };
     case SHOW_STAFFS:
       return {
@@ -27,8 +33,9 @@ const item = (state = initialState, action) => {
       );
       return {
         ...state,
-        staffs: filterStaffs
-       
+        staffs: filterStaffs,
+        error: [],
+        isSuccess: true
       };
     case UPDATE_STAFFS:
       const index = state.staffs.findIndex(
@@ -36,11 +43,26 @@ const item = (state = initialState, action) => {
       );
       state.staffs[index] = action.data;
       return {
-        ...state
+        ...state,
+        error: [],
+        isSuccess: true
       };
     case ERROR_STAFFS:
       return {
-        ...state, error: action.error
+        ...state,
+        error: action.error,
+        isSuccess: false
+      };
+    case IS_SUCCESS_STAFFS:
+      return {
+        ...state,
+        isSuccess: action.isSuccess
+      };
+    case CLEAR_ALERT_STAFFS:
+      return {
+        ...state,
+        error: [],
+        isSuccess: false
       };
     default:
       return state;
@@ -48,5 +70,3 @@ const item = (state = initialState, action) => {
 };
 
 export default item;
-
-

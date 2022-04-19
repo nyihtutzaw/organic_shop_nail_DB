@@ -5,8 +5,8 @@ import {
   CREATE_MEMBERS,
   UPDATE_MEMBERS,
   FILTER_MEMBERS,
-  IS_SUCCESS_MEMBER,
   ERROR_MEMBER,
+  IS_SUCCESS_MEMBER,
   CLEAR_ALERT_MEMBER
 } from "../type";
 import { useDispatch } from "react-redux";
@@ -36,14 +36,15 @@ export const updateMembers = (data) => ({
   data
 });
 
-export const memberSuccess = (isSuccess) => ({
-  type: IS_SUCCESS_MEMBER,
-  isSuccess
-});
-
 export const setMemberError = (error) => ({
   type: ERROR_MEMBER,
   error
+});
+
+
+export const memberSuccess = (isSuccess) => ({
+  type: IS_SUCCESS_MEMBER,
+  isSuccess
 });
 
 export const clearAlertMember = () => ({

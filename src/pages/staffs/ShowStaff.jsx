@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
+import { Typography, Space, Row, Col, Button, Table, notification, Alert } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
@@ -9,14 +9,17 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getStaffs, deleteStaffs } from "../../store/actions";
+import { getStaffs, deleteStaffs, clearAlertStaffs } from "../../store/actions";
 import { connect } from "react-redux";
 import { ExportToExcel } from "../../excel/ExportToExcel";
+import store from "../../store";
+
 
 const { Title } = Typography;
 
-const ShowStaff = ({ getStaffs, deleteStaffs }) => {
+const ShowStaff = ({ getStaffs, deleteStaffs, clearAlertStaffs }) => {
   const dispatch = useDispatch();
+  const staff = useSelector((state) => state.staff);
   const staffs = useSelector((state) => state.staff.staffs);
   const fileName = "Staffs"; // here enter filename for your excel file
   const result = staffs.map((staff) => ({
@@ -27,6 +30,10 @@ const ShowStaff = ({ getStaffs, deleteStaffs }) => {
     Salary: staff.salary,
     Start_Work: staff.start_work
   }));
+
+  useEffect(() => {
+    store.dispatch(clearAlertStaffs());
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,17 +51,8 @@ const ShowStaff = ({ getStaffs, deleteStaffs }) => {
     navigate(`/admin/edit-staff/${record.id}`);
   };
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Delete Your Data",
-      description: "Your data have been deleted.",
-      duration: 3
-    });
-  };
-
   const handleDelete = async (record) => {
     await deleteStaffs(record.id);
-    openNotificationWithIcon("error");
   };
 
   const handleDailyRecord = async (record) => {
@@ -111,6 +109,24 @@ const ShowStaff = ({ getStaffs, deleteStaffs }) => {
 
   return (
     <Layout style={{ margin: "20px" }}>
+      {staff.error.length > 0 ? (
+        <Alert
+          message="Errors"
+          description={staff.error}
+          type="error"
+          showIcon
+          closable
+        />
+      ) : null}
+
+      {staff.isSuccess && (
+        <Alert
+          message="Successfully Deleted..."
+          type="success"
+          showIcon
+          closable
+        />
+      )}
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
           <Col span={16}>
@@ -145,4 +161,4 @@ const ShowStaff = ({ getStaffs, deleteStaffs }) => {
   );
 };
 
-export default connect(null, { getStaffs, deleteStaffs })(ShowStaff);
+export default connect(null, { getStaffs, deleteStaffs, clearAlertStaffs })(ShowStaff);

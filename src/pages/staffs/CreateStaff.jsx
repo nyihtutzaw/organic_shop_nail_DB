@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   Input,
@@ -6,22 +6,30 @@ import {
   Space,
   Button,
   message,
-  notification
+  notification,
+  Alert
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import InputUpload from "../../components/InputUpload";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { saveStaffs } from "../../store/actions";
+import { saveStaffs, clearAlertStaffs } from "../../store/actions";
 import { connect } from "react-redux";
+import store from "../../store";
 
 const { Title, Text } = Typography;
 
-const CreateStaff = ({ saveStaffs }) => {
+const CreateStaff = ({ saveStaffs, clearAlertStaffs }) => {
+  const staff = useSelector((state) => state.staff);
+  console.log(staff);
   const [fileList, setFileList] = useState([]);
   const navigate = useNavigate();
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    store.dispatch(clearAlertStaffs());
+  }, []);
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
@@ -53,12 +61,30 @@ const CreateStaff = ({ saveStaffs }) => {
 
   return (
     <Layout style={{ margin: "20px" }}>
+      {staff.error.length > 0 ? (
+        <Alert
+          message="Errors"
+          description={staff.error}
+          type="error"
+          showIcon
+          closable
+        />
+      ) : null}
+
+      {staff.isSuccess && (
+        <Alert
+          message="Successfully Created"
+          type="success"
+          showIcon
+          closable
+        />
+      )}
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
           ၀န်ထမ်းစာရင်းသွင်းရန်စာမျက်နှာ
         </Title>
         <Form
-        colon={false}
+          colon={false}
           labelCol={{
             xl: {
               span: 3
@@ -210,4 +236,4 @@ const CreateStaff = ({ saveStaffs }) => {
   );
 };
 
-export default connect(null, { saveStaffs })(CreateStaff);
+export default connect(null, { saveStaffs, clearAlertStaffs })(CreateStaff);
