@@ -26,7 +26,6 @@ const PrintSale = () => {
   const componentRef = useRef();
   const [sales, setSales] = useState([]);
   const [sale, setSale] = useState();
-
   const param = useParams();
 
   const handlePrint = useReactToPrint({
@@ -324,7 +323,7 @@ const PrintSale = () => {
               <Col span={1}></Col>
               <Col span={15}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
-                  01-8600111 (Ext:1156), 09-262437532,    09-400600366
+                  01-8600111 (Ext:1156), 09-262437532, 09-400600366
                 </Title>
               </Col>
             </Row>
@@ -369,20 +368,28 @@ const PrintSale = () => {
           <Col span={9}>
             <Row>
               <Col span={8}>
-                <Title level={5} style={{ fontSize: "11.5px"  }}>Customer Phone:</Title>
+                <Title level={5} style={{ fontSize: "11.5px" }}>
+                  Customer Phone:
+                </Title>
               </Col>
               <Col span={1}></Col>
               <Col span={15}>
-                <Title level={5} style={{ fontSize: "11.5px" }}>{sale.customer_phone_no}</Title>
+                <Title level={5} style={{ fontSize: "11.5px" }}>
+                  {sale.customer_phone_no}
+                </Title>
               </Col>
             </Row>
             <Row>
               <Col span={8}>
-                <Title level={5} style={{ fontSize: "11.5px" }}>Customer Name:</Title>
+                <Title level={5} style={{ fontSize: "11.5px" }}>
+                  Customer Name:
+                </Title>
               </Col>
               <Col span={1}></Col>
               <Col span={15}>
-                <Title level={5} style={{ fontSize: "11.5px" }}>{sale.customer_name}</Title>
+                <Title level={5} style={{ fontSize: "11.5px" }}>
+                  {sale.customer_name}
+                </Title>
               </Col>
             </Row>
           </Col>
@@ -390,29 +397,41 @@ const PrintSale = () => {
           <Col span={9}>
             <Row>
               <Col span={8}>
-                <Title level={5} style={{ fontSize: "11.5px"}}>Date:</Title>
+                <Title level={5} style={{ fontSize: "11.5px" }}>
+                  Date:
+                </Title>
               </Col>
               <Col span={1}></Col>
               <Col span={15}>
-                <Title level={5} style={{ fontSize: "11.5px"}}>{getDate(sale.created_at)}</Title>
+                <Title level={5} style={{ fontSize: "11.5px" }}>
+                  {getDate(sale.created_at)}
+                </Title>
               </Col>
             </Row>
             <Row>
               <Col span={8}>
-                <Title level={5} style={{ fontSize: "11.5px"}}>Voucher Code:</Title>
+                <Title level={5} style={{ fontSize: "11.5px" }}>
+                  Voucher Code:
+                </Title>
               </Col>
               <Col span={1}></Col>
               <Col span={15}>
-                <Title level={5} style={{ fontSize: "11.5px"}}>{sale.voucher_code}</Title>
+                <Title level={5} style={{ fontSize: "11.5px" }}>
+                  {sale.voucher_code}
+                </Title>
               </Col>
             </Row>
             <Row>
               <Col span={8}>
-                <Title level={5} style={{ fontSize: "11.5px"}}>Payment Method:</Title>
+                <Title level={5} style={{ fontSize: "11.5px" }}>
+                  Payment Method:
+                </Title>
               </Col>
               <Col span={1}></Col>
               <Col span={15}>
-                <Title level={5} style={{ fontSize: "11.5px"}}>{sale.payment_method}</Title>
+                <Title level={5} style={{ fontSize: "11.5px" }}>
+                  {sale.payment_method}
+                </Title>
               </Col>
             </Row>
           </Col>
@@ -425,58 +444,80 @@ const PrintSale = () => {
           // pagination={{ position: ["none", "none"] }}
           pagination={{ defaultPageSize: 20, position: ["none", "none"] }}
           style={{ margin: "10px 20px" }}
-          
-          size='small'
+          size="small"
         />
         <Row gutter={[16, 16]}>
           <Col span={17} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px"}}>စုစုပေါင်း</Title>
+            <Title level={5} style={{ fontSize: "11.5px" }}>
+              စုစုပေါင်း
+            </Title>
           </Col>
           <Col span={1}></Col>
           <Col span={5} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px"}}>{sale.total}</Title>
+            <Title level={5} style={{ fontSize: "11.5px" }}>
+              {sale.total}
+            </Title>
           </Col>
           <Col span={1}></Col>
         </Row>
         <Row gutter={[16, 16]}>
           <Col span={17} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px"}}>လျော့ဈေး</Title>
+            <Title level={5} style={{ fontSize: "11.5px" }}>
+              လျော့ဈေး
+            </Title>
           </Col>
           <Col span={1} style={{ textAlign: "left" }}>
-            <Title level={5} style={{ fontSize: "11.5px"}}>{sale.discount}%</Title>
+            <Title level={5} style={{ fontSize: "11.5px" }}>
+              {sale.discount}%
+            </Title>
           </Col>
+
           <Col span={5} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px"}}>{discountAmount}</Title>
+            <Title level={5} style={{ fontSize: "11.5px" }}>
+              {discountAmount}
+            </Title>
           </Col>
           <Col span={1}></Col>
         </Row>
         <Row gutter={[16, 16]}>
           <Col span={17} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px"}}>ပေးချေရမည့်စုစုပေါင်း</Title>
+            <Title level={5} style={{ fontSize: "11.5px" }}>
+              ပေးချေရမည့်စုစုပေါင်း
+            </Title>
           </Col>
           <Col span={1}></Col>
           <Col span={5} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px"}}>{sale.final_total}</Title>
+            <Title level={5} style={{ fontSize: "11.5px" }}>
+              {sale.final_total}
+            </Title>
           </Col>
           <Col span={1}></Col>
         </Row>
         <Row gutter={[16, 16]}>
           <Col span={17} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px"}}>ပေးငွေ</Title>
+            <Title level={5} style={{ fontSize: "11.5px" }}>
+              ပေးငွေ
+            </Title>
           </Col>
           <Col span={1}></Col>
           <Col span={5} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px"}}>{sale.paid}</Title>
+            <Title level={5} style={{ fontSize: "11.5px" }}>
+              {sale.paid}
+            </Title>
           </Col>
           <Col span={1}></Col>
         </Row>
         <Row gutter={[16, 16]}>
           <Col span={17} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px"}}>ပေးရန်ကျန်ငွေ</Title>
+            <Title level={5} style={{ fontSize: "11.5px" }}>
+              ပေးရန်ကျန်ငွေ
+            </Title>
           </Col>
           <Col span={1}></Col>
           <Col span={5} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px"}}>{sale.credit}</Title>
+            <Title level={5} style={{ fontSize: "11.5px" }}>
+              {sale.credit}
+            </Title>
           </Col>
           <Col span={1}></Col>
         </Row>
