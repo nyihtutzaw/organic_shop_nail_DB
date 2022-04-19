@@ -40,7 +40,7 @@ const DailyAttendance = ({
   const param = useParams();
   const DailyStaffs = useSelector((state) => state.daily.dailys);
   const DailyStaffOne = useSelector((state) => state.daily.daily);
-  // console.log("aa", DailyStaffOne);
+  // console.log("aa", DailyStaffs);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -99,9 +99,14 @@ const DailyAttendance = ({
 
   const columns = [
     {
-      title: "ရက်စွဲ",
-      dataIndex: "date",
-      render: (_, record) => getReadableDateDisplay(record.created_at)
+      title: "ခုနှစ်",
+      dataIndex: "year",
+      render: (_, record) => record.year
+    },
+    {
+      title: "လ",
+      dataIndex: "month",
+      render: (_, record) => record.month
     },
     {
       title: "ပေးခဲ့သည့်ရက်မှန်ကြေး",

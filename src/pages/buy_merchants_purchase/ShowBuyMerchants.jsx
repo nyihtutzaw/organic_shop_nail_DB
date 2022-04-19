@@ -10,10 +10,7 @@ import {
   notification
 } from "antd";
 import Layout from "antd/lib/layout/layout";
-import {
-  PlusSquareOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { PlusSquareOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
 import {
@@ -38,6 +35,7 @@ const ShowBuyMerchants = ({
 }) => {
   const navigate = useNavigate();
   const allPurchases = useSelector((state) => state.purchase.purchases);
+  // console.log(allPurchases);
 
   const fileName = "Purchases"; // here enter filename for your excel file
   const result = allPurchases.map((purchase) => ({

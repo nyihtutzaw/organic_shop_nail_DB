@@ -20,9 +20,11 @@ const StaffComession = ({ getDailyStaffs }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const staffs = useSelector((state) => state.staff.staffs);
+  // const staffsDailyFee = useSelector((state) => state.staff.staffs);
   const dailyStaffsFree = useSelector((state) => state.daily.dailys);
+  // const daily = useSelector((state) => state);
   // console.log(dailyStaffsFree);
-  // console.log("ss",staffs);
+  // console.log(staffs);
 
   useEffect(() => {
     const fetchData = () => {
@@ -71,10 +73,9 @@ const StaffComession = ({ getDailyStaffs }) => {
         title: "ရက်မှန်ကြေး",
         dataIndex: "fee",
         render: (_, record) => {
-          // console.log("dd",record)
-          let result = dailyStaffsFree.find((d) => d?.staff?.id === record?.id);
-          // console.log("aa",result.amount)
-          return result?.amount;
+          const result = record.daily_fees.map((f) => parseInt(f.amount));
+          const final = result.reduce((a, b) => a + b, 0);
+          return final;
         }
       },
       {
