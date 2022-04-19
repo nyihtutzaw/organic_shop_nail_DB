@@ -109,23 +109,9 @@ const ShowBuyMerchants = ({
     openNotificationWithIcon("error");
   };
 
-  const handleClick = async (record) => {
-    await getPurchase(record.id);
-    navigate(`/admin/edit-buy-merchants/${record.id}`);
-  };
-
   const handleDetail = async (record) => {
-    // await getPurchase(record.id);
     navigate(`/admin/show-purchase/${record.id}`);
   };
-
-  // const getPurchasesData = allPurchases.map((p) =>
-  //   p.purchase_items.map((item) => ({
-  //     name: item.item.name
-  //   }))
-  // );
-
-  // console.log("dfsdf", getPurchasesData);
 
   const columns = [
     {

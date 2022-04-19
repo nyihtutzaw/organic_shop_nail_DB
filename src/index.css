@@ -50,6 +50,9 @@ a {
   }
 }
 
+.ant-table table {
+  font-size: 12px;
+}
 /* .highlight-bottom-border > td {
   border-bottom: solid 1px black !important;
 }

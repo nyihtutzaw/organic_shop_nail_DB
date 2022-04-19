@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Typography, Space, Row, Col, Table, Select, DatePicker } from "antd";
 import Layout from "antd/lib/layout/layout";
 import queryString from "query-string";
-import {
-  getStaffReport,
-  getDailyStaffs,
-  getBestDailyStaff
-} from "../../store/actions";
+import { getStaffReport, getDailyStaffs } from "../../store/actions";
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import { connect, useDispatch, useSelector } from "react-redux";
@@ -20,11 +16,7 @@ const StaffComession = ({ getDailyStaffs }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const staffs = useSelector((state) => state.staff.staffs);
-  // const staffsDailyFee = useSelector((state) => state.staff.staffs);
   const dailyStaffsFree = useSelector((state) => state.daily.dailys);
-  // const daily = useSelector((state) => state);
-  // console.log(dailyStaffsFree);
-  // console.log(staffs);
 
   useEffect(() => {
     const fetchData = () => {
@@ -35,16 +27,6 @@ const StaffComession = ({ getDailyStaffs }) => {
       fetchData();
     };
   }, [getStaffReport, location]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      dispatch(getBestDailyStaff(queryString.parse(location.search)));
-    };
-    fetchData();
-    return () => {
-      fetchData();
-    };
-  }, [getBestDailyStaff, location]);
 
   useEffect(() => {
     setFilterStaffs(staffs);
@@ -73,8 +55,8 @@ const StaffComession = ({ getDailyStaffs }) => {
         title: "ရက်မှန်ကြေး",
         dataIndex: "fee",
         render: (_, record) => {
-          const result = record.daily_fees.map((f) => parseInt(f.amount));
-          const final = result.reduce((a, b) => a + b, 0);
+          const result = record?.daily_fees?.map((f) => parseInt(f.amount));
+          const final = result?.reduce((a, b) => a + b, 0);
           return final;
         }
       },

@@ -38,29 +38,29 @@ export const setDailyStaffErrors = (error) => ({
   error
 });
 
-export const getBestDailyStaff = (query) => {
-  return async (dispatch) => {
-    try {
-      const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/daily-fees/bestDaily?${new URLSearchParams(
-          query
-        ).toString()}`
-      );
-      console.log("aa", query.best);
-      const result = response.data.data.map((service) => {
-        return {
-          ...service,
-          key: service.id
-        };
-      });
-      dispatch(showDailyStaffs(result));
-    } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setDailyStaffErrors(error.response.data.data));
-      }
-    }
-  };
-};
+// export const getBestDailyStaff = (query) => {
+//   return async (dispatch) => {
+//     try {
+//       const response = await axios.get(
+//         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/daily-fees/bestDaily?${new URLSearchParams(
+//           query
+//         ).toString()}`
+//       );
+//       console.log("aa", query.best);
+//       const result = response.data.data.map((service) => {
+//         return {
+//           ...service,
+//           key: service.id
+//         };
+//       });
+//       dispatch(showDailyStaffs(result));
+//     } catch (error) {
+//       if (error.response.status === 404) {
+//         dispatch(setDailyStaffErrors(error.response.data.data));
+//       }
+//     }
+//   };
+// };
 
 export const getDailyStaffs = () => {
   return async (dispatch) => {
