@@ -1,17 +1,8 @@
-import React, { useEffect, useState } from "react";
-import {
-  Form,
-  Input,
-  Typography,
-  Space,
-  Button,
-  notification,
-  message,
-  Alert
-} from "antd";
+import React, { useEffect } from "react";
+import { Form, Input, Typography, Space, Button, message, Alert } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { saveShops, clearAlert } from "../../store/actions";
 import store from "../../store";
 
@@ -23,6 +14,18 @@ const CreateShops = ({ saveShops, shop, clearAlert }) => {
   useEffect(() => {
     store.dispatch(clearAlert());
   }, []);
+
+  // useEffect(() => {
+  //   if (shop.isSuccess) {
+  //     message.success("Successfully Created...");
+  //   }
+  // }, [shop.isSuccess]);
+
+  // useEffect(() => {
+  //   if (shop.error.length) {
+  //     message.error(shop.error);
+  //   }
+  // }, [shop.error]);
 
   const onFinish = async (values) => {
     await saveShops(values);
@@ -42,12 +45,16 @@ const CreateShops = ({ saveShops, shop, clearAlert }) => {
       ) : null}
 
       {shop.isSuccess && (
-        <Alert message="Successfully Created" type="success" showIcon />
+        <Alert
+          message="Successfully Created"
+          type="success"
+          showIcon
+          closable
+        />
       )}
-
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
-          ဆိုင်အမည် သွင်းခြင်း စာမျက်နှာ
+          ဆိုင်အမည်သွင်းခြင်းစာမျက်နှာ
         </Title>
         <Form
           colon={false}

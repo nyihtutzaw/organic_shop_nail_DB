@@ -6,20 +6,26 @@ import {
   Space,
   Button,
   Select,
-  notification
+  notification,
+  message,
+  Alert
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { saveMembers, getShops } from "../../store/actions";
+import { saveMembers, getShops, clearAlertMember } from "../../store/actions";
 import { connect } from "react-redux";
+import store from "../../store";
 
 const { Title } = Typography;
 
-const CreateMembers = ({ shop, saveMembers, getShops }) => {
-  const navigate = useNavigate();
+const CreateMembers = ({ shop, saveMembers, getShops, clearAlertMember }) => {
+  const member = useSelector((state) => state.member);
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    store.dispatch(clearAlertMember());
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,17 +37,9 @@ const CreateMembers = ({ shop, saveMembers, getShops }) => {
     };
   }, [getShops]);
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Saved Your Data",
-      description: "Your data have been saved.",
-      duration: 3
-    });
-  };
   const onFinish = async (values) => {
     await saveMembers(values);
     form.resetFields();
-    openNotificationWithIcon("success");
   };
 
   //for barcode
@@ -52,12 +50,25 @@ const CreateMembers = ({ shop, saveMembers, getShops }) => {
 
   return (
     <Layout style={{ margin: "20px" }}>
+      {member.error.length > 0 ? (
+        <Alert
+          message="Errors"
+          description={member.error}
+          type="error"
+          showIcon
+          closable
+        />
+      ) : null}
+
+      {member.isSuccess && (
+        <Alert message="Successfully Created" type="success" showIcon />
+      )}
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
           Member စာရင်းသွင်းခြင်း စာမျက်နှာ
         </Title>
         <Form
-        colon={false}
+          colon={false}
           labelCol={{
             xl: {
               span: 3
@@ -169,6 +180,8 @@ const mapStateToProps = (store) => ({
   shop: store.shop
 });
 
-export default connect(mapStateToProps, { saveMembers, getShops })(
-  CreateMembers
-);
+export default connect(mapStateToProps, {
+  saveMembers,
+  getShops,
+  clearAlertMember
+})(CreateMembers);

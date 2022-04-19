@@ -40,7 +40,6 @@ export const setShopErrors = (error) => ({
   error
 });
 
-
 export const shopSuccess = (isSuccess) => ({
   type: IS_SUCCESS_SHOP,
   isSuccess
@@ -85,8 +84,10 @@ export const getShop = (id) => {
       }
     } catch (error) {
       if (error.response.status >= 400) {
-        dispatch(setShopErrors("There was an error during Updating a Data....!"));
-      } 
+        dispatch(
+          setShopErrors("There was an error during Updating a Data....!")
+        );
+      }
     }
   };
 };

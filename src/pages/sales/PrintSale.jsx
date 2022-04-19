@@ -183,17 +183,18 @@ const PrintSale = () => {
             span={12}
             style={{ textAlign: "center", marginBottom: "20px" }}
           >
+            <Image preview={false} width={68} src={organic} style={{ borderRadius: "100px" }} />
+
             <Title level={2} style={{ fontSize: "16px" }}>
               Organic Nail Shop
             </Title>
-            <Image width={68} src={organic} style={{ borderRadius: "100px" }} />
           </Col>
           <Col className="gutter-row" span={6}></Col>
         </Row>
 
         <Row>
           <Col span={1}></Col>
-          <Col span={9}>
+          <Col span={10}>
             <Row>
               <Col span={8}>
                 <Title style={{ fontSize: "11.5px" }} level={5}>
@@ -260,8 +261,8 @@ const PrintSale = () => {
               </Col>
             </Row>
           </Col>
-          <Col span={4}></Col>
-          <Col span={9}>
+          <Col span={2}></Col>
+          <Col span={10}>
             <Row>
               <Col span={8}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
@@ -365,7 +366,7 @@ const PrintSale = () => {
         </Row>
         <Row>
           <Col span={1}></Col>
-          <Col span={9}>
+          <Col span={10}>
             <Row>
               <Col span={8}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
@@ -393,8 +394,8 @@ const PrintSale = () => {
               </Col>
             </Row>
           </Col>
-          <Col span={4}></Col>
-          <Col span={9}>
+          <Col span={2}></Col>
+          <Col span={10}>
             <Row>
               <Col span={8}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>

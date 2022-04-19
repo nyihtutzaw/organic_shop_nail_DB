@@ -1,5 +1,15 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
+import {
+  Typography,
+  Space,
+  Row,
+  Col,
+  Button,
+  Table,
+  notification,
+  message,
+  Alert
+} from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
@@ -8,14 +18,26 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getMembers, deleteMembers, getMember } from "../../store/actions";
+import {
+  getMembers,
+  deleteMembers,
+  getMember,
+  clearAlertMember
+} from "../../store/actions";
 import { connect } from "react-redux";
 import { ExportToExcel } from "../../excel/ExportToExcel";
+import store from "../../store";
 
 const { Title } = Typography;
 
-const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
+const ShowMembers = ({
+  getMembers,
+  deleteMembers,
+  getMember,
+  clearAlertMember
+}) => {
   const navigate = useNavigate();
+  const member = useSelector((state) => state.member);
   const members = useSelector((state) => state.member.members);
   const fileName = "Members"; // here enter filename for your excel file
 
@@ -37,6 +59,10 @@ const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
   }));
 
   useEffect(() => {
+    store.dispatch(clearAlertMember());
+  }, []);
+
+  useEffect(() => {
     const fetchData = async () => {
       await getMembers();
     };
@@ -51,16 +77,8 @@ const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
     navigate(`/admin/edit-members/${record.id}`);
   };
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Deleted Your Data",
-      description: "Your data have been deleted.",
-      duration: 3
-    });
-  };
   const handleDelete = async (record) => {
     await deleteMembers(record.id);
-    openNotificationWithIcon("error");
   };
 
   const handleDetail = (record) => {
@@ -113,6 +131,25 @@ const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
 
   return (
     <Layout style={{ margin: "20px" }}>
+      {member.error.length > 0 ? (
+        <Alert
+          message="Errors"
+          description={member.error}
+          type="error"
+          showIcon
+          closable
+        />
+      ) : null}
+
+      {member.isSuccess && (
+        <Alert
+          message="Successfully Deleted"
+          type="success"
+          showIcon
+          closable
+        />
+      )}
+
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
           <Col span={16}>
@@ -147,6 +184,9 @@ const ShowMembers = ({ getMembers, deleteMembers, getMember }) => {
   );
 };
 
-export default connect(null, { getMembers, deleteMembers, getMember })(
-  ShowMembers
-);
+export default connect(null, {
+  getMembers,
+  deleteMembers,
+  getMember,
+  clearAlertMember
+})(ShowMembers);

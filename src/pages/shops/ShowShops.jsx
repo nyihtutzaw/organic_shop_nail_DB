@@ -1,9 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Typography, Space, Row, Col, Button, Table, Alert } from "antd";
+import React, { useEffect } from "react";
+import {
+  Typography,
+  Space,
+  Row,
+  Col,
+  Button,
+  Table,
+  message,
+  Alert
+} from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
-  ExportOutlined,
   DeleteOutlined,
   EditOutlined
 } from "@ant-design/icons";
@@ -89,7 +97,8 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
       ) : null}
 
       {shop.isSuccess && (
-        <Alert message="Successfully Deleted" type="success" showIcon />
+        <Alert message="Successfully Deleted" type="success" showIcon
+        closable />
       )}
 
       <Space direction="vertical" size="middle">

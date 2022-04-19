@@ -5,8 +5,11 @@ import {
   CREATE_MEMBERS,
   UPDATE_MEMBERS,
   FILTER_MEMBERS,
-  ERROR_ITEM
+  IS_SUCCESS_MEMBER,
+  ERROR_MEMBER,
+  CLEAR_ALERT_MEMBER
 } from "../type";
+import { useDispatch } from "react-redux";
 
 export const showMembers = (members) => ({
   type: SHOW_MEMBERS,
@@ -33,11 +36,19 @@ export const updateMembers = (data) => ({
   data
 });
 
-export const setItemError = (error) => ({
-  type: ERROR_ITEM,
+export const memberSuccess = (isSuccess) => ({
+  type: IS_SUCCESS_MEMBER,
+  isSuccess
+});
+
+export const setMemberError = (error) => ({
+  type: ERROR_MEMBER,
   error
 });
 
+export const clearAlertMember = () => ({
+  type: CLEAR_ALERT_MEMBER
+});
 
 export const getMembers = () => {
   return async (dispatch) => {
@@ -57,17 +68,15 @@ export const getMembers = () => {
       }
     } catch (error) {
       if (error.response.status === 404) {
-        dispatch(setItemError(error.response.data.data));
-      } else {
-        dispatch(setItemError(error.response.data));
+        dispatch(setMemberError(error.response.data.data));
       }
     }
   };
 };
 
-
 export const getMember = (id) => {
   return async (dispatch) => {
+    dispatch(memberSuccess(false));
     try {
       // console.log(id);
       const response = await axios.get(
@@ -80,9 +89,7 @@ export const getMember = (id) => {
       }
     } catch (error) {
       if (error) {
-        dispatch(setItemError(error));
-      } else {
-        dispatch(setItemError(error));
+        dispatch(setMemberError(error));
       }
     }
   };
@@ -103,10 +110,8 @@ export const saveMembers = (data) => {
         dispatch(createMembers(result));
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setItemError(error.response.data.data));
-      } else {
-        dispatch(setItemError(error.response.data));
+      if (error.response.status >= 400) {
+        dispatch(setMemberError("There was an error during Creating....!"));
       }
     }
   };
@@ -122,10 +127,8 @@ export const deleteMembers = (id) => {
         dispatch(filterMembers(id));
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setItemError(error.response.data.data));
-      } else {
-        dispatch(setItemError(error.response.data));
+      if (error.response.status >= 400) {
+        dispatch(setMemberError("There was an error during Deleting....!"));
       }
     }
   };
@@ -146,9 +149,7 @@ export const editMembers = (id, data) => {
       }
     } catch (error) {
       if (error.response.status === 404) {
-        dispatch(setItemError(error.response.data.data));
-      } else {
-        dispatch(setItemError(error.response.data));
+        dispatch(setMemberError(error.response.data.data));
       }
     }
   };

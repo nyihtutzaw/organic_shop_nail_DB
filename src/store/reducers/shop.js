@@ -17,6 +17,7 @@ const initialState = {
   isSuccess: false
 };
 
+
 const shop = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_SHOPS:
