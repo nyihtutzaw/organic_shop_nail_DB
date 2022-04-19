@@ -233,7 +233,7 @@ const StaffComession = ({ getDailyStaffs }) => {
                 color: "var(--white-color)"
               }}
             >
-              စုစုပေါင်း = {total}
+              စုစုပေါင်း = {total.toLocaleString()}
             </Text>
           </Col>
         </Row>
