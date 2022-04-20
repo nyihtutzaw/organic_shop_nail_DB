@@ -14,7 +14,6 @@ import { connect } from "react-redux";
 import { notification } from "antd";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 
-
 const { Title } = Typography;
 
 const ShowService = ({ service, getServices, deleteServices, getService }) => {
