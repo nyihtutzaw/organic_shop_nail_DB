@@ -336,7 +336,6 @@ const Admin = ({ logout }) => {
                 </Menu.Item>
               </SubMenu>
             )}
-
             <SubMenu
               key="Merchants"
               title="ကုန်သည်များ"
@@ -349,7 +348,6 @@ const Admin = ({ logout }) => {
                 <Link to="/admin/create-merchants">အသစ်ဖန်တီးရန်</Link>
               </Menu.Item>
             </SubMenu>
-
             <SubMenu
               key="Members"
               title="မန်ဘာများ"
@@ -362,7 +360,6 @@ const Admin = ({ logout }) => {
                 <Link to="/admin/create-members">အသစ်ဖန်တီးရန်</Link>
               </Menu.Item>
             </SubMenu>
-
             <SubMenu
               key="Items"
               title="ပစ္စည်းများ"
@@ -393,7 +390,6 @@ const Admin = ({ logout }) => {
                 <Link to="/admin/show-bad-item">ချို့ယွင်းချက်ရှိ</Link>
               </Menu.Item>
             </SubMenu>
-
             <SubMenu key="Service" title="ဝန်ဆောင်မှု" icon={<FlagOutlined />}>
               <Menu.Item key="CreateService" icon={<SaveOutlined />}>
                 <Link to="/admin/create-service">အသစ်ဖန်တီးရန်</Link>
@@ -442,39 +438,25 @@ const Admin = ({ logout }) => {
                 <Link to="/admin/show-expense-names">အမည်များ</Link>
               </Menu.Item>
             </SubMenu>
-
-            {(user?.position === "owner" || user?.position === "manager") && (
-              <SubMenu
-                key="Reports"
-                title="Reports"
-                icon={<FolderAddOutlined />}
-              >
-                <Menu.Item key="ItemsReports" icon={<SaveOutlined />}>
-                  <Link to="/admin/item-report">Item</Link>
-                </Menu.Item>
-                <Menu.Item
-                  key="VouchersReports"
-                  icon={<UnorderedListOutlined />}
-                >
-                  <Link to="/admin/voucher-report">Voucher</Link>
-                </Menu.Item>
-                <Menu.Item
-                  key="ServicesReports"
-                  icon={<UnorderedListOutlined />}
-                >
-                  <Link to="/admin/service-report">Service</Link>
-                </Menu.Item>
-                <Menu.Item key="ReportScreem" icon={<UnorderedListOutlined />}>
-                  <Link to="/admin/report-screem">Report Screen</Link>
-                </Menu.Item>
-                <Menu.Item
-                  key="PurchaseReport"
-                  icon={<UnorderedListOutlined />}
-                >
-                  <Link to="/admin/purchase-report">Purchase</Link>
-                </Menu.Item>
-              </SubMenu>
-            )}
+            {/* {(user?.position === "owner" || user?.position === "manager") && ( */}
+            <SubMenu key="Reports" title="Reports" icon={<FolderAddOutlined />}>
+              <Menu.Item key="ItemsReports" icon={<SaveOutlined />}>
+                <Link to="/admin/item-report">Item</Link>
+              </Menu.Item>
+              <Menu.Item key="VouchersReports" icon={<UnorderedListOutlined />}>
+                <Link to="/admin/voucher-report">Voucher</Link>
+              </Menu.Item>
+              <Menu.Item key="ServicesReports" icon={<UnorderedListOutlined />}>
+                <Link to="/admin/service-report">Service</Link>
+              </Menu.Item>
+              <Menu.Item key="ReportScreem" icon={<UnorderedListOutlined />}>
+                <Link to="/admin/report-screem">Report Screen</Link>
+              </Menu.Item>
+              <Menu.Item key="PurchaseReport" icon={<UnorderedListOutlined />}>
+                <Link to="/admin/purchase-report">Purchase</Link>
+              </Menu.Item>
+            </SubMenu>
+            {/* // )} */}
           </Menu>
         </Sider>
         <Layout>
@@ -523,8 +505,14 @@ const Admin = ({ logout }) => {
               <Route path="create-staff" element={<CreateStaff />} />
               <Route path="show-staff" element={<ShowStaff />} />
               <Route path="edit-staff/:id" element={<EditStaff />} />
-              <Route path="dailyAttendance-staff/:id" element={<DailyAttendance />} />
-              <Route path="editDailyAttendance-staff/:id" element={<DailyAttendance />} />
+              <Route
+                path="dailyAttendance-staff/:id"
+                element={<DailyAttendance />}
+              />
+              <Route
+                path="editDailyAttendance-staff/:id"
+                element={<DailyAttendance />}
+              />
               <Route
                 path="show-staff-commession"
                 element={<StaffComession />}

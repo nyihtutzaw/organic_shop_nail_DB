@@ -32,6 +32,8 @@ import {
   getMembers
 } from "../store/actions";
 import { call } from "../services/api";
+import dateFormat from "dateformat";
+
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -248,9 +250,10 @@ const Sale = ({
           });
         }
       });
-
+      const now = new Date();
+      const date = dateFormat(now, "yyyy-mm-dd");
       let savedData = {
-        date: "2022-03-28",
+        date: date,
         items: items,
         services: services,
         item_buy_total: itemBuyTotal,

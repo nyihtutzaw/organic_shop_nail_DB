@@ -40,7 +40,6 @@ const CreateBuyMerchants = ({
   const [buyMerchant, setBuyMerchant] = useState(null);
   const allItems = item.items;
   const navigate = useNavigate();
-  console.log(allItems);
 
   const [form] = Form.useForm();
   useEffect(() => {
