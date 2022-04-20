@@ -27,17 +27,18 @@ const CreateItems = ({ saveItems, error }) => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    if (fileList.length === 0) {
-      message.error("ကျေးဇူးပြု၍ပစ္စည်းပုံထည့်ပါ");
-    }
-    if (fileList.length > 0) {
+    console.log( values)
+    // if (fileList.length === 0) {
+    //   message.error("ကျေးဇူးပြု၍ပစ္စည်းပုံထည့်ပါ");
+    // }
+    // if (fileList.length > 0) {
       setItems([
         ...items,
         { ...values, image: fileList[0], key: Math.random() * 100 }
       ]);
       setFileList([]);
       form.resetFields();
-    }
+    // }
   };
 
   const handleDelete = (record) => {
@@ -85,7 +86,7 @@ const CreateItems = ({ saveItems, error }) => {
       dataIndex: "image_url",
       render: (_, record) => (
         <img
-          src={record.image.thumbUrl}
+          src={ (record?.image?.thumbUrl) ? (record?.image?.thumbUrl) : null }
           alt="ပစ္စည်းပုံ"
           width={100}
           height={100}

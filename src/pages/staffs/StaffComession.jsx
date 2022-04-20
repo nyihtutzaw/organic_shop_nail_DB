@@ -83,7 +83,7 @@ const StaffComession = ({ getDailyStaffs }) => {
               : 0;
           let result = dailyStaffsFree.find((d) => d?.staff?.id === record?.id);
           return (
-            Number(commercial) + Number(record.salary) + Number(result?.amount)
+            Number(commercial) + Number(record.salary) + (result?.amount ? Number(result?.amount) : 0) 
           );
         }
       }
@@ -131,7 +131,7 @@ const StaffComession = ({ getDailyStaffs }) => {
               : 0;
           let result = dailyStaffsFree.find((d) => d?.staff?.id === record?.id);
           return (
-            Number(commercial) + Number(record.salary) + Number(result?.amount)
+            Number(commercial) + Number(record.salary) + (result?.amount ? Number(result?.amount) : 0)
           );
         }
       }
@@ -149,7 +149,7 @@ const StaffComession = ({ getDailyStaffs }) => {
     let result = dailyStaffsFree.find((d) => d?.staff?.id === filterStaff?.id);
 
     total +=
-      Number(commercial) + Number(filterStaff.salary) + Number(result?.amount);
+      Number(commercial) + Number(filterStaff.salary) + (result?.amount ? Number(result?.amount) : 0) ;
   });
 
   const handleOnChange = (value) => {
@@ -233,7 +233,7 @@ const StaffComession = ({ getDailyStaffs }) => {
                 color: "var(--white-color)"
               }}
             >
-              စုစုပေါင်း = {total.toLocaleString()}
+              စုစုပေါင်း = {total}
             </Text>
           </Col>
         </Row>

@@ -43,7 +43,6 @@ export const clearAlertStaffs = () => ({
   type: CLEAR_ALERT_STAFFS
 });
 
-
 // export const getBestDailyStaff = (query) => {
 //   return async (dispatch) => {
 //     try {
@@ -101,7 +100,11 @@ export const saveStaffs = (data) => {
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs",
         data
       );
-      // console.log(response);
+      // console.log(response.data.data);
+      const result = response.data.data;
+      if (response.status === 201) {
+        dispatch(createStaffs(result));
+      }
     } catch (error) {
       if (error.response.status >= 400) {
         dispatch(setStaffErrors("There was an error during Creating...!"));
@@ -114,7 +117,7 @@ export const deleteStaffs = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffsc/${id}`
+        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs/${id}`
       );
       if (response.status === 204) {
         dispatch(filterStaffs(id));

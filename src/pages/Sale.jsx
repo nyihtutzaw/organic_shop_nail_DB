@@ -59,7 +59,6 @@ const Sale = ({
   const [barcode, setBarcode] = useState([]);
 
   const navigate = useNavigate();
-
   useEffect(() => {
     const fetchData = async () => {
       await getStocks();
@@ -96,7 +95,7 @@ const Sale = ({
           quantity: 1,
           subtotal: stock.item.sale_price * 1,
           is_item: true,
-          staff_id: 1 // not need staff id for item. so, we need to change api
+          staff_id: 6 // not need staff id for item. so, we need to change api
         };
 
         setSales([...sales, sale]);
@@ -294,6 +293,7 @@ const Sale = ({
       }
     }
   };
+  // console.log(payMethod);
 
   const handlePrint = () => {
     if (sale) {

@@ -10,7 +10,7 @@ const { Title } = Typography;
 
 const CreateShops = ({ saveShops, shop, clearAlert }) => {
   const [form] = Form.useForm();
-
+console.log(shop)
   useEffect(() => {
     store.dispatch(clearAlert());
   }, []);
@@ -112,5 +112,6 @@ const CreateShops = ({ saveShops, shop, clearAlert }) => {
 const mapStateToProps = (store) => ({
   shop: store.shop
 });
+
 
 export default connect(mapStateToProps, { saveShops, clearAlert })(CreateShops);

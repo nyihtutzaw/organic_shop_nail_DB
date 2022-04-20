@@ -20,9 +20,7 @@ import store from "../../store";
 
 const { Title, Text } = Typography;
 
-const CreateStaff = ({ saveStaffs, clearAlertStaffs }) => {
-  const staff = useSelector((state) => state.staff);
-  console.log(staff);
+const CreateStaff = ({ saveStaffs, clearAlertStaffs, staff }) => {
   const [fileList, setFileList] = useState([]);
   const navigate = useNavigate();
   const [form] = Form.useForm();
@@ -31,13 +29,13 @@ const CreateStaff = ({ saveStaffs, clearAlertStaffs }) => {
     store.dispatch(clearAlertStaffs());
   }, []);
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Saved Your Data",
-      description: "Your data have been saved.",
-      duration: 3
-    });
-  };
+  // const openNotificationWithIcon = (type) => {
+  //   notification[type]({
+  //     message: "Saved Your Data",
+  //     description: "Your data have been saved.",
+  //     duration: 3
+  //   });
+  // };
 
   const onFinish = async (values) => {
     if (fileList.length === 0) {
@@ -54,7 +52,7 @@ const CreateStaff = ({ saveStaffs, clearAlertStaffs }) => {
       formData.append("image", fileList[0].originFileObj);
       await saveStaffs(formData);
       form.resetFields();
-      openNotificationWithIcon("success");
+      // openNotificationWithIcon("success");
       setFileList([]);
     }
   };
@@ -236,4 +234,8 @@ const CreateStaff = ({ saveStaffs, clearAlertStaffs }) => {
   );
 };
 
-export default connect(null, { saveStaffs, clearAlertStaffs })(CreateStaff);
+const mapStateToProps = (store) => ({
+  staff: store.staff
+});
+
+export default connect(mapStateToProps, { saveStaffs, clearAlertStaffs })(CreateStaff);

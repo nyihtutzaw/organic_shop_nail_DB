@@ -14,18 +14,18 @@ const initialState = {
   isSuccess: false
 };
 
-const item = (state = initialState, action) => {
+const staff = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_STAFFS:
       return {
         staffs: [action.staff, ...state.staffs],
+        error: [],
         isSuccess: true,
-        error: []
       };
     case SHOW_STAFFS:
       return {
         ...state,
-        staffs: action.staffs
+        staffs: action.staffs,
       };
     case FILTER_STAFFS:
       const filterStaffs = state.staffs.filter(
@@ -69,4 +69,4 @@ const item = (state = initialState, action) => {
   }
 };
 
-export default item;
+export default staff;
