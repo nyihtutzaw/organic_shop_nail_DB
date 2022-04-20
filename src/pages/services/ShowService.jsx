@@ -26,6 +26,7 @@ const ShowService = ({ service, getServices, deleteServices, getService }) => {
     Category: service.category,
     Percentage: service.percentage,
     Price: service.price,
+    key: service.id
   }));
 
   const navigate = useNavigate();

@@ -41,13 +41,17 @@ const CreateService = ({ getServices, saveServices }) => {
   };
 
   const onFinish = (values) => {
+
     setSupplierTable(
       {
         services: [
           ...supplierTable.services,
           {
             key: Math.random() * 100,
-            ...values
+            ...values,
+            percentage: values.percentage,
+            price: values.price,
+            commercial: parseInt(values.price) * ( parseInt(values.percentage) / 100)
           }
         ]
       }
@@ -212,7 +216,7 @@ const CreateService = ({ getServices, saveServices }) => {
             />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             name="commercial"
             label="ကော်မရှင်"
             rules={[
@@ -227,8 +231,9 @@ const CreateService = ({ getServices, saveServices }) => {
               prefix={<EditOutlined />}
               style={{ borderRadius: "10px", width: "100%" }}
               size="large"
+              value={2000}
             />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item style={{ textAlign: "right" }}>
             <Button
               style={{
