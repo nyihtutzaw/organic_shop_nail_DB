@@ -238,4 +238,6 @@ const mapStateToProps = (store) => ({
   staff: store.staff
 });
 
-export default connect(mapStateToProps, { saveStaffs, clearAlertStaffs })(CreateStaff);
+export default connect(mapStateToProps, { saveStaffs, clearAlertStaffs })(
+  CreateStaff
+);

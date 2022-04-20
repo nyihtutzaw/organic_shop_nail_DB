@@ -20,7 +20,8 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
     Name: item.name,
     Code: item.code,
     Buy_Price: item.buy_price,
-    Sale_Price: item.sale_price
+    Sale_Price: item.sale_price,
+    key: item.id
   }));
 
   const navigate = useNavigate();

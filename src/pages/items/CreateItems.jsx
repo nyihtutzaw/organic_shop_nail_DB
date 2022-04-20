@@ -18,6 +18,7 @@ import {
 import InputUpload from "../../components/InputUpload";
 import { connect } from "react-redux";
 import { saveItems } from "../../store/actions";
+import imageDefault from "../sales/images/organic.jpg";
 
 const { Title, Text } = Typography;
 
@@ -27,18 +28,21 @@ const CreateItems = ({ saveItems, error }) => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    console.log( values)
-    // if (fileList.length === 0) {
-    //   message.error("ကျေးဇူးပြု၍ပစ္စည်းပုံထည့်ပါ");
-    // }
-    // if (fileList.length > 0) {
+    if (fileList.length === 0) {
+      message.error("ကျေးဇူးပြု၍ပစ္စည်းပုံထည့်ပါ");
+    }
+    if (fileList.length > 0) {
       setItems([
         ...items,
-        { ...values, image: fileList[0], key: Math.random() * 100 }
+        {
+          ...values,
+          image: fileList[0] ? fileList[0] : imageDefault,
+          key: Math.random() * 100
+        }
       ]);
       setFileList([]);
       form.resetFields();
-    // }
+    }
   };
 
   const handleDelete = (record) => {
@@ -64,10 +68,9 @@ const CreateItems = ({ saveItems, error }) => {
         formData.append(`items[${index}][name]`, item.name);
         formData.append(`items[${index}][buy_price]`, item.buy_price);
         formData.append(`items[${index}][sale_price]`, item.sale_price);
-        formData.append(`images[${index}]`, item.image.originFileObj);
+        formData.append(`images[${index}]`, item?.image?.originFileObj);
         formData.append(`images[${index}][key]`, item.key);
       });
-      // console.log("formData",formData)
       await saveItems(formData);
       setItems([]);
       openNotificationWithIcon("success");
@@ -86,7 +89,7 @@ const CreateItems = ({ saveItems, error }) => {
       dataIndex: "image_url",
       render: (_, record) => (
         <img
-          src={ (record?.image?.thumbUrl) ? (record?.image?.thumbUrl) : null }
+          src={record?.image?.thumbUrl}
           alt="ပစ္စည်းပုံ"
           width={100}
           height={100}
@@ -128,7 +131,7 @@ const CreateItems = ({ saveItems, error }) => {
         </Title>
 
         <Form
-        colon={false}
+          colon={false}
           labelCol={{
             xl: {
               span: 3
@@ -175,7 +178,6 @@ const CreateItems = ({ saveItems, error }) => {
               className="SearchInput"
               value={barcodeInputValue}
               onChange={onChangeBarcode}
-             
               placeholder="ပစ္စည်းကုတ်ထည့်ပါ"
               prefix={<EditOutlined />}
               style={{ borderRadius: "10px" }}

@@ -27,7 +27,6 @@ const member = (state = initialState, action) => {
       };
     case SHOW_MEMBERS:
       return {
-        isSuccess: false,
         ...state,
         members: action.members,
         error: [],
@@ -35,7 +34,6 @@ const member = (state = initialState, action) => {
       };
     case SHOW_MEMBER:
       return {
-        isSuccess: false,
         ...state,
         member: action.member,
         error: [],

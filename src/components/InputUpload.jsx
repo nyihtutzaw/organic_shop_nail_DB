@@ -36,7 +36,7 @@ const InputUpload = ({ fileList, setFileList }) => {
   const handleCancel = () => setPreviewVisible(false);
 
   const handlePreview = async (file) => {
-    // console.log("input", file)
+    console.log("input", file);
     setPreviewImage(file.thumbUrl);
     setPreviewVisible(true);
     setPreviewTitle(file.name);

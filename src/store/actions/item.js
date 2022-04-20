@@ -38,29 +38,22 @@ export const setItemErrors = (error) => ({
   error
 });
 
-
-
 export const getItems = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items"
       );
-      const result = response.data.data.map((item) => {
-        return {
-          ...item,
-          key: item.id
-        };
-      });
-      // console.log(result)
+      const result = response.data.data.map((d) => ({
+        ...d,
+        key: Math.random() * 100
+      }));
       if (response.status === 200) {
         dispatch(showItems(result));
       }
     } catch (error) {
       if (error.response.status === 404) {
         dispatch(setItemErrors(error.response.data.data));
-      } else {
-        dispatch(setItemErrors(error.response.data));
       }
     }
   };
@@ -95,18 +88,17 @@ export const saveItems = (data) => {
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/batchInsert",
         data
       );
-      const result = {
-        ...response.data.data,
-        key: response.data.data.id
-      };
-      // console.log(result)
-      dispatch(createItems(result));
+      const result = response.data.data.map((d) => ({
+        ...d,
+        key: d.id
+      }));
+      if (response.status === 201) {
+        dispatch(createItems(result));
+      }
     } catch (error) {
       if (error) {
         console.log(error);
-        dispatch(setItemErrors(error.response.data.data));
-      } else {
-        dispatch(setItemErrors(error.response.data));
+        dispatch(setItemErrors("There was an error during Creating...!"));
       }
     }
   };

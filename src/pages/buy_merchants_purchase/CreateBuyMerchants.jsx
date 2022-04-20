@@ -40,6 +40,7 @@ const CreateBuyMerchants = ({
   const [buyMerchant, setBuyMerchant] = useState(null);
   const allItems = item.items;
   const navigate = useNavigate();
+  console.log(allItems);
 
   const [form] = Form.useForm();
   useEffect(() => {
@@ -65,16 +66,12 @@ const CreateBuyMerchants = ({
   const now = new Date();
   const date = dateFormat(now, "yyyy-mm-dd");
 
-  // console.log(allItems);
   const onFinish = (values) => {
     const data = allItems.find((item) => item.id == values.item_id);
-    // console.log(data);
-
     setBuys([
       ...buys,
       {
         ...values,
-
         subtotal: values.quantity * values.price,
         key: buys.length + 1,
         data: date
@@ -84,7 +81,8 @@ const CreateBuyMerchants = ({
       ...dataMerchant,
       {
         ...values,
-        item_id: data.name,
+        item_id: data.id,
+        item_name: data.name,
         subtotal: values.quantity * values.price,
         key: buys.length + 1,
         data: date
@@ -92,8 +90,6 @@ const CreateBuyMerchants = ({
     ]);
     form.resetFields();
   };
-  // console.log("buy", buys);
-  // console.log("merchant", dataMerchant);
 
   let allTotal = [];
   buys.forEach((buy) => allTotal.push(parseInt(buy.subtotal)));
@@ -111,8 +107,9 @@ const CreateBuyMerchants = ({
   };
 
   const handleDelete = (record) => {
-    const filterBuys = buys.filter((buy) => buy !== record);
-    setBuys(filterBuys);
+    const filterMerchant = dataMerchant.filter((f) => f.key !== record.key);
+    setDataMerchant(filterMerchant);
+    setBuys(filterMerchant);
   };
 
   const openNotificationWithIcon = (type) => {
@@ -167,7 +164,8 @@ const CreateBuyMerchants = ({
   const columns = [
     {
       title: "ပစ္စည်းအမည်",
-      dataIndex: "item_id"
+      dataIndex: "item_id",
+      render: (_, record) => record.item_name
     },
     {
       title: "အရေအတွက်",
@@ -238,7 +236,7 @@ const CreateBuyMerchants = ({
           </Title>
         </Space>
         <Form
-        colon={false}
+          colon={false}
           labelCol={{
             xl: {
               span: 3
