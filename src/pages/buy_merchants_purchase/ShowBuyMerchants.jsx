@@ -36,7 +36,14 @@ const ShowBuyMerchants = ({
   const navigate = useNavigate();
   const allPurchases = useSelector((state) => state.purchase.purchases);
   // console.log(allPurchases);
+  // let final = [];
+  // allPurchases.forEach(function (childArray) {
+  //   childArray.purchase_items.forEach(function (item) {
+  //     final.push(item);
+  //   });
+  // });
 
+  // console.log(final);
   const fileName = "Purchases"; // here enter filename for your excel file
   const result = allPurchases.map((purchase) => ({
     Date: purchase.date,
@@ -45,6 +52,15 @@ const ShowBuyMerchants = ({
     Credit: purchase.credit,
     Paid: purchase.paid
   }));
+
+  // let finalMerchant = [];
+  // allPurchases.forEach(function (childArray) {
+  //   finalMerchant.push(childArray);
+  // });
+  // const fMerchant = finalMerchant.map((mer) => ({
+  //   name: mer.merchant.name
+  // }))
+  // console.log("f", fMerchant);
 
   const [myPurchase, setMyPurchase] = useState([]);
   useEffect(() => {
@@ -128,6 +144,7 @@ const ShowBuyMerchants = ({
       title: "အရေအတွက်",
       dataIndex: `created_at`,
       render: (_, record) => record.purchase_items.map((p) => p.quantity)
+      // render: (_, record) => record.quantity
     },
     {
       title: "ကုန်သည်လုပ်ငန်းအမည်",

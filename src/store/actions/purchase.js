@@ -101,7 +101,7 @@ export const getPurchases = () => {
           key: purchase.id
         };
       });
-      console.log(result);
+      // console.log(result);
       if (response.status === 200) {
         dispatch(showPurchases(result));
       }

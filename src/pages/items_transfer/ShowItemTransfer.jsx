@@ -119,7 +119,7 @@ const ShowItemTransfer = ({
               onClick={() => navigate("/admin/create-item-transfer")}
             >
               <PlusSquareOutlined />
-              အသစ်ထည့်မည်
+              လွှဲပြောင်းရန်
             </Button>
           </Col>
           <Col span={3}>

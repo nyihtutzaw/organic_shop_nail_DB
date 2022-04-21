@@ -48,6 +48,7 @@ export const getItems = () => {
         ...d,
         key: Math.random() * 100
       }));
+      // console.log(result)
       if (response.status === 200) {
         dispatch(showItems(result));
       }

@@ -15,7 +15,7 @@ import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 import { useLocation, useNavigate } from "react-router-dom";
 import { connect, useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
-import { getBestItem } from "../../store/actions";
+import { getBestItem, getItems } from "../../store/actions";
 import Text from "antd/lib/typography/Text";
 
 const { Title } = Typography;
@@ -26,6 +26,10 @@ const ItemsReports = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const items = useSelector((state) => state.item.items);
+  const itemsUnique = [];
+  items.forEach((i) => itemsUnique.push(i.item.name));
+  let unique = [...new Set(itemsUnique)];
+
   useEffect(() => {
     const fetchData = async () => {
       dispatch(getBestItem(queryString.parse(location.search)));
@@ -40,9 +44,9 @@ const ItemsReports = () => {
 
   const onChange = (value) => {
     if (value === undefined) {
-      setshowBuyMerchant([]);
+      setshowBuyMerchant(items);
     } else {
-      const filterBuyMerchant = items.filter((mer) => mer.id === value);
+      const filterBuyMerchant = items.filter((mer) => mer.item.name === value);
       setshowBuyMerchant(filterBuyMerchant);
     }
   };
@@ -117,7 +121,6 @@ const ItemsReports = () => {
         <Row>
           <Col span={6}>
             <RangePicker
-
               onChange={(val) => {
                 //alert(dayjs(val[0]).format("YYYY-MM-DD"))
                 if (queryString.parse(location.search).best) {
@@ -159,9 +162,9 @@ const ItemsReports = () => {
                 size="large"
                 style={{ borderRadius: "10px" }}
               >
-                {items.map((item) => (
-                  <Option key={item.key} value={item.id}>
-                    {item.item.name}
+                {unique.map((item) => (
+                  <Option key={Math.random() * 100} value={item}>
+                    {item}
                   </Option>
                 ))}
               </Select>
@@ -194,4 +197,8 @@ const ItemsReports = () => {
   );
 };
 
-export default ItemsReports;
+const mapStateToProps = (store) => ({
+  item: store.item
+});
+
+export default connect(mapStateToProps, { getItems })(ItemsReports);
