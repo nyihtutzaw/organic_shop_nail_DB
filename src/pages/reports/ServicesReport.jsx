@@ -1,5 +1,14 @@
-import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, DatePicker } from "antd";
+import React, { useEffect, useState } from "react";
+import {
+  Typography,
+  Space,
+  Row,
+  Col,
+  Button,
+  Table,
+  DatePicker,
+  Select
+} from "antd";
 import Layout from "antd/lib/layout/layout";
 // import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
@@ -8,7 +17,9 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { getBestService } from "../../store/actions";
 import queryString from "query-string";
 import dayjs from "dayjs";
+import Text from "antd/lib/typography/Text";
 const { Title } = Typography;
+const { Option } = Select;
 
 const ServicesReport = () => {
   const { RangePicker } = DatePicker;
@@ -16,11 +27,16 @@ const ServicesReport = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const services = useSelector((state) => state.service.services);
+  // console.log(services);
+  const servicesUnique = [];
+  services.forEach((i) => servicesUnique.push(i?.service?.category));
+  let unique = [...new Set(servicesUnique)];
+  // console.log(unique);
+
   const result = services.map((s) => ({
     ...s,
     key: Math.random() * 100
   }));
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +47,21 @@ const ServicesReport = () => {
       fetchData();
     };
   }, [getBestService, location]);
+
+  const [showBuyServices, setshowBuyServices] = useState(null);
+  const onChange = (value) => {
+    if (value === undefined) {
+      setshowBuyServices(services);
+    } else {
+      // console.log(services)
+      const filterBuyServices = services.filter(
+        (mer) => mer?.service?.category === value
+      );
+      // console.log(filterBuyServices)
+      setshowBuyServices(filterBuyServices);
+    }
+  };
+  // console.log(showBuyServices)
 
   let columns;
 
@@ -111,17 +142,7 @@ const ServicesReport = () => {
         <Space direction="vertical" size={12}></Space>
 
         <Row>
-          <Col span={5}>
-            {/* <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              block
-            >
-              Sort by ( ဝန်ဆောင်မှုအမည် )
-            </Button> */}
+          <Col span={6}>
             <RangePicker
               onChange={(val) => {
                 //alert(dayjs(val[0]).format("YYYY-MM-DD"))
@@ -141,8 +162,29 @@ const ServicesReport = () => {
               }}
             />
           </Col>
-          <Col span={14}></Col>
-          <Col span={5}>
+          <Col span={10}>
+            <Text type="secondary">ဝန်ဆောင်မှုအမည်အမည်ရွေးပါ</Text>
+            <Select
+              showSearch
+              placeholder="ကျေးဇူးပြု၍ 	ဝန်ဆောင်မှုအမည်အမည်ရွေးပါ"
+              optionFilterProp="children"
+              onChange={onChange}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              allowClear={true}
+              size="large"
+              style={{ borderRadius: "10px" }}
+            >
+              {unique.map((item) => (
+                <Option key={Math.random() * 100} value={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
+          </Col>
+
+          <Col span={6}>
             <Button
               onClick={() => {
                 window.location = "/admin/service-report?best=true";
@@ -163,7 +205,7 @@ const ServicesReport = () => {
           bordered
           columns={columns}
           pagination={{ defaultPageSize: 10 }}
-          dataSource={result}
+          dataSource={showBuyServices != null ? showBuyServices : result}
         />
       </Space>
     </Layout>
