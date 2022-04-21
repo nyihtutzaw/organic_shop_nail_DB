@@ -385,7 +385,7 @@ const Admin = ({ logout }) => {
                 <Link to="/admin/show-item-transfer">လွှဲပြောင်းရန်</Link>
               </Menu.Item>
               <Menu.Item key="ShowOwner" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-owner">ထုတ်သုံးခြင်:</Link>
+                <Link to="/admin/show-owner">ထုတ်သုံးခြင်း</Link>
               </Menu.Item>
               <Menu.Item key="CreateBadItems" icon={<UnorderedListOutlined />}>
                 <Link to="/admin/show-bad-item">ချို့ယွင်းချက်ရှိ</Link>

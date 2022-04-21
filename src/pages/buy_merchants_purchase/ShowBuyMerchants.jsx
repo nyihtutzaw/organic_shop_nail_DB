@@ -36,14 +36,19 @@ const ShowBuyMerchants = ({
   const navigate = useNavigate();
   const allPurchases = useSelector((state) => state.purchase.purchases);
   // console.log(allPurchases);
-  // let final = [];
-  // allPurchases.forEach(function (childArray) {
-  //   childArray.purchase_items.forEach(function (item) {
-  //     final.push(item);
-  //   });
-  // });
+  // const resultPurchases = allPurchases.map((p) => ({
+  //   date: p.date,
+  //   merchant_name: p.merchant.name,
+  //   credit: p.credit,
+  //   paid: p.paid,
+  //   key: Math.random() * 100
+  // }));
+ 
 
-  // console.log(final);
+  // const finalPurchase = [...final, ...allPurchases]
+  // console.log("finalPUrchanr", finalPurchase)
+  // console.log("ff", final);
+
   const fileName = "Purchases"; // here enter filename for your excel file
   const result = allPurchases.map((purchase) => ({
     Date: purchase.date,
@@ -52,15 +57,6 @@ const ShowBuyMerchants = ({
     Credit: purchase.credit,
     Paid: purchase.paid
   }));
-
-  // let finalMerchant = [];
-  // allPurchases.forEach(function (childArray) {
-  //   finalMerchant.push(childArray);
-  // });
-  // const fMerchant = finalMerchant.map((mer) => ({
-  //   name: mer.merchant.name
-  // }))
-  // console.log("f", fMerchant);
 
   const [myPurchase, setMyPurchase] = useState([]);
   useEffect(() => {
@@ -135,20 +131,21 @@ const ShowBuyMerchants = ({
       dataIndex: `created_at`,
       render: (_, record) => getReadableDateDisplay(record.created_at)
     },
-    {
-      title: "ပစ္စည်းအမည်",
-      dataIndex: `created_at`,
-      render: (_, record) => record.purchase_items.map((p) => p.item.name)
-    },
-    {
-      title: "အရေအတွက်",
-      dataIndex: `created_at`,
-      render: (_, record) => record.purchase_items.map((p) => p.quantity)
-      // render: (_, record) => record.quantity
-    },
+    // {
+    //   title: "ပစ္စည်းအမည်",
+    //   dataIndex: `created_at`,
+    //   render: (_, record) => record.purchase_items.map((p) => p.item.name)
+    // },
+    // {
+    //   title: "အရေအတွက်",
+    //   dataIndex: `created_at`,
+    //   render: (_, record) => record.purchase_items.map((p) => p.quantity)
+    //   // render: (_, record) => record.quantity
+    // },
     {
       title: "ကုန်သည်လုပ်ငန်းအမည်",
-      dataIndex: "company_name",
+      dataIndex: "merchant_name",
+      // render: (_, record) => console.log(record.merchant_name)
       render: (_, record) =>
         showBuyMerchant === null
           ? record?.merchant?.company_name
