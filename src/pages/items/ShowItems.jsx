@@ -11,11 +11,12 @@ import { connect, useSelector } from "react-redux";
 import { getItems, deleteItems, getItem } from "../../store/actions";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 
+
 const { Title } = Typography;
 
 const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
   const allItems = useSelector((state) => state.item.items);
-  // console.log("ii",allItems)
+  console.log("ii", allItems);
   const fileName = "Items"; // here enter filename for your excel file
   const result = allItems.map((item) => ({
     Name: item.name,

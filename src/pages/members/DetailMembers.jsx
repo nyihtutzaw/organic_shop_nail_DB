@@ -36,6 +36,7 @@ const DetailMembers = ({ editMembers, getShops, getMember, getMembers }) => {
   }, [getShops, getMember, getMembers]);
   const result = shops.find((shop) => shop.id == member.shop_id);
 
+  
   useEffect(() => {
     form.setFieldsValue({ code: member?.code });
     form.setFieldsValue({ name: member?.name });

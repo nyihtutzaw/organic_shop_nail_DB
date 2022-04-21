@@ -10,7 +10,11 @@ import {
   notification
 } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { PlusSquareOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  PlusSquareOutlined,
+  DeleteOutlined,
+  ReadOutlined
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
 import {
@@ -35,19 +39,6 @@ const ShowBuyMerchants = ({
 }) => {
   const navigate = useNavigate();
   const allPurchases = useSelector((state) => state.purchase.purchases);
-  // console.log(allPurchases);
-  // const resultPurchases = allPurchases.map((p) => ({
-  //   date: p.date,
-  //   merchant_name: p.merchant.name,
-  //   credit: p.credit,
-  //   paid: p.paid,
-  //   key: Math.random() * 100
-  // }));
- 
-
-  // const finalPurchase = [...final, ...allPurchases]
-  // console.log("finalPUrchanr", finalPurchase)
-  // console.log("ff", final);
 
   const fileName = "Purchases"; // here enter filename for your excel file
   const result = allPurchases.map((purchase) => ({
@@ -125,23 +116,16 @@ const ShowBuyMerchants = ({
     navigate(`/admin/show-purchase/${record.id}`);
   };
 
+  const handleDetailShow = (record) => {
+    navigate(`/admin/detail-buy-merchants/${record.id}`);
+  };
+
   const columns = [
     {
       title: "ရက်စွဲ",
       dataIndex: `created_at`,
       render: (_, record) => getReadableDateDisplay(record.created_at)
     },
-    // {
-    //   title: "ပစ္စည်းအမည်",
-    //   dataIndex: `created_at`,
-    //   render: (_, record) => record.purchase_items.map((p) => p.item.name)
-    // },
-    // {
-    //   title: "အရေအတွက်",
-    //   dataIndex: `created_at`,
-    //   render: (_, record) => record.purchase_items.map((p) => p.quantity)
-    //   // render: (_, record) => record.quantity
-    // },
     {
       title: "ကုန်သည်လုပ်ငန်းအမည်",
       dataIndex: "merchant_name",
@@ -166,6 +150,14 @@ const ShowBuyMerchants = ({
         <Space direction="horizontal">
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
+          </Button>
+          <Button
+            style={{ background: "#5b8c00", borderColor: "yellow" }}
+            type="primary"
+            danger
+            onClick={() => handleDetailShow(record)}
+          >
+            <ReadOutlined />
           </Button>
           {record.credit != 0 ? (
             <Button
