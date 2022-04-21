@@ -190,7 +190,7 @@ const Sale = ({
     setCustomerPhone(findMember.phone);
     setMemberId(findMember.id);
   };
-  console.log(MemberOnChanges);
+  // console.log(MemberOnChanges);
 
   const salesTotal =
     sales.length > 0

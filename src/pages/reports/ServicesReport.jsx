@@ -21,6 +21,7 @@ const ServicesReport = () => {
     key: Math.random() * 100
   }));
 
+
   useEffect(() => {
     const fetchData = async () => {
       dispatch(getBestService(queryString.parse(location.search)));
@@ -54,11 +55,19 @@ const ServicesReport = () => {
 
       {
         title: "အရေအတွက်",
-        dataIndex: "quantity"
+        dataIndex: "quantity",
+        sorter: {
+          compare: (a, b) => a.quantity - b.quantity,
+          multiple: 1
+        }
       },
       {
         title: "စုစုပေါင်း",
-        dataIndex: "subtotal"
+        dataIndex: "subtotal",
+        sorter: {
+          compare: (a, b) => a.subtotal - b.subtotal,
+          multiple: 1
+        }
       }
     ];
   } else {
@@ -71,11 +80,19 @@ const ServicesReport = () => {
 
       {
         title: "အရေအတွက်",
-        dataIndex: "total_qty"
+        dataIndex: "total_qty",
+        sorter: {
+          compare: (a, b) => a.total_qty - b.total_qty,
+          multiple: 1
+        }
       },
       {
         title: "စုစုပေါင်း",
-        render: (_, record) => record.service.price * record.total_qty
+        render: (_, record) => record.service.price * record.total_qty,
+        sorter: {
+          compare: (a, b) => a.subtotal - b.subtotal,
+          multiple: 1
+        }
       }
     ];
   }

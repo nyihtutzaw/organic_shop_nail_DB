@@ -27,7 +27,7 @@ const ItemsReports = () => {
   const location = useLocation();
   const items = useSelector((state) => state.item.items);
   const itemsUnique = [];
-  items.forEach((i) => itemsUnique.push(i.item.name));
+  items.forEach((i) => itemsUnique.push(i?.item?.name));
   let unique = [...new Set(itemsUnique)];
 
   useEffect(() => {
@@ -73,11 +73,19 @@ const ItemsReports = () => {
 
       {
         title: "အရေအတွက်",
-        dataIndex: "quantity"
+        dataIndex: "quantity",
+        sorter: {
+          compare: (a, b) => a.quantity - b.quantity,
+          multiple: 1
+        }
       },
       {
         title: "စုစုပေါင်း",
         render: (_, record) => record.price * record.quantity
+        // sorter: {
+        //   compare: (a, b) => a.record?.price - b.record?.quantity,
+        //   multiple: 1
+        // }
       }
     ];
   } else {
@@ -86,7 +94,6 @@ const ItemsReports = () => {
         title: "စဉ်",
         dataIndex: "order",
         render: (_, record) => record.item_id
-        // render: (_, record) => console.log(record)
       },
       {
         title: "ပစ္စည်းအမည်",
@@ -96,11 +103,19 @@ const ItemsReports = () => {
 
       {
         title: "အရေအတွက်",
-        dataIndex: "total_qty"
+        dataIndex: "total_qty",
+        sorter: {
+          compare: (a, b) => a.total_qty - b.total_qty
+          // multiple: 1
+        }
       },
       {
         title: "စုစုပေါင်း",
-        dataIndex: "total_subtotal"
+        dataIndex: "total_subtotal",
+        sorter: {
+          compare: (a, b) => a.total_subtotal - b.total_subtotal,
+          multiple: 1
+        }
         // render: (_, record) => record?.stock?.item?.sale_price*record?.total_qty,
       }
     ];
