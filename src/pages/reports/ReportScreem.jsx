@@ -7,16 +7,15 @@ import {
   Table,
   DatePicker,
   Select,
-  Input,
-  Button,
+  Input
 } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { ExportOutlined } from "@ant-design/icons";
 import queryString from "query-string";
 import { getReport } from "../../store/actions";
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
+import { ExportToExcel } from "../../excel/ExportToExcel";
 
 const { Title } = Typography;
 const ReportScreem = () => {
@@ -26,6 +25,7 @@ const ReportScreem = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const report = useSelector((state) => state.report.report);
+
   useEffect(() => {
     const fetchData = () => {
       dispatch(getReport(queryString.parse(location.search)));
@@ -36,69 +36,94 @@ const ReportScreem = () => {
     };
   }, [getReport]);
 
+  const fileName = "Reports"; // here enter filename for your excel file
+  let result = [];
+  if (reportType === "1") {
+    report.forEach((r) =>
+      result.push({
+        Service_Total: r.service_total,
+        Item_Total: r.item_total,
+        Sale_Total: r.sale_total
+      })
+    );
+  } else {
+    report.forEach((r) =>
+      result.push({
+        Service_Total: r.service_total,
+        Item_Total: r.item_total,
+        Sale_Total: r.sale_total,
+        Item_Buy_Total: r.item_buy_total,
+        Staff_Salary: r.staff_salary,
+        TotalCommision: r.totalCommision,
+        ExpenseTotal: r.expenseTotal,
+        Profit: r.profit
+      })
+    );
+  }
+
   let columns = [];
 
   if (reportType === "1") {
     columns = [
       {
         title: "ဝန်ဆောင်မှုမှရငွေစုစုပေါင်း",
-        dataIndex: "service_total",
+        dataIndex: "service_total"
       },
       {
         title: "ပစ္စည်းရောင်းရငွေစုစုပေါင်း",
-        dataIndex: "item_total",
+        dataIndex: "item_total"
       },
       {
         title: "ဝင်ငွေစုစုပေါင်း",
-        dataIndex: "sale_total",
-      },
+        dataIndex: "sale_total"
+      }
     ];
   } else {
     columns = [
       {
         title: "ဝန်ဆောင်မှုမှရငွေစုစုပေါင်း",
-        dataIndex: "service_total",
+        dataIndex: "service_total"
       },
       {
         title: "ပစ္စည်းရောင်းရငွေစုစုပေါင်း",
-        dataIndex: "item_total",
+        dataIndex: "item_total"
       },
       {
         title: "ဝင်ငွေစုစုပေါင်း",
-        dataIndex: "sale_total",
+        dataIndex: "sale_total"
       },
       {
         title: "ပစ္စည်းအရင်းစုစုပေါင်း",
         dataIndex: "item_buy_total",
         render: (_, record) => (
-          <span style={{color:"red"}}>{record.item_buy_total}</span>
-        ),
+          <span style={{ color: "red" }}>{record.item_buy_total}</span>
+        )
       },
       {
         title: "ဝန်ထမ်းလစာစုစုပေါင်း",
         dataIndex: "staff_salary",
         render: (_, record) => (
-          <span style={{color:"red"}}>{record.staff_salary}</span>
-        ),
+          <span style={{ color: "red" }}>{record.staff_salary}</span>
+        )
       },
       {
         title: "ကော်မရှင်စုစုပေါင်း",
         dataIndex: "totalCommision",
         render: (_, record) => (
-          <span style={{color:"red"}}>{record.totalCommision}</span>
-        ),
+          <span style={{ color: "red" }}>{record.totalCommision}</span>
+        )
       },
       {
         title: "အထွေထွေကုန်ကျငွေစုစုပေါင်း",
         dataIndex: "expenseTotal",
         render: (_, record) => (
-          <span style={{color:"red"}}>{record.expenseTotal}</span>
-        ),
+          <span style={{ color: "red" }}>{record.expenseTotal}</span>
+        )
       },
       {
         title: "အမြတ်စုစုပေါင်း",
-        dataIndex: "profit",
-      },
+        dataIndex: "profit"
+      }
     ];
   }
 
@@ -140,18 +165,8 @@ const ReportScreem = () => {
               </Select>
             </Input.Group>
           </Col>
-          <Col span={8} style={{ textAlign: "right" }}>
-            {/* <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px",
-              }}
-              size="middle"
-            >
-              <ExportOutlined />
-              Export
-            </Button> */}
+          <Col span={8}>
+            <ExportToExcel apiData={result} fileName={fileName} />
           </Col>
         </Row>
         <Table

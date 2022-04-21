@@ -3,7 +3,6 @@ import { Typography, Space, Row, Col, Button, Table } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
-  ExportOutlined,
   DeleteOutlined,
   EditOutlined
 } from "@ant-design/icons";
@@ -16,7 +15,7 @@ import { ExportToExcel } from "../../excel/ExportToExcel";
 
 const { Title } = Typography;
 
-const ShowService = ({ service, getServices, deleteServices, getService }) => {
+const ShowService = ({ getServices, deleteServices, getService }) => {
   const allServices = useSelector((state) => state.service.services);
   const fileName = "Services"; // here enter filename for your excel file
   const result = allServices.map((service) => ({
@@ -122,6 +121,7 @@ const ShowService = ({ service, getServices, deleteServices, getService }) => {
           <Col span={4}>
             <ExportToExcel apiData={result} fileName={fileName} />
           </Col>
+          
         </Row>
         <Table
           bordered

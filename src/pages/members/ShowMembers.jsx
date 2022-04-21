@@ -6,15 +6,14 @@ import {
   Col,
   Button,
   Table,
-  notification,
-  message,
   Alert
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
   DeleteOutlined,
-  EditOutlined
+  EditOutlined,
+  ReadOutlined
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -113,10 +112,10 @@ const ShowMembers = ({
         <Space direction="horizontal">
           <Button
             type="primary"
-            style={{ background: "green", borderColor: "yellow" }}
+            style={{ background: "#5b8c00", borderColor: "yellow" }}
             onClick={() => handleDetail(record)}
           >
-            Details
+            <ReadOutlined/>
           </Button>
           <Button type="primary" onClick={() => handleClick(record)}>
             <EditOutlined />

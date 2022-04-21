@@ -12,7 +12,7 @@ import {
   notification
 } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { DeleteOutlined, DashOutlined, ReadOutlined } from "@ant-design/icons";
+import { DeleteOutlined, ReadOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import queryString from "query-string";
@@ -48,6 +48,7 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
     await deleteVouchers(record.id);
     openNotificationWithIcon("error");
   };
+
   const columns = [
     {
       title: "ရက်စွဲ",
@@ -74,13 +75,12 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
           <Button
             type="primary"
             style={{
-              backgroundColor: "#40a9ff"
+              backgroundColor: "#5b8c00"
             }}
             onClick={() => {
               window.location = `/admin/sale/${record.id}`;
             }}
           >
-            {/* <DashOutlined /> */}
             <ReadOutlined />
           </Button>
           <Button type="primary" danger onClick={() => handleDelete(record)}>
