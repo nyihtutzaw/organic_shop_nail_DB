@@ -91,7 +91,7 @@ const ShowBuyMerchants = ({
   const [showBuyMerchant, setshowBuyMerchant] = useState(null);
   const onChange = (value) => {
     if (value === undefined) {
-      setshowBuyMerchant([]);
+      setshowBuyMerchant(allPurchases);
     } else {
       const filterBuyMerchant = allPurchases.filter(
         (mer) => mer.merchant.id === value
