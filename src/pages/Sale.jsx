@@ -34,7 +34,6 @@ import {
 import { call } from "../services/api";
 import dateFormat from "dateformat";
 
-
 const { Header, Content } = Layout;
 const { Option } = Select;
 const { Title, Text } = Typography;
@@ -49,13 +48,15 @@ const Sale = ({
   member,
   getMembers
 }) => {
+  const [value, setValue] = useState(null);
+  const [MemberOnChanges, setMemberOnChanges] = useState(null);
   const [sales, setSales] = useState([]);
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [memberId, setMemberId] = useState();
   const [discount, setDiscount] = useState(0);
   const [paid, setPaid] = useState(0);
-  const [payMethod, setPayMethod] = useState();
+  const [payMethod, setPayMethod] = useState(null);
   const [loading, setLoading] = useState(false);
   const [sale, setSale] = useState(null);
   const [barcode, setBarcode] = useState([]);
@@ -184,10 +185,12 @@ const Sale = ({
 
   const handleMemberOnChange = (value) => {
     const findMember = member.members.find((member) => member.id === value);
+    setMemberOnChanges(findMember.name);
     setCustomerName(findMember.name);
     setCustomerPhone(findMember.phone);
     setMemberId(findMember.id);
   };
+  console.log(MemberOnChanges);
 
   const salesTotal =
     sales.length > 0
@@ -288,7 +291,9 @@ const Sale = ({
           setMemberId(undefined);
           setDiscount(0);
           setPaid(0);
-          setPayMethod(undefined);
+          setPayMethod(null);
+          setValue(null);
+          setMemberOnChanges(null);
           setSale(response.data);
         } else {
           message.error("အချက်လက်များစစ်ဆေးပြီး ပြန်ထည့်ပေးပါ။");
@@ -296,7 +301,6 @@ const Sale = ({
       }
     }
   };
-  // console.log(payMethod);
 
   const handlePrint = () => {
     if (sale) {
@@ -496,6 +500,7 @@ const Sale = ({
                       .toLowerCase()
                       .indexOf(input.toLowerCase()) >= 0
                   }
+                  value={MemberOnChanges}
                   onChange={(value) => handleMemberOnChange(value)}
                   allowClear={true}
                   size="large"
@@ -800,6 +805,8 @@ const Sale = ({
                           .indexOf(input.toLowerCase()) >= 0
                       }
                       onChange={(value) => setPayMethod(value)}
+                      value={payMethod}
+                      // onChange={setValue}
                       allowClear={true}
                       size="large"
                       style={{ borderRadius: "10px" }}

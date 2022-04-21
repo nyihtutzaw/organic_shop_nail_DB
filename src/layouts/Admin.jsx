@@ -315,6 +315,7 @@ const Admin = ({ logout }) => {
             </Menu.Item>
             <Menu.Item key="Sale" icon={<ShopOutlined />}>
               <Link to="/admin/sale">Sale Screen</Link>
+              
             </Menu.Item>
             <Menu.Item key="ChangePassword" icon={<LockOutlined />}>
               <Link to="/admin/change-password">Change Password</Link>

@@ -16,13 +16,14 @@ import { useSelector } from "react-redux";
 import { saveMembers, getShops, clearAlertMember } from "../../store/actions";
 import { connect } from "react-redux";
 import store from "../../store";
+import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
 const CreateMembers = ({ shop, saveMembers, getShops, clearAlertMember }) => {
   const member = useSelector((state) => state.member);
   const [form] = Form.useForm();
-
+  const navigate = useNavigate();
   useEffect(() => {
     store.dispatch(clearAlertMember());
   }, []);
@@ -39,6 +40,7 @@ const CreateMembers = ({ shop, saveMembers, getShops, clearAlertMember }) => {
 
   const onFinish = async (values) => {
     await saveMembers(values);
+    navigate('/admin/sale')
     form.resetFields();
   };
 
