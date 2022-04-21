@@ -95,15 +95,13 @@ export const getPurchases = () => {
       const response = await axios.get(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases"
       );
-      // console.log('ss',response);
-
       const result = response.data.data.map((purchase) => {
         return {
           ...purchase,
           key: purchase.id
         };
       });
-      // console.log(response.status)
+      console.log(result);
       if (response.status === 200) {
         dispatch(showPurchases(result));
       }
