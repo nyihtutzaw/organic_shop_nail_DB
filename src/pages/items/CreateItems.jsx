@@ -28,10 +28,10 @@ const CreateItems = ({ saveItems, error }) => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    if (fileList.length === 0) {
-      message.error("ကျေးဇူးပြု၍ပစ္စည်းပုံထည့်ပါ");
-    }
-    if (fileList.length > 0) {
+    // if (fileList.length === 0) {
+    //   message.error("ကျေးဇူးပြု၍ပစ္စည်းပုံထည့်ပါ");
+    // }
+    // if (fileList.length > 0) {
       setItems([
         ...items,
         {
@@ -42,7 +42,7 @@ const CreateItems = ({ saveItems, error }) => {
       ]);
       setFileList([]);
       form.resetFields();
-    }
+    // }
   };
 
   const handleDelete = (record) => {
