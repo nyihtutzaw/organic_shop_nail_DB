@@ -1,19 +1,30 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, DatePicker, Input, Select, notification } from "antd";
+import {
+  Typography,
+  Space,
+  Row,
+  Col,
+  Button,
+  Table,
+  DatePicker,
+  Input,
+  Select,
+  notification
+} from "antd";
 import Layout from "antd/lib/layout/layout";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, DashOutlined, ReadOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import queryString from 'query-string';
+import queryString from "query-string";
 import dayjs from "dayjs";
 import { getVouchers, deleteVouchers } from "../../store/actions";
 
 const { Title } = Typography;
 
-const VoucherReports = ({ voucher, getVouchers, deleteVouchers}) => {
+const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
   const { Option } = Select;
   const { RangePicker } = DatePicker;
-  const location=useLocation();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,10 +44,10 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers}) => {
     });
   };
 
-const handleDelete = async (record) => {
-  await deleteVouchers(record.id)
-  openNotificationWithIcon("error")
-}
+  const handleDelete = async (record) => {
+    await deleteVouchers(record.id);
+    openNotificationWithIcon("error");
+  };
   const columns = [
     {
       title: "ရက်စွဲ",
@@ -58,16 +69,22 @@ const handleDelete = async (record) => {
     {
       title: "Actions",
       dataIndex: "action",
-      render: (_,record) => (
+      render: (_, record) => (
         <Space direction="horizontal">
-        
-          <Button type="primary" onClick={()=>{
-            window.location=`/admin/sale/${record.id}`;
-          }}>Detail</Button>
-          <Button type="primary" danger
-          onClick={() => handleDelete(record)}
+          <Button
+            type="primary"
+            style={{
+              backgroundColor: "#40a9ff"
+            }}
+            onClick={() => {
+              window.location = `/admin/sale/${record.id}`;
+            }}
           >
-          <DeleteOutlined/>
+            {/* <DashOutlined /> */}
+            <ReadOutlined />
+          </Button>
+          <Button type="primary" danger onClick={() => handleDelete(record)}>
+            <DeleteOutlined />
           </Button>
         </Space>
       )
@@ -81,17 +98,22 @@ const handleDelete = async (record) => {
           <Col span={18}>
             <Title level={3}>ဘောင်ချာအရောင်း မှတ်တမ်းစာမျက်နှာ</Title>
           </Col>
-          <Col span={3}>   
-          </Col>
-          <Col span={3}>    
-          </Col>
+          <Col span={3}></Col>
+          <Col span={3}></Col>
         </Row>
-        <Space direction="vertical" size={12}><RangePicker onChange={(val)=>{
-          //alert(dayjs(val[0]).format("YYYY-MM-DD"))
-          window.location=`/admin/voucher-report?start_date=${dayjs(val[0]).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format("YYYY-MM-DD")}`;
-        }}/></Space>
-        
-        
+        <Space direction="vertical" size={12}>
+          <RangePicker
+            onChange={(val) => {
+              //alert(dayjs(val[0]).format("YYYY-MM-DD"))
+              window.location = `/admin/voucher-report?start_date=${dayjs(
+                val[0]
+              ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                "YYYY-MM-DD"
+              )}`;
+            }}
+          />
+        </Space>
+
         <Row>
           <Col span={5}>
             {/* <Button style={{
@@ -103,7 +125,7 @@ const handleDelete = async (record) => {
             </Button> */}
           </Col>
           <Col span={14}></Col>
-          <Col span={5} >
+          <Col span={5}>
             {/* <Button style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
@@ -128,11 +150,13 @@ const handleDelete = async (record) => {
         />
       </Space>
     </Layout>
-  )
-}
+  );
+};
 
 const mapStateToProps = (store) => ({
   voucher: store.voucher
 });
 
-export default connect(mapStateToProps, { getVouchers, deleteVouchers })(VoucherReports);
+export default connect(mapStateToProps, { getVouchers, deleteVouchers })(
+  VoucherReports
+);

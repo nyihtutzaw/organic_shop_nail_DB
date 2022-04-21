@@ -41,7 +41,6 @@ const ItemsReports = () => {
   }, [getBestItem, location]);
 
   const [showBuyMerchant, setshowBuyMerchant] = useState(null);
-
   const onChange = (value) => {
     if (value === undefined) {
       setshowBuyMerchant(items);
