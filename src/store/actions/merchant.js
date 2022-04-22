@@ -111,9 +111,9 @@ export const saveMerchants = (data) => {
         dispatch(createMerchants(result));
       }
     } catch (error) {
-      if (error.response.status >= 400) {
-        dispatch(setMerchantError("There was an error during Creating....!"));
-      } else {
+      if (error.response.status === 400) {
+        dispatch(setMerchantError("ကုန်သည်ကုတ်ပြောင်းပါ..."));
+      } else if (error.response.status >= 400) {
         dispatch(setMerchantError("There was an error during Creating....!"));
       }
     }

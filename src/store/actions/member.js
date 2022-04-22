@@ -110,7 +110,9 @@ export const saveMembers = (data) => {
         dispatch(createMembers(result));
       }
     } catch (error) {
-      if (error.response.status >= 400) {
+      if (error.response.status === 400) {
+        dispatch(setMemberError("မန်ဘာကုတ်ပြောင်းပါ..."));
+      }else if (error.response.status >= 400) {
         dispatch(setMemberError("There was an error during Creating....!"));
       }
     }
