@@ -189,7 +189,8 @@ const CreateBadItem = ({ getStocks, saveBadItems, clearAlert, bad_item }) => {
             >
               {allStocks.map((stock) => (
                 <Option key={stock.id} value={stock.id}>
-                  {stock.name} ({stock.quantity})
+                  {stock.name}
+                   {/* ({stock.quantity}) */}
                 </Option>
               ))}
             </Select>

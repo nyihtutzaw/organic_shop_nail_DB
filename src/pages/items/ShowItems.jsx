@@ -11,11 +11,12 @@ import { connect, useSelector } from "react-redux";
 import { getItems, deleteItems, getItem } from "../../store/actions";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 
-
 const { Title } = Typography;
 
 const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
   const allItems = useSelector((state) => state.item.items);
+  const user = useSelector((state) => state.auth.user);
+
   // console.log("ii", allItems);
   const fileName = "Items"; // here enter filename for your excel file
   const result = allItems.map((item) => ({
@@ -84,9 +85,11 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
+          {user?.position !== "owner" && (
           <Button type="primary" onClick={() => handleClick(record)}>
             <EditOutlined />
           </Button>
+          )}
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
@@ -103,6 +106,7 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
             <Title level={3}>ပစ္စည်းစာရင်း</Title>
           </Col>
           <Col span={4}>
+          {user?.position !== "owner" && (
             <Button
               style={{
                 backgroundColor: "var(--secondary-color)",
@@ -115,6 +119,7 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
               <PlusSquareOutlined />
               အသစ်ထည့်မည်
             </Button>
+          )}
           </Col>
           <Col span={4}>
             <ExportToExcel apiData={result} fileName={fileName} />

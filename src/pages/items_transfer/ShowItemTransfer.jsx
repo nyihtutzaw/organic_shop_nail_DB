@@ -26,6 +26,8 @@ const ShowItemTransfer = ({
   const allItemTransfer = useSelector(
     (state) => state.item_transfer.itemTransfers
   );
+  const user = useSelector((state) => state.auth.user);
+
   const fileName = "ItemTransfers"; // here enter filename for your excel file
   const result = allItemTransfer.map((transfer) => ({
     Quantity: transfer.quantity,
@@ -55,7 +57,6 @@ const ShowItemTransfer = ({
   };
 
   const handleDelete = async (record) => {
-    console.log(record.id);
     await deleteItemTransfers(record.id);
     openNotificationWithIcon("error");
   };
@@ -101,6 +102,7 @@ const ShowItemTransfer = ({
     }
   ];
 
+
   return (
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
@@ -109,6 +111,7 @@ const ShowItemTransfer = ({
             <Title level={3}>လွှဲပြောင်းခဲ့သောပစ္စည်းများ</Title>
           </Col>
           <Col span={3}>
+          {user?.position !== "owner" && (
             <Button
               style={{
                 backgroundColor: "var(--secondary-color)",
@@ -121,6 +124,7 @@ const ShowItemTransfer = ({
               <PlusSquareOutlined />
               လွှဲပြောင်းရန်
             </Button>
+          )}
           </Col>
           <Col span={3}>
             <ExportToExcel apiData={result} fileName={fileName} />

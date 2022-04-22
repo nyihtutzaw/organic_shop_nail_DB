@@ -87,13 +87,11 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          {user?.position === "manager" ||
-            user?.position === "casher" ||
-            (user?.position === "staff" && (
-          <Button type="primary" onClick={() => handleClick(record)}>
-            <EditOutlined />
-          </Button>
-            ))}
+          {user?.position !== "owner" && (
+            <Button type="primary" onClick={() => handleClick(record)}>
+              <EditOutlined />
+            </Button>
+          )}
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
@@ -110,22 +108,20 @@ const ShowExpenses = ({ expense, getExpenses, deleteExpenses, getExpense }) => {
             <Title level={3}>ကုန်ကျစရိတ်စာရင်း</Title>
           </Col>
           <Col span={4}>
-          {user?.position === "manager" ||
-            user?.position === "casher" ||
-            (user?.position === "staff" && (
-            <Button
-              style={{
-                backgroundColor: "var(--secondary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-              onClick={() => navigate("/admin/create-expenses")}
-            >
-              <PlusSquareOutlined />
-              အသစ်ထည့်မည်
-            </Button>
-            ))}
+            {user?.position !== "owner" && (
+              <Button
+                style={{
+                  backgroundColor: "var(--secondary-color)",
+                  color: "var(--white-color)",
+                  borderRadius: "5px"
+                }}
+                size="middle"
+                onClick={() => navigate("/admin/create-expenses")}
+              >
+                <PlusSquareOutlined />
+                အသစ်ထည့်မည်
+              </Button>
+            )}
           </Col>
           <Col span={4}>
             <ExportToExcel apiData={result} fileName={fileName} />

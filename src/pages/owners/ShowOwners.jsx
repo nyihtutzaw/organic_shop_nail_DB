@@ -17,6 +17,8 @@ const { Title } = Typography;
 
 const ShowOwners = ({ getOwners, deleteOwners, getOwner }) => {
   const owners = useSelector((state) => state.owner.owners);
+  const user = useSelector((state) => state.auth.user);
+
   useEffect(() => {
     const fetchData = async () => {
       await getOwners();
@@ -74,9 +76,11 @@ const ShowOwners = ({ getOwners, deleteOwners, getOwner }) => {
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
+          {user?.position !== "owner" && (
           <Button type="primary" onClick={() => handleClick(record.id)}>
           <EditOutlined/>
           </Button>
+          )}
           <Button type="primary" danger onClick={() => handleDelete(record)}>
           <DeleteOutlined/>
           </Button>
@@ -93,6 +97,7 @@ const ShowOwners = ({ getOwners, deleteOwners, getOwner }) => {
             <Title level={3}>လုပ်ငန်းရှင်မှပစ္စည်းထုတ်သုံးခြင်း စာရင်း</Title>
           </Col>
           <Col span={3}>
+          {user?.position !== "owner" && (
             <Button
               style={{
                 backgroundColor: "var(--secondary-color)",
@@ -105,6 +110,7 @@ const ShowOwners = ({ getOwners, deleteOwners, getOwner }) => {
               <PlusSquareOutlined />
               အသစ်ထည့်မည်
             </Button>
+          )}
           </Col>
         </Row>
         <Table

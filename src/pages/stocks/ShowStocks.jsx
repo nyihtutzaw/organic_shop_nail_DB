@@ -4,7 +4,7 @@ import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getStocks } from "../../store/actions";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 
 const { Title } = Typography;
@@ -12,6 +12,8 @@ const { Title } = Typography;
 const ShowStocks = ({ stock, getStocks }) => {
   const navigate = useNavigate();
   const stockAll = stock.stocks;
+  const user = useSelector((state) => state.auth.user);
+
   const fileName = "Stocks"; // here enter filename for your excel file
   const result = stockAll.map((stock) => ({
     Quantity: stock.quantity,
@@ -32,13 +34,13 @@ const ShowStocks = ({ stock, getStocks }) => {
     };
   }, [getStocks]);
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Saved Your Data",
-      description: "Your data have been saved.",
-      duration: 3
-    });
-  };
+  // const openNotificationWithIcon = (type) => {
+  //   notification[type]({
+  //     message: "Saved Your Data",
+  //     description: "Your data have been saved.",
+  //     duration: 3
+  //   });
+  // };
 
   const columns = [
     {
@@ -107,6 +109,7 @@ const ShowStocks = ({ stock, getStocks }) => {
             <Title level={3}>Stock စာရင်း</Title>
           </Col>
           <Col span={4}>
+          {user?.position !== "owner" && (
             <Button
               style={{
                 backgroundColor: "var(--secondary-color)",
@@ -119,6 +122,7 @@ const ShowStocks = ({ stock, getStocks }) => {
               <PlusSquareOutlined />
               အသစ်ထည့်မည်
             </Button>
+          )}
           </Col>
           <Col span={4}>
             <ExportToExcel apiData={result} fileName={fileName} />

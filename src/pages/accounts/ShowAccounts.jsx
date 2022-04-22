@@ -79,22 +79,20 @@ const ShowAccounts = ({ deleteAccounts }) => {
             <Title level={3}>အကောင့်စာရင်း</Title>
           </Col>
           <Col span={4}>
-            {user?.position === "manager" ||
-              user?.position === "casher" ||
-              (user?.position === "staff" && (
-                <Button
-                  style={{
-                    backgroundColor: "var(--secondary-color)",
-                    color: "var(--white-color)",
-                    borderRadius: "5px"
-                  }}
-                  size="middle"
-                  onClick={() => navigate("/admin/create-accounts")}
-                >
-                  <PlusSquareOutlined />
-                  အသစ်ထည့်မည်
-                </Button>
-              ))}
+            {user?.position !== "owner" && (
+              <Button
+                style={{
+                  backgroundColor: "var(--secondary-color)",
+                  color: "var(--white-color)",
+                  borderRadius: "5px"
+                }}
+                size="middle"
+                onClick={() => navigate("/admin/create-accounts")}
+              >
+                <PlusSquareOutlined />
+                အသစ်ထည့်မည်
+              </Button>
+            )}
           </Col>
           <Col span={4}>
             <ExportToExcel apiData={result} fileName={fileName} />

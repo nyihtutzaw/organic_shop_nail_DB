@@ -124,7 +124,7 @@ const CreateAccounts = ({ saveAccounts, getShops }) => {
               style={{ borderRadius: "10px" }}
             >
               <Option value="manager">Manager</Option>
-              <Option value="casher">Cashier</Option>
+              <Option value="cashier">Cashier</Option>
               <Option value="staff">Staff</Option>
             </Select>
           </Form.Item>

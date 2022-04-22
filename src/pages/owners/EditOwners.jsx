@@ -38,8 +38,7 @@ const EditOwners = ({ getStocks, getOwner, editOwners, owner }) => {
 
   const stocks = useSelector((state) => state.stock.stocks);
   const ownersss = useSelector((state) => state)
-  console.log(owner)
-
+  // console.log(owner)
 
   useEffect(() => {
     form.setFieldsValue({ quantity: owner.owner?.quantity });

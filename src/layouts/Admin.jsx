@@ -314,13 +314,11 @@ const Admin = ({ logout }) => {
             <Menu.Item key="Dashboard" icon={<DashboardOutlined />}>
               <Link to="/admin/dashboard">Dashboard</Link>
             </Menu.Item>
-            {user?.position === "manager" ||
-              user?.position === "casher" ||
-              (user?.position === "staff" && (
-                <Menu.Item key="Sale" icon={<ShopOutlined />}>
-                  <Link to="/admin/sale">Sale Screen</Link>
-                </Menu.Item>
-              ))}
+            {user?.position !== "owner" && (
+              <Menu.Item key="Sale" icon={<ShopOutlined />}>
+                <Link to="/admin/sale">Sale Screen</Link>
+              </Menu.Item>
+            )}
             <Menu.Item key="ChangePassword" icon={<LockOutlined />}>
               <Link to="/admin/change-password">Change Password</Link>
             </Menu.Item>
@@ -334,7 +332,7 @@ const Admin = ({ logout }) => {
                   <Link to="/admin/show-accounts">စာရင်း</Link>
                 </Menu.Item>
                 {user?.position === "manager" ||
-                  user?.position === "casher" ||
+                  user?.position === "cashier" ||
                   (user?.position === "staff" && (
                     <Menu.Item key="CreateAccounts" icon={<SaveOutlined />}>
                       <Link to="/admin/create-accounts">အသစ်ဖန်တီးရန်</Link>
@@ -353,13 +351,11 @@ const Admin = ({ logout }) => {
               <Menu.Item key="ShowMerchants" icon={<UnorderedListOutlined />}>
                 <Link to="/admin/show-merchants">စာရင်း</Link>
               </Menu.Item>
-              {user?.position === "manager" ||
-                user?.position === "casher" ||
-                (user?.position === "staff" && (
-                  <Menu.Item key="CreateMerchants" icon={<SaveOutlined />}>
-                    <Link to="/admin/create-merchants">အသစ်ဖန်တီးရန်</Link>
-                  </Menu.Item>
-                ))}
+              {user?.position !== "owner" && (
+                <Menu.Item key="CreateMerchants" icon={<SaveOutlined />}>
+                  <Link to="/admin/create-merchants">အသစ်ဖန်တီးရန်</Link>
+                </Menu.Item>
+              )}
             </SubMenu>
             <SubMenu
               key="Members"
@@ -369,13 +365,11 @@ const Admin = ({ logout }) => {
               <Menu.Item key="ShowMembers" icon={<UnorderedListOutlined />}>
                 <Link to="/admin/show-members">စာရင်း</Link>
               </Menu.Item>
-              {user?.position === "manager" ||
-                user?.position === "casher" ||
-                (user?.position === "staff" && (
-                  <Menu.Item key="CreateMembers" icon={<SaveOutlined />}>
-                    <Link to="/admin/create-members">အသစ်ဖန်တီးရန်</Link>
-                  </Menu.Item>
-                ))}
+              {user?.position !== "owner" && (
+                <Menu.Item key="CreateMembers" icon={<SaveOutlined />}>
+                  <Link to="/admin/create-members">အသစ်ဖန်တီးရန်</Link>
+                </Menu.Item>
+              )}
             </SubMenu>
             <SubMenu
               key="Items"
@@ -408,13 +402,11 @@ const Admin = ({ logout }) => {
               </Menu.Item>
             </SubMenu>
             <SubMenu key="Service" title="ဝန်ဆောင်မှု" icon={<FlagOutlined />}>
-              {user?.position === "manager" ||
-                user?.position === "casher" ||
-                (user?.position === "staff" && (
-                  <Menu.Item key="CreateService" icon={<SaveOutlined />}>
-                    <Link to="/admin/create-service">အသစ်ဖန်တီးရန်</Link>
-                  </Menu.Item>
-                ))}
+              {user?.position !== "owner" && (
+                <Menu.Item key="CreateService" icon={<SaveOutlined />}>
+                  <Link to="/admin/create-service">အသစ်ဖန်တီးရန်</Link>
+                </Menu.Item>
+              )}
               <Menu.Item key="ShowService" icon={<UnorderedListOutlined />}>
                 <Link to="/admin/show-service">စာရင်း</Link>
               </Menu.Item>
@@ -425,13 +417,11 @@ const Admin = ({ logout }) => {
                 title="ဝန်ထမ်းစာရင်း"
                 icon={<ContactsOutlined />}
               >
-                {user?.position === "manager" ||
-                  user?.position === "casher" ||
-                  (user?.position === "staff" && (
-                    <Menu.Item key="CreateStaff" icon={<SaveOutlined />}>
-                      <Link to="/admin/create-staff">အသစ်ဖန်တီးရန်</Link>
-                    </Menu.Item>
-                  ))}
+                {user?.position === "manager" && (
+                  <Menu.Item key="CreateStaff" icon={<SaveOutlined />}>
+                    <Link to="/admin/create-staff">အသစ်ဖန်တီးရန်</Link>
+                  </Menu.Item>
+                )}
                 <Menu.Item key="ShowStaff" icon={<UnorderedListOutlined />}>
                   <Link to="/admin/show-staff">စာရင်း</Link>
                 </Menu.Item>

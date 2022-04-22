@@ -1,13 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Typography,
-  Space,
-  Row,
-  Col,
-  Button,
-  Table,
-  Alert
-} from "antd";
+import { Typography, Space, Row, Col, Button, Table, Alert } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
@@ -90,13 +82,11 @@ const ShowMerchants = ({
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          {user?.position === "manager" ||
-            user?.position === "casher" ||
-            (user?.position === "staff" && (
-              <Button type="primary" onClick={() => handleClick(record)}>
-                <EditOutlined />
-              </Button>
-            ))}
+          {user?.position !== "owner" && (
+            <Button type="primary" onClick={() => handleClick(record)}>
+              <EditOutlined />
+            </Button>
+          )}
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
@@ -127,22 +117,20 @@ const ShowMerchants = ({
             <Title level={3}>ကုန်သည်စာရင်း</Title>
           </Col>
           <Col span={4}>
-            {user?.position === "manager" ||
-              user?.position === "casher" ||
-              (user?.position === "staff" && (
-                <Button
-                  style={{
-                    backgroundColor: "var(--secondary-color)",
-                    color: "var(--white-color)",
-                    borderRadius: "5px"
-                  }}
-                  size="middle"
-                  onClick={() => navigate("/admin/create-merchants")}
-                >
-                  <PlusSquareOutlined />
-                  အသစ်ထည့်မည်
-                </Button>
-              ))}
+            {user?.position !== "owner" && (
+              <Button
+                style={{
+                  backgroundColor: "var(--secondary-color)",
+                  color: "var(--white-color)",
+                  borderRadius: "5px"
+                }}
+                size="middle"
+                onClick={() => navigate("/admin/create-merchants")}
+              >
+                <PlusSquareOutlined />
+                အသစ်ထည့်မည်
+              </Button>
+            )}
           </Col>
           <Col span={4}>
             <ExportToExcel apiData={result} fileName={fileName} />

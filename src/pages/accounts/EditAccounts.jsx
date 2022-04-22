@@ -94,7 +94,7 @@ const EditAccounts = () => {
               style={{ borderRadius: "10px" }}
             >
               <Option value="owner444">Owner</Option>
-              <Option value="casher">Casher</Option>
+              <Option value="cashier">Cashier</Option>
               <Option value="staff">Staff</Option>
             </Select>
           </Form.Item>

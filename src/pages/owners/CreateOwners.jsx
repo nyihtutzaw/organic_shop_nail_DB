@@ -127,7 +127,7 @@ const CreateOwners = ({ saveOwners, getStocks }) => {
             >
               {allStocks.map((stock) => (
                 <Option key={stock.id} value={stock.id}>
-                  {stock.name} ({stock.quantity})
+                  {stock.name}
                 </Option>
               ))}
             </Select>

@@ -11,6 +11,8 @@ const { Title } = Typography;
 
 const ShowBadItem = ({ getBadItems, deleteBadItems, getBadItem }) => {
   const badItems = useSelector((state) => state.bad_item.bad_items);
+  const user = useSelector((state) => state.auth.user);
+
   // console.log(badItems);
   useEffect(() => {
     const fetchData = async () => {
@@ -65,9 +67,11 @@ const ShowBadItem = ({ getBadItems, deleteBadItems, getBadItem }) => {
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
+          {user?.position !== "owner" && (
           <Button type="primary" onClick={() => handleClick(record)}>
             <EditOutlined/>
           </Button>
+          )}
           <Button type="primary" danger onClick={() => handleDelete(record)}>
           <DeleteOutlined />
           </Button>
@@ -84,6 +88,7 @@ const ShowBadItem = ({ getBadItems, deleteBadItems, getBadItem }) => {
             <Title level={3}>ချို့ယွင်းချက်ရှိပစ္စည်:များစာရင်း</Title>
           </Col>
           <Col span={3}>
+          {user?.position !== "owner" && (
             <Button
               style={{
                 backgroundColor: "var(--secondary-color)",
@@ -96,6 +101,7 @@ const ShowBadItem = ({ getBadItems, deleteBadItems, getBadItem }) => {
               <PlusSquareOutlined />
               အသစ်ထည့်မည်
             </Button>
+          )}
           </Col>
         </Row>
         <Table

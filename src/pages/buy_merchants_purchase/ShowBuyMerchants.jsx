@@ -39,6 +39,7 @@ const ShowBuyMerchants = ({
 }) => {
   const navigate = useNavigate();
   const allPurchases = useSelector((state) => state.purchase.purchases);
+  const user = useSelector((state) => state.auth.user);
 
   const fileName = "Purchases"; // here enter filename for your excel file
   const result = allPurchases.map((purchase) => ({
@@ -159,7 +160,7 @@ const ShowBuyMerchants = ({
           >
             <ReadOutlined />
           </Button>
-          {record.credit != 0 ? (
+          {(record.credit != 0 && user?.position !== "owner") ? (
             <Button
               type="primary"
               style={{ backgroundColor: "#ad6800" }}
@@ -182,6 +183,7 @@ const ShowBuyMerchants = ({
             <Title level={3}>အဝယ်စာရင်း</Title>
           </Col>
           <Col span={4}>
+          {user?.position !== "owner" && (
             <Button
               style={{
                 backgroundColor: "var(--secondary-color)",
@@ -194,6 +196,7 @@ const ShowBuyMerchants = ({
               <PlusSquareOutlined />
               အသစ်ထည့်မည်
             </Button>
+          )}
           </Col>
           <Col span={4}>
             <ExportToExcel apiData={result} fileName={fileName} />

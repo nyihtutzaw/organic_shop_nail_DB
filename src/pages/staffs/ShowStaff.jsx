@@ -95,7 +95,7 @@ const ShowStaff = ({ getStaffs, deleteStaffs, clearAlertStaffs }) => {
       render: (_, record) => (
         <Space direction="horizontal">
            {user?.position === "manager" ||
-            user?.position === "casher" ||
+            user?.position === "cashier" ||
             (user?.position === "staff" && (
           <Button type="primary" onClick={() => handleClick(record)}>
             {" "}
@@ -140,7 +140,7 @@ const ShowStaff = ({ getStaffs, deleteStaffs, clearAlertStaffs }) => {
           </Col>
           <Col span={4}>
           {user?.position === "manager" ||
-            user?.position === "casher" ||
+            user?.position === "cashier" ||
             (user?.position === "staff" && (
             <Button
               style={{
