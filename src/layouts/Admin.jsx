@@ -425,7 +425,6 @@ const Admin = ({ logout }) => {
                 <Menu.Item key="ShowStaff" icon={<UnorderedListOutlined />}>
                   <Link to="/admin/show-staff">စာရင်း</Link>
                 </Menu.Item>
-
                 <Menu.Item
                   key="StaffCommession"
                   icon={<UnorderedListOutlined />}
@@ -451,7 +450,7 @@ const Admin = ({ logout }) => {
                 <Link to="/admin/show-expense-names">အမည်များ</Link>
               </Menu.Item>
             </SubMenu>
-            {(user?.position === "owner" || user?.position === "manager") && (
+            {(user?.position === "owner" || user?.position === "manager" ) && (
               <SubMenu
                 key="Reports"
                 title="Reports"
