@@ -6,13 +6,11 @@ import {
   Col,
   Button,
   Table,
-  notification,
   Alert
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
-  ExportOutlined,
   DeleteOutlined,
   EditOutlined
 } from "@ant-design/icons";
@@ -37,6 +35,7 @@ const ShowMerchants = ({
   clearAlertMerchant
 }) => {
   const allMerchants = useSelector((state) => state.merchant.merchants);
+  const user = useSelector((state) => state.auth.user);
   const fileName = "Merchants"; // here enter filename for your excel file
   const result = allMerchants.map((merchant) => ({
     Name: merchant.name,
@@ -91,9 +90,13 @@ const ShowMerchants = ({
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          <Button type="primary" onClick={() => handleClick(record)}>
-            <EditOutlined />
-          </Button>
+          {user?.position === "manager" ||
+            user?.position === "casher" ||
+            (user?.position === "staff" && (
+              <Button type="primary" onClick={() => handleClick(record)}>
+                <EditOutlined />
+              </Button>
+            ))}
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
@@ -124,18 +127,22 @@ const ShowMerchants = ({
             <Title level={3}>ကုန်သည်စာရင်း</Title>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--secondary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-              onClick={() => navigate("/admin/create-merchants")}
-            >
-              <PlusSquareOutlined />
-              အသစ်ထည့်မည်
-            </Button>
+            {user?.position === "manager" ||
+              user?.position === "casher" ||
+              (user?.position === "staff" && (
+                <Button
+                  style={{
+                    backgroundColor: "var(--secondary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                  size="middle"
+                  onClick={() => navigate("/admin/create-merchants")}
+                >
+                  <PlusSquareOutlined />
+                  အသစ်ထည့်မည်
+                </Button>
+              ))}
           </Col>
           <Col span={4}>
             <ExportToExcel apiData={result} fileName={fileName} />

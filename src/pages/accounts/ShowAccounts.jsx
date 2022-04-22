@@ -1,10 +1,7 @@
 import React from "react";
 import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
 import Layout from "antd/lib/layout/layout";
-import {
-  PlusSquareOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { PlusSquareOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { getAccounts, deleteAccounts } from "../../store/actions";
@@ -14,6 +11,8 @@ const { Title } = Typography;
 
 const ShowAccounts = ({ deleteAccounts }) => {
   const accounts = useSelector((state) => state.account.accounts);
+  const user = useSelector((state) => state.auth.user);
+
   const fileName = "Accounts"; // here enter filename for your excel file
   const result = accounts.map((account) => ({
     name: account?.name,
@@ -80,18 +79,22 @@ const ShowAccounts = ({ deleteAccounts }) => {
             <Title level={3}>အကောင့်စာရင်း</Title>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--secondary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-              onClick={() => navigate("/admin/create-accounts")}
-            >
-              <PlusSquareOutlined />
-              အသစ်ထည့်မည်
-            </Button>
+            {user?.position === "manager" ||
+              user?.position === "casher" ||
+              (user?.position === "staff" && (
+                <Button
+                  style={{
+                    backgroundColor: "var(--secondary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                  size="middle"
+                  onClick={() => navigate("/admin/create-accounts")}
+                >
+                  <PlusSquareOutlined />
+                  အသစ်ထည့်မည်
+                </Button>
+              ))}
           </Col>
           <Col span={4}>
             <ExportToExcel apiData={result} fileName={fileName} />

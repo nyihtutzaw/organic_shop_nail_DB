@@ -17,6 +17,7 @@ const { Title } = Typography;
 
 const ShowService = ({ getServices, deleteServices, getService }) => {
   const allServices = useSelector((state) => state.service.services);
+  const user = useSelector((state) => state.auth.user);
   const fileName = "Services"; // here enter filename for your excel file
   const result = allServices.map((service) => ({
     Code: service.code,
@@ -86,9 +87,13 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
+          {user?.position === "manager" ||
+            user?.position === "casher" ||
+            (user?.position === "staff" && (
           <Button type="primary" onClick={() => handleClick(record)}>
             <EditOutlined />
           </Button>
+            ))}
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
@@ -105,6 +110,9 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
             <Title level={3}>ဝန်ဆောင်မှုစာရင်း</Title>
           </Col>
           <Col span={4}>
+          {user?.position === "manager" ||
+            user?.position === "casher" ||
+            (user?.position === "staff" && (
             <Button
               style={{
                 backgroundColor: "var(--secondary-color)",
@@ -117,6 +125,7 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
               <PlusSquareOutlined />
               အသစ်ထည့်မည်
             </Button>
+            ))}
           </Col>
           <Col span={4}>
             <ExportToExcel apiData={result} fileName={fileName} />

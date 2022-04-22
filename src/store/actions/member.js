@@ -41,7 +41,6 @@ export const setMemberError = (error) => ({
   error
 });
 
-
 export const memberSuccess = (isSuccess) => ({
   type: IS_SUCCESS_MEMBER,
   isSuccess

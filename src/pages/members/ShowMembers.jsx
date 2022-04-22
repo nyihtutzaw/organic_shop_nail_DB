@@ -38,6 +38,8 @@ const ShowMembers = ({
   const navigate = useNavigate();
   const member = useSelector((state) => state.member);
   const members = useSelector((state) => state.member.members);
+  const user = useSelector((state) => state.auth.user);
+
   const fileName = "Members"; // here enter filename for your excel file
 
   const result = members.map((member) => ({
@@ -101,10 +103,6 @@ const ShowMembers = ({
       title: "နေရပ်လိပ်စာ",
       dataIndex: "address"
     },
-    // {
-    //   title: "point စုစုပေါင်း",
-    //   dataIndex: "points"
-    // },
     {
       title: "Actions",
       dataIndex: "action",
@@ -117,9 +115,13 @@ const ShowMembers = ({
           >
             <ReadOutlined/>
           </Button>
+          {user?.position === "manager" ||
+              user?.position === "casher" ||
+              (user?.position === "staff" && (
           <Button type="primary" onClick={() => handleClick(record)}>
             <EditOutlined />
           </Button>
+              ))}
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
@@ -155,6 +157,9 @@ const ShowMembers = ({
             <Title level={3}>Member စာရင်း</Title>
           </Col>
           <Col span={4}>
+          {user?.position === "manager" ||
+            user?.position === "casher" ||
+            (user?.position === "staff" && (
             <Button
               style={{
                 backgroundColor: "var(--secondary-color)",
@@ -167,6 +172,7 @@ const ShowMembers = ({
               <PlusSquareOutlined />
               အသစ်ထည့်မည်
             </Button>
+            ))}
           </Col>
           <Col span={4}>
             <ExportToExcel apiData={resultMember} fileName={fileName} />

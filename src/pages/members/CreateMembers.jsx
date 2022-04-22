@@ -40,8 +40,8 @@ const CreateMembers = ({ shop, saveMembers, getShops, clearAlertMember }) => {
 
   const onFinish = async (values) => {
     await saveMembers(values);
-    navigate('/admin/sale')
-    form.resetFields();
+    // navigate('/admin/sale')
+    // form.resetFields();
   };
 
   //for barcode

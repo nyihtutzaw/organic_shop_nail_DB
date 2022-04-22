@@ -32,12 +32,11 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
   const navigate = useNavigate();
   const fileName = "Shops";
   const shops = useSelector((state) => state.shop.shops);
+  const user = useSelector((state) => state.auth.user);
   const result = shops.map((shop) => ({
     name: shop.name,
     id: shop.id
   }));
-
-  // console.log(result);
 
   useEffect(() => {
     store.dispatch(clearAlert());
@@ -73,9 +72,13 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-          <Button type="primary" onClick={() => handleClick(record)}>
-            <EditOutlined />
-          </Button>
+          {user?.position === "manager" ||
+            user?.position === "casher" ||
+            (user?.position === "staff" && (
+              <Button type="primary" onClick={() => handleClick(record)}>
+                <EditOutlined />
+              </Button>
+            ))}
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
@@ -97,8 +100,12 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
       ) : null}
 
       {shop.isSuccess && (
-        <Alert message="Successfully Deleted" type="success" showIcon
-        closable />
+        <Alert
+          message="Successfully Deleted"
+          type="success"
+          showIcon
+          closable
+        />
       )}
 
       <Space direction="vertical" size="middle">
@@ -107,18 +114,22 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
             <Title level={3}>ဆိုင်အမည်စာရင်း</Title>
           </Col>
           <Col span={4}>
-            <Button
-              style={{
-                backgroundColor: "var(--secondary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-              onClick={() => navigate("/admin/create-shops")}
-            >
-              <PlusSquareOutlined />
-              အသစ်ထည့်မည်
-            </Button>
+            {user?.position === "manager" ||
+              user?.position === "casher" ||
+              (user?.position === "staff" && (
+                <Button
+                  style={{
+                    backgroundColor: "var(--secondary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                  size="middle"
+                  onClick={() => navigate("/admin/create-shops")}
+                >
+                  <PlusSquareOutlined />
+                  အသစ်ထည့်မည်
+                </Button>
+              ))}
           </Col>
           <Col span={4}>
             <ExportToExcel apiData={result} fileName={fileName} />
