@@ -5,9 +5,6 @@ import {
   Typography,
   Space,
   Button,
-  Select,
-  notification,
-  message,
   Alert
 } from "antd";
 import Layout from "antd/lib/layout/layout";

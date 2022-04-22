@@ -5,7 +5,9 @@ import {
   CREATE_SERVICES,
   UPDATE_SERVICES,
   FILTER_SERVICES,
-  ERROR_ITEM
+  ERROR_SERVICES,
+  IS_SUCCESS_SERVICES,
+  CLEAR_ALERT_SERVICES
 } from "../type";
 
 export const showServices = (services) => ({
@@ -34,8 +36,16 @@ export const updateServices = (data) => ({
 });
 
 export const setServiceError = (error) => ({
-  type: ERROR_ITEM,
+  type: ERROR_SERVICES,
   error
+});
+export const serviceSuccess = (isSuccess) => ({
+  type: IS_SUCCESS_SERVICES,
+  isSuccess
+});
+
+export const clearAlertServices = () => ({
+  type: CLEAR_ALERT_SERVICES
 });
 
 export const getBestService = (query) => {
@@ -73,6 +83,7 @@ export const getServices = () => {
           key: service.id
         };
       });
+      // console.log(result);
       if (response.status === 200) {
         dispatch(showServices(result));
       }
@@ -120,11 +131,12 @@ export const saveServices = (data) => {
           key: service.id
         };
       });
+      // console.log(response)
       if (response.status === 201) {
         dispatch(createServices(result));
       }
     } catch (error) {
-      if (error.response.status === 404) {
+      if (error.response.status >= 400) {
         dispatch(setServiceError(error.response.data.data));
       }
     }

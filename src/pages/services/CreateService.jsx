@@ -8,14 +8,16 @@ import {
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getServices, saveServices } from "../../store/actions";
+import { getServices, saveServices, clearAlertServices } from "../../store/actions";
 import { connect } from "react-redux";
-import { ToastContainer, toast } from 'react-toastify';
-
+import store from "../../store";
 
 const { Title } = Typography;
 
-const CreateService = ({ getServices, saveServices }) => {
+const CreateService = ({ getServices, saveServices, clearAlertServices }) => {
+  // const servicesResult = useSelector((state) => state.service);
+  // console.log(servicesResult)
+
   useEffect(() => {
     const fetchData = async () => {
       await getServices();
@@ -26,7 +28,12 @@ const CreateService = ({ getServices, saveServices }) => {
     };
   }, [getServices]);
 
-  // const servicesResult = useSelector((state) => state.service.services);
+  useEffect(() => {
+    store.dispatch(clearAlertServices());
+  }, []);
+
+
+
   const [supplierTable, setSupplierTable] = useState({services: []});
 
   const [form] = Form.useForm();
@@ -41,7 +48,6 @@ const CreateService = ({ getServices, saveServices }) => {
   };
 
   const onFinish = (values) => {
-
     setSupplierTable(
       {
         services: [
@@ -278,4 +284,4 @@ const CreateService = ({ getServices, saveServices }) => {
 };
 
 
-export default connect(null, { getServices, saveServices })(CreateService);
+export default connect(null, { getServices, saveServices, clearAlertServices })(CreateService);
