@@ -8,13 +8,13 @@ import {
   Select,
   Table,
   message,
-  notification,
+  notification
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   EditOutlined,
   SaveOutlined,
-  PlusSquareOutlined,
+  PlusSquareOutlined
 } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { useSelector } from "react-redux";
@@ -22,7 +22,7 @@ import {
   saveItemTransfers,
   getShops,
   getItems,
-  getStocks,
+  getStocks
 } from "../../store/actions";
 
 const { Title } = Typography;
@@ -33,7 +33,7 @@ const CreateItemTransfer = ({
   getShops,
   getStocks,
   getItems,
-  saveItemTransfers,
+  saveItemTransfers
 }) => {
   const [items, setItems] = useState([]);
   const [form] = Form.useForm();
@@ -77,8 +77,8 @@ const CreateItemTransfer = ({
             ...values,
             Date: date,
             key: items.length + 1,
-            name: stock.item.name,
-          },
+            name: stock.item.name
+          }
         ]);
         form.resetFields();
       } else {
@@ -102,7 +102,7 @@ const CreateItemTransfer = ({
     notification[type]({
       message: "Saved Your Data",
       description: "Your data have been saved.",
-      duration: 3,
+      duration: 3
     });
   };
 
@@ -115,12 +115,12 @@ const CreateItemTransfer = ({
       const itemTransfer = items.map((item) => {
         return {
           stock_id: item.stock_id,
-          quantity: item.quantity,
+          quantity: item.quantity
         };
       });
       const saveItem = {
         item_transfers: itemTransfer,
-        to_shop_id: buyShop.id,
+        to_shop_id: buyShop.id
       };
       await saveItemTransfers(saveItem);
       setItems([]);
@@ -137,11 +137,11 @@ const CreateItemTransfer = ({
   const columns = [
     {
       title: "ပစ္စည်းအမည်",
-      dataIndex: "name",
+      dataIndex: "name"
     },
     {
       title: "အရေအတွက်",
-      dataIndex: "quantity",
+      dataIndex: "quantity"
     },
     {
       title: "Actions",
@@ -150,8 +150,8 @@ const CreateItemTransfer = ({
         <Button type="primary" danger onClick={() => handleDelete(record)}>
           Delete
         </Button>
-      ),
-    },
+      )
+    }
   ];
 
   return (
@@ -165,7 +165,7 @@ const CreateItemTransfer = ({
           style={{
             width: "100%",
             justifyContent: "center",
-            marginBottom: "10px",
+            marginBottom: "10px"
           }}
           size="large"
         >
@@ -194,17 +194,17 @@ const CreateItemTransfer = ({
         </Space>
 
         <Form
-        colon={false}
+          colon={false}
           labelCol={{
             xl: {
-              span: 3,
-            },
+              span: 3
+            }
           }}
           wrapperCol={{
-            span: 24,
+            span: 24
           }}
           initialValues={{
-            remember: true,
+            remember: true
           }}
           onFinish={onFinish}
           form={form}
@@ -215,8 +215,8 @@ const CreateItemTransfer = ({
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ",
-              },
+                message: "ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
+              }
             ]}
           >
             <Select
@@ -243,8 +243,8 @@ const CreateItemTransfer = ({
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ အရေအတွက်ထည့်ပါ",
-              },
+                message: "ကျေးဇူးပြု၍ အရေအတွက်ထည့်ပါ"
+              }
             ]}
           >
             <InputNumber
@@ -260,13 +260,13 @@ const CreateItemTransfer = ({
               style={{
                 backgroundColor: "var(--secondary-color)",
                 color: "var(--white-color)",
-                borderRadius: "10px",
+                borderRadius: "10px"
               }}
               size="large"
               htmlType="submit"
             >
               <PlusSquareOutlined />
-              အသစ်ထည့်မည်
+              လွှဲပြောင်းရန်
             </Button>
           </Form.Item>
         </Form>
@@ -285,7 +285,7 @@ const CreateItemTransfer = ({
             style={{
               backgroundColor: "var(--primary-color)",
               color: "var(--white-color)",
-              borderRadius: "10px",
+              borderRadius: "10px"
             }}
             size="large"
             onClick={handleSave}
@@ -303,5 +303,5 @@ export default connect(null, {
   getShops,
   getItems,
   saveItemTransfers,
-  getStocks,
+  getStocks
 })(CreateItemTransfer);
