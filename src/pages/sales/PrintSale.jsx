@@ -224,7 +224,8 @@ const PrintSale = () => {
               <Col span={1}></Col>
               <Col span={15}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
-                  အမှတ်(၁၈၂)၂၉လမ်း၊၇၉x၈၀ကြား
+                  {/* အမှတ်(၁၈၂)၂၉လမ်း၊၇၉x၈၀ကြား */}
+                  အမှတ်(၁၂၈)၂၉လမ်း၊၇၉×၈၀ကြား
                 </Title>
               </Col>
             </Row>
