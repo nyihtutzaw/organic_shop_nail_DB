@@ -220,7 +220,7 @@ const CreateItemTransfer = ({
             ]}
           >
             <Select
-              showSearch
+              // showSearch
               placeholder="ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -232,7 +232,7 @@ const CreateItemTransfer = ({
             >
               {stocks.map((item) => (
                 <Option key={item.id} value={item.id}>
-                  {item.item.name}
+                  {item.item.name} ({item.quantity})
                 </Option>
               ))}
             </Select>

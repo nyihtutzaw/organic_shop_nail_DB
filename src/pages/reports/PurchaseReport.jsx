@@ -35,6 +35,11 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   const showPurchase = useSelector((state) => state.purchase.purchases);
   const allMerchant = useSelector((state) => state.merchant.merchants);
 
+  const start_date = new URLSearchParams(window.location.search).get(
+    "start_date"
+  );
+  const end_date = new URLSearchParams(window.location.search).get("end_date");
+
   const result = purchaseReport.map((p) => ({
     company_name: p.merchant.company_name,
     date: p.merchant.created_at,
@@ -104,11 +109,31 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
-          <Col span={16}>
+          <Col span={13}>
             <Title level={3}>အဝယ်မှတ်တမ်းစာမျက်နှာ</Title>
           </Col>
-          <Col span={4}></Col>
-          <Col span={4}></Col>
+          <Col span={5}>
+            <p
+              style={{
+                backgroundColor: "var(--primary-color)",
+                padding: "10px",
+                color: "var(--white-color)"
+              }}
+            >
+              Start Date= {start_date}
+            </p>
+          </Col>
+          <Col span={5}>
+            <p
+              style={{
+                backgroundColor: "var(--primary-color)",
+                padding: "10px",
+                color: "var(--white-color)"
+              }}
+            >
+              End Date= {end_date}
+            </p>
+          </Col>
         </Row>
 
         <Row gutter={[16, 16]}>

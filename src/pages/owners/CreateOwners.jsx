@@ -115,7 +115,7 @@ const CreateOwners = ({ saveOwners, getStocks }) => {
             ]}
           >
             <Select
-              showSearch
+              // showSearch
               placeholder="ကျေးဇူးပြု၍ ပစ္စည်းကုတ်/အမည်ရွေးပါ"
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -127,7 +127,7 @@ const CreateOwners = ({ saveOwners, getStocks }) => {
             >
               {allStocks.map((stock) => (
                 <Option key={stock.id} value={stock.id}>
-                  {stock.name}
+                  {stock.name} ({stock.quantity})
                 </Option>
               ))}
             </Select>

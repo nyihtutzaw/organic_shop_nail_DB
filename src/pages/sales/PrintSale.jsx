@@ -17,6 +17,7 @@ import { useReactToPrint } from "react-to-print";
 import { call } from "../../services/api";
 import { getDate } from "../../uitls/convertToDate";
 import organic from "./images/organic.jpg";
+import { useSelector } from "react-redux";
 
 const { Header } = Layout;
 const { Title } = Typography;
@@ -27,6 +28,7 @@ const PrintSale = () => {
   const [sales, setSales] = useState([]);
   const [sale, setSale] = useState();
   const param = useParams();
+  const user = useSelector((state) => state.auth.user);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current
@@ -398,6 +400,19 @@ const PrintSale = () => {
                 </Title>
               </Col>
             </Row>
+            <Row>
+              <Col span={12}>
+                <Title level={5} style={{ fontSize: "11.5px" }}>
+                  Payment Method:
+                </Title>
+              </Col>
+              <Col span={1}></Col>
+              <Col span={11}>
+                <Title level={5} style={{ fontSize: "11.5px" }}>
+                  {sale.payment_method}
+                </Title>
+              </Col>
+            </Row>
           </Col>
           <Col span={2}></Col>
           <Col span={10}>
@@ -430,13 +445,13 @@ const PrintSale = () => {
             <Row>
               <Col span={12}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
-                  Payment Method:
+                  Shop Name:
                 </Title>
               </Col>
               <Col span={1}></Col>
               <Col span={11}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
-                  {sale.payment_method}
+                  {user?.shop?.name}
                 </Title>
               </Col>
             </Row>

@@ -31,7 +31,10 @@ const ServicesReport = () => {
   const servicesUnique = [];
   services.forEach((i) => servicesUnique.push(i?.service?.category));
   let unique = [...new Set(servicesUnique)];
-  // console.log(unique);
+  const start_date = new URLSearchParams(window.location.search).get(
+    "start_date"
+  );
+  const end_date = new URLSearchParams(window.location.search).get("end_date");
 
   const result = services.map((s) => ({
     ...s,
@@ -132,11 +135,31 @@ const ServicesReport = () => {
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
-          <Col span={18}>
+          <Col span={13}>
             <Title level={3}>ဝန်ဆောင်မှု မှတ်တမ်းစာမျက်နှာ</Title>
           </Col>
-          <Col span={3}></Col>
-          <Col span={3}></Col>
+          <Col span={5}>
+            <p
+              style={{
+                backgroundColor: "var(--primary-color)",
+                padding: "10px",
+                color: "var(--white-color)"
+              }}
+            >
+              Start Date= {start_date}
+            </p>
+          </Col>
+          <Col span={5}>
+            <p
+              style={{
+                backgroundColor: "var(--primary-color)",
+                padding: "10px",
+                color: "var(--white-color)"
+              }}
+            >
+              End Date= {end_date}
+            </p>
+          </Col>
         </Row>
 
         <Space direction="vertical" size={12}></Space>

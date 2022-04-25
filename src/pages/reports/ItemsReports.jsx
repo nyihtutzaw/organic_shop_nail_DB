@@ -29,6 +29,11 @@ const ItemsReports = () => {
   const itemsUnique = [];
   items.forEach((i) => itemsUnique.push(i?.item?.name));
   let unique = [...new Set(itemsUnique)];
+  const start_date = new URLSearchParams(window.location.search).get(
+    "start_date"
+  );
+  const end_date = new URLSearchParams(window.location.search).get("end_date");
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -124,11 +129,31 @@ const ItemsReports = () => {
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
-          <Col span={18}>
+          <Col span={13}>
             <Title level={3}>ပစ္စည်းအရောင်း မှတ်တမ်းစာမျက်နှာ</Title>
           </Col>
-          <Col span={3}></Col>
-          <Col span={3}></Col>
+          <Col span={5}>
+            <p
+              style={{
+                backgroundColor: "var(--primary-color)",
+                padding: "10px",
+                color: "var(--white-color)"
+              }}
+            >
+              Start Date= {start_date}
+            </p>
+          </Col>
+          <Col span={5}>
+            <p
+              style={{
+                backgroundColor: "var(--primary-color)",
+                padding: "10px",
+                color: "var(--white-color)"
+              }}
+            >
+              End Date= {end_date}
+            </p>
+          </Col>
         </Row>
         <Space direction="vertical" size={12}></Space>
 
