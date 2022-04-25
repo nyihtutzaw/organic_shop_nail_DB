@@ -181,9 +181,14 @@ const PrintSale = () => {
           <Col
             className="gutter-row"
             span={12}
-            style={{ textAlign: "center", marginBottom: "20px" }}
+            style={{ textAlign: "center", marginBottom: "0px" }}
           >
-            <Image preview={false} width={68} src={organic} style={{ borderRadius: "100px" }} />
+            <Image
+              preview={false}
+              width={68}
+              src={organic}
+              style={{ borderRadius: "100px" }}
+            />
 
             <Title level={2} style={{ fontSize: "16px" }}>
               Organic Nail Shop
@@ -230,7 +235,7 @@ const PrintSale = () => {
               <Col span={1}></Col>
               <Col span={15}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
-                  09793990086, 024066055
+                  09-793990086, 02-4066055
                 </Title>
               </Col>
             </Row>
@@ -256,7 +261,7 @@ const PrintSale = () => {
               <Col span={1}></Col>
               <Col span={15}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
-                  09790888550
+                  09-790888550
                 </Title>
               </Col>
             </Row>
@@ -368,26 +373,26 @@ const PrintSale = () => {
           <Col span={1}></Col>
           <Col span={10}>
             <Row>
-              <Col span={8}>
+              <Col span={12}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
                   Customer Phone:
                 </Title>
               </Col>
               <Col span={1}></Col>
-              <Col span={15}>
+              <Col span={11}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
                   {sale.customer_phone_no}
                 </Title>
               </Col>
             </Row>
             <Row>
-              <Col span={8}>
+              <Col span={12}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
                   Customer Name:
                 </Title>
               </Col>
               <Col span={1}></Col>
-              <Col span={15}>
+              <Col span={11}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
                   {sale.customer_name}
                 </Title>
@@ -397,39 +402,39 @@ const PrintSale = () => {
           <Col span={2}></Col>
           <Col span={10}>
             <Row>
-              <Col span={8}>
+              <Col span={12}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
                   Date:
                 </Title>
               </Col>
               <Col span={1}></Col>
-              <Col span={15}>
+              <Col span={11}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
                   {getDate(sale.created_at)}
                 </Title>
               </Col>
             </Row>
             <Row>
-              <Col span={8}>
+              <Col span={12}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
                   Voucher Code:
                 </Title>
               </Col>
               <Col span={1}></Col>
-              <Col span={15}>
+              <Col span={11}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
                   {sale.voucher_code}
                 </Title>
               </Col>
             </Row>
             <Row>
-              <Col span={8}>
+              <Col span={12}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
                   Payment Method:
                 </Title>
               </Col>
               <Col span={1}></Col>
-              <Col span={15}>
+              <Col span={11}>
                 <Title level={5} style={{ fontSize: "11.5px" }}>
                   {sale.payment_method}
                 </Title>
@@ -467,13 +472,13 @@ const PrintSale = () => {
               လျော့ဈေး
             </Title>
           </Col>
-          <Col span={1} style={{ textAlign: "left" }}>
+          <Col span={2} style={{ textAlign: "left" }}>
             <Title level={5} style={{ fontSize: "11.5px" }}>
               {sale.discount}%
             </Title>
           </Col>
 
-          <Col span={5} style={{ textAlign: "right" }}>
+          <Col span={4} style={{ textAlign: "right" }}>
             <Title level={5} style={{ fontSize: "11.5px" }}>
               {discountAmount}
             </Title>

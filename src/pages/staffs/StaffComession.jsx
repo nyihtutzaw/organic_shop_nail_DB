@@ -17,6 +17,10 @@ const StaffComession = ({ getDailyStaffs }) => {
   const location = useLocation();
   const staffs = useSelector((state) => state.staff.staffs);
   const dailyStaffsFree = useSelector((state) => state.daily.dailys);
+  const start_date = new URLSearchParams(window.location.search).get(
+    "start_date"
+  );
+  const end_date = new URLSearchParams(window.location.search).get("end_date");
 
   useEffect(() => {
     const fetchData = () => {
@@ -83,7 +87,9 @@ const StaffComession = ({ getDailyStaffs }) => {
               : 0;
           let result = dailyStaffsFree.find((d) => d?.staff?.id === record?.id);
           return (
-            Number(commercial) + Number(record.salary) + (result?.amount ? Number(result?.amount) : 0) 
+            Number(commercial) +
+            Number(record.salary) +
+            (result?.amount ? Number(result?.amount) : 0)
           );
         }
       }
@@ -131,7 +137,9 @@ const StaffComession = ({ getDailyStaffs }) => {
               : 0;
           let result = dailyStaffsFree.find((d) => d?.staff?.id === record?.id);
           return (
-            Number(commercial) + Number(record.salary) + (result?.amount ? Number(result?.amount) : 0)
+            Number(commercial) +
+            Number(record.salary) +
+            (result?.amount ? Number(result?.amount) : 0)
           );
         }
       }
@@ -149,7 +157,9 @@ const StaffComession = ({ getDailyStaffs }) => {
     let result = dailyStaffsFree.find((d) => d?.staff?.id === filterStaff?.id);
 
     total +=
-      Number(commercial) + Number(filterStaff.salary) + (result?.amount ? Number(result?.amount) : 0) ;
+      Number(commercial) +
+      Number(filterStaff.salary) +
+      (result?.amount ? Number(result?.amount) : 0);
   });
 
   const handleOnChange = (value) => {
@@ -164,10 +174,32 @@ const StaffComession = ({ getDailyStaffs }) => {
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
-          <Col span={20}>
+          <Col span={10}>
             <Title level={3}>၀န်ထမ်းလခနှင့်ကော်မရှင်စုစုပေါင်း</Title>
           </Col>
+          <Col span={5}>
+            <p
+              style={{
+                backgroundColor: "var(--primary-color)",
+                padding: "10px",
+                color: "var(--white-color)"
+              }}
+            >
+              Start Date= {start_date}
+            </p>
+          </Col>
 
+          <Col span={5}>
+            <p
+              style={{
+                backgroundColor: "var(--primary-color)",
+                padding: "10px",
+                color: "var(--white-color)"
+              }}
+            >
+              End Date= {end_date}
+            </p>
+          </Col>
           <Col span={3}>
             {/* <Button
               style={{
