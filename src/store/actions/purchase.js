@@ -57,10 +57,10 @@ export const getBestPurchase = (query) => {
       const result = response.data.data.map((purchase) => {
         return {
           ...purchase,
-          key: purchase.id
+          key: Math.random() * 100
         };
       });
-      // console.log(result);
+      console.log(result);
       // dispatch(showPurchases(result));
       dispatch(showPurchaseReport(result));
     } catch (error) {
@@ -189,7 +189,7 @@ export const getPurchaseReport = () => {
           key: purchase.merchant_id
         };
       });
-      // console.log(result)
+      // console.log("rr",result)
       if (response.status === 201) {
         dispatch(showPurchaseReport(result));
       }

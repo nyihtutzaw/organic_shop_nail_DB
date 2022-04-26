@@ -72,7 +72,7 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   const [showBuyMerchant, setshowBuyMerchant] = useState(null);
   const onChange = (value) => {
     if (value === undefined) {
-      setshowBuyMerchant([]);
+      setshowBuyMerchant(purchaseReport);
     } else {
       const filterBuyMerchant = purchaseReport.filter(
         (mer) => mer.merchant.id === value

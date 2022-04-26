@@ -26,6 +26,8 @@ const ItemsReports = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const items = useSelector((state) => state.item.items);
+  // const itemss = useSelector((state) => state.item);
+  // console.log(itemss)
   const itemsUnique = [];
   items.forEach((i) => itemsUnique.push(i?.item?.name));
   let unique = [...new Set(itemsUnique)];

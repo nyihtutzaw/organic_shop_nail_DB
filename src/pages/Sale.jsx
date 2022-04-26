@@ -62,7 +62,7 @@ const Sale = ({
   const [barcode, setBarcode] = useState([]);
 
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const fetchData = async () => {
       await getStocks();
