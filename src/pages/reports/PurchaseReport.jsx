@@ -82,15 +82,15 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   };
 
   const columns = [
-    {
-      title: "ရက်စွဲ",
-      dataIndex: `created_at`,
-      //   render: (_, record) => console.log(record)
-      render: (_, record) =>
-        showBuyMerchant === null
-          ? getReadableDateDisplay(record.date)
-          : getReadableDateDisplay(record.merchant.created_at)
-    },
+    // {
+    //   title: "ရက်စွဲ",
+    //   dataIndex: `created_at`,
+    //   //   render: (_, record) => console.log(record)
+    //   render: (_, record) =>
+    //     showBuyMerchant === null
+    //       ? getReadableDateDisplay(record.date)
+    //       : getReadableDateDisplay(record.merchant.created_at)
+    // },
     {
       title: "ကုန်သည်လုပ်ငန်းအမည်",
       dataIndex: "company_name",

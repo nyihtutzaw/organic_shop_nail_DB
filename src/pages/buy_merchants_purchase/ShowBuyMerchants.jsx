@@ -42,7 +42,7 @@ const ShowBuyMerchants = ({
   const user = useSelector((state) => state.auth.user);
 
   const fileName = "Purchases"; // here enter filename for your excel file
-  const result = allPurchases.map((purchase) => ({
+  const result = allPurchases?.map((purchase) => ({
     Date: purchase.date,
     Company_Name: purchase.merchant.company_name,
     Whole_Total: purchase.whole_total,
@@ -81,7 +81,7 @@ const ShowBuyMerchants = ({
     if (value === undefined) {
       setshowBuyMerchant(allPurchases);
     } else {
-      const filterBuyMerchant = allPurchases.filter(
+      const filterBuyMerchant = allPurchases?.filter(
         (mer) => mer.merchant.id === value
       );
       setshowBuyMerchant(filterBuyMerchant);
@@ -97,7 +97,7 @@ const ShowBuyMerchants = ({
   };
 
   let allCredit = [];
-  allPurchases.forEach((purchase) => allCredit.push(parseInt(purchase.credit)));
+  allPurchases?.forEach((purchase) => allCredit.push(parseInt(purchase.credit)));
   const finalCredit = allCredit.reduce((a, b) => a + b, 0);
 
   let allCreditGet = [];

@@ -60,7 +60,7 @@ export const getBestPurchase = (query) => {
           key: Math.random() * 100
         };
       });
-      console.log(result);
+      // console.log(result);
       // dispatch(showPurchases(result));
       dispatch(showPurchaseReport(result));
     } catch (error) {
