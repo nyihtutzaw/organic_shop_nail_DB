@@ -8,14 +8,12 @@ import {
   ERROR_MERCHANT,
   IS_SUCCESS_MERCHANT,
   CLEAR_ALERT,
-
   ADD_ERROR,
   REMOVE_ERROR,
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
 import { serverErrorMessage } from "../../util/messages";
-
 
 export const showMerchants = (merchants) => ({
   type: SHOW_MERCHANTS,
@@ -96,7 +94,6 @@ export const getMerchants = () => {
       }
     }
     dispatch({ type: SET_LOADING });
-
   };
 };
 
@@ -135,7 +132,6 @@ export const getMerchant = (id) => {
       }
     }
     dispatch({ type: SET_LOADING });
-
   };
 };
 
@@ -151,7 +147,7 @@ export const saveMerchants = (data) => {
       const result = {
         ...response.data.data,
         key: response.data.data.id
-      };      
+      };
       if (response.status === 201) {
         dispatch(createMerchants(result));
         dispatch({ type: SET_SUCCESS, payload: true });
@@ -161,18 +157,21 @@ export const saveMerchants = (data) => {
       }
     } catch (error) {
       const { status, data } = error.response;
-
-      if (status >= 400) {
+      if (status === 400) {
         dispatch({
           type: ADD_ERROR,
-          payload: serverErrorMessage
+          payload: "The code has already been taken."
         });
-      }
-      if (status === 401) {
+      } else if (status === 401) {
         localStorage.removeItem("jwtToken");
         dispatch({
           type: ADD_ERROR,
           payload: data.message
+        });
+      } else if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
         });
       }
     }

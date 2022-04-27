@@ -5,7 +5,6 @@ import {
   Typography,
   Space,
   Button,
-  Alert,
   message,
   Spin
 } from "antd";
@@ -18,7 +17,6 @@ import {
   clearAlertMerchant
 } from "../../store/actions";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import store from "../../store";
 import { successCreateMessage } from "../../util/messages";
 
@@ -28,7 +26,6 @@ const CreateMerchants = ({
   saveMerchants,
   getShops,
   clearAlertMerchant,
-  merchant
 }) => {
   const [form] = Form.useForm();
   const status = useSelector((state) => state.status);

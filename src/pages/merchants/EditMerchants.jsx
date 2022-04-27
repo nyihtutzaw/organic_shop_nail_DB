@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
-import { Form, Input, Typography, Space, Button, Select } from "antd";
+import { Form, Input, Typography, Space, Button, Spin, message } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { connect, useSelector } from "react-redux";
 import { editMerchants, getShops, getMerchant } from "../../store/actions";
 import { useNavigate, useParams } from "react-router-dom";
+import { successEditMessage } from "../../util/messages";
+
 
 const { Title } = Typography;
-const { Option } = Select;
 
 const EditMerchants = ({ editMerchants, getShops, getMerchant }) => {
   const [form] = Form.useForm();
@@ -15,6 +16,8 @@ const EditMerchants = ({ editMerchants, getShops, getMerchant }) => {
   const navigate = useNavigate();
 
   const merchant = useSelector((state) => state.merchant.merchant);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,6 +38,21 @@ const EditMerchants = ({ editMerchants, getShops, getMerchant }) => {
     form.setFieldsValue({ other: merchant?.other });
   }, [merchant]);
 
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successEditMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
+
   const onFinish = async (values) => {
     await editMerchants(param?.id, values);
     form.resetFields();
@@ -42,6 +60,8 @@ const EditMerchants = ({ editMerchants, getShops, getMerchant }) => {
   };
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
@@ -194,6 +214,7 @@ const EditMerchants = ({ editMerchants, getShops, getMerchant }) => {
         </Form>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

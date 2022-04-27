@@ -6,7 +6,6 @@ import {
   Col,
   Button,
   Table,
-  Alert,
   message,
   Spin
 } from "antd";
@@ -41,7 +40,6 @@ const ShowMerchants = ({
   // console.log("aa",allMerchants)
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
-  console.log(status);
 
   const user = useSelector((state) => state.auth.user);
   const fileName = "Merchants"; // here enter filename for your excel file
