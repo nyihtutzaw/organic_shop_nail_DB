@@ -31,6 +31,7 @@ const ItemsReports = () => {
   const itemsUnique = [];
   items.forEach((i) => itemsUnique.push(i?.item?.name));
   let unique = [...new Set(itemsUnique)];
+  
   const start_date = new URLSearchParams(window.location.search).get(
     "start_date"
   );

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Space,
@@ -18,18 +18,24 @@ import { connect } from "react-redux";
 import queryString from "query-string";
 import dayjs from "dayjs";
 import { getVouchers, deleteVouchers } from "../../store/actions";
+import Text from "antd/lib/typography/Text";
 
 const { Title } = Typography;
+const { Option } = Select;
 
 const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
   const { Option } = Select;
   const { RangePicker } = DatePicker;
   const location = useLocation();
+
+  const vouchersUnique = [];
+  voucher?.vouchers?.forEach((i) => vouchersUnique.push(i?.member?.name));
+  let unique = [...new Set(vouchersUnique)];
+
   const start_date = new URLSearchParams(window.location.search).get(
     "start_date"
   );
   const end_date = new URLSearchParams(window.location.search).get("end_date");
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +46,18 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
       fetchData();
     };
   }, [getVouchers]);
+
+
+  const [showBuyMerchant, setshowBuyMerchant] = useState(null);
+  const onChange = (value) => {
+    if (value === undefined) {
+      setshowBuyMerchant(voucher?.vouchers);
+    } else {
+      const filterBuyMerchant = voucher?.vouchers?.filter((mer) => mer?.member?.name === value);
+      setshowBuyMerchant(filterBuyMerchant);
+    }
+  };
+
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
@@ -70,7 +88,11 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
     },
     {
       title: "ဝယ်ယူသောပမာဏ",
-      dataIndex: "total"
+      dataIndex: "total",
+      sorter: {
+        compare: (a, b) => a.total - b.total,
+        multiple: 1
+      }
     },
     {
       title: "Actions",
@@ -126,29 +148,43 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
             </p>
           </Col>
         </Row>
-        <Space direction="vertical" size={12}>
-          <RangePicker
-            onChange={(val) => {
-              //alert(dayjs(val[0]).format("YYYY-MM-DD"))
-              window.location = `/admin/voucher-report?start_date=${dayjs(
-                val[0]
-              ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
-                "YYYY-MM-DD"
-              )}`;
-            }}
-          />
-        </Space>
+        <Row>
+          <Col span={10}>
+            <RangePicker
+              onChange={(val) => {
+                //alert(dayjs(val[0]).format("YYYY-MM-DD"))
+                window.location = `/admin/voucher-report?start_date=${dayjs(
+                  val[0]
+                ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                  "YYYY-MM-DD"
+                )}`;
+              }}
+            />
+          </Col>
+          <Col span={10}>
+            <Text type="secondary">ဝယ်သူအမည်ရွေးပါ</Text>
+            <Select
+              showSearch
+              placeholder="ကျေးဇူးပြု၍ ဝယ်သူအမည်ရွေးပါ"
+              optionFilterProp="children"
+              onChange={onChange}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              allowClear={true}
+              size="large"
+              style={{ borderRadius: "10px" }}
+            >
+              {unique.map((item) => (
+                  <Option key={Math.random() * 100} value={item}>
+                    {item}
+                  </Option>
+                ))}
+            </Select>
+          </Col>
+        </Row>
 
         <Row>
-          <Col span={5}>
-            {/* <Button style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }} block>
-             SSort by ( ပမာဏ )
-            </Button> */}
-          </Col>
           <Col span={14}></Col>
           <Col span={5}>
             {/* <Button style={{
@@ -171,7 +207,7 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
           bordered
           columns={columns}
           pagination={{ defaultPageSize: 10 }}
-          dataSource={voucher.vouchers}
+          dataSource={showBuyMerchant != null ? showBuyMerchant : voucher.vouchers}
         />
       </Space>
     </Layout>
