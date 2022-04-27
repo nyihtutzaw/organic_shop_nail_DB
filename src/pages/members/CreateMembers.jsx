@@ -5,7 +5,8 @@ import {
   Typography,
   Space,
   Button,
-  Alert
+  message,
+  Spin
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
@@ -13,14 +14,16 @@ import { useSelector } from "react-redux";
 import { saveMembers, getShops, clearAlertMember } from "../../store/actions";
 import { connect } from "react-redux";
 import store from "../../store";
-import { useNavigate } from "react-router-dom";
+import { successCreateMessage } from "../../util/messages";
+
 
 const { Title } = Typography;
 
-const CreateMembers = ({ shop, saveMembers, getShops, clearAlertMember }) => {
-  const member = useSelector((state) => state.member);
+const CreateMembers = ({ saveMembers, getShops, clearAlertMember }) => {
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+
   const [form] = Form.useForm();
-  const navigate = useNavigate();
   useEffect(() => {
     store.dispatch(clearAlertMember());
   }, []);
@@ -35,10 +38,26 @@ const CreateMembers = ({ shop, saveMembers, getShops, clearAlertMember }) => {
     };
   }, [getShops]);
 
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successCreateMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
+
+
+
   const onFinish = async (values) => {
     await saveMembers(values);
-    // navigate('/admin/sale')
-    // form.resetFields();
+    form.resetFields();
   };
 
   //for barcode
@@ -47,21 +66,10 @@ const CreateMembers = ({ shop, saveMembers, getShops, clearAlertMember }) => {
     updateBarcodeInputValue(event.target.value);
   };
 
+  
   return (
+    <Spin spinning={status.loading}>
     <Layout style={{ margin: "20px" }}>
-      {member.error.length > 0 ? (
-        <Alert
-          message="Errors"
-          description={member.error}
-          type="error"
-          showIcon
-          closable
-        />
-      ) : null}
-
-      {member.isSuccess && (
-        <Alert message="Successfully Created" type="success" showIcon />
-      )}
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
           Member စာရင်းသွင်းခြင်း စာမျက်နှာ
@@ -172,6 +180,7 @@ const CreateMembers = ({ shop, saveMembers, getShops, clearAlertMember }) => {
         </Form>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

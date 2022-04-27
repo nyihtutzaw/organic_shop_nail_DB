@@ -9,22 +9,28 @@ import {
   message,
   Select,
   notification,
+  Spin
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   EditOutlined,
   SaveOutlined,
-  PlusSquareOutlined,
+  PlusSquareOutlined
 } from "@ant-design/icons";
 import { saveExpenses, getExpenseNames } from "../../store/actions";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { successCreateMessage } from "../../util/messages";
 
 const { Title } = Typography;
 const { Option } = Select;
 
 const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
   const expenseNames = expense_name.expense_names;
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+  const [form] = Form.useForm();
+
   useEffect(() => {
     const fetchData = async () => {
       await getExpenseNames();
@@ -34,59 +40,45 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
       fetchData();
     };
   }, [getExpenseNames]);
-  const [form] = Form.useForm();
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successCreateMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
 
   const [expenseTable, setExpenseTable] = useState({ expenses: [] });
   const onFinish = async (values) => {
-    // console.log(values)
     setExpenseTable({
       expenses: [
         ...expenseTable.expenses,
         {
           key: Math.random() * 100,
-          ...values,
-        },
-      ],
+          ...values
+        }
+      ]
     });
     form.resetFields();
   };
-  // console.log(expenseTable);
 
   const handleDelete = (record) => {
     const filterExpenses = expenseTable.expenses.filter(
       (expense) => expense.key !== record.key
     );
     setExpenseTable({
-      expenses: [...filterExpenses],
+      expenses: [...filterExpenses]
     });
   };
 
-  // const handleSave = async () => {
-  // if (expenses.length === 0) {
-  //   message.error("ကျေးဇူးပြု၍ကုန်ကျစရိတ်များထည့်ပါ");
-  // } else {
-  //   console.log({
-  //     expenses: expenses
-  //   });
-  // const saveExpense = expenses.map((expense) => {
-  //   return {
-  //     name: expense.name,
-  //     amount: expense.amount
-  //   };
-  // });
-  // await saveExpenses(saveExpense)
-  // console.log("saveE", saveExpense);
-  // setExpenses([]);
-  // }
-  // };
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Saved Your Data",
-      description: "Your data have been saved.",
-      duration: 3,
-    });
-  };
 
   const handleSave = async () => {
     if (expenseTable.expenses.length === 0) {
@@ -94,18 +86,18 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
     } else {
       await saveExpenses(expenseTable);
       setExpenseTable([]);
-      openNotificationWithIcon("success");
       // navigate("/admin/show-expenses");
     }
   };
+
   const columns = [
     {
       title: "ကုန်ကျစရိတ်အမည်",
-      dataIndex: "name",
+      dataIndex: "name"
     },
     {
       title: "ပမာဏ",
-      dataIndex: "amount",
+      dataIndex: "amount"
     },
     {
       title: "Actions",
@@ -114,12 +106,12 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
         <Button type="primary" danger onClick={() => handleDelete(record)}>
           Delete
         </Button>
-      ),
-    },
+      )
+    }
   ];
 
   return (
-    <>
+    <Spin spinning={status.loading}>
       <Layout style={{ margin: "20px" }}>
         <Space direction="vertical" size="middle">
           <Space
@@ -127,7 +119,7 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
             style={{
               width: "100%",
               justifyContent: "center",
-              marginBottom: "10px",
+              marginBottom: "10px"
             }}
             size="large"
           >
@@ -148,17 +140,17 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
             </Button> */}
           </Space>
           <Form
-          colon={false}
+            colon={false}
             labelCol={{
               xl: {
-                span: 3,
-              },
+                span: 3
+              }
             }}
             wrapperCol={{
-              span: 24,
+              span: 24
             }}
             initialValues={{
-              remember: true,
+              remember: true
             }}
             onFinish={onFinish}
             form={form}
@@ -169,8 +161,8 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
               rules={[
                 {
                   required: true,
-                  message: "ကျေးဇူးပြု၍ ကုန်ကျစရိတ်အမည်ရွေးပါ",
-                },
+                  message: "ကျေးဇူးပြု၍ ကုန်ကျစရိတ်အမည်ရွေးပါ"
+                }
               ]}
             >
               <Select
@@ -199,8 +191,8 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
               rules={[
                 {
                   required: true,
-                  message: "ကျေးဇူးပြု၍ ပမာဏထည့်ပါ",
-                },
+                  message: "ကျေးဇူးပြု၍ ပမာဏထည့်ပါ"
+                }
               ]}
             >
               <Input
@@ -215,7 +207,7 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
                 style={{
                   backgroundColor: "var(--secondary-color)",
                   color: "var(--white-color)",
-                  borderRadius: "10px",
+                  borderRadius: "10px"
                 }}
                 size="large"
                 htmlType="submit"
@@ -239,7 +231,7 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
-                borderRadius: "10px",
+                borderRadius: "10px"
               }}
               size="large"
               onClick={handleSave}
@@ -250,63 +242,12 @@ const CreateExpenses = ({ expense_name, saveExpenses, getExpenseNames }) => {
           </Space>
         </Space>
       </Layout>
-      {/* <Drawer
-        title="ကုန်ကျစရိတ်ထည့်ရန်"
-        placement="right"
-        visible={visible}
-        onClose={() => {
-          setVisible(false);
-          expenseFrom.resetFields();
-        }}
-        maskClosable={false}
-        width={380}
-      >
-        <Form
-          initialValues={{
-            remember: true,
-          }}
-          // onFinish={handleSaveExpense}
-          form={expenseFrom}
-        >
-          <Form.Item
-            name="name"
-            rules={[
-              {
-                required: true,
-                message: "ကျေးဇူးပြု၍ ကုန်ကျစရိတ်အမည်ထည့်ပါ",
-              },
-            ]}
-          >
-            <Input
-              placeholder="ကုန်ကျစရိတ်အမည်ထည့်ပါ"
-              prefix={<EditOutlined />}
-              style={{ borderRadius: "10px" }}
-              size="large"
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button
-              style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "10px",
-                width: "100%",
-              }}
-              size="large"
-              htmlType="submit"
-            >
-              <PlusSquareOutlined />
-              အသစ်ထည့်မည်
-            </Button>
-          </Form.Item>
-        </Form>
-      </Drawer> */}
-    </>
+    </Spin>
   );
 };
 
 const mapStateToProps = (store) => ({
-  expense_name: store.expense_name,
+  expense_name: store.expense_name
 });
 
 export default connect(mapStateToProps, { saveExpenses, getExpenseNames })(

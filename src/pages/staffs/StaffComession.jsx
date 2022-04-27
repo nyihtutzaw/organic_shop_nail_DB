@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Space, Row, Col, Table, Select, DatePicker } from "antd";
+import { Typography, Space, Row, Col, Table, Select, DatePicker, Spin, message } from "antd";
 import Layout from "antd/lib/layout/layout";
 import queryString from "query-string";
 import { getStaffReport, getDailyStaffs } from "../../store/actions";
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import { connect, useDispatch, useSelector } from "react-redux";
+
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -17,10 +18,14 @@ const StaffComession = ({ getDailyStaffs }) => {
   const location = useLocation();
   const staffs = useSelector((state) => state.staff.staffs);
   const dailyStaffsFree = useSelector((state) => state.daily.dailys);
+  const status = useSelector((state) => state.status);
   const start_date = new URLSearchParams(window.location.search).get(
     "start_date"
   );
   const end_date = new URLSearchParams(window.location.search).get("end_date");
+
+
+
 
   useEffect(() => {
     const fetchData = () => {
@@ -171,6 +176,8 @@ const StaffComession = ({ getDailyStaffs }) => {
   };
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
@@ -277,6 +284,7 @@ const StaffComession = ({ getDailyStaffs }) => {
         />
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

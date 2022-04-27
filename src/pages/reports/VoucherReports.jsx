@@ -183,7 +183,6 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
             </Select>
           </Col>
         </Row>
-
         <Row>
           <Col span={14}></Col>
           <Col span={5}>

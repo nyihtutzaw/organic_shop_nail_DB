@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
-import { Form, Input, Typography, Space, Button, Select } from "antd";
+import { Form, Input, Typography, Space, Button, Select, Spin, message } from "antd";
 import Layout from "antd/lib/layout/layout";
-import {
-  EditOutlined,
-  SaveOutlined
-} from "@ant-design/icons";
+import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { editExpenses, getExpenseNames, getExpense } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { successEditMessage } from "../../util/messages";
+
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -16,8 +15,10 @@ const EditExpense = ({ editExpenses, getExpenseNames, getExpense }) => {
   const param = useParams();
   const navigate = useNavigate();
   const [form] = Form.useForm();
-
+  const expenseNames = useSelector((state) => state.expense_name.expense_names);
   const expense = useSelector((state) => state.expense.expense);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,7 +40,19 @@ const EditExpense = ({ editExpenses, getExpenseNames, getExpense }) => {
     };
   }, [getExpenseNames]);
 
-  const expenseNames = useSelector((state) => state.expense_name.expense_names);
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successEditMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
 
   useEffect(() => {
     form.setFieldsValue({ name: expense.name });
@@ -52,7 +65,7 @@ const EditExpense = ({ editExpenses, getExpenseNames, getExpense }) => {
   };
 
   return (
-    <>
+    <Spin spinning={status.loading}>
       <Layout style={{ margin: "20px" }}>
         <Space direction="vertical" size="middle">
           <Space
@@ -105,7 +118,6 @@ const EditExpense = ({ editExpenses, getExpenseNames, getExpense }) => {
                 size="large"
                 style={{ borderRadius: "10px" }}
               >
-                
                 {expenseNames.map((expense) => (
                   <Option value={expense.name} key={expense.id}>
                     {expense.name}
@@ -148,7 +160,7 @@ const EditExpense = ({ editExpenses, getExpenseNames, getExpense }) => {
           </Form>
         </Space>
       </Layout>
-    </>
+    </Spin>
   );
 };
 

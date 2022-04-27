@@ -37,7 +37,6 @@ const ShowMerchants = ({
   clearAlertMerchant
 }) => {
   const allMerchants = useSelector((state) => state.merchant.merchants);
-  // console.log("aa",allMerchants)
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
 
@@ -49,6 +48,7 @@ const ShowMerchants = ({
     CompanyName: merchant.company_name,
     Other: merchant.other
   }));
+
 
   const navigate = useNavigate();
   useEffect(() => {

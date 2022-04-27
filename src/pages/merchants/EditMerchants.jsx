@@ -7,7 +7,6 @@ import { editMerchants, getShops, getMerchant } from "../../store/actions";
 import { useNavigate, useParams } from "react-router-dom";
 import { successEditMessage } from "../../util/messages";
 
-
 const { Title } = Typography;
 
 const EditMerchants = ({ editMerchants, getShops, getMerchant }) => {
@@ -41,7 +40,6 @@ const EditMerchants = ({ editMerchants, getShops, getMerchant }) => {
 
   useEffect(() => {
     error.message !== null && message.error(error.message);
-
     return () => error.message;
   }, [error.message]);
 
@@ -49,7 +47,6 @@ const EditMerchants = ({ editMerchants, getShops, getMerchant }) => {
     if (status.success) {
       message.success(successEditMessage);
     }
-
     return () => status.success;
   }, [status.success]);
 
@@ -61,7 +58,6 @@ const EditMerchants = ({ editMerchants, getShops, getMerchant }) => {
 
   return (
     <Spin spinning={status.loading}>
-
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>

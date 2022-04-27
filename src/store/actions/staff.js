@@ -6,8 +6,14 @@ import {
   FILTER_STAFFS,
   ERROR_STAFFS,
   IS_SUCCESS_STAFFS,
-  CLEAR_ALERT_STAFFS
+  CLEAR_ALERT_STAFFS,
+
+  ADD_ERROR,
+  REMOVE_ERROR,
+  SET_LOADING,
+  SET_SUCCESS
 } from "../type";
+import { serverErrorMessage } from "../../util/messages";
 
 export const showStaffs = (staffs) => ({
   type: SHOW_STAFFS,
@@ -69,6 +75,7 @@ export const clearAlertStaffs = () => ({
 
 export const getStaffs = () => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.get(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs"
@@ -82,19 +89,37 @@ export const getStaffs = () => {
       // console.log(response.status)
       if (response.status === 200) {
         dispatch(showStaffs(result));
+        dispatch({
+          type: REMOVE_ERROR
+        })
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setStaffErrors(error.response.data.data));
-      } else {
-        dispatch(setStaffErrors(error.response.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
+
   };
 };
 
 export const saveStaffs = (data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs",
@@ -104,34 +129,78 @@ export const saveStaffs = (data) => {
       const result = response.data.data;
       if (response.status === 201) {
         dispatch(createStaffs(result));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status >= 400) {
-        dispatch(setStaffErrors("There was an error during Creating...!"));
+      const { status, data } = error.response;
+      if (status === 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: "The code has already been taken."
+        });
+      } else if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      } else if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const deleteStaffs = (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs/${id}`
       );
       if (response.status === 204) {
         dispatch(filterStaffs(id));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status >= 400) {
-        dispatch(setStaffErrors("There was an error during Deleting..."));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const editStaffs = (id, data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs/${id}?_method=put`,
@@ -141,20 +210,38 @@ export const editStaffs = (id, data) => {
       const result = response.data.data;
       if (response.status === 204) {
         dispatch(updateStaffs(result));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      console.log(error);
-      // if (error) {
-      //   dispatch(setStaffErrors(error.response.data.data));
-      // } else {
-      //   dispatch(setStaffErrors(error.response.data));
-      // }
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
+      }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const getStaffReport = (query) => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
       const response = await axios.get(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffReport?${new URLSearchParams(
@@ -169,13 +256,29 @@ export const getStaffReport = (query) => {
       });
       if (response.status === 200) {
         dispatch(showStaffs(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setStaffErrors(error.response.data.data));
-      } else {
-        dispatch(setStaffErrors(error.response.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
+
   };
 };

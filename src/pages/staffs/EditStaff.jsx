@@ -6,7 +6,8 @@ import {
   Space,
   Button,
   InputNumber,
-  message
+  message,
+  Spin
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
@@ -19,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { editStaffs } from "../../store/actions";
 import { connect } from "react-redux";
+import { successEditMessage } from "../../util/messages";
 
 const { Title, Text } = Typography;
 
@@ -27,6 +29,22 @@ const EditStaff = ({ editStaffs }) => {
   const [fileList, setFileList] = useState([]);
   const AllStaffs = useSelector((state) => state.staff.staffs);
   const currentStaff = AllStaffs.find((staff) => staff.id === parseInt(id));
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successEditMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
 
   useEffect(() => {
     if (currentStaff) {
@@ -69,6 +87,7 @@ const EditStaff = ({ editStaffs }) => {
   };
 
   return (
+    <Spin spinning={status.loading}>
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
@@ -225,6 +244,7 @@ const EditStaff = ({ editStaffs }) => {
         </Form>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

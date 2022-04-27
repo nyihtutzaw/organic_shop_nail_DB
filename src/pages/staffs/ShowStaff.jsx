@@ -1,28 +1,27 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, notification, Alert } from "antd";
+import { Typography, Space, Row, Col, Button, Table, Spin, message } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
-  ExportOutlined,
   DeleteOutlined,
   EditOutlined
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getStaffs, deleteStaffs, clearAlertStaffs } from "../../store/actions";
 import { connect } from "react-redux";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 import store from "../../store";
-
+import { successDeleteMessage } from "../../util/messages";
 
 const { Title } = Typography;
 
 const ShowStaff = ({ getStaffs, deleteStaffs, clearAlertStaffs }) => {
-  const dispatch = useDispatch();
-  const staff = useSelector((state) => state.staff);
   const staffs = useSelector((state) => state.staff.staffs);
-  const user = useSelector((state) => state.auth.user);
 
+  const user = useSelector((state) => state.auth.user);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
   const fileName = "Staffs"; // here enter filename for your excel file
   const result = staffs.map((staff) => ({
     Date_Of_Birth: staff.dob,
@@ -32,6 +31,21 @@ const ShowStaff = ({ getStaffs, deleteStaffs, clearAlertStaffs }) => {
     Salary: staff.salary,
     Start_Work: staff.start_work
   }));
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successDeleteMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
+
 
   useEffect(() => {
     store.dispatch(clearAlertStaffs());
@@ -94,14 +108,12 @@ const ShowStaff = ({ getStaffs, deleteStaffs, clearAlertStaffs }) => {
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-           {user?.position === "manager" ||
-            user?.position === "cashier" ||
-            (user?.position === "staff" && (
+           {user?.position !== "owner" && (
           <Button type="primary" onClick={() => handleClick(record)}>
             {" "}
             <EditOutlined />
           </Button>
-            ))}
+            )}
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
@@ -113,35 +125,18 @@ const ShowStaff = ({ getStaffs, deleteStaffs, clearAlertStaffs }) => {
     }
   ];
 
-  return (
-    <Layout style={{ margin: "20px" }}>
-      {staff.error.length > 0 ? (
-        <Alert
-          message="Errors"
-          description={staff.error}
-          type="error"
-          showIcon
-          closable
-        />
-      ) : null}
 
-      {staff.isSuccess && (
-        <Alert
-          message="Successfully Deleted..."
-          type="success"
-          showIcon
-          closable
-        />
-      )}
+  return (
+    <Spin spinning={status.loading}>
+    <Layout style={{ margin: "20px" }}>
+      
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
           <Col span={16}>
             <Title level={3}>ဝန်ထမ်းစာရင်း</Title>
           </Col>
           <Col span={4}>
-          {user?.position === "manager" ||
-            user?.position === "cashier" ||
-            (user?.position === "staff" && (
+          {user?.position !== "owner" && (
             <Button
               style={{
                 backgroundColor: "var(--secondary-color)",
@@ -154,7 +149,7 @@ const ShowStaff = ({ getStaffs, deleteStaffs, clearAlertStaffs }) => {
               <PlusSquareOutlined />
               အသစ်ထည့်မည်
             </Button>
-            ))}
+            )}
           </Col>
           <Col span={4}>
             <ExportToExcel apiData={result} fileName={fileName} />
@@ -168,6 +163,7 @@ const ShowStaff = ({ getStaffs, deleteStaffs, clearAlertStaffs }) => {
         />
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

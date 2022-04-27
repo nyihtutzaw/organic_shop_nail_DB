@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Typography, Space, Row, Col, Button, Table } from "antd";
+import { Typography, Space, Row, Col, Button, Table, Spin, message } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
@@ -12,12 +12,16 @@ import { getServices, deleteServices, getService } from "../../store/actions";
 import { connect } from "react-redux";
 import { notification } from "antd";
 import { ExportToExcel } from "../../excel/ExportToExcel";
+import { successDeleteMessage } from "../../util/messages";
 
 const { Title } = Typography;
 
 const ShowService = ({ getServices, deleteServices, getService }) => {
   const allServices = useSelector((state) => state.service.services);
   const user = useSelector((state) => state.auth.user);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+
   const fileName = "Services"; // here enter filename for your excel file
   const result = allServices.map((service) => ({
     Code: service.code,
@@ -29,13 +33,6 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
   }));
 
   const navigate = useNavigate();
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Delete Your Data",
-      description: "Your data have been deleted.",
-      duration: 3
-    });
-  };
 
   const mountedRef = React.useRef(true);
   const getShopYearly = async () => {
@@ -48,6 +45,21 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
       // console.log(error.response);
     }
   };
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successDeleteMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
+
   React.useEffect(() => {
     getShopYearly();
     return () => {
@@ -62,7 +74,6 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
 
   const handleDelete = async (record) => {
     await deleteServices(record.id);
-    openNotificationWithIcon("error");
   };
 
   const columns = [
@@ -101,6 +112,7 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
   ];
 
   return (
+    <Spin spinning={status.loading}>
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
@@ -136,6 +148,7 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
         />
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

@@ -7,9 +7,14 @@ import {
   FILTER_MEMBERS,
   ERROR_MEMBER,
   IS_SUCCESS_MEMBER,
-  CLEAR_ALERT_MEMBER
+  CLEAR_ALERT_MEMBER,
+
+  ADD_ERROR,
+  REMOVE_ERROR,
+  SET_LOADING,
+  SET_SUCCESS
 } from "../type";
-import { useDispatch } from "react-redux";
+import { serverErrorMessage } from "../../util/messages";
 
 export const showMembers = (members) => ({
   type: SHOW_MEMBERS,
@@ -52,6 +57,8 @@ export const clearAlertMember = () => ({
 
 export const getMembers = () => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
       const response = await axios.get(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members"
@@ -65,18 +72,35 @@ export const getMembers = () => {
       // console.log(response.status)
       if (response.status === 200) {
         dispatch(showMembers(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setMemberError(error.response.data.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const getMember = (id) => {
   return async (dispatch) => {
-    dispatch(memberSuccess(false));
+    dispatch({ type: SET_LOADING });
     try {
       // console.log(id);
       const response = await axios.get(
@@ -86,17 +110,36 @@ export const getMember = (id) => {
       // console.log(result);
       if (response.status === 200) {
         dispatch(showMember(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error) {
-        dispatch(setMemberError(error));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const saveMembers = (data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members",
@@ -108,36 +151,78 @@ export const saveMembers = (data) => {
       };
       if (response.status === 201) {
         dispatch(createMembers(result));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status === 400) {
-        dispatch(setMemberError("မန်ဘာကုတ်ပြောင်းပါ..."));
-      }else if (error.response.status >= 400) {
-        dispatch(setMemberError("There was an error during Creating....!"));
+      const { status, data } = error.response;
+      if (status === 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: "The code has already been taken."
+        });
+      } else if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      } else if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const deleteMembers = (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members/${id}`
       );
       if (response.status === 204) {
         dispatch(filterMembers(id));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status >= 400) {
-        dispatch(setMemberError("There was an error during Deleting....!"));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const editMembers = (id, data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members/${id}?_method=put`,
@@ -148,11 +233,30 @@ export const editMembers = (id, data) => {
       // console.log(result)
       if (response.status === 201) {
         dispatch(updateMembers(result));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setMemberError(error.response.data.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };

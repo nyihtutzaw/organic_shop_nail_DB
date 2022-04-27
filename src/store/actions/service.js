@@ -7,8 +7,15 @@ import {
   FILTER_SERVICES,
   ERROR_SERVICES,
   IS_SUCCESS_SERVICES,
-  CLEAR_ALERT_SERVICES
+  CLEAR_ALERT_SERVICES,
+
+  ADD_ERROR,
+  REMOVE_ERROR,
+  SET_LOADING,
+  SET_SUCCESS
 } from "../type";
+import { serverErrorMessage } from "../../util/messages";
+
 
 export const showServices = (services) => ({
   type: SHOW_SERVICES,
@@ -73,6 +80,8 @@ export const getBestService = (query) => {
 
 export const getServices = () => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
       const response = await axios.get(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services"
@@ -86,40 +95,75 @@ export const getServices = () => {
       // console.log(result);
       if (response.status === 200) {
         dispatch(showServices(result));
+        dispatch({
+          type: REMOVE_ERROR
+        })
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setServiceError(error.response.data.data));
-      } else {
-        dispatch(setServiceError(error.response.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
+
   };
 };
 
 export const getService = (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
-      // console.log(id);
       const response = await axios.get(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/${id}`
       );
       const result = response.data.data;
       if (response.status === 200) {
         dispatch(showService(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error) {
-        dispatch(setServiceError(error));
-      } else {
-        dispatch(setServiceError(error));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
+
   };
 };
 
 export const saveServices = (data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/batchInsert",
@@ -134,36 +178,78 @@ export const saveServices = (data) => {
       // console.log(response)
       if (response.status === 201) {
         dispatch(createServices(result));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status >= 400) {
-        dispatch(setServiceError(error.response.data.data));
+      const { status, data } = error.response;
+      if (status === 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: "The code has already been taken."
+        });
+      } else if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      } else if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const deleteServices = (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/${id}`
       );
       if (response.status === 204) {
         dispatch(filterServices(id));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setServiceError(error.response.data.data));
-      } else {
-        dispatch(setServiceError(error.response.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const editServices = (id, data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/${id}?_method=put`,
@@ -176,13 +262,30 @@ export const editServices = (id, data) => {
 
       if (response.status === 201) {
         dispatch(updateServices(result));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setServiceError(error.response.data.data));
-      } else {
-        dispatch(setServiceError(error.response.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };

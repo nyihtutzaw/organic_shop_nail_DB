@@ -5,6 +5,8 @@ import {
   Typography,
   Space,
   Button,
+  Spin,
+  message,
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
@@ -17,6 +19,7 @@ import {
   getMember,
   getMembers
 } from "../../store/actions";
+import { successEditMessage } from "../../util/messages";
 
 const { Title } = Typography;
 
@@ -30,9 +33,10 @@ const EditMembers = ({
   const param = useParams();
   const [form] = Form.useForm();
   const navigate = useNavigate();
-
   const member = useSelector((state) => state.member.member);
   const shops = useSelector((state) => state.shop.shops);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,6 +59,22 @@ const EditMembers = ({
     form.setFieldsValue({ shop_id: result?.id });
   }, [member, shops, result]);
 
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successEditMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
+
+
   const onFinish = async (values) => {
     // console.log(values);
     await editMembers(param?.id, values);
@@ -62,6 +82,7 @@ const EditMembers = ({
   };
 
   return (
+    <Spin spinning={status.loading}>
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
@@ -165,6 +186,7 @@ const EditMembers = ({
         </Form>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 
@@ -178,3 +200,4 @@ export default connect(mapStateToProps, {
   getMember,
   getMembers
 })(EditMembers);
+

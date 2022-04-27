@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Typography, Space, Button } from "antd";
+import { Form, Input, Typography, Space, Button, Spin, message } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { editServices, getService } from "../../store/actions";
+import { successEditMessage } from "../../util/messages";
+
 const { Title } = Typography;
 
 const EditService = ({ editServices, getService }) => {
   const param = useParams();
   const [form] = Form.useForm();
   const navigate = useNavigate();
-
   const service = useSelector((state) => state.service.service);
-
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
   useEffect(() => {
     const fetchData = async () => {
       await getService(param?.id);
@@ -25,7 +27,18 @@ const EditService = ({ editServices, getService }) => {
     };
   }, [getService]);
 
-  
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successEditMessage);
+    }
+    return () => status.success;
+  }, [status.success]);
+
   useEffect(() => {
     form.setFieldsValue({ code: service?.code });
     form.setFieldsValue({ commercial: service?.commercial });
@@ -40,6 +53,7 @@ const EditService = ({ editServices, getService }) => {
   };
 
   return (
+    <Spin spinning={status.loading}>
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
@@ -154,6 +168,7 @@ const EditService = ({ editServices, getService }) => {
         </Form>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

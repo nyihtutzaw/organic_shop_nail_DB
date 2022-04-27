@@ -8,6 +8,7 @@ import {
   ERROR_MERCHANT,
   IS_SUCCESS_MERCHANT,
   CLEAR_ALERT,
+  
   ADD_ERROR,
   REMOVE_ERROR,
   SET_LOADING,
@@ -175,6 +176,7 @@ export const saveMerchants = (data) => {
         });
       }
     }
+
     dispatch({ type: SET_SUCCESS, payload: false });
     dispatch({ type: SET_LOADING });
   };

@@ -7,7 +7,8 @@ import {
   Button,
   message,
   notification,
-  Alert
+  Alert,
+  Spin
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
@@ -17,6 +18,8 @@ import { useNavigate } from "react-router-dom";
 import { saveStaffs, clearAlertStaffs } from "../../store/actions";
 import { connect } from "react-redux";
 import store from "../../store";
+import { successCreateMessage } from "../../util/messages";
+
 
 const { Title, Text } = Typography;
 
@@ -24,18 +27,26 @@ const CreateStaff = ({ saveStaffs, clearAlertStaffs, staff }) => {
   const [fileList, setFileList] = useState([]);
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
 
   useEffect(() => {
     store.dispatch(clearAlertStaffs());
   }, []);
 
-  // const openNotificationWithIcon = (type) => {
-  //   notification[type]({
-  //     message: "Saved Your Data",
-  //     description: "Your data have been saved.",
-  //     duration: 3
-  //   });
-  // };
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successCreateMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
 
   const onFinish = async (values) => {
     if (fileList.length === 0) {
@@ -58,6 +69,7 @@ const CreateStaff = ({ saveStaffs, clearAlertStaffs, staff }) => {
   };
 
   return (
+    <Spin spinning={status.loading}>
     <Layout style={{ margin: "20px" }}>
       {staff.error.length > 0 ? (
         <Alert
@@ -231,12 +243,14 @@ const CreateStaff = ({ saveStaffs, clearAlertStaffs, staff }) => {
         </Form>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 
 const mapStateToProps = (store) => ({
   staff: store.staff
 });
+
 
 export default connect(mapStateToProps, { saveStaffs, clearAlertStaffs })(
   CreateStaff

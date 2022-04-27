@@ -21,7 +21,6 @@ const CreateShops = ({ saveShops, shop, clearAlert }) => {
   const [form] = Form.useForm();
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
-  console.log(status);
   
   useEffect(() => {
     store.dispatch(clearAlert());
