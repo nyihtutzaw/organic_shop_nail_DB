@@ -18,6 +18,8 @@ import owner from "./owner";
 import voucher from "./voucher";
 import report from "./report";
 import daily from "./daily";
+import status from "./status";
+import error from "./error";
 
 
 const reducers = combineReducers({
@@ -40,6 +42,8 @@ const reducers = combineReducers({
   voucher,
   report,
   daily,
+  status,
+  error
 });
 
 export default reducers;

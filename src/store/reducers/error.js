@@ -1,7 +1,7 @@
-import { ADD_ERROR, REMOVE_ERROR } from "store/types.js";
+import { ADD_ERROR, REMOVE_ERROR } from "../type";
 
 const initialState = {
-  message: "errorss",
+  message: null,
 };
 
 const error = (state = initialState, action) => {
@@ -9,7 +9,7 @@ const error = (state = initialState, action) => {
     case ADD_ERROR:
       return {
         ...state,
-        message: action.error,
+        message: action.payload,
       };
 
     case REMOVE_ERROR:

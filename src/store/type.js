@@ -1,7 +1,15 @@
-export const SET_CURRENT_USER = "SET_CURRENT_USER";
 export const ADD_ERROR = "ADD_ERROR";
 export const REMOVE_ERROR = "REMOVE_ERROR";
+
 export const SET_LOADING = "SET_LOADING";
+export const SET_SUCCESS = "SET_SUCCESS";
+export const SET_DELETE = "SET_DELETE";
+
+
+export const SET_CURRENT_USER = "SET_CURRENT_USER";
+// export const ADD_ERROR = "ADD_ERROR";
+// export const REMOVE_ERROR = "REMOVE_ERROR";
+// export const SET_LOADING = "SET_LOADING";
 export const ERROR_ITEM = "ERROR_ITEM";
 export const ERROR_ACCOUNT = "ERROR_ACCOUNT";
 export const ERROR_EXPENSE = "ERROR_EXPENSE";

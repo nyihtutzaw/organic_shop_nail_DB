@@ -6,7 +6,9 @@ import {
   Space,
   Button,
   Select,
-  notification
+  notification,
+  Spin,
+  message
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
@@ -14,12 +16,16 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { saveAccounts, getShops } from "../../store/actions";
 import { connect } from "react-redux";
+import { successCreateMessage } from "../../util/messages";
 
 const { Title } = Typography;
 const { Option } = Select;
 
 const CreateAccounts = ({ saveAccounts, getShops }) => {
   const shops = useSelector((state) => state.shop.shops);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+
   useEffect(() => {
     const fetchData = async () => {
       await getShops();
@@ -30,23 +36,32 @@ const CreateAccounts = ({ saveAccounts, getShops }) => {
     };
   }, [getShops]);
 
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successCreateMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
+
+
   const [form] = Form.useForm();
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Saved Your Data",
-      description: "Your data have been saved.",
-      duration: 3
-    });
-  };
   const onFinish = async (values) => {
     await saveAccounts(values);
     form.resetFields();
     // navigate("/admin/show-accounts");
-    openNotificationWithIcon("success");
   };
 
   return (
+    <Spin spinning={status.loading}>
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
@@ -173,6 +188,7 @@ const CreateAccounts = ({ saveAccounts, getShops }) => {
         </Form>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 
