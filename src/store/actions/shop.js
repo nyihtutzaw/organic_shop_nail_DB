@@ -7,8 +7,13 @@ import {
   FILTER_SHOPS,
   ERROR_SHOP,
   IS_SUCCESS_SHOP,
-  CLEAR_ALERT
+  CLEAR_ALERT,
+  ADD_ERROR,
+  REMOVE_ERROR,
+  SET_LOADING,
+  SET_SUCCESS
 } from "../type";
+import { serverErrorMessage } from "../../util/messages";
 
 export const showShops = (shops) => ({
   type: SHOW_SHOPS,
@@ -94,6 +99,8 @@ export const getShop = (id) => {
 
 export const saveShops = (data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops",
@@ -105,34 +112,75 @@ export const saveShops = (data) => {
       };
       if (response.status === 201) {
         dispatch(createShops(result));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status >= 400) {
-        dispatch(setShopErrors("There was an error during Creating....!"));
+      const { status, data } = error.response;
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
+      }
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const deleteShops = (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${id}`
       );
       if (response.status === 204) {
         dispatch(filterShops(id));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status >= 400) {
-        dispatch(setShopErrors("There was an error during Deleting....!"));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const editShops = (id, data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${id}?_method=put`,
@@ -140,11 +188,30 @@ export const editShops = (id, data) => {
       );
       if (response.status === 201) {
         dispatch(updateShops(data));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status >= 400) {
-        dispatch(setShopErrors("There was an error during Updating....!"));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };

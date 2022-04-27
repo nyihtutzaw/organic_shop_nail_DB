@@ -6,8 +6,8 @@ import {
   Col,
   Button,
   Table,
-  message,
-  Alert
+  Spin,
+  message
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
@@ -25,6 +25,7 @@ import {
 } from "../../store/actions";
 import store from "../../store";
 import { ExportToExcel } from "../../excel/ExportToExcel";
+import { successDeleteMessage } from "../../util/messages";
 
 const { Title } = Typography;
 
@@ -33,6 +34,10 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
   const fileName = "Shops";
   const shops = useSelector((state) => state.shop.shops);
   const user = useSelector((state) => state.auth.user);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+  console.log(status);
+
   const result = shops.map((shop) => ({
     name: shop.name,
     id: shop.id
@@ -56,6 +61,20 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
       fetchData();
     };
   }, [getShops]);
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successDeleteMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
 
   const handleDelete = async (record) => {
     await deleteShops(record.id);
@@ -86,59 +105,42 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
   ];
 
   return (
-    <Layout style={{ margin: "20px" }}>
-      {shop.error.length > 0 ? (
-        <Alert
-          message="Errors"
-          description={shop.error}
-          type="error"
-          showIcon
-          closable
-        />
-      ) : null}
-
-      {shop.isSuccess && (
-        <Alert
-          message="Successfully Deleted"
-          type="success"
-          showIcon
-          closable
-        />
-      )}
-
-      <Space direction="vertical" size="middle">
-        <Row gutter={[16, 16]}>
-          <Col span={16}>
-            <Title level={3}>ဆိုင်အမည်စာရင်း</Title>
-          </Col>
-          <Col span={4}>
-            {user?.position !== "owner" && (
-              <Button
-                style={{
-                  backgroundColor: "var(--secondary-color)",
-                  color: "var(--white-color)",
-                  borderRadius: "5px"
-                }}
-                size="middle"
-                onClick={() => navigate("/admin/create-shops")}
-              >
-                <PlusSquareOutlined />
-                အသစ်ထည့်မည်
-              </Button>
-            )}
-          </Col>
-          <Col span={4}>
-            <ExportToExcel apiData={result} fileName={fileName} />
-          </Col>
-        </Row>
-        <Table
-          bordered
-          dataSource={shop.shops}
-          columns={columns}
-          pagination={{ defaultPageSize: 10 }}
-        />
-      </Space>
-    </Layout>
+    <Spin spinning={status.loading}>
+      <Layout style={{ margin: "20px" }}>
+        <Space direction="vertical" size="middle">
+          <Row gutter={[16, 16]}>
+            <Col span={16}>
+              <Title level={3}>ဆိုင်အမည်စာရင်း</Title>
+            </Col>
+            <Col span={4}>
+              {user?.position !== "owner" && (
+                <Button
+                  style={{
+                    backgroundColor: "var(--secondary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                  size="middle"
+                  onClick={() => navigate("/admin/create-shops")}
+                >
+                  <PlusSquareOutlined />
+                  အသစ်ထည့်မည်
+                </Button>
+              )}
+            </Col>
+            <Col span={4}>
+              <ExportToExcel apiData={result} fileName={fileName} />
+            </Col>
+          </Row>
+          <Table
+            bordered
+            dataSource={shop.shops}
+            columns={columns}
+            pagination={{ defaultPageSize: 10 }}
+          />
+        </Space>
+      </Layout>
+    </Spin>
   );
 };
 

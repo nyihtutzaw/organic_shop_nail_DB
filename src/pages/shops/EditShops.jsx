@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Form, Input, Typography, Space, Button, Alert } from "antd";
+import { Form, Input, Typography, Space, Button, Alert, Spin, message } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { editShops, getShop, clearAlert} from "../../store/actions";
 import store from "../../store";
 import { connect } from "react-redux";
+import { successEditMessage } from "../../util/messages";
 
 
 
@@ -17,8 +18,12 @@ const EditShops = ({ editShops,getShop, clearAlert }) => {
   const param = useParams();
 
   const shop = useSelector((state) => state.shop.shop);
-  const error = useSelector((state) => state.shop.error);
+  // const error = useSelector((state) => state.shop.error);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+console.log(status)
 
+  console.log(status);
   useEffect(() => {
     const fetchData = async () => {
       await getShop(param?.id);
@@ -33,6 +38,20 @@ const EditShops = ({ editShops,getShop, clearAlert }) => {
       form.setFieldsValue({ name: shop.name });
   }, [shop]);
 
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successEditMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
+
   const onFinish = async (values) => {
     const data = {
       id: parseInt(param?.id),
@@ -45,6 +64,7 @@ const EditShops = ({ editShops,getShop, clearAlert }) => {
   };
 
   return (
+    <Spin spinning={status.loading}>
     <Layout style={{ margin: "20px" }}>
       {error.length > 0 ? (
         <Alert
@@ -110,6 +130,7 @@ const EditShops = ({ editShops,getShop, clearAlert }) => {
         </Form>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 
