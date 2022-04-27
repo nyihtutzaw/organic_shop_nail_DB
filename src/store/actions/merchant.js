@@ -61,6 +61,7 @@ export const getMerchants = () => {
           key: merchant.id
         };
       });
+
       if (response.status === 200) {
         dispatch(showMerchants(result));
       }
@@ -82,7 +83,6 @@ export const getMerchant = (id) => {
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/merchants/${id}`
       );
       const result = response.data.data;
-      // console.log(result);
       if (response.status === 200) {
         dispatch(showMerchant(result));
       }
@@ -106,7 +106,7 @@ export const saveMerchants = (data) => {
       const result = {
         ...response.data.data,
         key: response.data.data.id
-      };
+      };      
       if (response.status === 201) {
         dispatch(createMerchants(result));
       }

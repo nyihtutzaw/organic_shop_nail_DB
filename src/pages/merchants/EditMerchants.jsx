@@ -30,6 +30,7 @@ const EditMerchants = ({ editMerchants, getShops, getMerchant }) => {
   useEffect(() => {
     form.setFieldsValue({ code: merchant?.code });
     form.setFieldsValue({ name: merchant?.name });
+    form.setFieldsValue({ phone: merchant?.phone });
     form.setFieldsValue({ company_name: merchant?.company_name });
     form.setFieldsValue({ other: merchant?.other });
   }, [merchant]);
@@ -91,6 +92,23 @@ const EditMerchants = ({ editMerchants, getShops, getMerchant }) => {
           >
             <Input
               placeholder="အမည်ထည့်ပါ"
+              prefix={<EditOutlined />}
+              style={{ borderRadius: "10px" }}
+              size="large"
+            />
+          </Form.Item>
+          <Form.Item
+            name="phone"
+            label="ဖုန်းနံပါတ်"
+            rules={[
+              {
+                required: true,
+                message: "ကျေးဇူးပြု၍ ဖုန်းနံပါတ်ထည့်ပါ"
+              }
+            ]}
+          >
+            <Input
+              placeholder="ဖုန်းနံပါတ်ထည့်ပါ"
               prefix={<EditOutlined />}
               style={{ borderRadius: "10px" }}
               size="large"

@@ -27,6 +27,8 @@ const ShowMerchants = ({
   clearAlertMerchant
 }) => {
   const allMerchants = useSelector((state) => state.merchant.merchants);
+  // console.log("aa",allMerchants)
+
   const user = useSelector((state) => state.auth.user);
   const fileName = "Merchants"; // here enter filename for your excel file
   const result = allMerchants.map((merchant) => ({
@@ -68,6 +70,10 @@ const ShowMerchants = ({
     {
       title: "အမည်",
       dataIndex: "name"
+    },
+    {
+      title: "ဖုန်းနံပါတ်",
+      dataIndex: "phone"
     },
     {
       title: "ကုမ္ပဏီအမည်",

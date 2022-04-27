@@ -43,6 +43,7 @@ const CreateMerchants = ({
   }, []);
 
   const onFinish = async (values) => {
+    // console.log(values)
     await saveMerchants(values);
     form.resetFields();
   };
@@ -112,6 +113,23 @@ const CreateMerchants = ({
           >
             <Input
               placeholder="အမည်ထည့်ပါ"
+              prefix={<EditOutlined />}
+              style={{ borderRadius: "10px" }}
+              size="large"
+            />
+          </Form.Item>
+          <Form.Item
+            name="phone"
+            label="ဖုန်းနံပါတ်"
+            rules={[
+              {
+                required: true,
+                message: "ကျေးဇူးပြု၍ ဖုန်းနံပါတ်ထည့်ပါ"
+              }
+            ]}
+          >
+            <Input
+              placeholder="ဖုန်းနံပါတ်ထည့်ပါ"
               prefix={<EditOutlined />}
               style={{ borderRadius: "10px" }}
               size="large"
