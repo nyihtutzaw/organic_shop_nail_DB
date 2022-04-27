@@ -54,7 +54,6 @@ const CreateMembers = ({ saveMembers, getShops, clearAlertMember }) => {
   }, [status.success]);
 
 
-
   const onFinish = async (values) => {
     await saveMembers(values);
     form.resetFields();

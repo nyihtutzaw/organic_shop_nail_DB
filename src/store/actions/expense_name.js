@@ -5,8 +5,16 @@ import {
   CREATE_EXPENSENAMES,
   UPDATE_EXPENSENAMES,
   FILTER_EXPENSENAMES,
-  ERROR_ITEM
+  ERROR_ITEM,
+
+
+  ADD_ERROR,
+  REMOVE_ERROR,
+  SET_LOADING,
+  SET_SUCCESS
 } from "../type";
+import { serverErrorMessage } from "../../util/messages";
+
 
 export const showExpenseNames = (expenseNames) => ({
   type: SHOW_EXPENSENAMES,
@@ -40,6 +48,8 @@ export const setExpenseNamesError = (error) => ({
 
 export const getExpenseNames = () => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
       const response = await axios.get(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names"
@@ -53,42 +63,76 @@ export const getExpenseNames = () => {
     //   console.log(result)
       if (response.status === 200) {
         dispatch(showExpenseNames(result));
+        dispatch({
+          type: REMOVE_ERROR
+        })
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setExpenseNamesError(error.response.data.data));
-      } else {
-        dispatch(setExpenseNamesError(error.response.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
+
   };
 };
 
 
 export const getExpenseName = (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
-      // console.log(id);
       const response = await axios.get(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names/${id}`
       );
       const result = response.data.data;
-      // console.log(result)
       if (response.status === 200) {
         dispatch(showExpenseName(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error) {
-        dispatch(setExpenseNamesError(error));
-      } else {
-        dispatch(setExpenseNamesError(error));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
+
   };
 };
 
 export const saveExpenseNames = (data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names",
@@ -100,39 +144,74 @@ export const saveExpenseNames = (data) => {
       };
       if (response.status === 201) {
         dispatch(createExpenseNames(result));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setExpenseNamesError(error.response.data.data));
-      } else {
-        dispatch(setExpenseNamesError(error.response.data));
+      const { status, data } = error.response;
+       if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      } else if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const deleteExpenseNames = (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names/${id}`
       );
       if (response.status === 204) {
         dispatch(filterExpenseNames(id));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setExpenseNamesError(error.response.data.data));
-      } else {
-        dispatch(setExpenseNamesError(error.response.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 
 export const editExpenseNames = (id, data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names/${id}?_method=put`,
@@ -146,13 +225,30 @@ export const editExpenseNames = (id, data) => {
         // console.log(resultName)
       if (response.status === 201) {
         dispatch(updateExpenseNames(resultName));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setExpenseNamesError(error.response.data.data));
-      } else {
-        dispatch(setExpenseNamesError(error.response.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };

@@ -1,5 +1,15 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
+import {
+  Typography,
+  Space,
+  Row,
+  Col,
+  Button,
+  Table,
+  notification,
+  Spin,
+  message
+} from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
@@ -14,6 +24,8 @@ import {
 } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
 import { ExportToExcel } from "../../excel/ExportToExcel";
+import { successDeleteMessage } from "../../util/messages";
+
 const { Title } = Typography;
 
 const ShowExpenseNames = ({
@@ -26,6 +38,8 @@ const ShowExpenseNames = ({
     (state) => state.expense_name.expense_names
   );
   const user = useSelector((state) => state.auth.user);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
   const fileName = "Name Expenses"; // here enter filename for your excel file
   const result = allExpenseName.map((expense) => ({
     Name: expense.name
@@ -42,22 +56,27 @@ const ShowExpenseNames = ({
     };
   }, [getExpenseNames]);
 
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successDeleteMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
+
   const handleClick = async (record) => {
     await getExpenseName(record.id);
     navigate(`/admin/edit-expense-names/${record.id}`);
   };
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Deleted Your Data",
-      description: "Your data have been deleted.",
-      duration: 3
-    });
-  };
-
   const handleDelete = async (record) => {
     await deleteExpenseNames(record.id);
-    openNotificationWithIcon("error");
   };
 
   const columns = [
@@ -84,40 +103,42 @@ const ShowExpenseNames = ({
   ];
 
   return (
-    <Layout style={{ margin: "20px" }}>
-      <Space direction="vertical" size="middle">
-        <Row gutter={[16, 16]}>
-          <Col span={16}>
-            <Title level={3}>ကုန်ကျစရိတ်အမည်စာရင်း</Title>
-          </Col>
-          <Col span={4}>
-            {user?.position !== "owner" && (
-              <Button
-                style={{
-                  backgroundColor: "var(--secondary-color)",
-                  color: "var(--white-color)",
-                  borderRadius: "5px"
-                }}
-                size="middle"
-                onClick={() => navigate("/admin/create-expense-names")}
-              >
-                <PlusSquareOutlined />
-                အသစ်ထည့်မည်
-              </Button>
-            )}
-          </Col>
-          <Col span={4}>
-            <ExportToExcel apiData={result} fileName={fileName} />
-          </Col>
-        </Row>
-        <Table
-          bordered
-          columns={columns}
-          dataSource={expenseNames.expense_names}
-          pagination={{ defaultPageSize: 10 }}
-        />
-      </Space>
-    </Layout>
+    <Spin spinning={status.loading}>
+      <Layout style={{ margin: "20px" }}>
+        <Space direction="vertical" size="middle">
+          <Row gutter={[16, 16]}>
+            <Col span={16}>
+              <Title level={3}>ကုန်ကျစရိတ်အမည်စာရင်း</Title>
+            </Col>
+            <Col span={4}>
+              {user?.position !== "owner" && (
+                <Button
+                  style={{
+                    backgroundColor: "var(--secondary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                  size="middle"
+                  onClick={() => navigate("/admin/create-expense-names")}
+                >
+                  <PlusSquareOutlined />
+                  အသစ်ထည့်မည်
+                </Button>
+              )}
+            </Col>
+            <Col span={4}>
+              <ExportToExcel apiData={result} fileName={fileName} />
+            </Col>
+          </Row>
+          <Table
+            bordered
+            columns={columns}
+            dataSource={expenseNames.expense_names}
+            pagination={{ defaultPageSize: 10 }}
+          />
+        </Space>
+      </Layout>
+    </Spin>
   );
 };
 
