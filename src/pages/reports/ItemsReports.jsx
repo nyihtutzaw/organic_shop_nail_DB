@@ -150,7 +150,6 @@ const ItemsReports = () => {
 
   return (
     <Spin spinning={status.loading}>
-
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>

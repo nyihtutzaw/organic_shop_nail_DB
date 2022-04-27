@@ -280,6 +280,9 @@ export const getBestItem = (query) => {
           };
         });
         dispatch(showItems(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
       const { status, data } = error.response;

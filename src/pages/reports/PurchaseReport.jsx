@@ -8,7 +8,9 @@ import {
   Table,
   Select,
   notification,
-  DatePicker
+  DatePicker,
+  message,
+  Spin
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -22,6 +24,7 @@ import {
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 import queryString from "query-string";
 import dayjs from "dayjs";
+import { successDeleteMessage } from "../../util/messages";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -34,6 +37,8 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   const purchaseReport = useSelector((state) => state.purchase.purchaseReport);
   const showPurchase = useSelector((state) => state.purchase.purchases);
   const allMerchant = useSelector((state) => state.merchant.merchants);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
 
   const start_date = new URLSearchParams(window.location.search).get(
     "start_date"
@@ -57,6 +62,20 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   //     fetchData();
   //   };
   // }, [getPurchaseReport, getMerchants]);
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successDeleteMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -106,98 +125,101 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   ];
 
   return (
-    <Layout style={{ margin: "20px" }}>
-      <Space direction="vertical" size="middle">
-        <Row gutter={[16, 16]}>
-          <Col span={13}>
-            <Title level={3}>အဝယ်မှတ်တမ်းစာမျက်နှာ</Title>
-          </Col>
-          <Col span={5}>
-            <p
-              style={{
-                backgroundColor: "var(--primary-color)",
-                padding: "10px",
-                color: "var(--white-color)"
-              }}
-            >
-              Start Date= {start_date}
-            </p>
-          </Col>
-          <Col span={5}>
-            <p
-              style={{
-                backgroundColor: "var(--primary-color)",
-                padding: "10px",
-                color: "var(--white-color)"
-              }}
-            >
-              End Date= {end_date}
-            </p>
-          </Col>
-        </Row>
-
-        <Row gutter={[16, 16]}>
-          <Col span={8}>
-            <RangePicker
-              onChange={(val) => {
-                // alert(dayjs(val[0]).format("YYYY-MM-DD"))
-                if (queryString.parse(location.search).best) {
-                  window.location = `/admin/purchase-report?best=true&start_date=${dayjs(
-                    val[0]
-                  ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
-                    "YYYY-MM-DD"
-                  )}`;
-                } else {
-                  window.location = `/admin/purchase-report?start_date=${dayjs(
-                    val[0]
-                  ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
-                    "YYYY-MM-DD"
-                  )}`;
-                }
-              }}
-            />
-          </Col>
-          <Col span={2}></Col>
-          <Col span={14}>
-            <Space
-              direction="horizontal"
-              style={{
-                width: "100%",
-                marginBottom: "10px"
-              }}
-              size="large"
-            >
-              <Text type="secondary">ကုန်သည်လုပ်ငန်းအမည်ရွေးပါ</Text>
-              <Select
-                showSearch
-                placeholder="ကျေးဇူးပြု၍ ကုန်သည်လုပ်ငန်းအမည်ရွေးပါ"
-                optionFilterProp="children"
-                onChange={onChange}
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                  0
-                }
-                allowClear={true}
-                size="large"
-                style={{ borderRadius: "10px" }}
+    <Spin spinning={status.loading}>
+      <Layout style={{ margin: "20px" }}>
+        <Space direction="vertical" size="middle">
+          <Row gutter={[16, 16]}>
+            <Col span={13}>
+              <Title level={3}>အဝယ်မှတ်တမ်းစာမျက်နှာ</Title>
+            </Col>
+            <Col span={5}>
+              <p
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  padding: "10px",
+                  color: "var(--white-color)"
+                }}
               >
-                {allMerchant.map((mer) => (
-                  <Option key={mer.id} value={mer.id}>
-                    {mer.company_name}
-                  </Option>
-                ))}
-              </Select>
-            </Space>
-          </Col>
-        </Row>
-        <Table
-          bordered
-          columns={columns}
-          dataSource={showBuyMerchant != null ? showBuyMerchant : result}
-          pagination={{ defaultPageSize: 10 }}
-        />
-      </Space>
-    </Layout>
+                Start Date= {start_date}
+              </p>
+            </Col>
+            <Col span={5}>
+              <p
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  padding: "10px",
+                  color: "var(--white-color)"
+                }}
+              >
+                End Date= {end_date}
+              </p>
+            </Col>
+          </Row>
+
+          <Row gutter={[16, 16]}>
+            <Col span={8}>
+              <RangePicker
+                onChange={(val) => {
+                  // alert(dayjs(val[0]).format("YYYY-MM-DD"))
+                  if (queryString.parse(location.search).best) {
+                    window.location = `/admin/purchase-report?best=true&start_date=${dayjs(
+                      val[0]
+                    ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                      "YYYY-MM-DD"
+                    )}`;
+                  } else {
+                    window.location = `/admin/purchase-report?start_date=${dayjs(
+                      val[0]
+                    ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                      "YYYY-MM-DD"
+                    )}`;
+                  }
+                }}
+              />
+            </Col>
+            <Col span={2}></Col>
+            <Col span={14}>
+              <Space
+                direction="horizontal"
+                style={{
+                  width: "100%",
+                  marginBottom: "10px"
+                }}
+                size="large"
+              >
+                <Text type="secondary">ကုန်သည်လုပ်ငန်းအမည်ရွေးပါ</Text>
+                <Select
+                  showSearch
+                  placeholder="ကျေးဇူးပြု၍ ကုန်သည်လုပ်ငန်းအမည်ရွေးပါ"
+                  optionFilterProp="children"
+                  onChange={onChange}
+                  filterOption={(input, option) =>
+                    option.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }
+                  allowClear={true}
+                  size="large"
+                  style={{ borderRadius: "10px" }}
+                >
+                  {allMerchant.map((mer) => (
+                    <Option key={mer.id} value={mer.id}>
+                      {mer.company_name}
+                    </Option>
+                  ))}
+                </Select>
+              </Space>
+            </Col>
+          </Row>
+          <Table
+            bordered
+            columns={columns}
+            dataSource={showBuyMerchant != null ? showBuyMerchant : result}
+            pagination={{ defaultPageSize: 10 }}
+          />
+        </Space>
+      </Layout>
+    </Spin>
   );
 };
 

@@ -7,7 +7,9 @@ import {
   Table,
   DatePicker,
   Select,
-  Input
+  Input,
+  Spin,
+  message
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import queryString from "query-string";
@@ -16,6 +18,8 @@ import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { ExportToExcel } from "../../excel/ExportToExcel";
+import { successDeleteMessage } from "../../util/messages";
+
 
 const { Title } = Typography;
 const ReportScreem = () => {
@@ -25,11 +29,27 @@ const ReportScreem = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const report = useSelector((state) => state.report.report);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
   const start_date = new URLSearchParams(window.location.search).get(
     "start_date"
   );
   const end_date = new URLSearchParams(window.location.search).get("end_date");
   
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successDeleteMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
+
   useEffect(() => {
     const fetchData = () => {
       dispatch(getReport(queryString.parse(location.search)));
@@ -132,6 +152,8 @@ const ReportScreem = () => {
   }
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
@@ -203,6 +225,7 @@ const ReportScreem = () => {
         />
       </Space>
     </Layout>
+    </Spin>
   );
 };
 
