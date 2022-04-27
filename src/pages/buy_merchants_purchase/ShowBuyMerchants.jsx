@@ -7,7 +7,9 @@ import {
   Button,
   Table,
   Select,
-  notification
+  notification,
+  Spin,
+  message
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
@@ -25,6 +27,7 @@ import {
 } from "../../store/actions";
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 import { ExportToExcel } from "../../excel/ExportToExcel";
+import { successDeleteMessage } from "../../util/messages";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -40,6 +43,8 @@ const ShowBuyMerchants = ({
   const navigate = useNavigate();
   const allPurchases = useSelector((state) => state.purchase.purchases);
   const user = useSelector((state) => state.auth.user);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
 
   const fileName = "Purchases"; // here enter filename for your excel file
   const result = allPurchases?.map((purchase) => ({
@@ -76,6 +81,20 @@ const ShowBuyMerchants = ({
     };
   }, [getPurchases]);
 
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successDeleteMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
+
   const [showBuyMerchant, setshowBuyMerchant] = useState(null);
   const onChange = (value) => {
     if (value === undefined) {
@@ -88,13 +107,13 @@ const ShowBuyMerchants = ({
     }
   };
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Deleted Your Data",
-      description: "Your data have been deleted.",
-      duration: 3
-    });
-  };
+  // const openNotificationWithIcon = (type) => {
+  //   notification[type]({
+  //     message: "Deleted Your Data",
+  //     description: "Your data have been deleted.",
+  //     duration: 3
+  //   });
+  // };
 
   let allCredit = [];
   allPurchases?.forEach((purchase) => allCredit.push(parseInt(purchase.credit)));
@@ -110,7 +129,7 @@ const ShowBuyMerchants = ({
     );
     setMyPurchase(filterMyPurchase);
     await deletePurchases(record.id);
-    openNotificationWithIcon("error");
+    // openNotificationWithIcon("error");
   };
 
   const handleDetail = async (record) => {
@@ -176,6 +195,8 @@ const ShowBuyMerchants = ({
   ];
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
@@ -262,6 +283,7 @@ const ShowBuyMerchants = ({
         />
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

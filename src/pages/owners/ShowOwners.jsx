@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
+import { Typography, Space, Row, Col, Button, Table, notification, message, Spin } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined,  DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -12,12 +12,30 @@ import {
   getOwner
 } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
+import { successDeleteMessage } from "../../util/messages";
+
 
 const { Title } = Typography;
 
 const ShowOwners = ({ getOwners, deleteOwners, getOwner }) => {
   const owners = useSelector((state) => state.owner.owners);
   const user = useSelector((state) => state.auth.user);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successDeleteMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,17 +56,8 @@ const ShowOwners = ({ getOwners, deleteOwners, getOwner }) => {
     navigate(`/admin/edit-owner/${id}`);
   };
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Deleted Your Data",
-      description: "Your data have been deleted.",
-      duration: 3
-    });
-  };
-
   const handleDelete = async (record) => {
     await deleteOwners(record.id);
-    openNotificationWithIcon("error");
   };
 
   const columns = [
@@ -90,6 +99,8 @@ const ShowOwners = ({ getOwners, deleteOwners, getOwner }) => {
   ];
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
@@ -121,6 +132,7 @@ const ShowOwners = ({ getOwners, deleteOwners, getOwner }) => {
         />
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

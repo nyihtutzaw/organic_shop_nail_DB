@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Form,
-  Input,
   Typography,
   Space,
   Button,
   InputNumber,
   Select,
-  notification,
   message,
+  Spin,
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
@@ -17,16 +16,33 @@ import { useNavigate } from "react-router-dom";
 import dateFormat from "dateformat";
 import { saveOwners, getStocks } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
+import { successCreateMessage } from "../../util/messages";
 
 const { Title } = Typography;
 const { Option } = Select;
 
 const CreateOwners = ({ saveOwners, getStocks }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+
+
   const [form] = Form.useForm();
   const now = new Date();
   const date = dateFormat(now, "yyyy-mm-dd");
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successCreateMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,14 +63,6 @@ const CreateOwners = ({ saveOwners, getStocks }) => {
     };
   });
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Saved Your Data",
-      description: "Your data have been saved.",
-      duration: 3,
-    });
-  };
-
   const onFinish = async (values) => {
     const stock = allStocks.find((stock) => stock.id === values.stock_id);
     if (stock.quantity >= values.quantity) {
@@ -65,7 +73,6 @@ const CreateOwners = ({ saveOwners, getStocks }) => {
         ...values,
       };
       await saveOwners(data);
-      openNotificationWithIcon("success");
       form.resetFields();
       // navigate("/admin/show-owner");
     } else {
@@ -74,6 +81,8 @@ const CreateOwners = ({ saveOwners, getStocks }) => {
   };
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
@@ -168,6 +177,7 @@ const CreateOwners = ({ saveOwners, getStocks }) => {
         </Form>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

@@ -8,7 +8,8 @@ import {
   Select,
   Table,
   message,
-  notification
+  notification,
+  Spin
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
@@ -24,6 +25,8 @@ import {
   getItems,
   getStocks
 } from "../../store/actions";
+import { successCreateMessage } from "../../util/messages";
+
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -41,8 +44,24 @@ const CreateItemTransfer = ({
 
   let shops = useSelector((state) => state.shop.shops);
   const user = useSelector((state) => state.auth.user);
-
   const stocks = useSelector((state) => state.stock.stocks);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successCreateMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -98,13 +117,7 @@ const CreateItemTransfer = ({
     }
   };
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Saved Your Data",
-      description: "Your data have been saved.",
-      duration: 3
-    });
-  };
+
 
   const handleSave = async () => {
     if (items.length === 0) {
@@ -125,10 +138,10 @@ const CreateItemTransfer = ({
       await saveItemTransfers(saveItem);
       setItems([]);
       setBuyShop(null);
-      openNotificationWithIcon("success");
     }
   };
 
+  
   const handleDelete = (record) => {
     const filter = items.filter((item) => item.key !== record.key);
     setItems(filter);
@@ -155,6 +168,8 @@ const CreateItemTransfer = ({
   ];
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
@@ -296,6 +311,7 @@ const CreateItemTransfer = ({
         </Space>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

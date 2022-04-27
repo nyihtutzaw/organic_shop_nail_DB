@@ -5,8 +5,15 @@ import {
   CREATE_OWNERS,
   UPDATE_OWNERS,
   FILTER_OWNERS,
-  ERROR_OWNER
+  ERROR_OWNER,
+
+  ADD_ERROR,
+  REMOVE_ERROR,
+  SET_LOADING,
+  SET_SUCCESS
 } from "../type";
+import { serverErrorMessage } from "../../util/messages";
+
 
 export const showOwners = (owners) => ({
   type: SHOW_OWNERS,
@@ -40,6 +47,8 @@ export const setOwnerError = (error) => ({
 
 export const getOwners = () => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
       const response = await axios.get(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items"
@@ -52,21 +61,38 @@ export const getOwners = () => {
       });
       if (response.status === 200) {
         dispatch(showOwners(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error) {
-        dispatch(setOwnerError(error.response.data.data));
-      } else {
-        dispatch(setOwnerError(error.response.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
+
   };
 };
 
 export const getOwner = (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
-      // console.log(id);
       const response = await axios.get(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items/${id}`
       );
@@ -74,19 +100,37 @@ export const getOwner = (id) => {
 
       if (response.status === 200) {
         dispatch(showOwner(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error) {
-        dispatch(setOwnerError(error));
-      } else {
-        dispatch(setOwnerError(error));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
+
   };
 };
 
 export const saveOwners = (data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items",
@@ -99,19 +143,35 @@ export const saveOwners = (data) => {
       //   console.log(result);
       if (response.status === 201) {
         dispatch(createOwners(result));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error) {
-        dispatch(setOwnerError(error.response.data.data));
-      } else {
-        dispatch(setOwnerError(error.response.data));
+      const { status, data } = error.response;
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      } else if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const deleteOwners = (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items/${id}`
@@ -119,19 +179,38 @@ export const deleteOwners = (id) => {
       //   console.log(response)
       if (response.status === 204) {
         dispatch(filterOwners(id));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error) {
-        dispatch(setOwnerError(error.response.data.data));
-      } else {
-        dispatch(setOwnerError(error.response.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const editOwners = (id, data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items/${id}?_method=put`,
@@ -143,13 +222,27 @@ export const editOwners = (id, data) => {
       };
       if (response.status === 201) {
         dispatch(updateOwners(result));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error) {
-        dispatch(setOwnerError(error.response.data.data));
-      } else {
-        dispatch(setOwnerError(error.response.data));
+      const { status, data } = error.response;
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      } else if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };

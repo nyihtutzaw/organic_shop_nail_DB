@@ -6,8 +6,14 @@ import {
   CREATE_PURCHASES,
   UPDATE_PURCHASES,
   FILTER_PURCHASES,
-  ERROR_PURCHASES
+  ERROR_PURCHASES,
+  
+  ADD_ERROR,
+  REMOVE_ERROR,
+  SET_LOADING,
+  SET_SUCCESS
 } from "../type";
+import { serverErrorMessage } from "../../util/messages";
 
 export const showPurchases = (purchases) => ({
   type: SHOW_PURCHASES,
@@ -44,7 +50,6 @@ export const setPurchaseErrors = (error) => ({
   error
 });
 
-
 export const getBestPurchase = (query) => {
   return async (dispatch) => {
     try {
@@ -73,6 +78,8 @@ export const getBestPurchase = (query) => {
 
 export const getPurchase = (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
       const response = await axios.get(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases/${id}`
@@ -80,17 +87,36 @@ export const getPurchase = (id) => {
       const result = response.data.data;
       if (response.status === 200) {
         dispatch(showPurchase(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setPurchaseErrors(error.response.data.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const getPurchases = () => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
       const response = await axios.get(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases"
@@ -104,58 +130,109 @@ export const getPurchases = () => {
       // console.log(result);
       if (response.status === 200) {
         dispatch(showPurchases(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setPurchaseErrors(error.response.data.data));
-      } else {
-        dispatch(setPurchaseErrors(error.response.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const savePurchases = (data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases",
         data
       );
+      dispatch({ type: SET_SUCCESS, payload: true });
+      dispatch({
+        type: REMOVE_ERROR
+      });
       // console.log(response);
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setPurchaseErrors(error.response.data.data));
-      } else {
-        dispatch(setPurchaseErrors(error.response.data));
+      const { status, data } = error.response;
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      } else if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const deletePurchases = (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases/${id}`
       );
       // console.log(response)
-      dispatch(filterPurchases(id));
       // if (response.status === 204) {
+      dispatch(filterPurchases(id));
+      dispatch({ type: SET_SUCCESS, payload: true });
+      dispatch({
+        type: REMOVE_ERROR
+      });
       // }
     } catch (error) {
-      console.log(error);
-      // if (error.response.status === 404) {
-      //   dispatch(setPurchaseErrors(error.response.data.data));
-      // } else {
-      //   dispatch(setPurchaseErrors(error.response.data));
-      // }
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
+      }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const editPurchases = (id, data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}?_method=put`,
@@ -165,15 +242,28 @@ export const editPurchases = (id, data) => {
       const result = response.data.data;
       if (response.status === 204) {
         dispatch(updatePurchases(result));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      console.log(error);
-      // if (error) {
-      //   dispatch(setItemErrors(error.response.data.data));
-      // } else {
-      //   dispatch(setItemErrors(error.response.data));
-      // }
+      const { status, data } = error.response;
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      } else if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
+      }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 

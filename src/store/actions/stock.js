@@ -7,7 +7,14 @@ import {
   UPDATE_PURCHASES,
   FILTER_PURCHASES,
   ERROR_STOCKS,
+
+  ADD_ERROR,
+  REMOVE_ERROR,
+  SET_LOADING,
+  SET_SUCCESS
 } from "../type";
+import { serverErrorMessage } from "../../util/messages";
+
 
 export const showStocks = (stocks) => ({
   type: SHOW_STOCKS,
@@ -36,6 +43,8 @@ export const setStockError = (error) => ({
 
 export const getStocks = () => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
       const response = await axios.get(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/stocks"
@@ -49,14 +58,30 @@ export const getStocks = () => {
       // console.log(response.status)
       if (response.status === 200) {
         dispatch(showStocks(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setStockError(error.response.data.data));
-      } else {
-        dispatch(setStockError(error.response.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
+
   };
 };
 

@@ -21,7 +21,7 @@ import { connect } from "react-redux";
 import { useSelector } from "react-redux";
 import { saveItemTransfers, getShops, getItems, getStocks } from "../../store/actions";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 const { Option } = Select;
 
 const EditItemTransfer = ({

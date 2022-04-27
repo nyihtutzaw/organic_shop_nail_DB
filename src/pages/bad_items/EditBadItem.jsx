@@ -7,7 +7,9 @@ import {
   InputNumber,
   Select,
   Checkbox,
-  Alert
+  Alert,
+  Spin,
+  message
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
@@ -26,6 +28,7 @@ import { connect, useSelector } from "react-redux";
 import dateFormat from "dateformat";
 import store from "../../store";
 import { useNavigate, useParams } from "react-router-dom";
+import { successEditMessage } from "../../util/messages";
 
 const now = new Date();
 
@@ -33,7 +36,6 @@ const { Title } = Typography;
 const { Option } = Select;
 const EditBadItem = ({
   getStocks,
-  saveBadItems,
   clearAlert,
   bad_item,
   getBadItem,
@@ -42,6 +44,9 @@ const EditBadItem = ({
 }) => {
   const stocks = useSelector((state) => state.stock.stocks);
   const badItems = useSelector((state) => state.bad_item.bad_item);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+
   const param = useParams();
   const navigate = useNavigate();
   const allStocks = stocks.map((stock) => {
@@ -55,10 +60,17 @@ const EditBadItem = ({
     (stock) => stock?.id == badItems?.stock?.id
   );
 
-  // console.log("all", stocks.id)
-  // console.log("edit",editBadItem.id);
-  // console.log("get", badItems.stock.id)
-// console.log(editBadItem)
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successEditMessage);
+    }
+    return () => status.success;
+  }, [status.success]);
 
   useEffect(() => {
     form.setFieldsValue({ quantity: badItems?.quantity });
@@ -95,6 +107,8 @@ const EditBadItem = ({
   };
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       {bad_item.error !== "" ? (
         <Alert
@@ -211,6 +225,7 @@ const EditBadItem = ({
         </Form>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

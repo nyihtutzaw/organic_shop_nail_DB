@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
+import { Typography, Space, Row, Col, Button, Table, notification, message, Spin } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
@@ -10,13 +10,17 @@ import { useNavigate } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
 import { getItems, deleteItems, getItem } from "../../store/actions";
 import { ExportToExcel } from "../../excel/ExportToExcel";
+import { successDeleteMessage } from "../../util/messages";
+
 
 const { Title } = Typography;
 
 const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
   const allItems = useSelector((state) => state.item.items);
   const user = useSelector((state) => state.auth.user);
-
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+  
   // console.log("ii", allItems);
   const fileName = "Items"; // here enter filename for your excel file
   const result = allItems.map((item) => ({
@@ -26,6 +30,18 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
     Sale_Price: item.sale_price,
     key: item.id
   }));
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successDeleteMessage);
+    }
+    return () => status.success;
+  }, [status.success]);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -43,16 +59,16 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
     navigate(`/admin/edit-items/${record.id}`);
   };
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Deleted Your Data",
-      description: "Your data have been deleted.",
-      duration: 3
-    });
-  };
+  // const openNotificationWithIcon = (type) => {
+  //   notification[type]({
+  //     message: "Deleted Your Data",
+  //     description: "Your data have been deleted.",
+  //     duration: 3
+  //   });
+  // };
+
   const handleDelete = async (record) => {
     await deleteItems(record.id);
-    openNotificationWithIcon("error");
   };
 
   const columns = [
@@ -99,6 +115,8 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
   ];
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
@@ -133,6 +151,7 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
         />
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

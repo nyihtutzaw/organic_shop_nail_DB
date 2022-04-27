@@ -6,8 +6,15 @@ import {
   UPDATE_BADITEMS,
   FILTER_BADITEMS,
   ERROR_BADITEMS,
-  IS_SUCCESS_ERROR_BADITEMS
+  IS_SUCCESS_ERROR_BADITEMS,
+
+  ADD_ERROR,
+  REMOVE_ERROR,
+  SET_LOADING,
+  SET_SUCCESS
 } from "../type";
+import { serverErrorMessage } from "../../util/messages";
+
 
 export const showBadItems = (baditems) => ({
   type: SHOW_BADITEMS,
@@ -49,6 +56,8 @@ export const badItemSuccess = (isSuccess) => ({
 
 export const getBadItems = () => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
       const response = await axios.get(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items"
@@ -62,19 +71,37 @@ export const getBadItems = () => {
       // console.log(response.status)
       if (response.status === 200) {
         dispatch(showBadItems(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error) {
-        dispatch(setBadItemErrors(error.response.data.data));
-      } else {
-        dispatch(setBadItemErrors(error.response.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
+
   };
 };
 
 export const getBadItem = (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
       const response = await axios.get(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items/${id}`
@@ -82,18 +109,38 @@ export const getBadItem = (id) => {
       const result = response.data.data;
       if (response.status === 200) {
         dispatch(showBadItem(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error) {
-        dispatch(setBadItemErrors(error));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
+
   };
 };
 
 
 export const saveBadItems = (data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items/batchInsert",
@@ -102,48 +149,104 @@ export const saveBadItems = (data) => {
       const result = response.data.data;
       if(response.status === 201){
         dispatch(createBadItems(result))
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error) {
-        dispatch(setBadItemErrors("There was an Error during Saving...."));
-      } 
+      const { status, data } = error.response;
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      } else if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
+      }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const deleteBadItems = (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items/${id}`
       );
       if (response.status === 204) {
       dispatch(filterBadItems(id));
+      dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      console.log(error)
-      if (error) {
-        dispatch(setBadItemErrors("There was an error during Deleting"));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const editBadItems = (id, data) => {
   return async (dispatch) => {
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items/${id}?_method=put`,
         data
       );
       const result = response.data.data;
-      if (response.status === 204) {
+      console.log(response.status)
+      if (response.status === 201) {
         dispatch(updateBadItems(result));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        console.log("first")
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error) {
-        dispatch(setBadItemErrors("There was an Error during Updating...."));
+      const { status, data } = error.response;
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      } else if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_SUCCESS, payload: false });
+    dispatch({ type: SET_LOADING });
   };
 };

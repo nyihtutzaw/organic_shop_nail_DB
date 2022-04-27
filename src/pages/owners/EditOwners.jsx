@@ -6,7 +6,9 @@ import {
   Space,
   Button,
   InputNumber,
-  Select
+  Select,
+  Spin,
+  message
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
@@ -14,16 +16,33 @@ import { useSelector, connect } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { getStocks, editOwners, getOwner } from "../../store/actions";
 import dateFormat from "dateformat";
+import { successEditMessage } from "../../util/messages";
+
 
 const { Title } = Typography;
 const { Option } = Select;
 
 
 const EditOwners = ({ getStocks, getOwner, editOwners, owner }) => {
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+  const stocks = useSelector((state) => state.stock.stocks);
 
   const param = useParams();
   const navigate = useNavigate();
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successEditMessage);
+    }
+    return () => status.success;
+  }, [status.success]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,9 +55,6 @@ const EditOwners = ({ getStocks, getOwner, editOwners, owner }) => {
     };
   }, [getStocks, getOwner]);
 
-  const stocks = useSelector((state) => state.stock.stocks);
-  const ownersss = useSelector((state) => state)
-  // console.log(owner)
 
   useEffect(() => {
     form.setFieldsValue({ quantity: owner.owner?.quantity });
@@ -58,6 +74,8 @@ const EditOwners = ({ getStocks, getOwner, editOwners, owner }) => {
   };
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
@@ -151,6 +169,7 @@ const EditOwners = ({ getStocks, getOwner, editOwners, owner }) => {
         </Form>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

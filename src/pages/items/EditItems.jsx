@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Typography, Space, Button } from "antd";
+import { Form, Input, Typography, Space, Button, Spin, message } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import InputUpload from "../../components/InputUpload";
 import { connect, useSelector } from "react-redux";
 import { editItems, getItem } from "../../store/actions";
 import { useNavigate, useParams } from "react-router-dom";
+import { successEditMessage } from "../../util/messages";
+
 
 const { Title, Text } = Typography;
 
@@ -18,6 +20,20 @@ const EditItems = ({ editItems, getItem }) => {
   const item = useSelector((state) => state.item.item);
   // const currentItem = allItems.find((item) => item.id === parseInt(id));
   // console.log(currentItem)
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successEditMessage);
+    }
+    return () => status.success;
+  }, [status.success]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +74,8 @@ const EditItems = ({ editItems, getItem }) => {
   };
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
@@ -183,6 +201,7 @@ const EditItems = ({ editItems, getItem }) => {
         </Form>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

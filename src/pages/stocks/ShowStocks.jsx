@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, notification } from "antd";
+import { Typography, Space, Row, Col, Button, Table, notification, Spin, message } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getStocks } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
 import { ExportToExcel } from "../../excel/ExportToExcel";
+import { successDeleteMessage } from "../../util/messages";
+
 
 const { Title } = Typography;
 
@@ -13,7 +15,8 @@ const ShowStocks = ({ stock, getStocks }) => {
   const navigate = useNavigate();
   const stockAll = stock.stocks;
   const user = useSelector((state) => state.auth.user);
-
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
   const fileName = "Stocks"; // here enter filename for your excel file
   const result = stockAll.map((stock) => ({
     Quantity: stock.quantity,
@@ -22,6 +25,18 @@ const ShowStocks = ({ stock, getStocks }) => {
     Sale_Price: stock.item.sale_price,
     Name: stock.item.name
   }));
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successDeleteMessage);
+    }
+    return () => status.success;
+  }, [status.success]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,13 +49,6 @@ const ShowStocks = ({ stock, getStocks }) => {
     };
   }, [getStocks]);
 
-  // const openNotificationWithIcon = (type) => {
-  //   notification[type]({
-  //     message: "Saved Your Data",
-  //     description: "Your data have been saved.",
-  //     duration: 3
-  //   });
-  // };
 
   const columns = [
     {
@@ -102,6 +110,8 @@ const ShowStocks = ({ stock, getStocks }) => {
   ];
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
@@ -136,6 +146,7 @@ const ShowStocks = ({ stock, getStocks }) => {
         />
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

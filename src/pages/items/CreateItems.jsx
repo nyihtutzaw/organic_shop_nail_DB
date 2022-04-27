@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   Input,
@@ -7,7 +7,8 @@ import {
   Button,
   Table,
   message,
-  notification
+  notification,
+  Spin
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
@@ -16,16 +17,34 @@ import {
   PlusSquareOutlined
 } from "@ant-design/icons";
 import InputUpload from "../../components/InputUpload";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { saveItems } from "../../store/actions";
 import imageDefault from "../sales/images/organic.jpg";
+import { successCreateMessage } from "../../util/messages";
 
 const { Title, Text } = Typography;
 
-const CreateItems = ({ saveItems, error }) => {
+const CreateItems = ({ saveItems }) => {
   const [items, setItems] = useState([]);
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+  
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successCreateMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
+
 
   const onFinish = (values) => {
     // if (fileList.length === 0) {
@@ -50,13 +69,6 @@ const CreateItems = ({ saveItems, error }) => {
     setItems(filterItems);
   };
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Saved Your Data",
-      description: "Your data have been saved.",
-      duration: 3
-    });
-  };
 
   const handleSave = async () => {
     if (items.length === 0) {
@@ -73,7 +85,6 @@ const CreateItems = ({ saveItems, error }) => {
       });
       await saveItems(formData);
       setItems([]);
-      openNotificationWithIcon("success");
     }
   };
 
@@ -123,7 +134,10 @@ const CreateItems = ({ saveItems, error }) => {
     }
   ];
 
+  
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
@@ -277,6 +291,7 @@ const CreateItems = ({ saveItems, error }) => {
         </Space>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

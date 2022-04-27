@@ -23,6 +23,7 @@ const CreateExpenseNames = ({ saveExpenseNames }) => {
   const [form] = Form.useForm();
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
+
   useEffect(() => {
     error.message !== null && message.error(error.message);
 
@@ -37,18 +38,9 @@ const CreateExpenseNames = ({ saveExpenseNames }) => {
     return () => status.success;
   }, [status.success]);
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Saved Your Data",
-      description: "Your data have been saved.",
-      duration: 3
-    });
-  };
-
   const onFinish = async (values) => {
     await saveExpenseNames(values);
     form.resetFields();
-    openNotificationWithIcon("success");
     // navigate("/admin/show-expense-names");
   };
 

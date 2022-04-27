@@ -10,7 +10,8 @@ import {
   Row,
   Col,
   message,
-  notification
+  notification,
+  Spin
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
@@ -18,10 +19,12 @@ import {
   SaveOutlined,
   PlusSquareOutlined
 } from "@ant-design/icons";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { getMerchants, getItems, savePurchases } from "../../store/actions";
 import { useNavigate } from "react-router-dom";
 import dateFormat from "dateformat";
+import { successCreateMessage } from "../../util/messages";
+
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -40,6 +43,9 @@ const CreateBuyMerchants = ({
   const [buyMerchant, setBuyMerchant] = useState(null);
   const allItems = item.items;
   const navigate = useNavigate();
+
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
 
   const [form] = Form.useForm();
   useEffect(() => {
@@ -61,6 +67,20 @@ const CreateBuyMerchants = ({
       fetchData();
     };
   }, [getItems]);
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successCreateMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
 
   const now = new Date();
   const date = dateFormat(now, "yyyy-mm-dd");
@@ -111,13 +131,13 @@ const CreateBuyMerchants = ({
     setBuys(filterMerchant);
   };
 
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Saved Your Data",
-      description: "Your data have been saved.",
-      duration: 3
-    });
-  };
+  // const openNotificationWithIcon = (type) => {
+  //   notification[type]({
+  //     message: "Saved Your Data",
+  //     description: "Your data have been saved.",
+  //     duration: 3
+  //   });
+  // };
 
   const handleSave = async () => {
     if (buyMerchant === null) {
@@ -146,7 +166,7 @@ const CreateBuyMerchants = ({
       };
       // console.log(saveBuy);
       await savePurchases(saveBuy);
-      openNotificationWithIcon("success");
+      // openNotificationWithIcon("success");
       // setDataMerchant([]);
       // setCredit(0);
       // setPaid(0)
@@ -190,6 +210,8 @@ const CreateBuyMerchants = ({
   ];
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
@@ -387,6 +409,7 @@ const CreateBuyMerchants = ({
         </Space>
       </Space>
     </Layout>
+    </Spin>
   );
 };
 
