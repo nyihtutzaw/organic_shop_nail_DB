@@ -13,8 +13,12 @@ import {
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
+<<<<<<< HEAD
 import { serverErrorMessage } from "../../util/messages";
 
+=======
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 export const showPurchases = (purchases) => ({
   type: SHOW_PURCHASES,
   purchases
@@ -50,11 +54,19 @@ export const setPurchaseErrors = (error) => ({
   error
 });
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 export const getBestPurchase = (query) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
+<<<<<<< HEAD
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchaseReport?${new URLSearchParams(
+=======
+        `${apiUrl}purchaseReport?${new URLSearchParams(
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
           query
         ).toString()}`
       );
@@ -62,7 +74,11 @@ export const getBestPurchase = (query) => {
       const result = response.data.data.map((purchase) => {
         return {
           ...purchase,
+<<<<<<< HEAD
           key: Math.random() * 100
+=======
+          key: purchase.id
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
         };
       });
       // console.log(result);
@@ -82,7 +98,7 @@ export const getPurchase = (id) => {
 
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases/${id}`
+        `${apiUrl}purchases/${id}`
       );
       const result = response.data.data;
       if (response.status === 200) {
@@ -92,6 +108,7 @@ export const getPurchase = (id) => {
         });
       }
     } catch (error) {
+<<<<<<< HEAD
       const { status, data } = error.response;
 
       if (status === 401) {
@@ -107,6 +124,10 @@ export const getPurchase = (id) => {
           type: ADD_ERROR,
           payload: serverErrorMessage
         });
+=======
+      if (error.response.status === 404) {
+        dispatch(setPurchaseErrors(error.response.data.data));
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       }
     }
     dispatch({ type: SET_LOADING });
@@ -119,8 +140,13 @@ export const getPurchases = () => {
 
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases"
+        `${apiUrl}purchases`
       );
+<<<<<<< HEAD
+=======
+      // console.log('ss',response);
+
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       const result = response.data.data.map((purchase) => {
         return {
           ...purchase,
@@ -162,7 +188,7 @@ export const savePurchases = (data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases",
+        `${apiUrl}purchases`,
         data
       );
       dispatch({ type: SET_SUCCESS, payload: true });
@@ -196,7 +222,7 @@ export const deletePurchases = (id) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases/${id}`
+        `${apiUrl}purchases/${id}`
       );
       // console.log(response)
       // if (response.status === 204) {
@@ -235,7 +261,7 @@ export const editPurchases = (id, data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}?_method=put`,
+        `${apiUrl}items/${id}?_method=put`,
         data
       );
       // console.log(response);
@@ -308,5 +334,29 @@ export const getPurchaseReport = () => {
     }
     dispatch({ type: SET_LOADING });
 
+  };
+};
+
+export const getPurchaseReport = () => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `${apiUrl}purchaseReport`
+      );
+      const result = response.data.data.map((purchase) => {
+        return {
+          ...purchase,
+          key: purchase.merchant_id
+        };
+      });
+      // console.log(result)
+      if (response.status === 201) {
+        dispatch(showPurchaseReport(result));
+      }
+    } catch (error) {
+      if (error.response.status === 404) {
+        dispatch(setPurchaseErrors(error.response.data.data));
+      }
+    }
   };
 };

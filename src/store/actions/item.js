@@ -5,6 +5,7 @@ import {
   CREATE_ITEMS,
   UPDATE_ITEMS,
   FILTER_ITEMS,
+<<<<<<< HEAD
   ERROR_ITEM,
   
   ADD_ERROR,
@@ -13,6 +14,11 @@ import {
   SET_SUCCESS
 } from "../type";
 import { serverErrorMessage } from "../../util/messages";
+=======
+  ERROR_ITEM
+} from "../type";
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showItems = (items) => ({
   type: SHOW_ITEMS,
@@ -50,12 +56,21 @@ export const getItems = () => {
 
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items"
+        `${apiUrl}items`
       );
+<<<<<<< HEAD
       const result = response.data.data.map((d) => ({
         ...d,
         key: Math.random() * 100
       }));
+=======
+      const result = response.data.data.map((item) => {
+        return {
+          ...item,
+          key: item.id
+        };
+      });
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       // console.log(result)
       if (response.status === 200) {
         dispatch(showItems(result));
@@ -92,7 +107,7 @@ export const getItem = (id) => {
     try {
       // console.log(id);
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}`
+        `${apiUrl}items/${id}`
       );
       const result = response.data.data;
       // console.log(result)
@@ -130,9 +145,10 @@ export const saveItems = (data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/batchInsert",
+        `${apiUrl}items/batchInsert`,
         data
       );
+<<<<<<< HEAD
       const result = response.data.data.map((d) => ({
         ...d,
         key: d.id
@@ -144,6 +160,14 @@ export const saveItems = (data) => {
           type: REMOVE_ERROR
         });
       }
+=======
+      const result = {
+        ...response.data.data,
+        key: response.data.data.id
+      };
+      // console.log(result)
+      dispatch(createItems(result));
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
     } catch (error) {
       const { status, data } = error.response;
       if (status === 401) {
@@ -170,7 +194,7 @@ export const deleteItems = (id) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}`
+        `${apiUrl}/items/${id}`
       );
       // console.log(response)
       if (response.status === 204) {
@@ -209,7 +233,7 @@ export const editItems = (id, data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}?_method=put`,
+        `${apiUrl}items/${id}?_method=put`,
         data
       );
       const result = {
@@ -256,7 +280,7 @@ export const getBestItem = (query) => {
 
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/bestItem?${new URLSearchParams(
+        `${apiUrl}items/bestItem?${new URLSearchParams(
           query
         ).toString()}`
       );

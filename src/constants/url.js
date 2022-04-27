@@ -1,0 +1,1 @@
+export const apiUrl='http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/';

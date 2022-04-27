@@ -121,6 +121,13 @@ const ShowMembers = ({
       title: "နေရပ်လိပ်စာ",
       dataIndex: "address"
     },
+<<<<<<< HEAD
+=======
+    // {
+    //   title: "point စုစုပေါင်း",
+    //   dataIndex: "points"
+    // },
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
     {
       title: "Actions",
       dataIndex: "action",

@@ -13,7 +13,11 @@ import {
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
+<<<<<<< HEAD
 import { serverErrorMessage } from "../../util/messages";
+=======
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showStaffs = (staffs) => ({
   type: SHOW_STAFFS,
@@ -78,7 +82,7 @@ export const getStaffs = () => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs"
+        `${apiUrl}staffs`
       );
       const result = response.data.data.map((item) => {
         return {
@@ -122,7 +126,7 @@ export const saveStaffs = (data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs",
+        `${apiUrl}staffs`,
         data
       );
       // console.log(response.data.data);
@@ -165,7 +169,7 @@ export const deleteStaffs = (id) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs/${id}`
+        `${apiUrl}staffs/${id}`
       );
       if (response.status === 204) {
         dispatch(filterStaffs(id));
@@ -203,7 +207,7 @@ export const editStaffs = (id, data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffs/${id}?_method=put`,
+        `${apiUrl}staffs/${id}?_method=put`,
         data
       );
       //   console.log(response);
@@ -244,7 +248,7 @@ export const getStaffReport = (query) => {
 
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffReport?${new URLSearchParams(
+        `${apiUrl}staffReport?${new URLSearchParams(
           query
         ).toString()}`
       );

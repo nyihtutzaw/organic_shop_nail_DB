@@ -50,9 +50,12 @@ a {
   }
 }
 
+<<<<<<< HEAD
 .ant-table table {
   font-size: 12px;
 }
+=======
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 /* .highlight-bottom-border > td {
   border-bottom: solid 1px black !important;
 }

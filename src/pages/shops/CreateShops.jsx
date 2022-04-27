@@ -46,6 +46,7 @@ const CreateShops = ({ saveShops, shop, clearAlert }) => {
   };
 
   return (
+<<<<<<< HEAD
     <Spin spinning={status.loading}>
       <Layout style={{ margin: "20px" }}>
         <Space direction="vertical" size="middle">
@@ -57,6 +58,50 @@ const CreateShops = ({ saveShops, shop, clearAlert }) => {
             labelCol={{
               xl: {
                 span: 3
+=======
+    <Layout style={{ margin: "20px" }}>
+      {shop.error.length > 0 ? (
+        <Alert
+          message="Errors"
+          description={shop.error}
+          type="error"
+          showIcon
+          closable
+        />
+      ) : null}
+
+      {shop.isSuccess && (
+        <Alert message="Successfully Created" type="success" showIcon />
+      )}
+
+      <Space direction="vertical" size="middle">
+        <Title style={{ textAlign: "center" }} level={3}>
+          ဆိုင်အမည် သွင်းခြင်း စာမျက်နှာ
+        </Title>
+        <Form
+          colon={false}
+          labelCol={{
+            xl: {
+              span: 3
+            }
+          }}
+          wrapperCol={{
+            span: 24
+          }}
+          initialValues={{
+            remember: true
+          }}
+          onFinish={onFinish}
+          form={form}
+        >
+          <Form.Item
+            name="name"
+            label="ဆိုင်အမည်"
+            rules={[
+              {
+                required: true,
+                message: "ကျေးဇူးပြု၍ ဆိုင်အမည်ထည့်ပါ"
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
               }
             }}
             wrapperCol={{

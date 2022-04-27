@@ -13,8 +13,12 @@ import {
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
+<<<<<<< HEAD
 import { serverErrorMessage } from "../../util/messages";
 
+=======
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showStocks = (stocks) => ({
   type: SHOW_STOCKS,
@@ -47,7 +51,7 @@ export const getStocks = () => {
 
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/stocks"
+        `${apiUrl}stocks`
       );
       const result = response.data.data.map((stock) => {
         return {

@@ -13,8 +13,12 @@ import {
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
+<<<<<<< HEAD
 import { serverErrorMessage } from "../../util/messages";
 
+=======
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showBadItems = (baditems) => ({
   type: SHOW_BADITEMS,
@@ -60,7 +64,7 @@ export const getBadItems = () => {
 
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items"
+        `${apiUrl}damage-items`
       );
       const result = response.data.data.map((baditem) => {
         return {
@@ -104,7 +108,7 @@ export const getBadItem = (id) => {
 
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items/${id}`
+        `${apiUrl}damage-items/${id}`
       );
       const result = response.data.data;
       if (response.status === 200) {
@@ -143,7 +147,7 @@ export const saveBadItems = (data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items/batchInsert",
+        `${apiUrl}damage-items/batchInsert`,
         data
       );
       const result = response.data.data;
@@ -180,7 +184,7 @@ export const deleteBadItems = (id) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items/${id}`
+        `${apiUrl}damage-items/${id}`
       );
       if (response.status === 204) {
       dispatch(filterBadItems(id));
@@ -218,7 +222,7 @@ export const editBadItems = (id, data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/damage-items/${id}?_method=put`,
+        `${apiUrl}damage-items/${id}?_method=put`,
         data
       );
       const result = response.data.data;

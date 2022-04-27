@@ -12,6 +12,10 @@ import {
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
+<<<<<<< HEAD
+=======
+  ExportOutlined,
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
   DeleteOutlined,
   EditOutlined
 } from "@ant-design/icons";
@@ -21,8 +25,11 @@ import { connect, useSelector } from "react-redux";
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 import Text from "antd/lib/typography/Text";
+<<<<<<< HEAD
 import { successDeleteMessage } from "../../util/messages";
 
+=======
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 const { Title } = Typography;
 
 const ShowExpenses = ({ getExpenses, deleteExpenses, getExpense }) => {
@@ -82,6 +89,16 @@ const ShowExpenses = ({ getExpenses, deleteExpenses, getExpense }) => {
     navigate(`/admin/edit-expenses/${record.id}`);
   };
 
+<<<<<<< HEAD
+=======
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: "Deleted Your Data",
+      description: "Your data have been deleted.",
+      duration: 3
+    });
+  };
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
   const handleDelete = async (record) => {
     await deleteExpenses(record.id);
@@ -107,11 +124,17 @@ const ShowExpenses = ({ getExpenses, deleteExpenses, getExpense }) => {
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
+<<<<<<< HEAD
           {user?.position !== "owner" && (
             <Button type="primary" onClick={() => handleClick(record)}>
               <EditOutlined />
             </Button>
           )}
+=======
+          <Button type="primary" onClick={() => handleClick(record)}>
+            <EditOutlined />
+          </Button>
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
@@ -121,6 +144,7 @@ const ShowExpenses = ({ getExpenses, deleteExpenses, getExpense }) => {
   ];
 
   return (
+<<<<<<< HEAD
     <Spin spinning={status.loading}>
       <Layout style={{ margin: "20px" }}>
         <Space direction="vertical" size="middle">
@@ -178,6 +202,61 @@ const ShowExpenses = ({ getExpenses, deleteExpenses, getExpense }) => {
         </Space>
       </Layout>
     </Spin>
+=======
+    <Layout style={{ margin: "20px" }}>
+      <Space direction="vertical" size="middle">
+        <Row gutter={[16, 16]}>
+          <Col span={16}>
+            <Title level={3}>ကုန်ကျစရိတ်စာရင်း</Title>
+          </Col>
+          <Col span={4}>
+            <Button
+              style={{
+                backgroundColor: "var(--secondary-color)",
+                color: "var(--white-color)",
+                borderRadius: "5px"
+              }}
+              size="middle"
+              onClick={() => navigate("/admin/create-expenses")}
+            >
+              <PlusSquareOutlined />
+              အသစ်ထည့်မည်
+            </Button>
+          </Col>
+          <Col span={4}>
+            <ExportToExcel apiData={result} fileName={fileName} />
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Space
+              direction="horizontal"
+              style={{ width: "100%", justifyContent: "right" }}
+              size="large"
+            >
+              <Text
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  padding: "10px",
+                  color: "var(--white-color)",
+                  borderRadius: "5px"
+                }}
+              >
+                စုစုပေါင်းကုန်ကျစရိတ် = {allAmount} Ks
+              </Text>
+            </Space>
+          </Col>
+        </Row>
+        <Table
+          bordered
+          columns={columns}
+          dataSource={allExpenses}
+          rowKey={allExpenses.key}
+          pagination={{ defaultPageSize: 10 }}
+        />
+      </Space>
+    </Layout>
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
   );
 };
 

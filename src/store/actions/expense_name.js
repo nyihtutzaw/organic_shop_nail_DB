@@ -13,9 +13,13 @@ import {
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
+<<<<<<< HEAD
 import { serverErrorMessage } from "../../util/messages";
 
 
+=======
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 export const showExpenseNames = (expenseNames) => ({
   type: SHOW_EXPENSENAMES,
   expenseNames
@@ -52,7 +56,7 @@ export const getExpenseNames = () => {
 
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names"
+        `${apiUrl}expense-names`
       );
       const result = response.data.data.map((name) => {
         return {
@@ -97,7 +101,7 @@ export const getExpenseName = (id) => {
 
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names/${id}`
+        `${apiUrl}expense-names/${id}`
       );
       const result = response.data.data;
       if (response.status === 200) {
@@ -135,7 +139,7 @@ export const saveExpenseNames = (data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names",
+        `${apiUrl}expense-names`,
         data
       );
       const result = {
@@ -175,7 +179,7 @@ export const deleteExpenseNames = (id) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names/${id}`
+        `${apiUrl}expense-names/${id}`
       );
       if (response.status === 204) {
         dispatch(filterExpenseNames(id));
@@ -214,7 +218,7 @@ export const editExpenseNames = (id, data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expense-names/${id}?_method=put`,
+        `${apiUrl}expense-names/${id}?_method=put`,
         data
       );
       const result = response.data.data;

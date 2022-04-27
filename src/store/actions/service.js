@@ -14,8 +14,12 @@ import {
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
+<<<<<<< HEAD
 import { serverErrorMessage } from "../../util/messages";
 
+=======
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showServices = (services) => ({
   type: SHOW_SERVICES,
@@ -51,17 +55,24 @@ export const serviceSuccess = (isSuccess) => ({
   isSuccess
 });
 
+<<<<<<< HEAD
 export const clearAlertServices = () => ({
   type: CLEAR_ALERT_SERVICES
 });
 
+=======
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 export const getBestService = (query) => {
   return async (dispatch) => {
     dispatch({ type: SET_LOADING });
 
     try {
       const response = await axios.get(
+<<<<<<< HEAD
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/bestService?${new URLSearchParams(
+=======
+        `${apiUrl}services/bestService?${new URLSearchParams(
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
           query
         ).toString()}`
       );
@@ -72,6 +83,7 @@ export const getBestService = (query) => {
         };
       });
       dispatch(showServices(result));
+<<<<<<< HEAD
       dispatch({
         type: REMOVE_ERROR
       });
@@ -91,6 +103,11 @@ export const getBestService = (query) => {
           type: ADD_ERROR,
           payload: serverErrorMessage
         });
+=======
+    } catch (error) {
+      if (error.response.status === 404) {
+        dispatch(setServiceError(error.response.data.data));
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       }
     }
     dispatch({ type: SET_LOADING });
@@ -104,7 +121,7 @@ export const getServices = () => {
 
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services"
+        `${apiUrl}services`
       );
       const result = response.data.data.map((service) => {
         return {
@@ -112,7 +129,11 @@ export const getServices = () => {
           key: service.id
         };
       });
+<<<<<<< HEAD
       // console.log(result);
+=======
+
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       if (response.status === 200) {
         dispatch(showServices(result));
         dispatch({
@@ -148,7 +169,7 @@ export const getService = (id) => {
 
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/${id}`
+        `${apiUrl}services/${id}`
       );
       const result = response.data.data;
       if (response.status === 200) {
@@ -186,7 +207,7 @@ export const saveServices = (data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/batchInsert",
+        `${apiUrl}services/batchInsert`,
         data
       );
       const result = response.data.data.map((service) => {
@@ -195,7 +216,10 @@ export const saveServices = (data) => {
           key: service.id
         };
       });
+<<<<<<< HEAD
       // console.log(response)
+=======
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       if (response.status === 201) {
         dispatch(createServices(result));
         dispatch({ type: SET_SUCCESS, payload: true });
@@ -204,6 +228,7 @@ export const saveServices = (data) => {
         });
       }
     } catch (error) {
+<<<<<<< HEAD
       const { status, data } = error.response;
       if (status === 400) {
         dispatch({
@@ -221,6 +246,10 @@ export const saveServices = (data) => {
           type: ADD_ERROR,
           payload: serverErrorMessage
         });
+=======
+      if (error.response.status === 404) {
+        dispatch(setServiceError(error.response.data.data));
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       }
     }
     dispatch({ type: SET_SUCCESS, payload: false });
@@ -234,7 +263,7 @@ export const deleteServices = (id) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/${id}`
+        `${apiUrl}services/${id}`
       );
       if (response.status === 204) {
         dispatch(filterServices(id));
@@ -272,7 +301,7 @@ export const editServices = (id, data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/${id}?_method=put`,
+        `${apiUrl}services/${id}?_method=put`,
         data
       );
       const result = {

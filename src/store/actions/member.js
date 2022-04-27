@@ -14,8 +14,12 @@ import {
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
+<<<<<<< HEAD
 import { serverErrorMessage } from "../../util/messages";
 
+=======
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 export const showMembers = (members) => ({
   type: SHOW_MEMBERS,
   members
@@ -61,7 +65,7 @@ export const getMembers = () => {
 
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members"
+        `${apiUrl}members`
       );
       const result = response.data.data.map((member) => {
         return {
@@ -104,7 +108,7 @@ export const getMember = (id) => {
     try {
       // console.log(id);
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members/${id}`
+        `${apiUrl}members/${id}`
       );
       const result = response.data.data;
       // console.log(result);
@@ -142,7 +146,7 @@ export const saveMembers = (data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members",
+        `${apiUrl}members`,
         data
       );
       const result = {
@@ -187,7 +191,7 @@ export const deleteMembers = (id) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members/${id}`
+        `${apiUrl}members/${id}`
       );
       if (response.status === 204) {
         dispatch(filterMembers(id));
@@ -225,7 +229,7 @@ export const editMembers = (id, data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/members/${id}?_method=put`,
+        `${apiUrl}members/${id}?_method=put`,
         data
       );
       // console.log(response.status);

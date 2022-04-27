@@ -132,6 +132,7 @@ const CreateService = ({ getServices, saveServices, clearAlertServices }) => {
   ];
 
   return (
+<<<<<<< HEAD
     <Spin spinning={status.loading}>
       <Layout style={{ margin: "20px" }}>
         <Space direction="vertical" size="middle">
@@ -144,6 +145,35 @@ const CreateService = ({ getServices, saveServices, clearAlertServices }) => {
               xl: {
                 span: 3
               }
+=======
+    <Layout style={{ margin: "20px" }}>
+      <Space direction="vertical" size="middle">
+        <Title style={{ textAlign: "center" }} level={3}>
+          ဝန်ဆောင်မှုအချက်အလက်သွင်းရန်စာမျက်နှာ
+        </Title>
+        <Form
+        colon={false}
+          labelCol={{
+            xl: {
+              span: 3
+            }
+          }}
+          wrapperCol={{
+            span: 24
+          }}
+          initialValues={{
+            remember: true
+          }}
+          onFinish={onFinish}
+          form={form}
+        >
+          <Space
+            direction="vertical"
+            style={{
+              width: "100%",
+              alignItems: "center",
+              marginBottom: "10px"
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
             }}
             wrapperCol={{
               span: 24

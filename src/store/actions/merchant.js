@@ -14,7 +14,11 @@ import {
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
+<<<<<<< HEAD
 import { serverErrorMessage } from "../../util/messages";
+=======
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showMerchants = (merchants) => ({
   type: SHOW_MERCHANTS,
@@ -61,7 +65,7 @@ export const getMerchants = () => {
 
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/merchants"
+        `${apiUrl}merchants`
       );
       const result = response.data.data.map((merchant) => {
         return {
@@ -105,7 +109,7 @@ export const getMerchant = (id) => {
     try {
       // console.log(id);
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/merchants/${id}`
+        `${apiUrl}merchants/${id}`
       );
       const result = response.data.data;
       if (response.status === 200) {
@@ -142,7 +146,7 @@ export const saveMerchants = (data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/merchants",
+        `${apiUrl}merchants`,
         data
       );
       const result = {
@@ -188,7 +192,7 @@ export const deleteMerchants = (id) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/merchants/${id}`
+        `${apiUrl}merchants/${id}`
       );
       if (response.status === 204) {
         dispatch(filterMerchants(id));
@@ -226,7 +230,7 @@ export const editMerchants = (id, data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/merchants/${id}?_method=put`,
+        `${apiUrl}merchants/${id}?_method=put`,
         data
       );
       // console.log(response.status);

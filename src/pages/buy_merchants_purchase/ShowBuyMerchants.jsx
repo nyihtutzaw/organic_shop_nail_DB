@@ -100,7 +100,11 @@ const ShowBuyMerchants = ({
     if (value === undefined) {
       setshowBuyMerchant(allPurchases);
     } else {
+<<<<<<< HEAD
       const filterBuyMerchant = allPurchases?.filter(
+=======
+      const filterBuyMerchant = allPurchases.filter(
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
         (mer) => mer.merchant.id === value
       );
       setshowBuyMerchant(filterBuyMerchant);
@@ -123,6 +127,14 @@ const ShowBuyMerchants = ({
   showBuyMerchant?.forEach((mr) => allCreditGet.push(parseInt(mr.credit)));
   const finalCreditGet = allCreditGet.reduce((a, b) => a + b, 0);
 
+  let allCredit = [];
+  allPurchases.forEach((purchase) => allCredit.push(parseInt(purchase.credit)));
+  const finalCredit = allCredit.reduce((a, b) => a + b, 0);
+
+  let allCreditGet = [];
+  showBuyMerchant?.forEach((mr) => allCreditGet.push(parseInt(mr.credit)));
+  const finalCreditGet = allCreditGet.reduce((a, b) => a + b, 0);
+
   const handleDelete = async (record) => {
     const filterMyPurchase = myPurchase.filter(
       (purchase) => purchase.id !== record.id
@@ -133,12 +145,26 @@ const ShowBuyMerchants = ({
   };
 
   const handleDetail = async (record) => {
+<<<<<<< HEAD
     navigate(`/admin/show-purchase/${record.id}`);
   };
 
   const handleDetailShow = (record) => {
     navigate(`/admin/detail-buy-merchants/${record.id}`);
   };
+=======
+    // await getPurchase(record.id);
+    navigate(`/admin/show-purchase/${record.id}`);
+  };
+
+  // const getPurchasesData = allPurchases.map((p) =>
+  //   p.purchase_items.map((item) => ({
+  //     name: item.item.name
+  //   }))
+  // );
+
+  // console.log("dfsdf", getPurchasesData);
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
   const columns = [
     {
@@ -147,6 +173,7 @@ const ShowBuyMerchants = ({
       render: (_, record) => getReadableDateDisplay(record.created_at)
     },
     {
+<<<<<<< HEAD
       title: "ကုန်သည်လုပ်ငန်းအမည်",
       dataIndex: "merchant_name",
       // render: (_, record) => console.log(record.merchant_name)
@@ -156,6 +183,26 @@ const ShowBuyMerchants = ({
           : record?.merchant?.company_name
     },
     {
+=======
+      title: "ပစ္စည်းအမည်",
+      dataIndex: `created_at`,
+      render: (_, record) => record.purchase_items.map((p) => p.item.name)
+    },
+    {
+      title: "အရေအတွက်",
+      dataIndex: `created_at`,
+      render: (_, record) => record.purchase_items.map((p) => p.quantity)
+    },
+    {
+      title: "ကုန်သည်လုပ်ငန်းအမည်",
+      dataIndex: "company_name",
+      render: (_, record) =>
+        showBuyMerchant === null
+          ? record?.merchant?.company_name
+          : record?.merchant?.company_name
+    },
+    {
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       title: "ကနဦးပေးချေခဲ့သည့်ပမာဏ",
       dataIndex: "paid"
     },

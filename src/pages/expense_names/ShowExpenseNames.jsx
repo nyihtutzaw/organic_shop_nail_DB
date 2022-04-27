@@ -103,6 +103,7 @@ const ShowExpenseNames = ({
   ];
 
   return (
+<<<<<<< HEAD
     <Spin spinning={status.loading}>
       <Layout style={{ margin: "20px" }}>
         <Space direction="vertical" size="middle">
@@ -139,6 +140,40 @@ const ShowExpenseNames = ({
         </Space>
       </Layout>
     </Spin>
+=======
+    <Layout style={{ margin: "20px" }}>
+      <Space direction="vertical" size="middle">
+        <Row gutter={[16, 16]}>
+          <Col span={16}>
+            <Title level={3}>ကုန်ကျစရိတ်အမည်စာရင်း</Title>
+          </Col>
+          <Col span={4}>
+            <Button
+              style={{
+                backgroundColor: "var(--secondary-color)",
+                color: "var(--white-color)",
+                borderRadius: "5px"
+              }}
+              size="middle"
+              onClick={() => navigate("/admin/create-expense-names")}
+            >
+              <PlusSquareOutlined />
+              အသစ်ထည့်မည်
+            </Button>
+          </Col>
+          <Col span={4}>
+          <ExportToExcel apiData={result} fileName={fileName} />
+          </Col>
+        </Row>
+        <Table
+          bordered
+          columns={columns}
+          dataSource={expenseNames.expense_names}
+          pagination={{ defaultPageSize: 10 }}
+        />
+      </Space>
+    </Layout>
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
   );
 };
 

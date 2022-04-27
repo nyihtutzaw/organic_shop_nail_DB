@@ -1,4 +1,5 @@
 import axios from "axios";
+<<<<<<< HEAD
 import {
   SET_REPORTS,
   ADD_ERROR,
@@ -9,10 +10,15 @@ import {
 import { serverErrorMessage } from "../../util/messages";
 
 
+=======
+import { SET_REPORTS } from "../type";
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 export const setReport = (report) => ({
   type: SET_REPORTS,
   report
 });
+
 
 export const getReport = (query) => {
   return async (dispatch) => {
@@ -20,7 +26,7 @@ export const getReport = (query) => {
 
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/report/sale?${new URLSearchParams(
+        `${apiUrl}report/sale?${new URLSearchParams(
           query
         ).toString()}`
       );

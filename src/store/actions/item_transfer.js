@@ -12,8 +12,12 @@ import {
   SET_SUCCESS
 } from "../type";
 import axios from "axios";
+<<<<<<< HEAD
 import { serverErrorMessage } from "../../util/messages";
 
+=======
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showItemTransfers = (itemTransfers) => ({
   type: SHOW_ITEMS_TRANSFER,
@@ -51,7 +55,7 @@ export const getItemTransfers = () => {
 
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/item-transfers"
+        `${apiUrl}item-transfers`
       );
       const result = response.data.data.map((item) => {
         return {
@@ -95,7 +99,7 @@ export const getItemTransfer = (id) => {
 
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/item-transfers/${id}`
+        `${apiUrl}item-transfers/${id}`
       );
       const result = response.data.data;
       console.log(result)
@@ -134,7 +138,7 @@ export const saveItemTransfers = (data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/item-transfers/batchInsert",
+        `${apiUrl}item-transfers/batchInsert`,
         data
       );
       dispatch({ type: SET_SUCCESS, payload: true });
@@ -168,7 +172,7 @@ export const editItemTransfers = (id, data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}?_method=put`,
+        `${apiUrl}items/${id}?_method=put`,
         data
       );
       console.log(response)
@@ -210,7 +214,7 @@ export const deleteItemTransfers = (id) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/item-transfers/${id}`
+        `${apiUrl}item-transfers/${id}`
       );
       if (response.status === 204) {
         dispatch(filterItemTransfers(id));

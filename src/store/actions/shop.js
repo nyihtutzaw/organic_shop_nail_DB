@@ -13,7 +13,11 @@ import {
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
+<<<<<<< HEAD
 import { serverErrorMessage } from "../../util/messages";
+=======
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showShops = (shops) => ({
   type: SHOW_SHOPS,
@@ -60,7 +64,7 @@ export const getShops = () => {
 
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops"
+        `${apiUrl}shops`
       );
       const result = response.data.data.map((data) => {
         return {
@@ -102,7 +106,7 @@ export const getShop = (id) => {
 
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${id}`
+        `${apiUrl}shops/${id}`
       );
       const result = response.data.data;
       if (response.status === 200) {
@@ -139,7 +143,7 @@ export const saveShops = (data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops",
+        `${apiUrl}shops`,
         data
       );
       const result = {
@@ -181,7 +185,7 @@ export const deleteShops = (id) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${id}`
+        `${apiUrl}shops/${id}`
       );
       if (response.status === 204) {
         dispatch(filterShops(id));
@@ -219,7 +223,7 @@ export const editShops = (id, data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${id}?_method=put`,
+        `${apiUrl}shops/${id}?_method=put`,
         data
       );
       if (response.status === 201) {

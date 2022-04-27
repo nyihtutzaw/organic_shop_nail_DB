@@ -19,7 +19,10 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { getBestService } from "../../store/actions";
 import queryString from "query-string";
 import dayjs from "dayjs";
+<<<<<<< HEAD
 import Text from "antd/lib/typography/Text";
+=======
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 const { Title } = Typography;
 const { Option } = Select;
 
@@ -29,6 +32,7 @@ const ServicesReport = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const services = useSelector((state) => state.service.services);
+<<<<<<< HEAD
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
   // console.log(services);
@@ -40,10 +44,13 @@ const ServicesReport = () => {
   );
   const end_date = new URLSearchParams(window.location.search).get("end_date");
 
+=======
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
   const result = services.map((s) => ({
     ...s,
     key: Math.random() * 100
   }));
+<<<<<<< HEAD
 
   useEffect(() => {
     error.message !== null && message.error(error.message);
@@ -51,6 +58,8 @@ const ServicesReport = () => {
     return () => error.message;
   }, [error.message]);
 
+=======
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,6 +109,7 @@ const ServicesReport = () => {
 
       {
         title: "အရေအတွက်",
+<<<<<<< HEAD
         dataIndex: "quantity",
         sorter: {
           compare: (a, b) => a.quantity - b.quantity,
@@ -113,6 +123,13 @@ const ServicesReport = () => {
           compare: (a, b) => a.subtotal - b.subtotal,
           multiple: 1
         }
+=======
+        dataIndex: "quantity"
+      },
+      {
+        title: "စုစုပေါင်း",
+        dataIndex: "subtotal"
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       }
     ];
   } else {
@@ -125,6 +142,7 @@ const ServicesReport = () => {
 
       {
         title: "အရေအတွက်",
+<<<<<<< HEAD
         dataIndex: "total_qty",
         sorter: {
           compare: (a, b) => a.total_qty - b.total_qty,
@@ -138,6 +156,13 @@ const ServicesReport = () => {
           compare: (a, b) => a.subtotal - b.subtotal,
           multiple: 1
         }
+=======
+        dataIndex: "total_qty"
+      },
+      {
+        title: "စုစုပေါင်း",
+        render: (_, record) => record.service.price * record.total_qty
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       }
     ];
   }
@@ -151,16 +176,55 @@ const ServicesReport = () => {
           <Col span={13}>
             <Title level={3}>ဝန်ဆောင်မှု မှတ်တမ်းစာမျက်နှာ</Title>
           </Col>
+<<<<<<< HEAD
           <Col span={5}>
             <p
               style={{
                 backgroundColor: "var(--primary-color)",
                 padding: "10px",
                 color: "var(--white-color)"
+=======
+          <Col span={3}></Col>
+          <Col span={3}></Col>
+        </Row>
+
+        <Space direction="vertical" size={12}></Space>
+
+        <Row>
+          <Col span={5}>
+            {/* <Button
+              style={{
+                backgroundColor: "var(--primary-color)",
+                color: "var(--white-color)",
+                borderRadius: "5px"
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
               }}
             >
+<<<<<<< HEAD
               Start Date= {start_date}
             </p>
+=======
+              Sort by ( ဝန်ဆောင်မှုအမည် )
+            </Button> */}
+            <RangePicker
+              onChange={(val) => {
+                //alert(dayjs(val[0]).format("YYYY-MM-DD"))
+                if (queryString.parse(location.search).best) {
+                  window.location = `/admin/service-report?best=true&start_date=${dayjs(
+                    val[0]
+                  ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                    "YYYY-MM-DD"
+                  )}`;
+                } else {
+                  window.location = `/admin/service-report?start_date=${dayjs(
+                    val[0]
+                  ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                    "YYYY-MM-DD"
+                  )}`;
+                }
+              }}
+            />
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
           </Col>
           <Col span={5}>
             <p
@@ -241,7 +305,11 @@ const ServicesReport = () => {
           bordered
           columns={columns}
           pagination={{ defaultPageSize: 10 }}
+<<<<<<< HEAD
           dataSource={showBuyServices != null ? showBuyServices : result}
+=======
+          dataSource={result}
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
         />
       </Space>
     </Layout>

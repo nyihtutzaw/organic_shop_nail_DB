@@ -13,7 +13,11 @@ import {
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
+<<<<<<< HEAD
 import { serverErrorMessage } from "../../util/messages";
+=======
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showAccounts = (accounts) => ({
   type: SHOW_ACCOUNTS,
@@ -58,7 +62,7 @@ export const getAccounts = () => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/users"
+        `${apiUrl}users`
       );
       const result = response.data.data.map((account) => {
         return {
@@ -100,7 +104,7 @@ export const saveAccounts = (data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/io-register",
+        `${apiUrl}io-register`,
         data
       );
       console.log(response.status);
@@ -148,7 +152,7 @@ export const deleteAccounts = (id) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/users/${id}`
+        `${apiUrl}users/${id}`
       );
       if (response.status === 204) {
         dispatch(filterAccounts(id));
@@ -207,8 +211,12 @@ export const changePassword = (data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
+<<<<<<< HEAD
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/io-change-password`,
         data
+=======
+        `${apiUrl}io-change-password`, data
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       );
       // console.log(response.data.data);
       const result = response.data.data;

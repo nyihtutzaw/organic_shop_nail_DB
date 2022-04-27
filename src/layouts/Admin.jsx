@@ -88,8 +88,11 @@ import ShowPurchases from "../pages/buy_merchants_purchase/ShowPurchases";
 import EditBadItem from "../pages/bad_items/EditBadItem";
 import ChangePassword from "../pages/change_password/ChangePassword";
 import PurchaseReport from "../pages/reports/PurchaseReport";
+<<<<<<< HEAD
 import DailyAttendance from "../pages/staffs/DailyAttendance";
 import DetailMerchant from "../pages/buy_merchants_purchase/DetailMerchant";
+=======
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -314,11 +317,17 @@ const Admin = ({ logout }) => {
             <Menu.Item key="Dashboard" icon={<DashboardOutlined />}>
               <Link to="/admin/dashboard">Dashboard</Link>
             </Menu.Item>
+<<<<<<< HEAD
             {user?.position !== "owner" && (
               <Menu.Item key="Sale" icon={<ShopOutlined />}>
                 <Link to="/admin/sale">Sale Screen</Link>
               </Menu.Item>
             )}
+=======
+            <Menu.Item key="Sale" icon={<ShopOutlined />}>
+              <Link to="/admin/sale">Sale Screen</Link>
+            </Menu.Item>
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
             <Menu.Item key="ChangePassword" icon={<LockOutlined />}>
               <Link to="/admin/change-password">Change Password</Link>
             </Menu.Item>
@@ -395,7 +404,11 @@ const Admin = ({ logout }) => {
                 <Link to="/admin/show-item-transfer">လွှဲပြောင်းရန်</Link>
               </Menu.Item>
               <Menu.Item key="ShowOwner" icon={<UnorderedListOutlined />}>
+<<<<<<< HEAD
                 <Link to="/admin/show-owner">ထုတ်သုံးခြင်း</Link>
+=======
+                <Link to="/admin/show-owner">ထုတ်သုံးခြင်:</Link>
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
               </Menu.Item>
               <Menu.Item key="CreateBadItems" icon={<UnorderedListOutlined />}>
                 <Link to="/admin/show-bad-item">ချို့ယွင်းချက်ရှိ</Link>
@@ -417,6 +430,7 @@ const Admin = ({ logout }) => {
                 title="ဝန်ထမ်းစာရင်း"
                 icon={<ContactsOutlined />}
               >
+<<<<<<< HEAD
                 {user?.position === "manager" && (
                   <Menu.Item key="CreateStaff" icon={<SaveOutlined />}>
                     <Link to="/admin/create-staff">အသစ်ဖန်တီးရန်</Link>
@@ -425,6 +439,16 @@ const Admin = ({ logout }) => {
                 <Menu.Item key="ShowStaff" icon={<UnorderedListOutlined />}>
                   <Link to="/admin/show-staff">စာရင်း</Link>
                 </Menu.Item>
+=======
+                <Menu.Item key="CreateStaff" icon={<SaveOutlined />}>
+                  <Link to="/admin/create-staff">အသစ်ဖန်တီးရန်</Link>
+                </Menu.Item>
+
+                <Menu.Item key="ShowStaff" icon={<UnorderedListOutlined />}>
+                  <Link to="/admin/show-staff">စာရင်း</Link>
+                </Menu.Item>
+
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
                 <Menu.Item
                   key="StaffCommession"
                   icon={<UnorderedListOutlined />}

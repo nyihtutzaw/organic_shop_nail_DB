@@ -51,6 +51,7 @@ const EditExpenseNames = ({ editExpenseNames, getExpenseName }) => {
   };
 
   return (
+<<<<<<< HEAD
     <Spin spinning={status.loading}>
       <Layout style={{ margin: "20px" }}>
         <Space direction="vertical" size="middle">
@@ -69,6 +70,35 @@ const EditExpenseNames = ({ editExpenseNames, getExpenseName }) => {
             }}
             onFinish={onFinish}
             form={form}
+=======
+    <Layout style={{ margin: "20px" }}>
+      <Space direction="vertical" size="middle">
+        <Title style={{ textAlign: "center" }} level={3}>
+          ကုန်ကျစရိတ်အမည်ပြုပြင်ရန်စာမျက်နှာ
+        </Title>
+        <Form
+          labelCol={{
+            span: 3
+          }}
+          wrapperCol={{
+            span: 24
+          }}
+          initialValues={{
+            remember: true
+          }}
+          onFinish={onFinish}
+          form={form}
+        >
+          <Form.Item
+            name="name"
+            label="ကုန်ကျစရိတ်အမည်"
+            rules={[
+              {
+                required: true,
+                message: "ကျေးဇူးပြု၍ ကုန်ကျစရိတ်အမည်ထည့်ပါ"
+              }
+            ]}
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
           >
             <Form.Item
               name="name"

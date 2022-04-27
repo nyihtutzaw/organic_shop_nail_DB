@@ -213,8 +213,23 @@ const ReportScreem = () => {
               </Select>
             </Input.Group>
           </Col>
+<<<<<<< HEAD
           <Col span={8}>
             <ExportToExcel apiData={result} fileName={fileName} />
+=======
+          <Col span={8} style={{ textAlign: "right" }}>
+            {/* <Button
+              style={{
+                backgroundColor: "var(--primary-color)",
+                color: "var(--white-color)",
+                borderRadius: "5px",
+              }}
+              size="middle"
+            >
+              <ExportOutlined />
+              Export
+            </Button> */}
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
           </Col>
         </Row>
         <Table

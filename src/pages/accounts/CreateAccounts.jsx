@@ -6,9 +6,13 @@ import {
   Space,
   Button,
   Select,
+<<<<<<< HEAD
   notification,
   Spin,
   message
+=======
+  notification
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
@@ -54,10 +58,24 @@ const CreateAccounts = ({ saveAccounts, getShops }) => {
 
   const [form] = Form.useForm();
 
+<<<<<<< HEAD
+=======
+  const openNotificationWithIcon = (type) => {
+    notification[type]({
+      message: "Saved Your Data",
+      description: "Your data have been saved.",
+      duration: 3
+    });
+  };
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
   const onFinish = async (values) => {
     await saveAccounts(values);
     form.resetFields();
     // navigate("/admin/show-accounts");
+<<<<<<< HEAD
+=======
+    openNotificationWithIcon("success");
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
   };
 
   return (
@@ -139,7 +157,11 @@ const CreateAccounts = ({ saveAccounts, getShops }) => {
               style={{ borderRadius: "10px" }}
             >
               <Option value="manager">Manager</Option>
+<<<<<<< HEAD
               <Option value="cashier">Cashier</Option>
+=======
+              <Option value="casher">Cashier</Option>
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
               <Option value="staff">Staff</Option>
             </Select>
           </Form.Item>

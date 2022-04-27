@@ -61,37 +61,72 @@ const ShowStocks = ({ stock, getStocks }) => {
     {
       title: "ပစ္စည်းကုတ်",
       dataIndex: "item",
+<<<<<<< HEAD
       render: (_, record) => {
         if (record.quantity < 10)
           return <span style={{ color: "red" }}>{record.item.code}</span>;
         else return <span>{record.item.code}</span>;
       }
+=======
+      render: (_, record) =>
+      {
+        if (record.quantity < 10)
+              return <span style={{ color : "red" }}>{record.item.code}</span>;
+            else return <span>{record.item.code}</span>;
+          }
+      
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
     },
     {
       title: "ပစ္စည်းအမည်",
       dataIndex: "item",
+<<<<<<< HEAD
       render: (_, record) => {
         if (record.quantity < 10)
           return <span style={{ color: "red" }}>{record.item.name}</span>;
         else return <span>{record.item.name}</span>;
       }
+=======
+      render: (_, record) =>{
+      if (record.quantity < 10)
+            return <span style={{ color : "red" }}>{record.item.name}</span>;
+          else return <span>{record.item.name}</span>;
+        }
+      
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
     },
 
     {
       title: "ဝယ်ဈေး",
       dataIndex: "buy_price",
+<<<<<<< HEAD
       render: (_, record) => {
         if (record.quantity < 10)
           return <span style={{ color: "red" }}>{record.item.buy_price}</span>;
         else return <span>{record.item.buy_price}</span>;
       }
+=======
+      render: (_, record) =>{
+      
+        if (record.quantity < 10)
+            return <span style={{ color : "red" }}>{record.item.buy_price}</span>;
+          else return <span>{record.item.buy_price}</span>;
+        }
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
     },
     {
       title: "ရောင်းဈေး",
       dataIndex: "sale_price",
+<<<<<<< HEAD
       render: (_, record) => {
         if (record.quantity < 10)
           return <span style={{ color: "red" }}>{record.item.sale_price}</span>;
+=======
+      render: (_, record) =>{
+      
+      if (record.quantity < 10)
+          return <span style={{ color : "red" }}>{record.item.sale_price}</span>;
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
         else return <span>{record.item.sale_price}</span>;
       }
     },
@@ -99,7 +134,7 @@ const ShowStocks = ({ stock, getStocks }) => {
       title: "အရေအတွက်",
       render: (_, record) => {
         if (record.quantity < 10)
-          return <span style={{ color: "red" }}>{record.quantity}</span>;
+          return <span style={{ color : "red" }}>{record.quantity}</span>;
         else return <span>{record.quantity}</span>;
       }
     },

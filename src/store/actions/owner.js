@@ -12,8 +12,12 @@ import {
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
+<<<<<<< HEAD
 import { serverErrorMessage } from "../../util/messages";
 
+=======
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showOwners = (owners) => ({
   type: SHOW_OWNERS,
@@ -51,7 +55,7 @@ export const getOwners = () => {
 
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items"
+        `${apiUrl}owner-used-items`
       );
       const result = response.data.data.map((owner) => {
         return {
@@ -94,7 +98,7 @@ export const getOwner = (id) => {
 
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items/${id}`
+        `${apiUrl}owner-used-items/${id}`
       );
       const result = response.data.data;
 
@@ -133,7 +137,7 @@ export const saveOwners = (data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items",
+        `${apiUrl}owner-used-items`,
         data
       );
       const result = {
@@ -174,7 +178,7 @@ export const deleteOwners = (id) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items/${id}`
+        `${apiUrl}owner-used-items/${id}`
       );
       //   console.log(response)
       if (response.status === 204) {
@@ -213,7 +217,7 @@ export const editOwners = (id, data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/owner-used-items/${id}?_method=put`,
+        `${apiUrl}owner-used-items/${id}?_method=put`,
         data
       );
       const result = {

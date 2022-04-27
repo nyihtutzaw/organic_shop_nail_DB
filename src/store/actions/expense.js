@@ -13,8 +13,12 @@ import {
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
+<<<<<<< HEAD
 import { serverErrorMessage } from "../../util/messages";
 
+=======
+import { apiUrl } from "../../constants/url";
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showExpenses = (expenses) => ({
   type: SHOW_EXPENSES,
@@ -52,7 +56,7 @@ export const getExpenses = () => {
 
     try {
       const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expenses"
+        `${apiUrl}expenses`
       );
       const result = response.data.data.map((expense) => {
         return {
@@ -69,6 +73,7 @@ export const getExpenses = () => {
         })
       }
     } catch (error) {
+<<<<<<< HEAD
       const { status, data } = error.response;
 
       if (status === 401) {
@@ -84,6 +89,10 @@ export const getExpenses = () => {
           type: ADD_ERROR,
           payload: serverErrorMessage
         });
+=======
+      if (error.response.status === 404) {
+        dispatch(setExpenseError(error.response.data.data));
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       }
     }
     dispatch({ type: SET_LOADING });
@@ -97,7 +106,7 @@ export const getExpense = (id) => {
 
     try {
       const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expenses/${id}`
+        `${apiUrl}expenses/${id}`
       );
       const result = response.data.data;
       if (response.status === 200) {
@@ -135,7 +144,7 @@ export const saveExpenses = (data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expenses/batchInsert",
+        `${apiUrl}expenses/batchInsert`,
         data
       );
       const result = response.data.data.map((expense) => {
@@ -178,7 +187,7 @@ export const deleteExpenses = (id) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expenses/${id}`
+        `${apiUrl}expenses/${id}`
       );
       if (response.status === 204) {
         dispatch(filterExpenses(id));
@@ -216,7 +225,7 @@ export const editExpenses = (id, data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/expenses/${id}?_method=put`,
+        `${apiUrl}expenses/${id}?_method=put`,
         data
       );
       const result = {
@@ -232,6 +241,7 @@ export const editExpenses = (id, data) => {
         });
       }
     } catch (error) {
+<<<<<<< HEAD
       const { status, data } = error.response;
 
       if (status === 401) {
@@ -248,6 +258,11 @@ export const editExpenses = (id, data) => {
           payload: serverErrorMessage
         });
       }
+=======
+      if (error.response.status === 404) {
+        dispatch(setExpenseError(error.response.data.data));
+      } 
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
     }
     dispatch({ type: SET_SUCCESS, payload: false });
     dispatch({ type: SET_LOADING });

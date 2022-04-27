@@ -8,9 +8,13 @@ import {
   Table,
   Select,
   notification,
+<<<<<<< HEAD
   DatePicker,
   message,
   Spin
+=======
+  DatePicker
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -24,7 +28,10 @@ import {
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 import queryString from "query-string";
 import dayjs from "dayjs";
+<<<<<<< HEAD
 import { successDeleteMessage } from "../../util/messages";
+=======
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -37,6 +44,7 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   const purchaseReport = useSelector((state) => state.purchase.purchaseReport);
   const showPurchase = useSelector((state) => state.purchase.purchases);
   const allMerchant = useSelector((state) => state.merchant.merchants);
+<<<<<<< HEAD
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
 
@@ -44,6 +52,8 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
     "start_date"
   );
   const end_date = new URLSearchParams(window.location.search).get("end_date");
+=======
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
   const result = purchaseReport.map((p) => ({
     company_name: p.merchant.company_name,
@@ -64,6 +74,7 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   // }, [getPurchaseReport, getMerchants]);
 
   useEffect(() => {
+<<<<<<< HEAD
     error.message !== null && message.error(error.message);
 
     return () => error.message;
@@ -78,6 +89,8 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   }, [status.success]);
 
   useEffect(() => {
+=======
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
     const fetchData = async () => {
       dispatch(getBestPurchase(queryString.parse(location.search)));
       await getMerchants();
@@ -91,7 +104,11 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   const [showBuyMerchant, setshowBuyMerchant] = useState(null);
   const onChange = (value) => {
     if (value === undefined) {
+<<<<<<< HEAD
       setshowBuyMerchant(purchaseReport);
+=======
+      setshowBuyMerchant([]);
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
     } else {
       const filterBuyMerchant = purchaseReport.filter(
         (mer) => mer.merchant.id === value
@@ -101,6 +118,7 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   };
 
   const columns = [
+<<<<<<< HEAD
     // {
     //   title: "ရက်စွဲ",
     //   dataIndex: `created_at`,
@@ -110,6 +128,17 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
     //       ? getReadableDateDisplay(record.date)
     //       : getReadableDateDisplay(record.merchant.created_at)
     // },
+=======
+    {
+      title: "ရက်စွဲ",
+      dataIndex: `created_at`,
+      //   render: (_, record) => console.log(record)
+      render: (_, record) =>
+        showBuyMerchant === null
+          ? getReadableDateDisplay(record.date)
+          : getReadableDateDisplay(record.merchant.created_at)
+    },
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
     {
       title: "ကုန်သည်လုပ်ငန်းအမည်",
       dataIndex: "company_name",
@@ -125,6 +154,7 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   ];
 
   return (
+<<<<<<< HEAD
     <Spin spinning={status.loading}>
       <Layout style={{ margin: "20px" }}>
         <Space direction="vertical" size="middle">
@@ -220,6 +250,80 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
         </Space>
       </Layout>
     </Spin>
+=======
+    <Layout style={{ margin: "20px" }}>
+      <Space direction="vertical" size="middle">
+        <Row gutter={[16, 16]}>
+          <Col span={16}>
+            <Title level={3}>အဝယ်မှတ်တမ်းစာမျက်နှာ</Title>
+          </Col>
+          <Col span={4}></Col>
+          <Col span={4}></Col>
+        </Row>
+
+        <Row gutter={[16, 16]}>
+          <Col span={8}>
+            <RangePicker
+              onChange={(val) => {
+                // alert(dayjs(val[0]).format("YYYY-MM-DD"))
+                if (queryString.parse(location.search).best) {
+                  window.location = `/admin/purchase-report?best=true&start_date=${dayjs(
+                    val[0]
+                  ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                    "YYYY-MM-DD"
+                  )}`;
+                } else {
+                  window.location = `/admin/purchase-report?start_date=${dayjs(
+                    val[0]
+                  ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                    "YYYY-MM-DD"
+                  )}`;
+                }
+              }}
+            />
+          </Col>
+          <Col span={2}></Col>
+          <Col span={14}>
+            <Space
+              direction="horizontal"
+              style={{
+                width: "100%",
+                marginBottom: "10px"
+              }}
+              size="large"
+            >
+              <Text type="secondary">ကုန်သည်လုပ်ငန်းအမည်ရွေးပါ</Text>
+              <Select
+                showSearch
+                placeholder="ကျေးဇူးပြု၍ ကုန်သည်လုပ်ငန်းအမည်ရွေးပါ"
+                optionFilterProp="children"
+                onChange={onChange}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+                allowClear={true}
+                size="large"
+                style={{ borderRadius: "10px" }}
+              >
+                {allMerchant.map((mer) => (
+                  <Option key={mer.id} value={mer.id}>
+                    {mer.company_name}
+                  </Option>
+                ))}
+              </Select>
+            </Space>
+          </Col>
+        </Row>
+        <Table
+          bordered
+          columns={columns}
+          dataSource={showBuyMerchant != null ? showBuyMerchant : result}
+          pagination={{ defaultPageSize: 10 }}
+        />
+      </Space>
+    </Layout>
+>>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
   );
 };
 
