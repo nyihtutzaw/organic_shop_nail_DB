@@ -9,16 +9,20 @@ import {
   DatePicker,
   Input,
   Select,
-  notification
+  notification,
+  Spin,
+  message
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { DeleteOutlined, ReadOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import queryString from "query-string";
 import dayjs from "dayjs";
 import { getVouchers, deleteVouchers } from "../../store/actions";
 import Text from "antd/lib/typography/Text";
+import { successDeleteMessage } from "../../util/messages";
+
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -27,7 +31,8 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
   const { Option } = Select;
   const { RangePicker } = DatePicker;
   const location = useLocation();
-
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
   const vouchersUnique = [];
   voucher?.vouchers?.forEach((i) => vouchersUnique.push(i?.member?.name));
   let unique = [...new Set(vouchersUnique)];
@@ -47,6 +52,19 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
     };
   }, [getVouchers]);
 
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successDeleteMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
 
   const [showBuyMerchant, setshowBuyMerchant] = useState(null);
   const onChange = (value) => {
@@ -119,6 +137,8 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
   ];
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
@@ -210,6 +230,7 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
         />
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

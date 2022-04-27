@@ -7,7 +7,9 @@ import {
   Button,
   Table,
   DatePicker,
-  Select
+  Select,
+  message,
+  Spin
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 // import { PlusSquareOutlined, ExportOutlined } from "@ant-design/icons";
@@ -27,6 +29,8 @@ const ServicesReport = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const services = useSelector((state) => state.service.services);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
   // console.log(services);
   const servicesUnique = [];
   services.forEach((i) => servicesUnique.push(i?.service?.category));
@@ -40,6 +44,13 @@ const ServicesReport = () => {
     ...s,
     key: Math.random() * 100
   }));
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -132,6 +143,8 @@ const ServicesReport = () => {
   }
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
@@ -232,6 +245,7 @@ const ServicesReport = () => {
         />
       </Space>
     </Layout>
+    </Spin>
   );
 };
 

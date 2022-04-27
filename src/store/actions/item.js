@@ -252,6 +252,8 @@ export const editItems = (id, data) => {
 
 export const getBestItem = (query) => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
       const response = await axios.get(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/bestItem?${new URLSearchParams(
@@ -267,6 +269,9 @@ export const getBestItem = (query) => {
           };
         });
         dispatch(showItems(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       } else {
         const result = response.data.data.map((item) => {
           return {
@@ -277,9 +282,24 @@ export const getBestItem = (query) => {
         dispatch(showItems(result));
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setItemErrors(error.response.data.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
+
   };
 };

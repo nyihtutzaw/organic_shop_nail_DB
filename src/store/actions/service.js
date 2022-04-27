@@ -57,6 +57,8 @@ export const clearAlertServices = () => ({
 
 export const getBestService = (query) => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
       const response = await axios.get(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/bestService?${new URLSearchParams(
@@ -70,11 +72,29 @@ export const getBestService = (query) => {
         };
       });
       dispatch(showServices(result));
+      dispatch({
+        type: REMOVE_ERROR
+      });
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setServiceError(error.response.data.data));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
+
   };
 };
 
@@ -270,15 +290,18 @@ export const editServices = (id, data) => {
     } catch (error) {
       const { status, data } = error.response;
 
-      if (status === 401) {
+      if (status === 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: "The code has already been taken"
+        });
+      } else if (status === 401) {
         localStorage.removeItem("jwtToken");
         dispatch({
           type: ADD_ERROR,
           payload: data.message
         });
-      }
-
-      if (status >= 400) {
+      } else if (status >= 400) {
         dispatch({
           type: ADD_ERROR,
           payload: serverErrorMessage

@@ -222,11 +222,9 @@ export const editBadItems = (id, data) => {
         data
       );
       const result = response.data.data;
-      console.log(response.status)
       if (response.status === 201) {
         dispatch(updateBadItems(result));
         dispatch({ type: SET_SUCCESS, payload: true });
-        console.log("first")
         dispatch({
           type: REMOVE_ERROR
         });

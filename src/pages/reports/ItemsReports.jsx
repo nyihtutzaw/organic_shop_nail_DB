@@ -7,7 +7,9 @@ import {
   Button,
   Table,
   DatePicker,
-  Select
+  Select,
+  message,
+  Spin
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import queryString from "query-string";
@@ -17,6 +19,8 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { getBestItem, getItems } from "../../store/actions";
 import Text from "antd/lib/typography/Text";
+import { successDeleteMessage } from "../../util/messages";
+
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -26,6 +30,8 @@ const ItemsReports = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const items = useSelector((state) => state.item.items);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
   // const itemss = useSelector((state) => state.item);
   // console.log(itemss)
   const itemsUnique = [];
@@ -36,6 +42,20 @@ const ItemsReports = () => {
     "start_date"
   );
   const end_date = new URLSearchParams(window.location.search).get("end_date");
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successDeleteMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
 
 
   useEffect(() => {
@@ -129,6 +149,8 @@ const ItemsReports = () => {
   }
 
   return (
+    <Spin spinning={status.loading}>
+
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
@@ -236,6 +258,7 @@ const ItemsReports = () => {
         />
       </Space>
     </Layout>
+    </Spin>
   );
 };
 
