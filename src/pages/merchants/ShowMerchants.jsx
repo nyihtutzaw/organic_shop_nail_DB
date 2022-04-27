@@ -1,5 +1,15 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, Alert } from "antd";
+import {
+  Typography,
+  Space,
+  Row,
+  Col,
+  Button,
+  Table,
+  Alert,
+  message,
+  Spin
+} from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
@@ -16,6 +26,7 @@ import {
 } from "../../store/actions";
 import store from "../../store";
 import { ExportToExcel } from "../../excel/ExportToExcel";
+import { successDeleteMessage } from "../../util/messages";
 
 const { Title } = Typography;
 
@@ -28,6 +39,9 @@ const ShowMerchants = ({
 }) => {
   const allMerchants = useSelector((state) => state.merchant.merchants);
   // console.log("aa",allMerchants)
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+  console.log(status);
 
   const user = useSelector((state) => state.auth.user);
   const fileName = "Merchants"; // here enter filename for your excel file
@@ -52,6 +66,20 @@ const ShowMerchants = ({
   useEffect(() => {
     store.dispatch(clearAlertMerchant());
   }, []);
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successDeleteMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
 
   const handleClick = async (record) => {
     await getMerchant(record.id);
@@ -102,54 +130,42 @@ const ShowMerchants = ({
   ];
 
   return (
-    <Layout style={{ margin: "20px" }}>
-      {merchant.error.length > 0 ? (
-        <Alert
-          message="Errors"
-          description={merchant.error}
-          type="error"
-          showIcon
-          closable
-        />
-      ) : null}
-
-      {merchant.isSuccess && (
-        <Alert message="Successfully Deleted" type="success" showIcon />
-      )}
-
-      <Space direction="vertical" size="middle">
-        <Row gutter={[16, 16]}>
-          <Col span={16}>
-            <Title level={3}>ကုန်သည်စာရင်း</Title>
-          </Col>
-          <Col span={4}>
-            {user?.position !== "owner" && (
-              <Button
-                style={{
-                  backgroundColor: "var(--secondary-color)",
-                  color: "var(--white-color)",
-                  borderRadius: "5px"
-                }}
-                size="middle"
-                onClick={() => navigate("/admin/create-merchants")}
-              >
-                <PlusSquareOutlined />
-                အသစ်ထည့်မည်
-              </Button>
-            )}
-          </Col>
-          <Col span={4}>
-            <ExportToExcel apiData={result} fileName={fileName} />
-          </Col>
-        </Row>
-        <Table
-          bordered
-          columns={columns}
-          pagination={{ defaultPageSize: 10 }}
-          dataSource={merchant.merchants}
-        />
-      </Space>
-    </Layout>
+    <Spin spinning={status.loading}>
+      <Layout style={{ margin: "20px" }}>
+        <Space direction="vertical" size="middle">
+          <Row gutter={[16, 16]}>
+            <Col span={16}>
+              <Title level={3}>ကုန်သည်စာရင်း</Title>
+            </Col>
+            <Col span={4}>
+              {user?.position !== "owner" && (
+                <Button
+                  style={{
+                    backgroundColor: "var(--secondary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                  size="middle"
+                  onClick={() => navigate("/admin/create-merchants")}
+                >
+                  <PlusSquareOutlined />
+                  အသစ်ထည့်မည်
+                </Button>
+              )}
+            </Col>
+            <Col span={4}>
+              <ExportToExcel apiData={result} fileName={fileName} />
+            </Col>
+          </Row>
+          <Table
+            bordered
+            columns={columns}
+            pagination={{ defaultPageSize: 10 }}
+            dataSource={merchant.merchants}
+          />
+        </Space>
+      </Layout>
+    </Spin>
   );
 };
 

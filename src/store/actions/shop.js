@@ -56,6 +56,8 @@ export const clearAlert = () => ({
 
 export const getShops = () => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
       const response = await axios.get(
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops"
@@ -68,17 +70,36 @@ export const getShops = () => {
       });
       if (response.status === 200) {
         dispatch(showShops(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status >= 400) {
-        dispatch(setShopErrors("There was an error during Showing....!"));
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
   };
 };
 
 export const getShop = (id) => {
   return async (dispatch) => {
+    dispatch({ type: SET_LOADING });
+
     try {
       const response = await axios.get(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/shops/${id}`
@@ -86,14 +107,29 @@ export const getShop = (id) => {
       const result = response.data.data;
       if (response.status === 200) {
         dispatch(showShop(result));
+        dispatch({
+          type: REMOVE_ERROR
+        });
       }
     } catch (error) {
-      if (error.response.status >= 400) {
-        dispatch(
-          setShopErrors("There was an error during Updating a Data....!")
-        );
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        localStorage.removeItem("jwtToken");
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.message
+        });
+      }
+
+      if (status >= 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: serverErrorMessage
+        });
       }
     }
+    dispatch({ type: SET_LOADING });
   };
 };
 

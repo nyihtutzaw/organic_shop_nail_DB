@@ -18,10 +18,8 @@ const EditShops = ({ editShops,getShop, clearAlert }) => {
   const param = useParams();
 
   const shop = useSelector((state) => state.shop.shop);
-  // const error = useSelector((state) => state.shop.error);
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
-console.log(status)
 
   console.log(status);
   useEffect(() => {

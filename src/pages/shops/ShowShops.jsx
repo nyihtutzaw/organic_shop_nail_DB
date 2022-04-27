@@ -36,7 +36,6 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
   const user = useSelector((state) => state.auth.user);
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
-  console.log(status);
 
   const result = shops.map((shop) => ({
     name: shop.name,
