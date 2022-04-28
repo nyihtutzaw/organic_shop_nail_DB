@@ -24,7 +24,7 @@ import {
 } from "@ant-design/icons";
 import Sider from "antd/lib/layout/Sider";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import {
   getStocks,
   getServices,
@@ -60,6 +60,9 @@ const Sale = ({
   const [loading, setLoading] = useState(false);
   const [sale, setSale] = useState(null);
   const [barcode, setBarcode] = useState([]);
+  // const user = useSelector((state) => state.auth.user);
+  // const staffs = useSelector((state) => state.staff.staffs);
+  // console.log(staffs);
 
   const navigate = useNavigate();
 
@@ -99,7 +102,7 @@ const Sale = ({
           quantity: 1,
           subtotal: stock.item.sale_price * 1,
           is_item: true,
-          staff_id: 6 // not need staff id for item. so, we need to change api
+          // staff_id: 6 // not need staff id for item. so, we need to change api
         };
 
         setSales([...sales, sale]);

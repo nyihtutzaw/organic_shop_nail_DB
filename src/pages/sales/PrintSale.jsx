@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 const { Header } = Layout;
 const { Title } = Typography;
 
+
 const PrintSale = () => {
   const navigate = useNavigate();
   const componentRef = useRef();

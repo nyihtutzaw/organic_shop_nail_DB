@@ -498,6 +498,7 @@ const Admin = ({ logout }) => {
               <Route path="show-merchants" element={<ShowMerchants />} />
               <Route path="edit-merchants/:id" element={<EditMerchants />} />
 
+
               <Route path="create-members" element={<CreateMembers />} />
               <Route path="show-members" element={<ShowMembers />} />
               <Route path="detail-members/:id" element={<DetailMembers />} />
