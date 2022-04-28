@@ -103,7 +103,6 @@ export const saveAccounts = (data) => {
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/io-register",
         data
       );
-      console.log(response.status);
 
       const result = {
         ...response.data.data,

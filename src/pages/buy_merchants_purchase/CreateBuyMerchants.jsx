@@ -251,10 +251,10 @@ const CreateBuyMerchants = ({
           style={{ width: "100%", justifyContent: "center" }}
           size="large"
         >
-          <Title level={4}>ကုန်သည်လုပ်ငန်းအမည် - </Title>
+          {/* <Title level={4}>ကုန်သည်လုပ်ငန်းအမည် - </Title>
           <Title level={4}>
             {buyMerchant === null ? "-" : buyMerchant.company_name}
-          </Title>
+          </Title> */}
         </Space>
         <Form
           colon={false}
