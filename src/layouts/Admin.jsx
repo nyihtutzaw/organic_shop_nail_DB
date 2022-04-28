@@ -333,6 +333,7 @@ const Admin = ({ logout }) => {
                 </Menu.Item>
                 {user?.position === "manager" ||
                   user?.position === "cashier" ||
+                  user?.position === "owner" ||
                   (user?.position === "staff" && (
                     <Menu.Item key="CreateAccounts" icon={<SaveOutlined />}>
                       <Link to="/admin/create-accounts">အသစ်ဖန်တီးရန်</Link>
