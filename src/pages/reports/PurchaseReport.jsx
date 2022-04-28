@@ -74,7 +74,6 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   // }, [getPurchaseReport, getMerchants]);
 
   useEffect(() => {
-<<<<<<< HEAD
     error.message !== null && message.error(error.message);
 
     return () => error.message;
@@ -89,8 +88,6 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   }, [status.success]);
 
   useEffect(() => {
-=======
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
     const fetchData = async () => {
       dispatch(getBestPurchase(queryString.parse(location.search)));
       await getMerchants();
@@ -104,11 +101,8 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   const [showBuyMerchant, setshowBuyMerchant] = useState(null);
   const onChange = (value) => {
     if (value === undefined) {
-<<<<<<< HEAD
       setshowBuyMerchant(purchaseReport);
-=======
       setshowBuyMerchant([]);
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
     } else {
       const filterBuyMerchant = purchaseReport.filter(
         (mer) => mer.merchant.id === value
@@ -118,7 +112,6 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   };
 
   const columns = [
-<<<<<<< HEAD
     // {
     //   title: "ရက်စွဲ",
     //   dataIndex: `created_at`,
@@ -128,7 +121,6 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
     //       ? getReadableDateDisplay(record.date)
     //       : getReadableDateDisplay(record.merchant.created_at)
     // },
-=======
     {
       title: "ရက်စွဲ",
       dataIndex: `created_at`,
@@ -138,7 +130,6 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
           ? getReadableDateDisplay(record.date)
           : getReadableDateDisplay(record.merchant.created_at)
     },
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
     {
       title: "ကုန်သည်လုပ်ငန်းအမည်",
       dataIndex: "company_name",
@@ -154,7 +145,6 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
   ];
 
   return (
-<<<<<<< HEAD
     <Spin spinning={status.loading}>
       <Layout style={{ margin: "20px" }}>
         <Space direction="vertical" size="middle">
@@ -250,7 +240,6 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
         </Space>
       </Layout>
     </Spin>
-=======
     <Layout style={{ margin: "20px" }}>
       <Space direction="vertical" size="middle">
         <Row gutter={[16, 16]}>
@@ -323,7 +312,6 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
         />
       </Space>
     </Layout>
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
   );
 };
 
