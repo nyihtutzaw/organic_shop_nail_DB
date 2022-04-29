@@ -120,7 +120,7 @@ const Sale = ({
           code: stock.item.code,
           name: stock.item.name,
           capital: stock.item.buy_price,
-          price: prices ? prices : stock.item.sale_price,
+          price: stock.item.sale_price,
           quantity: 1,
           subtotal: stock.item.sale_price * 1,
           is_item: true
@@ -135,9 +135,7 @@ const Sale = ({
         cloneSales[index] = {
           ...cloneSales[index],
           quantity: cloneSales[index].quantity + 1,
-          subtotal: prices
-            ? prices * (cloneSales[index].quantity + 1)
-            : cloneSales[index].price * (cloneSales[index].quantity + 1)
+          subtotal: cloneSales[index].price * (cloneSales[index].quantity + 1)
         };
         setSales(cloneSales);
         setDataSource(cloneSales);
@@ -159,7 +157,7 @@ const Sale = ({
         code: service.code,
         name: service.category,
         capital: 0,
-        price: prices ? prices : service.price,
+        price: service.price,
         quantity: 1,
         subtotal: service.price * 1,
         is_item: false,
@@ -173,9 +171,7 @@ const Sale = ({
       cloneSales[index] = {
         ...cloneSales[index],
         quantity: cloneSales[index].quantity + 1,
-        subtotal: prices
-          ? prices * (cloneSales[index].quantity + 1)
-          : cloneSales[index].price * (cloneSales[index].quantity + 1)
+        subtotal: cloneSales[index].price * (cloneSales[index].quantity + 1)
       };
       setSales(cloneSales);
     }
@@ -200,22 +196,19 @@ const Sale = ({
     cloneSales[index] = {
       ...cloneSales[index],
       quantity: value,
-      subtotal: prices ? prices * value : cloneSales[index].price * value
+      subtotal: cloneSales[index].price * value
     };
     setSales(cloneSales);
   };
 
-  const handlePriceOnChange = (e, value, record) => {
-    setPrices(e.target.value);
-    // console.log("p", record.quantity);
+  const handlePriceOnChange = (value, record) => {
     const index = sales.findIndex((sale) => sale === record);
     let cloneSales = [...sales];
+
     cloneSales[index] = {
       ...cloneSales[index],
-      quantity: record.quantity,
-      subtotal: e.target.value
-        ? e.target.value * record.quantity
-        : cloneSales[index].price * record.quantity
+      price: value,
+      subtotal: cloneSales[index].quantity * value
     };
     setSales(cloneSales);
   };
@@ -238,7 +231,6 @@ const Sale = ({
     setCustomerPhone(findMember.phone);
     setMemberId(findMember.id);
   };
-  // console.log(MemberOnChanges);
 
   const salesTotal =
     sales.length > 0
@@ -329,7 +321,6 @@ const Sale = ({
       }
 
       if (is_staff_id) {
-        console.log(savedData)
         setLoading(true);
         const response = await call("post", "invoices", savedData);
         setLoading(false);
@@ -405,13 +396,12 @@ const Sale = ({
     navigate("/admin/dashboard");
   };
 
+  // const handleClickClear = () => {
+  //   console.log("edit")
+  //   setEditingRow(null);
+  // }
 
-  const handleClickClear = () => {
-    console.log("edit")
-    setEditingRow(null);
-  }
-
-  console.log(prices);
+  // console.log(prices);
 
   const columns = [
     {
@@ -455,41 +445,52 @@ const Sale = ({
       title: "ဈေးနှုန်း",
       dataIndex: "price",
       align: "right",
-      render: (text, record) =>
-        //  (
-        //   <InputNumber
-        //     value={record.price}
-        //     onChange={(value) => handlePriceOnChange(value, record)}
-        //     style={{
-        //       width: "100px",
-        //       backgroundColor: "var(--white-color)",
-        //       color: "var(--black-color)"
-        //     }}
-        //   />
-        // )
-        {
-          if (editingRow === record.key) {
-            console.log(record.price)
-            return (
-              <Form.Item
-                name="price"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter your name"
-                  }
-                ]}
-              >
-                <Input
-                value={record.price}
-                  onChange={(e, value) => handlePriceOnChange(e, value, record)}
-                />
-              </Form.Item>
-            );
-          } else {
-            return <p>{text}</p>;
-          }
-        }
+      render: (_, record) => (
+        <InputNumber
+          value={record.price}
+          onChange={(value) => handlePriceOnChange(value, record)}
+          style={{
+            width: "100px",
+            backgroundColor: "var(--white-color)",
+            color: "var(--black-color)"
+          }}
+        />
+      )
+      // render: (text, record) =>
+      //  (
+      //   <InputNumber
+      //     value={record.price}
+      //     onChange={(value) => handlePriceOnChange(value, record)}
+      //     style={{
+      //       width: "100px",
+      //       backgroundColor: "var(--white-color)",
+      //       color: "var(--black-color)"
+      //     }}
+      //   />
+      // )
+      // {
+      //   if (editingRow === record.key) {
+      //     console.log(record.price)
+      //     return (
+      //       <Form.Item
+      //         name="price"
+      //         rules={[
+      //           {
+      //             required: true,
+      //             message: "Please enter your name"
+      //           }
+      //         ]}
+      //       >
+      //         <Input
+      //         value={record.price}
+      //           onChange={(e, value) => handlePriceOnChange(e, value, record)}
+      //         />
+      //       </Form.Item>
+      //     );
+      //   } else {
+      //     return <p>{text}</p>;
+      //   }
+      // }
     },
     {
       title: "အရေအတွက်",
@@ -538,7 +539,7 @@ const Sale = ({
               color: "var(--white-color)"
             }}
             // htmlType="submit"
-            onClick={handleClickClear}
+            // onClick={handleClickClear}
           >
             <SaveOutlined />
           </Button>
@@ -546,11 +547,6 @@ const Sale = ({
       )
     }
   ];
-
-  // const onFinish = (values) => {
-  //   setEditingRow(null);
-  // };
-  // console.log("sss", sales);
 
   return (
     <Spin spinning={status.loading}>
@@ -788,7 +784,7 @@ const Sale = ({
               }}
             >
               <Layout>
-                <Form form={form}>
+                <Form>
                   <Table
                     bordered
                     columns={columns}
