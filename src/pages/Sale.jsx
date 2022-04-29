@@ -647,11 +647,11 @@ const Sale = ({
                       >
                         {service.code}
                       </Text>
-                      <Image
+                      {/* <Image
                         width={130}
                         preview={false}
                         src={`${window.location.origin}/image.png`}
-                      />
+                      /> */}
                       <Text style={{ color: "var(--black-color)" }}>
                         {service.category}
                       </Text>
