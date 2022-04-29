@@ -225,6 +225,7 @@ const ItemsReports = () => {
                 size="large"
                 style={{ borderRadius: "10px" }}
               >
+                
                 {unique.map((item) => (
                   <Option key={Math.random() * 100} value={item}>
                     {item}

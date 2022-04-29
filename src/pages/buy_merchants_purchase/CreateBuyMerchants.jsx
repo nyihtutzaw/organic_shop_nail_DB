@@ -10,7 +10,6 @@ import {
   Row,
   Col,
   message,
-  notification,
   Spin
 } from "antd";
 import Layout from "antd/lib/layout/layout";
@@ -24,7 +23,6 @@ import { getMerchants, getItems, savePurchases } from "../../store/actions";
 import { useNavigate } from "react-router-dom";
 import dateFormat from "dateformat";
 import { successCreateMessage } from "../../util/messages";
-
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -211,81 +209,26 @@ const CreateBuyMerchants = ({
 
   return (
     <Spin spinning={status.loading}>
-
-    <Layout style={{ margin: "20px" }}>
-      <Space direction="vertical" size="middle">
-        <Title style={{ textAlign: "center" }} level={3}>
-          အဝယ်စာရင်းသွင်းရန်
-        </Title>
-        <Space
-          direction="horizontal"
-          style={{
-            width: "100%",
-            justifyContent: "center",
-            marginBottom: "10px"
-          }}
-          size="large"
-        >
-          <Text type="secondary">ကုန်သည်အမည်ရွေးပါ</Text>
-          <Select
-            showSearch
-            placeholder="ကျေးဇူးပြု၍ ကုန်သည်အမည်ရွေးပါ"
-            optionFilterProp="children"
-            onChange={onChange}
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            allowClear={true}
+      <Layout style={{ margin: "20px" }}>
+        <Space direction="vertical" size="middle">
+          <Title style={{ textAlign: "center" }} level={3}>
+            အဝယ်စာရင်းသွင်းရန်
+          </Title>
+          <Space
+            direction="horizontal"
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              marginBottom: "10px"
+            }}
             size="large"
-            style={{ borderRadius: "10px" }}
           >
-            {merchant.merchants.map((mer) => (
-              <Option key={mer.id} value={mer.id}>
-                {mer.name}
-              </Option>
-            ))}
-          </Select>
-        </Space>
-        <Space
-          direction="horizontal"
-          style={{ width: "100%", justifyContent: "center" }}
-          size="large"
-        >
-          {/* <Title level={4}>ကုန်သည်လုပ်ငန်းအမည် - </Title>
-          <Title level={4}>
-            {buyMerchant === null ? "-" : buyMerchant.company_name}
-          </Title> */}
-        </Space>
-        <Form
-          colon={false}
-          labelCol={{
-            xl: {
-              span: 3
-            }
-          }}
-          wrapperCol={{
-            span: 24
-          }}
-          initialValues={{
-            remember: true
-          }}
-          onFinish={onFinish}
-          form={form}
-        >
-          <Form.Item
-            name="item_id"
-            label="ပစ္စည်း"
-            rules={[
-              {
-                required: true,
-                message: "ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
-              }
-            ]}
-          >
+            <Text type="secondary">ကုန်သည်အမည်ရွေးပါ</Text>
             <Select
               showSearch
-              placeholder="ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
+              placeholder="ကျေးဇူးပြု၍ ကုန်သည်အမည်ရွေးပါ"
               optionFilterProp="children"
+              onChange={onChange}
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
@@ -293,122 +236,177 @@ const CreateBuyMerchants = ({
               size="large"
               style={{ borderRadius: "10px" }}
             >
-              {allItems.map((item) => (
-                <Option key={item.id} value={item.id}>
-                  {item.name}
+              {merchant.merchants.map((mer) => (
+                <Option key={mer.id} value={mer.id}>
+                  {mer.name}
                 </Option>
               ))}
             </Select>
-          </Form.Item>
-
-          <Form.Item
-            name="quantity"
-            label="အရေအတွက်"
-            rules={[
-              {
-                required: true,
-                message: "ကျေးဇူးပြု၍ အရေအတွက်ထည့်ပါ"
-              }
-            ]}
+          </Space>
+          <Space
+            direction="horizontal"
+            style={{ width: "100%", justifyContent: "center" }}
+            size="large"
           >
-            <InputNumber
-              placeholder="အရေအတွက်ထည့်ပါ"
-              prefix={<EditOutlined />}
-              style={{ borderRadius: "10px", width: "100%" }}
-              size="large"
-            />
-          </Form.Item>
-          <Form.Item
-            name="price"
-            label="တစ်ခုဈေးနှုန်း"
-            rules={[
-              {
-                required: true,
-                message: "ကျေးဇူးပြု၍ တစ်ခုဈေးနှုန်းထည့်ပါ"
+            {/* <Title level={4}>ကုန်သည်လုပ်ငန်းအမည် - </Title>
+          <Title level={4}>
+            {buyMerchant === null ? "-" : buyMerchant.company_name}
+          </Title> */}
+          </Space>
+          <Form
+            colon={false}
+            labelCol={{
+              xl: {
+                span: 3
               }
-            ]}
+            }}
+            wrapperCol={{
+              span: 24
+            }}
+            initialValues={{
+              remember: true
+            }}
+            onFinish={onFinish}
+            form={form}
           >
-            <InputNumber
-              placeholder="တစ်ခုဈေးနှုန်းထည့်ပါ"
-              prefix={<EditOutlined />}
-              style={{ borderRadius: "10px", width: "100%" }}
-              size="large"
-            />
-          </Form.Item>
+            <Form.Item
+              name="item_id"
+              label="ပစ္စည်း"
+              rules={[
+                {
+                  required: true,
+                  message: "ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
+                }
+              ]}
+            >
+              <Select
+                showSearch
+                placeholder="ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+                allowClear={true}
+                size="large"
+                style={{ borderRadius: "10px" }}
+              >
+                {allItems.map((item) => (
+                  <Option key={item.id} value={item.id}>
+                    {item.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
 
-          <Form.Item style={{ textAlign: "right" }}>
+            <Form.Item
+              name="quantity"
+              label="အရေအတွက်"
+              rules={[
+                {
+                  required: true,
+                  message: "ကျေးဇူးပြု၍ အရေအတွက်ထည့်ပါ"
+                }
+              ]}
+            >
+              <InputNumber
+                placeholder="အရေအတွက်ထည့်ပါ"
+                prefix={<EditOutlined />}
+                style={{ borderRadius: "10px", width: "100%" }}
+                size="large"
+              />
+            </Form.Item>
+            <Form.Item
+              name="price"
+              label="တစ်ခုဈေးနှုန်း"
+              rules={[
+                {
+                  required: true,
+                  message: "ကျေးဇူးပြု၍ တစ်ခုဈေးနှုန်းထည့်ပါ"
+                }
+              ]}
+            >
+              <InputNumber
+                placeholder="တစ်ခုဈေးနှုန်းထည့်ပါ"
+                prefix={<EditOutlined />}
+                style={{ borderRadius: "10px", width: "100%" }}
+                size="large"
+              />
+            </Form.Item>
+
+            <Form.Item style={{ textAlign: "right" }}>
+              <Button
+                style={{
+                  backgroundColor: "var(--secondary-color)",
+                  color: "var(--white-color)",
+                  borderRadius: "10px"
+                }}
+                size="large"
+                htmlType="submit"
+              >
+                <PlusSquareOutlined />
+                အသစ်ထည့်မည်
+              </Button>
+            </Form.Item>
+          </Form>
+          <Table
+            bordered
+            columns={columns}
+            dataSource={dataMerchant}
+            pagination={{ position: ["none", "none"] }}
+          />
+          <Row>
+            <Col span={17} style={{ textAlign: "right" }}>
+              <Title level={4}>စုစုပေါင်း</Title>
+            </Col>
+            <Col span={2}></Col>
+            <Col span={5}>
+              <Title level={4}>{result} Ks</Title>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={17} style={{ textAlign: "right" }}>
+              <Title level={4}>ပေးငွေ</Title>
+            </Col>
+            <Col span={2}></Col>
+            <Col span={5}>
+              <InputNumber
+                placeholder="ပေးငွေ"
+                prefix={<EditOutlined />}
+                style={{ borderRadius: "10px", width: "100%" }}
+                size="large"
+                onChange={(value) => handlePayment(value)}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col span={17} style={{ textAlign: "right" }}>
+              <Title level={4}>ပေးရန်ကျန်ငွေ</Title>
+            </Col>
+            <Col span={2}></Col>
+            <Col span={5}>
+              <Title level={4}>{credit} Ks</Title>
+            </Col>
+          </Row>
+          <Space
+            direction="horizontal"
+            style={{ width: "100%", justifyContent: "right" }}
+          >
             <Button
               style={{
-                backgroundColor: "var(--secondary-color)",
+                backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
                 borderRadius: "10px"
               }}
               size="large"
-              htmlType="submit"
+              onClick={handleSave}
             >
-              <PlusSquareOutlined />
-              အသစ်ထည့်မည်
+              <SaveOutlined />
+              သိမ်းမည်
             </Button>
-          </Form.Item>
-        </Form>
-        <Table
-          bordered
-          columns={columns}
-          dataSource={dataMerchant}
-          pagination={{ position: ["none", "none"] }}
-        />
-        <Row>
-          <Col span={17} style={{ textAlign: "right" }}>
-            <Title level={4}>စုစုပေါင်း</Title>
-          </Col>
-          <Col span={2}></Col>
-          <Col span={5}>
-            <Title level={4}>{result} Ks</Title>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={17} style={{ textAlign: "right" }}>
-            <Title level={4}>ပေးငွေ</Title>
-          </Col>
-          <Col span={2}></Col>
-          <Col span={5}>
-            <InputNumber
-              placeholder="ပေးငွေ"
-              prefix={<EditOutlined />}
-              style={{ borderRadius: "10px", width: "100%" }}
-              size="large"
-              onChange={(value) => handlePayment(value)}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col span={17} style={{ textAlign: "right" }}>
-            <Title level={4}>ပေးရန်ကျန်ငွေ</Title>
-          </Col>
-          <Col span={2}></Col>
-          <Col span={5}>
-            <Title level={4}>{credit} Ks</Title>
-          </Col>
-        </Row>
-        <Space
-          direction="horizontal"
-          style={{ width: "100%", justifyContent: "right" }}
-        >
-          <Button
-            style={{
-              backgroundColor: "var(--primary-color)",
-              color: "var(--white-color)",
-              borderRadius: "10px"
-            }}
-            size="large"
-            onClick={handleSave}
-          >
-            <SaveOutlined />
-            သိမ်းမည်
-          </Button>
+          </Space>
         </Space>
-      </Space>
-    </Layout>
+      </Layout>
     </Spin>
   );
 };

@@ -23,7 +23,6 @@ import { getVouchers, deleteVouchers } from "../../store/actions";
 import Text from "antd/lib/typography/Text";
 import { successDeleteMessage } from "../../util/messages";
 
-
 const { Title } = Typography;
 const { Option } = Select;
 
@@ -32,9 +31,10 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
   const { RangePicker } = DatePicker;
   const location = useLocation();
   const status = useSelector((state) => state.status);
+  const Vouchers = useSelector((state) => state.voucher.vouchers);
   const error = useSelector((state) => state.error);
   const vouchersUnique = [];
-  voucher?.vouchers?.forEach((i) => vouchersUnique.push(i?.member?.name));
+  Vouchers?.forEach((i) => vouchersUnique.push(i?.customer_name));
   let unique = [...new Set(vouchersUnique)];
 
   const start_date = new URLSearchParams(window.location.search).get(
@@ -71,11 +71,12 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
     if (value === undefined) {
       setshowBuyMerchant(voucher?.vouchers);
     } else {
-      const filterBuyMerchant = voucher?.vouchers?.filter((mer) => mer?.member?.name === value);
+      const filterBuyMerchant = voucher?.vouchers?.filter(
+        (mer) => mer?.member?.name === value
+      );
       setshowBuyMerchant(filterBuyMerchant);
     }
   };
-
 
   const openNotificationWithIcon = (type) => {
     notification[type]({
@@ -112,6 +113,7 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
         multiple: 1
       }
     },
+
     {
       title: "Actions",
       dataIndex: "action",
@@ -138,97 +140,100 @@ const VoucherReports = ({ voucher, getVouchers, deleteVouchers }) => {
 
   return (
     <Spin spinning={status.loading}>
-    <Layout style={{ margin: "20px" }}>
-      <Space direction="vertical" size="middle">
-        <Row gutter={[16, 16]}>
-          <Col span={13}>
-            <Title level={3}>ဘောင်ချာအရောင်း မှတ်တမ်းစာမျက်နှာ</Title>
-          </Col>
-          <Col span={5}>
-            <p
-              style={{
-                backgroundColor: "var(--primary-color)",
-                padding: "10px",
-                color: "var(--white-color)"
-              }}
-            >
-              Start Date= {start_date}
-            </p>
-          </Col>
-          <Col span={5}>
-            <p
-              style={{
-                backgroundColor: "var(--primary-color)",
-                padding: "10px",
-                color: "var(--white-color)"
-              }}
-            >
-              End Date= {end_date}
-            </p>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={10}>
-            <RangePicker
-              onChange={(val) => {
-                //alert(dayjs(val[0]).format("YYYY-MM-DD"))
-                window.location = `/admin/voucher-report?start_date=${dayjs(
-                  val[0]
-                ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
-                  "YYYY-MM-DD"
-                )}`;
-              }}
-            />
-          </Col>
-          <Col span={10}>
-            <Text type="secondary">ဝယ်သူအမည်ရွေးပါ</Text>
-            <Select
-              showSearch
-              placeholder="ကျေးဇူးပြု၍ ဝယ်သူအမည်ရွေးပါ"
-              optionFilterProp="children"
-              onChange={onChange}
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              allowClear={true}
-              size="large"
-              style={{ borderRadius: "10px" }}
-            >
-              {unique.map((item) => (
+      <Layout style={{ margin: "20px" }}>
+        <Space direction="vertical" size="middle">
+          <Row gutter={[16, 16]}>
+            <Col span={13}>
+              <Title level={3}>ဘောင်ချာအရောင်း မှတ်တမ်းစာမျက်နှာ</Title>
+            </Col>
+            <Col span={5}>
+              <p
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  padding: "10px",
+                  color: "var(--white-color)"
+                }}
+              >
+                Start Date= {start_date}
+              </p>
+            </Col>
+            <Col span={5}>
+              <p
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  padding: "10px",
+                  color: "var(--white-color)"
+                }}
+              >
+                End Date= {end_date}
+              </p>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={10}>
+              <RangePicker
+                onChange={(val) => {
+                  //alert(dayjs(val[0]).format("YYYY-MM-DD"))
+                  window.location = `/admin/voucher-report?start_date=${dayjs(
+                    val[0]
+                  ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                    "YYYY-MM-DD"
+                  )}`;
+                }}
+              />
+            </Col>
+            <Col span={10}>
+              <Text type="secondary">ဝယ်သူအမည်ရွေးပါ</Text>
+              <Select
+                showSearch
+                placeholder="ကျေးဇူးပြု၍ ဝယ်သူအမည်ရွေးပါ"
+                optionFilterProp="children"
+                onChange={onChange}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+                allowClear={true}
+                size="large"
+                style={{ borderRadius: "10px" }}
+              >
+                {unique.map((item) => (
                   <Option key={Math.random() * 100} value={item}>
                     {item}
                   </Option>
                 ))}
-            </Select>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={14}></Col>
-          <Col span={5}>
-            {/* <Button style={{
+              </Select>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={14}></Col>
+            <Col span={5}>
+              {/* <Button style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
                 borderRadius: "5px"
               }} block>
               ဝယ်ယူသူအမည်
             </Button> */}
-            {/* <Input.Group compact style={{ width: "100%" }}>
+              {/* <Input.Group compact style={{ width: "100%" }}>
               <Select defaultValue="ဝယ်ယူသူအမည်">
                 <Option value="Option1">ဝယ်ယူသူအမည်1</Option>
                 <Option value="Option2">ဝယ်ယူသူအမည်2</Option>
               </Select>
             </Input.Group> */}
-          </Col>
-        </Row>
+            </Col>
+          </Row>
 
-        <Table
-          bordered
-          columns={columns}
-          pagination={{ defaultPageSize: 10 }}
-          dataSource={showBuyMerchant != null ? showBuyMerchant : voucher.vouchers}
-        />
-      </Space>
-    </Layout>
+          <Table
+            bordered
+            columns={columns}
+            pagination={{ defaultPageSize: 10 }}
+            dataSource={
+              showBuyMerchant != null ? showBuyMerchant : voucher.vouchers
+            }
+          />
+        </Space>
+      </Layout>
     </Spin>
   );
 };
