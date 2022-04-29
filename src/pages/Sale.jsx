@@ -69,6 +69,8 @@ const Sale = ({
   const [dataSource, setDataSource] = useState([]);
   const [editingRow, setEditingRow] = useState(null);
   const [form] = Form.useForm();
+  const [prices, setPrices] = useState(null);
+
   //for edit price
   const navigate = useNavigate();
 
@@ -118,7 +120,7 @@ const Sale = ({
           code: stock.item.code,
           name: stock.item.name,
           capital: stock.item.buy_price,
-          price: stock.item.sale_price,
+          price: prices ? prices : stock.item.sale_price,
           quantity: 1,
           subtotal: stock.item.sale_price * 1,
           is_item: true
@@ -133,7 +135,9 @@ const Sale = ({
         cloneSales[index] = {
           ...cloneSales[index],
           quantity: cloneSales[index].quantity + 1,
-          subtotal: cloneSales[index].price * (cloneSales[index].quantity + 1)
+          subtotal: prices
+            ? prices * (cloneSales[index].quantity + 1)
+            : cloneSales[index].price * (cloneSales[index].quantity + 1)
         };
         setSales(cloneSales);
         setDataSource(cloneSales);
@@ -141,7 +145,7 @@ const Sale = ({
     }
   };
 
-  console.log("datasource",dataSource);
+  // console.log("datasource", dataSource);
 
   const handleAddSaleService = (service) => {
     const index = sales.findIndex(
@@ -155,7 +159,7 @@ const Sale = ({
         code: service.code,
         name: service.category,
         capital: 0,
-        price: service.price,
+        price: prices ? prices : service.price,
         quantity: 1,
         subtotal: service.price * 1,
         is_item: false,
@@ -169,7 +173,9 @@ const Sale = ({
       cloneSales[index] = {
         ...cloneSales[index],
         quantity: cloneSales[index].quantity + 1,
-        subtotal: cloneSales[index].price * (cloneSales[index].quantity + 1)
+        subtotal: prices
+          ? prices * (cloneSales[index].quantity + 1)
+          : cloneSales[index].price * (cloneSales[index].quantity + 1)
       };
       setSales(cloneSales);
     }
@@ -194,7 +200,22 @@ const Sale = ({
     cloneSales[index] = {
       ...cloneSales[index],
       quantity: value,
-      subtotal: cloneSales[index].price * value
+      subtotal: prices ? prices * value : cloneSales[index].price * value
+    };
+    setSales(cloneSales);
+  };
+
+  const handlePriceOnChange = (e, value, record) => {
+    setPrices(e.target.value);
+    // console.log("p", record.quantity);
+    const index = sales.findIndex((sale) => sale === record);
+    let cloneSales = [...sales];
+    cloneSales[index] = {
+      ...cloneSales[index],
+      quantity: record.quantity,
+      subtotal: e.target.value
+        ? e.target.value * record.quantity
+        : cloneSales[index].price * record.quantity
     };
     setSales(cloneSales);
   };
@@ -253,12 +274,13 @@ const Sale = ({
           items.push({
             stock_id: sale.sale_id,
             staff_id: sale.staff_id,
-            price:  sale.price,
+            price: prices ? prices : sale.price,
             quantity: sale.quantity
           });
         }
       });
 
+      // console.log("item", items);
       let services = [];
       let serviceTotal = 0;
 
@@ -307,6 +329,7 @@ const Sale = ({
       }
 
       if (is_staff_id) {
+        console.log(savedData)
         setLoading(true);
         const response = await call("post", "invoices", savedData);
         setLoading(false);
@@ -382,7 +405,13 @@ const Sale = ({
     navigate("/admin/dashboard");
   };
 
-  // const [prices, setPrices] = useState(null)
+
+  const handleClickClear = () => {
+    console.log("edit")
+    setEditingRow(null);
+  }
+
+  console.log(prices);
 
   const columns = [
     {
@@ -426,30 +455,41 @@ const Sale = ({
       title: "ဈေးနှုန်း",
       dataIndex: "price",
       align: "right",
-      render: (text, record) => {
-        if (editingRow === record.id) {
-          return (
-            <Form.Item
-            name="price"
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter your price",
-                },
-              ]}
-            >
-              <Input 
-              placeholder="ဈေးနှုန်းထည့်ပါ"
-              style={{ borderRadius: "10px" }}
-              size="large"/>
-              {/* onChange={(record) => setPrices(record)} */}
-            </Form.Item>
-          );
-        } else {
-          return <p>{text}</p>;
+      render: (text, record) =>
+        //  (
+        //   <InputNumber
+        //     value={record.price}
+        //     onChange={(value) => handlePriceOnChange(value, record)}
+        //     style={{
+        //       width: "100px",
+        //       backgroundColor: "var(--white-color)",
+        //       color: "var(--black-color)"
+        //     }}
+        //   />
+        // )
+        {
+          if (editingRow === record.key) {
+            console.log(record.price)
+            return (
+              <Form.Item
+                name="price"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter your name"
+                  }
+                ]}
+              >
+                <Input
+                value={record.price}
+                  onChange={(e, value) => handlePriceOnChange(e, value, record)}
+                />
+              </Form.Item>
+            );
+          } else {
+            return <p>{text}</p>;
+          }
         }
-      },
-
     },
     {
       title: "အရေအတွက်",
@@ -485,7 +525,7 @@ const Sale = ({
             onClick={() => {
               setEditingRow(record.id);
               form.setFieldsValue({
-                price: parseInt(record.price),
+                price: record.price
               });
             }}
           >
@@ -497,8 +537,8 @@ const Sale = ({
               backgroundColor: "var(--secondary-color)",
               color: "var(--white-color)"
             }}
-            // onClick={() => handleClick(record)}
-            htmlType="submit"
+            // htmlType="submit"
+            onClick={handleClickClear}
           >
             <SaveOutlined />
           </Button>
@@ -507,30 +547,10 @@ const Sale = ({
     }
   ];
 
-
-  // const resultDataSource = dataSource.map((data) => ({
-  //   capital: data.capital,
-  //   code: data.code,
-  //   id:data.id,
-  //   is_item:data.is_item,
-  //   key:data.key,
-  //   name:data.name,
-  //   price:data.price,
-  //   quantity:data.quantity,
-  //   sale_id:data.sale_id,
-  //   subtotal:data.subtotal
-  // }))
-  // console.log(resultDataSource);
-
-  // console.log(sales.length);
-
-  const onFinish = (values) => {
-    // const updatedsales = [...sales, values];
-    // updatedsales.splice(editingRow, 1,  { ...values, key: editingRow });
-    // setSales(updatedsales);
-    // setEditingRow(null);
-  };
-console.log("sss", sales)
+  // const onFinish = (values) => {
+  //   setEditingRow(null);
+  // };
+  // console.log("sss", sales);
 
   return (
     <Spin spinning={status.loading}>
@@ -768,17 +788,17 @@ console.log("sss", sales)
               }}
             >
               <Layout>
-              <Form form={form} onFinish={onFinish}>
-                <Table
-                  bordered
-                  columns={columns}
-                  dataSource={sales}
-                  // pagination={{ position: ["none", "none"] }}
-                  pagination={{
-                    defaultPageSize: 20,
-                    position: ["none", "none"]
-                  }}
-                />
+                <Form form={form}>
+                  <Table
+                    bordered
+                    columns={columns}
+                    dataSource={sales}
+                    // pagination={{ position: ["none", "none"] }}
+                    pagination={{
+                      defaultPageSize: 20,
+                      position: ["none", "none"]
+                    }}
+                  />
                 </Form>
                 <Row gutter={[16, 16]}>
                   <Col span={15} style={{ textAlign: "right" }}>
