@@ -14,13 +14,15 @@ import {
   Table,
   InputNumber,
   message,
-  Spin
+  Spin,
+  Form
 } from "antd";
 import {
   PlusSquareOutlined,
   DeleteOutlined,
   SaveOutlined,
-  PrinterOutlined
+  PrinterOutlined,
+  EditOutlined
 } from "@ant-design/icons";
 import Sider from "antd/lib/layout/Sider";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +36,6 @@ import {
 import { call } from "../services/api";
 import dateFormat from "dateformat";
 import { successCreateMessage } from "../util/messages";
-
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -62,12 +63,13 @@ const Sale = ({
   const [loading, setLoading] = useState(false);
   const [sale, setSale] = useState(null);
   const [barcode, setBarcode] = useState([]);
-  // const user = useSelector((state) => state.auth.user);
-  // const staffs = useSelector((state) => state.staff.staffs);
-  // console.log(staffs);
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
-
+  //for edit price
+  const [dataSource, setDataSource] = useState([]);
+  const [editingRow, setEditingRow] = useState(null);
+  const [form] = Form.useForm();
+  //for edit price
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -122,8 +124,8 @@ const Sale = ({
           is_item: true
           // staff_id: 6 // not need staff id for item. so, we need to change api
         };
-
         setSales([...sales, sale]);
+        setDataSource([...sales, sale]);
       }
     } else {
       let cloneSales = [...sales];
@@ -134,9 +136,12 @@ const Sale = ({
           subtotal: cloneSales[index].price * (cloneSales[index].quantity + 1)
         };
         setSales(cloneSales);
+        setDataSource(cloneSales);
       }
     }
   };
+
+  console.log("datasource",dataSource);
 
   const handleAddSaleService = (service) => {
     const index = sales.findIndex(
@@ -248,7 +253,7 @@ const Sale = ({
           items.push({
             stock_id: sale.sale_id,
             staff_id: sale.staff_id,
-            price: sale.price,
+            price:  sale.price,
             quantity: sale.quantity
           });
         }
@@ -377,6 +382,8 @@ const Sale = ({
     navigate("/admin/dashboard");
   };
 
+  // const [prices, setPrices] = useState(null)
+
   const columns = [
     {
       title: "စဥ်",
@@ -418,7 +425,31 @@ const Sale = ({
     {
       title: "ဈေးနှုန်း",
       dataIndex: "price",
-      align: "right"
+      align: "right",
+      render: (text, record) => {
+        if (editingRow === record.id) {
+          return (
+            <Form.Item
+            name="price"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter your price",
+                },
+              ]}
+            >
+              <Input 
+              placeholder="ဈေးနှုန်းထည့်ပါ"
+              style={{ borderRadius: "10px" }}
+              size="large"/>
+              {/* onChange={(record) => setPrices(record)} */}
+            </Form.Item>
+          );
+        } else {
+          return <p>{text}</p>;
+        }
+      },
+
     },
     {
       title: "အရေအတွက်",
@@ -445,14 +476,62 @@ const Sale = ({
       title: "",
       dataIndex: "action",
       render: (_, record) => (
-        <Button type="primary" danger onClick={() => handleDelete(record)}>
-          <DeleteOutlined />
-        </Button>
+        <Space direction="horizontal">
+          <Button type="primary" danger onClick={() => handleDelete(record)}>
+            <DeleteOutlined />
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              setEditingRow(record.id);
+              form.setFieldsValue({
+                price: parseInt(record.price),
+              });
+            }}
+          >
+            <EditOutlined />
+          </Button>
+          <Button
+            type="secondary"
+            style={{
+              backgroundColor: "var(--secondary-color)",
+              color: "var(--white-color)"
+            }}
+            // onClick={() => handleClick(record)}
+            htmlType="submit"
+          >
+            <SaveOutlined />
+          </Button>
+        </Space>
       )
     }
   ];
 
+
+  // const resultDataSource = dataSource.map((data) => ({
+  //   capital: data.capital,
+  //   code: data.code,
+  //   id:data.id,
+  //   is_item:data.is_item,
+  //   key:data.key,
+  //   name:data.name,
+  //   price:data.price,
+  //   quantity:data.quantity,
+  //   sale_id:data.sale_id,
+  //   subtotal:data.subtotal
+  // }))
+  // console.log(resultDataSource);
+
   // console.log(sales.length);
+
+  const onFinish = (values) => {
+    // const updatedsales = [...sales, values];
+    // updatedsales.splice(editingRow, 1,  { ...values, key: editingRow });
+    // setSales(updatedsales);
+    // setEditingRow(null);
+  };
+console.log("sss", sales)
+
   return (
     <Spin spinning={status.loading}>
       <Layout>
@@ -689,6 +768,7 @@ const Sale = ({
               }}
             >
               <Layout>
+              <Form form={form} onFinish={onFinish}>
                 <Table
                   bordered
                   columns={columns}
@@ -699,6 +779,7 @@ const Sale = ({
                     position: ["none", "none"]
                   }}
                 />
+                </Form>
                 <Row gutter={[16, 16]}>
                   <Col span={15} style={{ textAlign: "right" }}>
                     <Title level={5}>စုစုပေါင်း</Title>
@@ -843,11 +924,21 @@ const Sale = ({
                         size="large"
                         style={{ borderRadius: "10px" }}
                       >
-                        <Option value="Cash" key="Cash">Cash</Option>
-                        <Option value="KBZ" key="KBZ">KBZ</Option>
-                        <Option value="AYA" key="AYA">AYA</Option>
-                        <Option value="CB" key="CB">CB</Option>
-                        <Option value="Kpay" key="Kpay">Kpay</Option>
+                        <Option value="Cash" key="Cash">
+                          Cash
+                        </Option>
+                        <Option value="KBZ" key="KBZ">
+                          KBZ
+                        </Option>
+                        <Option value="AYA" key="AYA">
+                          AYA
+                        </Option>
+                        <Option value="CB" key="CB">
+                          CB
+                        </Option>
+                        <Option value="Kpay" key="Kpay">
+                          Kpay
+                        </Option>
                       </Select>
                     </Space>
                   </Col>
