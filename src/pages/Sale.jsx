@@ -101,7 +101,7 @@ const Sale = ({
           price: stock.item.sale_price,
           quantity: 1,
           subtotal: stock.item.sale_price * 1,
-          is_item: true,
+          is_item: true
           // staff_id: 6 // not need staff id for item. so, we need to change api
         };
 
@@ -208,13 +208,16 @@ const Sale = ({
   const credit = finalTotal - paid;
 
   const handleSavedSale = async () => {
+
     if (sales.length === 0) {
       message.error("ကျေးဇူးပြု၍အဝယ်ပစ္စည်းများထည့်ပါ");
-    } else if (customerName === "") {
-      message.error("ကျေးဇူးပြု၍ဝယ်ယူသူအမည်ထည့်ပါ");
-    } else if (customerPhone === "") {
-      message.error("ကျေးဇူးပြု၍ဝယ်ယူသူဖုန်းနံပါတ်ထည့်ပါ");
-    } else if (payMethod === undefined) {
+    }
+    //  else if (customerName === "") {
+    //   message.error("ကျေးဇူးပြု၍ဝယ်ယူသူအမည်ထည့်ပါ");
+    // } else if (customerPhone === "") {
+    //   message.error("ကျေးဇူးပြု၍ဝယ်ယူသူဖုန်းနံပါတ်ထည့်ပါ");
+    // }
+     else if (payMethod === null) {
       message.error("ကျေးဇူးပြု၍ငွေချေရမည့်နည်းလမ်းထည့်ပါ");
     } else {
       let items = [];
