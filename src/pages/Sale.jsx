@@ -66,8 +66,6 @@ const Sale = ({
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
   //for edit price
-  const [dataSource, setDataSource] = useState([]);
-  const [editingRow, setEditingRow] = useState(null);
   const [form] = Form.useForm();
   const [prices, setPrices] = useState(null);
 
@@ -127,7 +125,6 @@ const Sale = ({
           // staff_id: 6 // not need staff id for item. so, we need to change api
         };
         setSales([...sales, sale]);
-        setDataSource([...sales, sale]);
       }
     } else {
       let cloneSales = [...sales];
@@ -138,7 +135,6 @@ const Sale = ({
           subtotal: cloneSales[index].price * (cloneSales[index].quantity + 1)
         };
         setSales(cloneSales);
-        setDataSource(cloneSales);
       }
     }
   };
@@ -266,7 +262,7 @@ const Sale = ({
           items.push({
             stock_id: sale.sale_id,
             staff_id: sale.staff_id,
-            price: prices ? prices : sale.price,
+            price: sale.price,
             quantity: sale.quantity
           });
         }
@@ -456,41 +452,6 @@ const Sale = ({
           }}
         />
       )
-      // render: (text, record) =>
-      //  (
-      //   <InputNumber
-      //     value={record.price}
-      //     onChange={(value) => handlePriceOnChange(value, record)}
-      //     style={{
-      //       width: "100px",
-      //       backgroundColor: "var(--white-color)",
-      //       color: "var(--black-color)"
-      //     }}
-      //   />
-      // )
-      // {
-      //   if (editingRow === record.key) {
-      //     console.log(record.price)
-      //     return (
-      //       <Form.Item
-      //         name="price"
-      //         rules={[
-      //           {
-      //             required: true,
-      //             message: "Please enter your name"
-      //           }
-      //         ]}
-      //       >
-      //         <Input
-      //         value={record.price}
-      //           onChange={(e, value) => handlePriceOnChange(e, value, record)}
-      //         />
-      //       </Form.Item>
-      //     );
-      //   } else {
-      //     return <p>{text}</p>;
-      //   }
-      // }
     },
     {
       title: "အရေအတွက်",
@@ -520,28 +481,6 @@ const Sale = ({
         <Space direction="horizontal">
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
-          </Button>
-          <Button
-            type="primary"
-            onClick={() => {
-              setEditingRow(record.id);
-              form.setFieldsValue({
-                price: record.price
-              });
-            }}
-          >
-            <EditOutlined />
-          </Button>
-          <Button
-            type="secondary"
-            style={{
-              backgroundColor: "var(--secondary-color)",
-              color: "var(--white-color)"
-            }}
-            // htmlType="submit"
-            // onClick={handleClickClear}
-          >
-            <SaveOutlined />
           </Button>
         </Space>
       )
