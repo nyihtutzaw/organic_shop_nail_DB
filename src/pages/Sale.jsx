@@ -14,17 +14,19 @@ import {
   Table,
   InputNumber,
   message,
-  Spin
+  Spin,
+  Form
 } from "antd";
 import {
   PlusSquareOutlined,
   DeleteOutlined,
   SaveOutlined,
-  PrinterOutlined
+  PrinterOutlined,
+  EditOutlined
 } from "@ant-design/icons";
 import Sider from "antd/lib/layout/Sider";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import {
   getStocks,
   getServices,
@@ -33,6 +35,7 @@ import {
 } from "../store/actions";
 import { call } from "../services/api";
 import dateFormat from "dateformat";
+import { successCreateMessage } from "../util/messages";
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -48,7 +51,7 @@ const Sale = ({
   member,
   getMembers
 }) => {
-  const [value, setValue] = useState(null);
+  // const [value, setValue] = useState(null);
   const [MemberOnChanges, setMemberOnChanges] = useState(null);
   const [sales, setSales] = useState([]);
   const [customerName, setCustomerName] = useState("");
@@ -60,8 +63,28 @@ const Sale = ({
   const [loading, setLoading] = useState(false);
   const [sale, setSale] = useState(null);
   const [barcode, setBarcode] = useState([]);
+  const status = useSelector((state) => state.status);
+  const error = useSelector((state) => state.error);
+  //for edit price
+  const [form] = Form.useForm();
+  const [prices, setPrices] = useState(null);
 
+  //for edit price
   const navigate = useNavigate();
+
+  useEffect(() => {
+    error.message !== null && message.error(error.message);
+
+    return () => error.message;
+  }, [error.message]);
+
+  useEffect(() => {
+    if (status.success) {
+      message.success(successCreateMessage);
+    }
+
+    return () => status.success;
+  }, [status.success]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -98,10 +121,9 @@ const Sale = ({
           price: stock.item.sale_price,
           quantity: 1,
           subtotal: stock.item.sale_price * 1,
-          is_item: true,
-          staff_id: 6 // not need staff id for item. so, we need to change api
+          is_item: true
+          // staff_id: 6 // not need staff id for item. so, we need to change api
         };
-
         setSales([...sales, sale]);
       }
     } else {
@@ -116,6 +138,8 @@ const Sale = ({
       }
     }
   };
+
+  // console.log("datasource", dataSource);
 
   const handleAddSaleService = (service) => {
     const index = sales.findIndex(
@@ -173,6 +197,18 @@ const Sale = ({
     setSales(cloneSales);
   };
 
+  const handlePriceOnChange = (value, record) => {
+    const index = sales.findIndex((sale) => sale === record);
+    let cloneSales = [...sales];
+
+    cloneSales[index] = {
+      ...cloneSales[index],
+      price: value,
+      subtotal: cloneSales[index].quantity * value
+    };
+    setSales(cloneSales);
+  };
+
   const handleSaffOnChange = (value, record) => {
     const index = sales.findIndex((sale) => sale === record);
     let cloneSales = [...sales];
@@ -191,7 +227,6 @@ const Sale = ({
     setCustomerPhone(findMember.phone);
     setMemberId(findMember.id);
   };
-  // console.log(MemberOnChanges);
 
   const salesTotal =
     sales.length > 0
@@ -207,11 +242,13 @@ const Sale = ({
   const handleSavedSale = async () => {
     if (sales.length === 0) {
       message.error("ကျေးဇူးပြု၍အဝယ်ပစ္စည်းများထည့်ပါ");
-    } else if (customerName === "") {
-      message.error("ကျေးဇူးပြု၍ဝယ်ယူသူအမည်ထည့်ပါ");
-    } else if (customerPhone === "") {
-      message.error("ကျေးဇူးပြု၍ဝယ်ယူသူဖုန်းနံပါတ်ထည့်ပါ");
-    } else if (payMethod === undefined) {
+    }
+    //  else if (customerName === "") {
+    //   message.error("ကျေးဇူးပြု၍ဝယ်ယူသူအမည်ထည့်ပါ");
+    // } else if (customerPhone === "") {
+    //   message.error("ကျေးဇူးပြု၍ဝယ်ယူသူဖုန်းနံပါတ်ထည့်ပါ");
+    // }
+    else if (payMethod === null) {
       message.error("ကျေးဇူးပြု၍ငွေချေရမည့်နည်းလမ်းထည့်ပါ");
     } else {
       let items = [];
@@ -231,6 +268,7 @@ const Sale = ({
         }
       });
 
+      // console.log("item", items);
       let services = [];
       let serviceTotal = 0;
 
@@ -293,7 +331,7 @@ const Sale = ({
           setDiscount(0);
           setPaid(0);
           setPayMethod(null);
-          setValue(null);
+          // setValue(null);
           setMemberOnChanges(null);
           setSale(response.data);
         } else {
@@ -354,6 +392,13 @@ const Sale = ({
     navigate("/admin/dashboard");
   };
 
+  // const handleClickClear = () => {
+  //   console.log("edit")
+  //   setEditingRow(null);
+  // }
+
+  // console.log(prices);
+
   const columns = [
     {
       title: "စဥ်",
@@ -395,7 +440,18 @@ const Sale = ({
     {
       title: "ဈေးနှုန်း",
       dataIndex: "price",
-      align: "right"
+      align: "right",
+      render: (_, record) => (
+        <InputNumber
+          value={record.price}
+          onChange={(value) => handlePriceOnChange(value, record)}
+          style={{
+            width: "100px",
+            backgroundColor: "var(--white-color)",
+            color: "var(--black-color)"
+          }}
+        />
+      )
     },
     {
       title: "အရေအတွက်",
@@ -422,440 +478,462 @@ const Sale = ({
       title: "",
       dataIndex: "action",
       render: (_, record) => (
-        <Button type="primary" danger onClick={() => handleDelete(record)}>
-          <DeleteOutlined />
-        </Button>
+        <Space direction="horizontal">
+          <Button type="primary" danger onClick={() => handleDelete(record)}>
+            <DeleteOutlined />
+          </Button>
+        </Space>
       )
     }
   ];
 
-  // console.log(sales.length);
   return (
-    <Layout>
-      <Header style={{ backgroundColor: "var(--primary-color)" }}>
-        <Title
-          style={{
-            color: "var(--white-color)",
-            textAlign: "center",
-            marginTop: "13px"
-          }}
-          level={3}
-        >
-          အရောင်း‌ဘောင်ချာဖွင့်ခြင်း
-        </Title>
-      </Header>
-      <Spin spinning={loading}>
-        <Layout
-          style={{
-            marginBottom: "20px",
-            backgroundColor: "var(--white-color)",
-            padding: "10px"
-          }}
-        >
-          <Row gutter={[16, 16]}>
-            <Col
-              xl={{
-                span: 4
-              }}
-            >
-              <Space>
-                <Text
-                  style={{
-                    backgroundColor: "var(--primary-color)",
-                    padding: "10px",
-                    color: "var(--white-color)"
-                  }}
-                  onClick={handleSearch}
-                >
-                  Search
-                </Text>
-                <Input
-                  autoFocus={true}
-                  placeholder="Start Scanning"
-                  id="SearchbyScanning"
-                  className="SearchInput"
-                  value={barcodeInputValue}
-                  onChange={onChangeBarcode}
-                  onKeyDown={onKeyDown}
-                />
-              </Space>
-            </Col>
-            <Col xl={{ span: 5 }}></Col>
-            <Col xl={{ span: 7 }}>
-              <Space>
-                <Text
-                  style={{
-                    backgroundColor: "var(--primary-color)",
-                    padding: "10px",
-                    color: "var(--white-color)"
-                  }}
-                >
-                  Member Name
-                </Text>
-                <Select
-                  showSearch
-                  placeholder="မန်ဘာအမည်ရွေးပါ"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
-                  value={MemberOnChanges}
-                  onChange={(value) => handleMemberOnChange(value)}
-                  allowClear={true}
-                  size="large"
-                  style={{ borderRadius: "10px" }}
-                >
-                  {member.members.map((member) => (
-                    <Option value={member.id} key={member.id}>
-                      {member.name}
-                    </Option>
-                  ))}
-                </Select>
-              </Space>
-            </Col>
-            <Col xl={{ span: 3 }}>
-              <Button
-                style={{
-                  backgroundColor: "var(--primary-color)",
-                  color: "var(--white-color)"
-                }}
-                size="large"
-                onClick={handleMember}
-              >
-                <PlusSquareOutlined />
-                New Member
-              </Button>
-            </Col>
-            <Col xl={{ span: 3 }}>
-              <Button
-                style={{
-                  backgroundColor: "var(--primary-color)",
-                  color: "var(--white-color)"
-                }}
-                size="large"
-                onClick={handleDashboard}
-              >
-                Go To Dashboard
-              </Button>
-            </Col>
-          </Row>
-        </Layout>
-        <Row gutter={[12, 12]} style={{ marginBottom: "10px" }}>
-          <Col span={12}>
-            <Text
-              style={{
-                backgroundColor: "var(--primary-color)",
-                paddingTop: "10px",
-                paddingRight: "45px",
-                paddingBottom: "10px",
-                paddingLeft: "45px",
-                color: "var(--white-color)",
-                textAlign: "center",
-                alignContent: "center",
-                alignItems: "center",
-                marginLeft: "33px"
-              }}
-            >
-              Product
-            </Text>
-            <Text
-              style={{
-                backgroundColor: "var(--primary-color)",
-                paddingTop: "10px",
-                paddingRight: "45px",
-                paddingBottom: "10px",
-                paddingLeft: "45px",
-                color: "var(--white-color)",
-                marginLeft: "33px"
-              }}
-            >
-              Service
-            </Text>
-          </Col>
-          <Col span={12}></Col>
-        </Row>
-        <Layout style={{ display: "flex", flexDirection: "row" }}>
-          <Sider
-            width={380}
+    <Spin spinning={status.loading}>
+      <Layout>
+        <Header style={{ backgroundColor: "var(--primary-color)" }}>
+          <Title
             style={{
-              backgroundColor: "var(--info-color)",
-              padding: "20px",
-              height: "520px",
-              overflow: "auto"
+              color: "var(--white-color)",
+              textAlign: "center",
+              marginTop: "13px"
+            }}
+            level={3}
+          >
+            အရောင်း‌ဘောင်ချာဖွင့်ခြင်း
+          </Title>
+        </Header>
+        <Spin spinning={loading}>
+          <Layout
+            style={{
+              marginBottom: "20px",
+              backgroundColor: "var(--white-color)",
+              padding: "10px"
             }}
           >
-            <Row gutter={[12, 12]}>
-              <Col span={12}>
-                {barcode.map((stock) => (
-                  <Col key={stock.id}>
-                    <Space
-                      direction="vertical"
-                      style={{
-                        width: "100%",
-                        alignItems: "center",
-                        backgroundColor: "var(--white-color)",
-                        marginBottom: "12px"
-                      }}
-                      onClick={() => handleAddSaleItem(stock)}
-                    >
-                      <Text
-                        style={{
-                          backgroundColor: "var(--primary-color)",
-                          color: "var(--white-color)",
-                          padding: "0 10px"
-                        }}
-                      >
-                        {stock.item.code}
-                      </Text>
-                      <Image
-                        width={130}
-                        preview={false}
-                        src={stock.item.image}
-                      />
-                      <Text style={{ color: "var(--black-color)" }}>
-                        {stock.item.name}
-                        <br />({stock.quantity})
-                      </Text>
-                    </Space>
-                  </Col>
-                ))}
+            <Row gutter={[16, 16]}>
+              <Col
+                xl={{
+                  span: 4
+                }}
+              >
+                <Space>
+                  <Text
+                    style={{
+                      backgroundColor: "var(--primary-color)",
+                      padding: "10px",
+                      color: "var(--white-color)"
+                    }}
+                    onClick={handleSearch}
+                  >
+                    Search
+                  </Text>
+                  <Input
+                    autoFocus={true}
+                    placeholder="Start Scanning"
+                    id="SearchbyScanning"
+                    className="SearchInput"
+                    value={barcodeInputValue}
+                    onChange={onChangeBarcode}
+                    onKeyDown={onKeyDown}
+                  />
+                </Space>
               </Col>
-              <Col span={12}>
-                {service.services.map((service) => (
-                  <Col key={service.id}>
-                    <Space
-                      direction="vertical"
-                      style={{
-                        width: "100%",
-                        alignItems: "center",
-                        backgroundColor: "var(--white-color)",
-                        marginBottom: "12px"
-                      }}
-                      onClick={() => handleAddSaleService(service)}
-                    >
-                      <Text
+              <Col xl={{ span: 5 }}></Col>
+              <Col xl={{ span: 7 }}>
+                <Space>
+                  <Text
+                    style={{
+                      backgroundColor: "var(--primary-color)",
+                      padding: "10px",
+                      color: "var(--white-color)"
+                    }}
+                  >
+                    Member Name
+                  </Text>
+                  <Select
+                    showSearch
+                    placeholder="မန်ဘာအမည်ရွေးပါ"
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) >= 0
+                    }
+                    value={MemberOnChanges}
+                    onChange={(value) => handleMemberOnChange(value)}
+                    allowClear={true}
+                    size="large"
+                    style={{ borderRadius: "10px" }}
+                  >
+                    {member.members.map((member) => (
+                      <Option value={member.id} key={member.id}>
+                        {member.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </Space>
+              </Col>
+              <Col xl={{ span: 3 }}>
+                <Button
+                  style={{
+                    backgroundColor: "var(--primary-color)",
+                    color: "var(--white-color)"
+                  }}
+                  size="large"
+                  onClick={handleMember}
+                >
+                  <PlusSquareOutlined />
+                  New Member
+                </Button>
+              </Col>
+              <Col xl={{ span: 3 }}>
+                <Button
+                  style={{
+                    backgroundColor: "var(--primary-color)",
+                    color: "var(--white-color)"
+                  }}
+                  size="large"
+                  onClick={handleDashboard}
+                >
+                  Go To Dashboard
+                </Button>
+              </Col>
+            </Row>
+          </Layout>
+          <Row gutter={[12, 12]} style={{ marginBottom: "10px" }}>
+            <Col span={12}>
+              <Text
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  paddingTop: "10px",
+                  paddingRight: "45px",
+                  paddingBottom: "10px",
+                  paddingLeft: "45px",
+                  color: "var(--white-color)",
+                  textAlign: "center",
+                  alignContent: "center",
+                  alignItems: "center",
+                  marginLeft: "33px"
+                }}
+              >
+                Product
+              </Text>
+              <Text
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  paddingTop: "10px",
+                  paddingRight: "45px",
+                  paddingBottom: "10px",
+                  paddingLeft: "45px",
+                  color: "var(--white-color)",
+                  marginLeft: "33px"
+                }}
+              >
+                Service
+              </Text>
+            </Col>
+            <Col span={12}></Col>
+          </Row>
+          <Layout style={{ display: "flex", flexDirection: "row" }}>
+            <Sider
+              width={380}
+              style={{
+                backgroundColor: "var(--info-color)",
+                padding: "20px",
+                height: "520px",
+                overflow: "auto"
+              }}
+            >
+              <Row gutter={[12, 12]}>
+                <Col span={12}>
+                  {barcode.map((stock) => (
+                    <Col key={stock.id}>
+                      <Space
+                        direction="vertical"
                         style={{
-                          backgroundColor: "var(--primary-color)",
-                          color: "var(--white-color)",
-                          padding: "0 10px"
+                          width: "100%",
+                          alignItems: "center",
+                          backgroundColor: "var(--white-color)",
+                          marginBottom: "12px"
                         }}
+                        onClick={() => handleAddSaleItem(stock)}
                       >
-                        {service.code}
-                      </Text>
-                      <Image
+                        <Text
+                          style={{
+                            backgroundColor: "var(--primary-color)",
+                            color: "var(--white-color)",
+                            padding: "0 10px"
+                          }}
+                        >
+                          {stock.item.code}
+                        </Text>
+                        <Image
+                          width={130}
+                          preview={false}
+                          src={stock.item.image}
+                        />
+                        <Text style={{ color: "var(--black-color)" }}>
+                          {stock.item.name}
+                          <br />({stock.quantity})
+                        </Text>
+                      </Space>
+                    </Col>
+                  ))}
+                </Col>
+                <Col span={12}>
+                  {service.services.map((service) => (
+                    <Col key={service.id}>
+                      <Space
+                        direction="vertical"
+                        style={{
+                          width: "100%",
+                          alignItems: "center",
+                          backgroundColor: "var(--white-color)",
+                          marginBottom: "12px"
+                        }}
+                        onClick={() => handleAddSaleService(service)}
+                      >
+                        <Text
+                          style={{
+                            backgroundColor: "var(--primary-color)",
+                            color: "var(--white-color)",
+                            padding: "0 10px"
+                          }}
+                        >
+                          {service.code}
+                        </Text>
+                        {/* <Image
                         width={130}
                         preview={false}
                         src={`${window.location.origin}/image.png`}
-                      />
-                      <Text style={{ color: "var(--black-color)" }}>
-                        {service.category}
-                      </Text>
-                    </Space>
-                  </Col>
-                ))}
-              </Col>
-            </Row>
-          </Sider>
-          <Content
-            style={{
-              minHeight: "520px",
-              backgroundColor: "var(--muted-color)"
-            }}
-          >
-            <Layout>
-              <Table
-                bordered
-                columns={columns}
-                dataSource={sales}
-                // pagination={{ position: ["none", "none"] }}
-                pagination={{ defaultPageSize: 20, position: ["none", "none"] }}
-              />
-              <Row gutter={[16, 16]}>
-                <Col span={15} style={{ textAlign: "right" }}>
-                  <Title level={5}>စုစုပေါင်း</Title>
+                      /> */}
+                        <Text style={{ color: "var(--black-color)" }}>
+                          {service.category}
+                        </Text>
+                      </Space>
+                    </Col>
+                  ))}
                 </Col>
-                <Col span={3}></Col>
-                <Col span={3} style={{ textAlign: "right" }}>
-                  <Title level={5}>{salesTotal}</Title>
-                </Col>
-                <Col span={3}></Col>
               </Row>
-              <Row gutter={[16, 16]}>
-                <Col span={15} style={{ textAlign: "right" }}>
-                  <Title level={5}>လျော့ဈေး</Title>
-                </Col>
-                <Col span={3} style={{ textAlign: "center" }}>
-                  <InputNumber
-                    min={0}
-                    value={discount}
-                    onChange={(value) => setDiscount(value)}
-                    addonAfter="%"
-                    style={{
-                      width: "100px",
-                      backgroundColor: "var(--white-color)",
-                      color: "var(--black-color)"
+            </Sider>
+            <Content
+              style={{
+                minHeight: "520px",
+                backgroundColor: "var(--muted-color)"
+              }}
+            >
+              <Layout>
+                <Form>
+                  <Table
+                    bordered
+                    columns={columns}
+                    dataSource={sales}
+                    // pagination={{ position: ["none", "none"] }}
+                    pagination={{
+                      defaultPageSize: 20,
+                      position: ["none", "none"]
                     }}
                   />
-                </Col>
-                <Col span={3} style={{ textAlign: "right" }}>
-                  <Title level={5}>{discountAmount}</Title>
-                </Col>
-                <Col span={3}></Col>
-              </Row>
-              <Row gutter={[16, 16]}>
-                <Col span={15} style={{ textAlign: "right" }}>
-                  <Title level={5}>ပေးချေရမည့်စုစုပေါင်း</Title>
-                </Col>
-                <Col span={3}></Col>
-                <Col span={3} style={{ textAlign: "right" }}>
-                  <Title level={5}>{finalTotal}</Title>
-                </Col>
-                <Col span={3}></Col>
-              </Row>
-              <Row gutter={[16, 16]}>
-                <Col span={15} style={{ textAlign: "right" }}>
-                  <Title level={5}>ပေးငွေ</Title>
-                </Col>
-                <Col span={3}></Col>
-                <Col span={3} style={{ textAlign: "right" }}>
-                  <Title level={5}>
+                </Form>
+                <Row gutter={[16, 16]}>
+                  <Col span={15} style={{ textAlign: "right" }}>
+                    <Title level={5}>စုစုပေါင်း</Title>
+                  </Col>
+                  <Col span={3}></Col>
+                  <Col span={3} style={{ textAlign: "right" }}>
+                    <Title level={5}>{salesTotal}</Title>
+                  </Col>
+                  <Col span={3}></Col>
+                </Row>
+                <Row gutter={[16, 16]}>
+                  <Col span={15} style={{ textAlign: "right" }}>
+                    <Title level={5}>လျော့ဈေး</Title>
+                  </Col>
+                  <Col span={3} style={{ textAlign: "center" }}>
                     <InputNumber
                       min={0}
-                      value={paid}
-                      onChange={(value) => setPaid(value)}
+                      value={discount}
+                      onChange={(value) => setDiscount(value)}
+                      addonAfter="%"
                       style={{
                         width: "100px",
                         backgroundColor: "var(--white-color)",
                         color: "var(--black-color)"
                       }}
                     />
-                  </Title>
-                </Col>
-                <Col span={3}></Col>
-              </Row>
-              <Row gutter={[16, 16]}>
-                <Col span={15} style={{ textAlign: "right" }}>
-                  <Title level={5}>ပေးရန်ကျန်ငွေ</Title>
-                </Col>
-                <Col span={3}></Col>
-                <Col span={3} style={{ textAlign: "right" }}>
-                  <Title level={5}>{credit}</Title>
-                </Col>
-                <Col span={3}></Col>
-              </Row>
-              <Row gutter={[16, 16]} style={{ padding: "20px" }}>
-                <Col xl={{ span: 10 }}>
-                  <Space>
-                    <Text
+                  </Col>
+                  <Col span={3} style={{ textAlign: "right" }}>
+                    <Title level={5}>{discountAmount}</Title>
+                  </Col>
+                  <Col span={3}></Col>
+                </Row>
+                <Row gutter={[16, 16]}>
+                  <Col span={15} style={{ textAlign: "right" }}>
+                    <Title level={5}>ပေးချေရမည့်စုစုပေါင်း</Title>
+                  </Col>
+                  <Col span={3}></Col>
+                  <Col span={3} style={{ textAlign: "right" }}>
+                    <Title level={5}>{finalTotal}</Title>
+                  </Col>
+                  <Col span={3}></Col>
+                </Row>
+                <Row gutter={[16, 16]}>
+                  <Col span={15} style={{ textAlign: "right" }}>
+                    <Title level={5}>ပေးငွေ</Title>
+                  </Col>
+                  <Col span={3}></Col>
+                  <Col span={3} style={{ textAlign: "right" }}>
+                    <Title level={5}>
+                      <InputNumber
+                        min={0}
+                        value={paid}
+                        onChange={(value) => setPaid(value)}
+                        style={{
+                          width: "100px",
+                          backgroundColor: "var(--white-color)",
+                          color: "var(--black-color)"
+                        }}
+                      />
+                    </Title>
+                  </Col>
+                  <Col span={3}></Col>
+                </Row>
+                <Row gutter={[16, 16]}>
+                  <Col span={15} style={{ textAlign: "right" }}>
+                    <Title level={5}>ပေးရန်ကျန်ငွေ</Title>
+                  </Col>
+                  <Col span={3}></Col>
+                  <Col span={3} style={{ textAlign: "right" }}>
+                    <Title level={5}>{credit}</Title>
+                  </Col>
+                  <Col span={3}></Col>
+                </Row>
+                <Row gutter={[16, 16]} style={{ padding: "20px" }}>
+                  <Col xl={{ span: 10 }}>
+                    <Space>
+                      <Text
+                        style={{
+                          backgroundColor: "var(--primary-color)",
+                          padding: "10px",
+                          color: "var(--white-color)"
+                        }}
+                      >
+                        ဝယ်ယူသူအမည်
+                      </Text>
+                      <Input
+                        size="large"
+                        value={customerName}
+                        onChange={(event) =>
+                          setCustomerName(event.target.value)
+                        }
+                      />
+                    </Space>
+                  </Col>
+                  <Col xl={{ span: 4 }}></Col>
+                  <Col xl={{ span: 10 }}>
+                    <Space>
+                      <Text
+                        style={{
+                          backgroundColor: "var(--primary-color)",
+                          padding: "10px",
+                          color: "var(--white-color)"
+                        }}
+                      >
+                        ဝယ်ယူသူဖုန်းနံပါတ်
+                      </Text>
+                      <Input
+                        size="large"
+                        value={customerPhone}
+                        onChange={(event) =>
+                          setCustomerPhone(event.target.value)
+                        }
+                      />
+                    </Space>
+                  </Col>
+                </Row>
+                <Row gutter={[16, 16]} style={{ padding: "20px" }}>
+                  <Col xl={{ span: 20 }} style={{ textAlign: "right" }}>
+                    <Space direction="vertical">
+                      <Text
+                        style={{
+                          backgroundColor: "var(--primary-color)",
+                          padding: "10px",
+                          color: "var(--white-color)"
+                        }}
+                      >
+                        ငွေချေရမည့်နည်းလမ်း
+                      </Text>
+                      <Select
+                        showSearch
+                        placeholder="ငွေချေနည်းရွေးပါ"
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          option.children
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={(value) => setPayMethod(value)}
+                        value={payMethod}
+                        // onChange={setValue}
+                        allowClear={true}
+                        size="large"
+                        style={{ borderRadius: "10px" }}
+                      >
+                        <Option value="Cash" key="Cash">
+                          Cash
+                        </Option>
+                        <Option value="KBZ" key="KBZ">
+                          KBZ
+                        </Option>
+                        <Option value="AYA" key="AYA">
+                          AYA
+                        </Option>
+                        <Option value="CB" key="CB">
+                          CB
+                        </Option>
+                        <Option value="Kpay" key="Kpay">
+                          Kpay
+                        </Option>
+                      </Select>
+                    </Space>
+                  </Col>
+                  <Col xl={{ span: 4 }}></Col>
+                </Row>
+                <Row gutter={[16, 16]} style={{ padding: "20px" }}>
+                  <Col span={10} style={{ textAlign: "center" }}>
+                    <Button
                       style={{
                         backgroundColor: "var(--primary-color)",
-                        padding: "10px",
                         color: "var(--white-color)"
                       }}
-                    >
-                      ဝယ်ယူသူအမည်
-                    </Text>
-                    <Input
                       size="large"
-                      value={customerName}
-                      onChange={(event) => setCustomerName(event.target.value)}
-                    />
-                  </Space>
-                </Col>
-                <Col xl={{ span: 4 }}></Col>
-                <Col xl={{ span: 10 }}>
-                  <Space>
-                    <Text
+                      onClick={handleSavedSale}
+                    >
+                      <SaveOutlined />
+                      Save
+                    </Button>
+                  </Col>
+                  <Col span={4}></Col>
+                  <Col span={10} style={{ textAlign: "center" }}>
+                    <Button
                       style={{
                         backgroundColor: "var(--primary-color)",
-                        padding: "10px",
                         color: "var(--white-color)"
                       }}
-                    >
-                      ဝယ်ယူသူဖုန်းနံပါတ်
-                    </Text>
-                    <Input
                       size="large"
-                      value={customerPhone}
-                      onChange={(event) => setCustomerPhone(event.target.value)}
-                    />
-                  </Space>
-                </Col>
-              </Row>
-              <Row gutter={[16, 16]} style={{ padding: "20px" }}>
-                <Col xl={{ span: 20 }} style={{ textAlign: "right" }}>
-                  <Space direction="vertical">
-                    <Text
-                      style={{
-                        backgroundColor: "var(--primary-color)",
-                        padding: "10px",
-                        color: "var(--white-color)"
-                      }}
+                      onClick={handlePrint}
                     >
-                      ငွေချေရမည့်နည်းလမ်း
-                    </Text>
-                    <Select
-                      showSearch
-                      placeholder="ငွေချေနည်းရွေးပါ"
-                      optionFilterProp="children"
-                      filterOption={(input, option) =>
-                        option.children
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }
-                      onChange={(value) => setPayMethod(value)}
-                      value={payMethod}
-                      // onChange={setValue}
-                      allowClear={true}
-                      size="large"
-                      style={{ borderRadius: "10px" }}
-                    >
-                      <Option value="Cash">Cash</Option>
-                      <Option value="KBZ">KBZ</Option>
-                      <Option value="AYA">AYA</Option>
-                      <Option value="CB">CB</Option>
-                      <Option value="Kpay">Kpay</Option>
-                    </Select>
-                  </Space>
-                </Col>
-                <Col xl={{ span: 4 }}></Col>
-              </Row>
-              <Row gutter={[16, 16]} style={{ padding: "20px" }}>
-                <Col span={10} style={{ textAlign: "center" }}>
-                  <Button
-                    style={{
-                      backgroundColor: "var(--primary-color)",
-                      color: "var(--white-color)"
-                    }}
-                    size="large"
-                    onClick={handleSavedSale}
-                  >
-                    <SaveOutlined />
-                    Save
-                  </Button>
-                </Col>
-                <Col span={4}></Col>
-                <Col span={10} style={{ textAlign: "center" }}>
-                  <Button
-                    style={{
-                      backgroundColor: "var(--primary-color)",
-                      color: "var(--white-color)"
-                    }}
-                    size="large"
-                    onClick={handlePrint}
-                  >
-                    <PrinterOutlined />
-                    Print
-                  </Button>
-                </Col>
-              </Row>
-            </Layout>
-          </Content>
-        </Layout>
-      </Spin>
-    </Layout>
+                      <PrinterOutlined />
+                      Print
+                    </Button>
+                  </Col>
+                </Row>
+              </Layout>
+            </Content>
+          </Layout>
+        </Spin>
+      </Layout>
+    </Spin>
   );
 };
 

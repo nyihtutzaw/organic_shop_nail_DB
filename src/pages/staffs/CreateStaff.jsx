@@ -71,7 +71,7 @@ const CreateStaff = ({ saveStaffs, clearAlertStaffs, staff }) => {
   return (
     <Spin spinning={status.loading}>
     <Layout style={{ margin: "20px" }}>
-      {staff.error.length > 0 ? (
+      {/* {staff.error.length > 0 ? (
         <Alert
           message="Errors"
           description={staff.error}
@@ -88,7 +88,7 @@ const CreateStaff = ({ saveStaffs, clearAlertStaffs, staff }) => {
           showIcon
           closable
         />
-      )}
+      )} */}
       <Space direction="vertical" size="middle">
         <Title style={{ textAlign: "center" }} level={3}>
           ၀န်ထမ်းစာရင်းသွင်းရန်စာမျက်နှာ

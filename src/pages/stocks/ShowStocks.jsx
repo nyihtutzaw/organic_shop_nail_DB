@@ -49,7 +49,9 @@ const ShowStocks = ({ stock, getStocks }) => {
     };
   }, [getStocks]);
 
+  let columns = [];
 
+<<<<<<< HEAD
   const columns = [
     {
       title: "ပစ္စည်းပုံ",
@@ -143,6 +145,127 @@ const ShowStocks = ({ stock, getStocks }) => {
       render: (_, record) => record?.shop?.name
     }
   ];
+=======
+  if(user?.position === "owner"){
+    columns = [
+      {
+        title: "ပစ္စည်းပုံ",
+        dataIndex: "item",
+        render: (_, record) => (
+          <img src={record.item.image} alt="ပစ္စည်းပုံ" width={80} height={80} />
+        )
+      },
+      {
+        title: "ပစ္စည်းကုတ်",
+        dataIndex: "item",
+        render: (_, record) => {
+          if (record.quantity < 10)
+            return <span style={{ color: "red" }}>{record.item.code}</span>;
+          else return <span>{record.item.code}</span>;
+        }
+      },
+      {
+        title: "ပစ္စည်းအမည်",
+        dataIndex: "item",
+        render: (_, record) => {
+          if (record.quantity < 10)
+            return <span style={{ color: "red" }}>{record.item.name}</span>;
+          else return <span>{record.item.name}</span>;
+        }
+      },
+  
+      {
+        title: "ဝယ်ဈေး",
+        dataIndex: "buy_price",
+        render: (_, record) => {
+          if (record.quantity < 10)
+            return <span style={{ color: "red" }}>{record.item.buy_price}</span>;
+          else return <span>{record.item.buy_price}</span>;
+        }
+      },
+      {
+        title: "ရောင်းဈေး",
+        dataIndex: "sale_price",
+        render: (_, record) => {
+          if (record.quantity < 10)
+            return <span style={{ color: "red" }}>{record.item.sale_price}</span>;
+          else return <span>{record.item.sale_price}</span>;
+        }
+      },
+      {
+        title: "အရေအတွက်",
+        render: (_, record) => {
+          if (record.quantity < 10)
+            return <span style={{ color: "red" }}>{record.quantity}</span>;
+          else return <span>{record.quantity}</span>;
+        }
+      },
+      {
+        title: "ဆိုင်အမည်",
+        render: (_, record) => record?.shop?.name
+      }
+    ];
+  }else{
+    columns = [
+      {
+        title: "ပစ္စည်းပုံ",
+        dataIndex: "item",
+        render: (_, record) => (
+          <img src={record.item.image} alt="ပစ္စည်းပုံ" width={80} height={80} />
+        )
+      },
+      {
+        title: "ပစ္စည်းကုတ်",
+        dataIndex: "item",
+        render: (_, record) => {
+          if (record.quantity < 10)
+            return <span style={{ color: "red" }}>{record.item.code}</span>;
+          else return <span>{record.item.code}</span>;
+        }
+      },
+      {
+        title: "ပစ္စည်းအမည်",
+        dataIndex: "item",
+        render: (_, record) => {
+          if (record.quantity < 10)
+            return <span style={{ color: "red" }}>{record.item.name}</span>;
+          else return <span>{record.item.name}</span>;
+        }
+      },
+      // {
+      //   title: "ဝယ်ဈေး",
+      //   dataIndex: "buy_price",
+      //   render: (_, record) => {
+      //     if (record.quantity < 10)
+      //       return <span style={{ color: "red" }}>{record.item.buy_price}</span>;
+      //     else return <span>{record.item.buy_price}</span>;
+      //   }
+      // },
+      {
+        title: "ရောင်းဈေး",
+        dataIndex: "sale_price",
+        render: (_, record) => {
+          if (record.quantity < 10)
+            return <span style={{ color: "red" }}>{record.item.sale_price}</span>;
+          else return <span>{record.item.sale_price}</span>;
+        }
+      },
+      {
+        title: "အရေအတွက်",
+        render: (_, record) => {
+          if (record.quantity < 10)
+            return <span style={{ color: "red" }}>{record.quantity}</span>;
+          else return <span>{record.quantity}</span>;
+        }
+      },
+      {
+        title: "ဆိုင်အမည်",
+        render: (_, record) => record?.shop?.name
+      }
+    ];
+  }
+  
+>>>>>>> Last
 
   return (
     <Spin spinning={status.loading}>

@@ -268,6 +268,10 @@ const ItemsReports = () => {
                 style={{ borderRadius: "10px" }}
               >
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+                
+>>>>>>> Last
                 {unique.map((item) => (
                   <Option key={Math.random() * 100} value={item}>
                     {item}

@@ -103,6 +103,7 @@ const ShowStaff = ({ getStaffs, deleteStaffs, clearAlertStaffs }) => {
       title: "ဘဏ်အကောင့်",
       dataIndex: "bank_account"
     },
+    
     {
       title: "Actions",
       dataIndex: "action",

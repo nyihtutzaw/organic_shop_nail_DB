@@ -1,5 +1,15 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, notification, message, Spin } from "antd";
+import {
+  Typography,
+  Space,
+  Row,
+  Col,
+  Button,
+  Table,
+  notification,
+  message,
+  Spin
+} from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
@@ -12,7 +22,6 @@ import { getItems, deleteItems, getItem } from "../../store/actions";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 import { successDeleteMessage } from "../../util/messages";
 
-
 const { Title } = Typography;
 
 const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
@@ -20,7 +29,6 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
   const user = useSelector((state) => state.auth.user);
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
-  
   // console.log("ii", allItems);
   const fileName = "Items"; // here enter filename for your excel file
   const result = allItems.map((item) => ({
@@ -71,7 +79,9 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
     await deleteItems(record.id);
   };
 
-  const columns = [
+  let columns = [];
+if(user?.position === "owner"){
+  columns = [
     {
       title: "ပစ္စည်းပုံ",
       dataIndex: "image",
@@ -102,9 +112,9 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
       render: (_, record) => (
         <Space direction="horizontal">
           {user?.position !== "owner" && (
-          <Button type="primary" onClick={() => handleClick(record)}>
-            <EditOutlined />
-          </Button>
+            <Button type="primary" onClick={() => handleClick(record)}>
+              <EditOutlined />
+            </Button>
           )}
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
@@ -113,44 +123,88 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
       )
     }
   ];
+}else{
+  columns = [
+    {
+      title: "ပစ္စည်းပုံ",
+      dataIndex: "image",
+      render: (_, record) => (
+        <img src={record.image} alt="ပစ္စည်းပုံ" width={80} height={80} />
+      )
+    },
+    {
+      title: "ပစ္စည်းကုတ်",
+      dataIndex: "code"
+    },
+    {
+      title: "ပစ္စည်းအမည်",
+      dataIndex: "name"
+    },
+    // {
+    //   title: "ဝယ်ဈေး",
+    //   dataIndex: "buy_price"
+    // },
+    {
+      title: "ရောင်းဈေး",
+      dataIndex: "sale_price"
+    },
+
+    {
+      title: "Actions",
+      dataIndex: "action",
+      render: (_, record) => (
+        <Space direction="horizontal">
+          {user?.position !== "owner" && (
+            <Button type="primary" onClick={() => handleClick(record)}>
+              <EditOutlined />
+            </Button>
+          )}
+          <Button type="primary" danger onClick={() => handleDelete(record)}>
+            <DeleteOutlined />
+          </Button>
+        </Space>
+      )
+    }
+  ];
+}
+  
 
   return (
     <Spin spinning={status.loading}>
-
-    <Layout style={{ margin: "20px" }}>
-      <Space direction="vertical" size="middle">
-        <Row gutter={[16, 16]}>
-          <Col span={16}>
-            <Title level={3}>ပစ္စည်းစာရင်း</Title>
-          </Col>
-          <Col span={4}>
-          {user?.position !== "owner" && (
-            <Button
-              style={{
-                backgroundColor: "var(--secondary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-              onClick={() => navigate("/admin/create-items")}
-            >
-              <PlusSquareOutlined />
-              အသစ်ထည့်မည်
-            </Button>
-          )}
-          </Col>
-          <Col span={4}>
-            <ExportToExcel apiData={result} fileName={fileName} />
-          </Col>
-        </Row>
-        <Table
-          bordered
-          columns={columns}
-          pagination={{ defaultPageSize: 10 }}
-          dataSource={item.items}
-        />
-      </Space>
-    </Layout>
+      <Layout style={{ margin: "20px" }}>
+        <Space direction="vertical" size="middle">
+          <Row gutter={[16, 16]}>
+            <Col span={16}>
+              <Title level={3}>ပစ္စည်းစာရင်း</Title>
+            </Col>
+            <Col span={4}>
+              {user?.position !== "owner" && (
+                <Button
+                  style={{
+                    backgroundColor: "var(--secondary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                  size="middle"
+                  onClick={() => navigate("/admin/create-items")}
+                >
+                  <PlusSquareOutlined />
+                  အသစ်ထည့်မည်
+                </Button>
+              )}
+            </Col>
+            <Col span={4}>
+              <ExportToExcel apiData={result} fileName={fileName} />
+            </Col>
+          </Row>
+          <Table
+            bordered
+            columns={columns}
+            pagination={{ defaultPageSize: 10 }}
+            dataSource={item.items}
+          />
+        </Space>
+      </Layout>
     </Spin>
   );
 };

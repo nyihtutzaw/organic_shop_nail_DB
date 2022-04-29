@@ -342,6 +342,7 @@ const Admin = ({ logout }) => {
                 </Menu.Item>
                 {user?.position === "manager" ||
                   user?.position === "cashier" ||
+                  user?.position === "owner" ||
                   (user?.position === "staff" && (
                     <Menu.Item key="CreateAccounts" icon={<SaveOutlined />}>
                       <Link to="/admin/create-accounts">အသစ်ဖန်တီးရန်</Link>
@@ -474,7 +475,7 @@ const Admin = ({ logout }) => {
                 <Link to="/admin/show-expense-names">အမည်များ</Link>
               </Menu.Item>
             </SubMenu>
-            {(user?.position === "owner" || user?.position === "manager" ) && (
+            {user?.position === "owner" || user?.position === "manager" ? (
               <SubMenu
                 key="Reports"
                 title="Reports"
@@ -504,6 +505,37 @@ const Admin = ({ logout }) => {
                 >
                   <Link to="/admin/purchase-report">Purchase</Link>
                 </Menu.Item>
+              </SubMenu>
+            ) : (
+              <SubMenu
+                key="Reports"
+                title="Reports"
+                icon={<FolderAddOutlined />}
+              >
+                {/* <Menu.Item key="ItemsReports" icon={<SaveOutlined />}>
+                  <Link to="/admin/item-report">Item</Link>
+                </Menu.Item> */}
+                <Menu.Item
+                  key="VouchersReports"
+                  icon={<UnorderedListOutlined />}
+                >
+                  <Link to="/admin/voucher-report">Voucher</Link>
+                </Menu.Item>
+                {/* <Menu.Item
+                  key="ServicesReports"
+                  icon={<UnorderedListOutlined />}
+                >
+                  <Link to="/admin/service-report">Service</Link>
+                </Menu.Item>
+                <Menu.Item key="ReportScreem" icon={<UnorderedListOutlined />}>
+                  <Link to="/admin/report-screem">Report Screen</Link>
+                </Menu.Item>
+                <Menu.Item
+                  key="PurchaseReport"
+                  icon={<UnorderedListOutlined />}
+                >
+                  <Link to="/admin/purchase-report">Purchase</Link>
+                </Menu.Item> */}
               </SubMenu>
             )}
           </Menu>

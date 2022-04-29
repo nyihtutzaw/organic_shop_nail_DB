@@ -107,7 +107,6 @@ export const saveAccounts = (data) => {
         `${apiUrl}io-register`,
         data
       );
-      console.log(response.status);
 
       const result = {
         ...response.data.data,

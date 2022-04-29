@@ -107,7 +107,7 @@ const ShowAccounts = ({ deleteAccounts }) => {
               <Title level={3}>အကောင့်စာရင်း</Title>
             </Col>
             <Col span={4}>
-              {user?.position !== "owner" && (
+              {(user?.position === "owner" || user?.position === "manager") && (
                 <Button
                   style={{
                     backgroundColor: "var(--secondary-color)",

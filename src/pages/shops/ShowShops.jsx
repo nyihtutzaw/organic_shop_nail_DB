@@ -112,7 +112,7 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
               <Title level={3}>ဆိုင်အမည်စာရင်း</Title>
             </Col>
             <Col span={4}>
-              {user?.position !== "owner" && (
+            {(user?.position === "owner" || user?.position === "manager") && (
                 <Button
                   style={{
                     backgroundColor: "var(--secondary-color)",
