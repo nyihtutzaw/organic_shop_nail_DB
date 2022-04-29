@@ -451,7 +451,7 @@ const Admin = ({ logout }) => {
                 <Link to="/admin/show-expense-names">အမည်များ</Link>
               </Menu.Item>
             </SubMenu>
-            {(user?.position === "owner" || user?.position === "manager" ) && (
+            {user?.position === "owner" || user?.position === "manager" ? (
               <SubMenu
                 key="Reports"
                 title="Reports"
@@ -482,6 +482,37 @@ const Admin = ({ logout }) => {
                   <Link to="/admin/purchase-report">Purchase</Link>
                 </Menu.Item>
               </SubMenu>
+            ) : (
+              <SubMenu
+                key="Reports"
+                title="Reports"
+                icon={<FolderAddOutlined />}
+              >
+                {/* <Menu.Item key="ItemsReports" icon={<SaveOutlined />}>
+                  <Link to="/admin/item-report">Item</Link>
+                </Menu.Item> */}
+                <Menu.Item
+                  key="VouchersReports"
+                  icon={<UnorderedListOutlined />}
+                >
+                  <Link to="/admin/voucher-report">Voucher</Link>
+                </Menu.Item>
+                {/* <Menu.Item
+                  key="ServicesReports"
+                  icon={<UnorderedListOutlined />}
+                >
+                  <Link to="/admin/service-report">Service</Link>
+                </Menu.Item>
+                <Menu.Item key="ReportScreem" icon={<UnorderedListOutlined />}>
+                  <Link to="/admin/report-screem">Report Screen</Link>
+                </Menu.Item>
+                <Menu.Item
+                  key="PurchaseReport"
+                  icon={<UnorderedListOutlined />}
+                >
+                  <Link to="/admin/purchase-report">Purchase</Link>
+                </Menu.Item> */}
+              </SubMenu>
             )}
           </Menu>
         </Sider>
@@ -497,7 +528,6 @@ const Admin = ({ logout }) => {
               <Route path="create-merchants" element={<CreateMerchants />} />
               <Route path="show-merchants" element={<ShowMerchants />} />
               <Route path="edit-merchants/:id" element={<EditMerchants />} />
-
 
               <Route path="create-members" element={<CreateMembers />} />
               <Route path="show-members" element={<ShowMembers />} />

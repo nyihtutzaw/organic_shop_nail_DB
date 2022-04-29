@@ -843,11 +843,11 @@ const Sale = ({
                         size="large"
                         style={{ borderRadius: "10px" }}
                       >
-                        <Option value="Cash">Cash</Option>
-                        <Option value="KBZ">KBZ</Option>
-                        <Option value="AYA">AYA</Option>
-                        <Option value="CB">CB</Option>
-                        <Option value="Kpay">Kpay</Option>
+                        <Option value="Cash" key="Cash">Cash</Option>
+                        <Option value="KBZ" key="KBZ">KBZ</Option>
+                        <Option value="AYA" key="AYA">AYA</Option>
+                        <Option value="CB" key="CB">CB</Option>
+                        <Option value="Kpay" key="Kpay">Kpay</Option>
                       </Select>
                     </Space>
                   </Col>
