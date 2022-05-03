@@ -127,9 +127,9 @@ const ShowBuyMerchants = ({
   // allPurchases.forEach((purchase) => allCredit.push(parseInt(purchase.credit)));
   // const finalCredit = allCredit.reduce((a, b) => a + b, 0);
 
-  // let allCreditGet = [];
-  // showBuyMerchant?.forEach((mr) => allCreditGet.push(parseInt(mr.credit)));
-  // const finalCreditGet = allCreditGet.reduce((a, b) => a + b, 0);
+  let allCreditGet = [];
+  showBuyMerchant?.forEach((mr) => allCreditGet.push(parseInt(mr.credit)));
+  const finalCreditGet = allCreditGet.reduce((a, b) => a + b, 0);
 
   const handleDelete = async (record) => {
     const filterMyPurchase = myPurchase.filter(

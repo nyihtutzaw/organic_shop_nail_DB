@@ -17,6 +17,7 @@ import { useReactToPrint } from "react-to-print";
 import { call } from "../../services/api";
 import { getDate } from "../../uitls/convertToDate";
 import organic from "./images/organic.jpg";
+import { useSelector } from "react-redux";
 
 const { Header } = Layout;
 const { Title } = Typography;
