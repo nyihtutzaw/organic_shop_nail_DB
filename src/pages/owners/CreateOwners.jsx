@@ -23,7 +23,6 @@ const CreateOwners = ({ saveOwners, getStocks }) => {
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
 
-
   const [form] = Form.useForm();
   const now = new Date();
   const date = dateFormat(now, "yyyy-mm-dd");
