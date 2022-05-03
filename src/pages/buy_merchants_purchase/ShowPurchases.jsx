@@ -108,11 +108,7 @@ const ShowPurchases = ({
           အကြွေးပေးချေရန်
         </Title>
         <Form
-<<<<<<< HEAD
           colon={false}
-=======
-        colon={false}
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
           labelCol={{
             xl: {
               span: 3
@@ -162,15 +158,11 @@ const ShowPurchases = ({
           <Col span={24}>
             <Space
               direction="horizontal"
-<<<<<<< HEAD
               style={{
                 width: "100%",
                 justifyContent: "right",
                 marginBottom: "10px"
               }}
-=======
-              style={{ width: "100%", justifyContent: "right", marginBottom: "10px" }}
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
               size="large"
             >
               <Text
@@ -178,11 +170,7 @@ const ShowPurchases = ({
                   backgroundColor: "var(--primary-color)",
                   padding: "10px",
                   color: "var(--white-color)",
-<<<<<<< HEAD
                   borderRadius: "5px"
-=======
-                  borderRadius: "5px",
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
                 }}
               >
                 ကနဦးပေးချေခဲ့သည့်ပမာဏ = {allCredits?.paid} Ks
@@ -194,15 +182,11 @@ const ShowPurchases = ({
           <Col span={24}>
             <Space
               direction="horizontal"
-<<<<<<< HEAD
               style={{
                 width: "100%",
                 justifyContent: "right",
                 marginBottom: "10px"
               }}
-=======
-              style={{ width: "100%", justifyContent: "right", marginBottom: "10px" }}
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
               size="large"
             >
               <Text
@@ -223,15 +207,11 @@ const ShowPurchases = ({
           <Col span={24}>
             <Space
               direction="horizontal"
-<<<<<<< HEAD
               style={{
                 width: "100%",
                 justifyContent: "right",
                 marginBottom: "10px"
               }}
-=======
-              style={{ width: "100%", justifyContent: "right", marginBottom: "10px" }}
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
               size="large"
             >
               <Text

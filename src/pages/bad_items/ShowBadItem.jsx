@@ -11,15 +11,11 @@ import {
   message
 } from "antd";
 import Layout from "antd/lib/layout/layout";
-<<<<<<< HEAD
 import {
   DeleteOutlined,
   EditOutlined,
   PlusSquareOutlined
 } from "@ant-design/icons";
-=======
-import { ExportOutlined, DeleteOutlined, EditOutlined, PlusSquareOutlined } from "@ant-design/icons";
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 import { useNavigate } from "react-router-dom";
 import { getBadItems, deleteBadItems, getBadItem } from "../../store/actions";
 import { connect } from "react-redux";
@@ -102,7 +98,6 @@ const ShowBadItem = ({ getBadItems, deleteBadItems, getBadItem }) => {
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-<<<<<<< HEAD
           {user?.position !== "owner" && (
             <Button type="primary" onClick={() => handleClick(record)}>
               <EditOutlined />
@@ -110,13 +105,6 @@ const ShowBadItem = ({ getBadItems, deleteBadItems, getBadItem }) => {
           )}
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
-=======
-          <Button type="primary" onClick={() => handleClick(record)}>
-            <EditOutlined/>
-          </Button>
-          <Button type="primary" danger onClick={() => handleDelete(record)}>
-          <DeleteOutlined />
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
           </Button>
         </Space>
       )

@@ -94,11 +94,7 @@ const CreateStaff = ({ saveStaffs, clearAlertStaffs, staff }) => {
           ၀န်ထမ်းစာရင်းသွင်းရန်စာမျက်နှာ
         </Title>
         <Form
-<<<<<<< HEAD
           colon={false}
-=======
-        colon={false}
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
           labelCol={{
             xl: {
               span: 3

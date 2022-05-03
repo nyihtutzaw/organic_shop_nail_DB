@@ -30,24 +30,10 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
     Category: service.category,
     Percentage: service.percentage,
     Price: service.price,
-<<<<<<< HEAD
     key: service.id
   }));
 
   const navigate = useNavigate();
-=======
-  }));
-
-  const navigate = useNavigate();
-  
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Delete Your Data",
-      description: "Your data have been deleted.",
-      duration: 3
-    });
-  };
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
   const mountedRef = React.useRef(true);
   const getShopYearly = async () => {

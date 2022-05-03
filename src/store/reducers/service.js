@@ -45,13 +45,9 @@ const service = (state = initialState, action) => {
       );
       return {
         ...state,
-<<<<<<< HEAD
         services: filterServices,
         error: [],
         isSuccess: true
-=======
-        services: filterServices
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       };
     case UPDATE_SERVICES:
       const index = state.services.findIndex(

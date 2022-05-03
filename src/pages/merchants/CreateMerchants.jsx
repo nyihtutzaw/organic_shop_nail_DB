@@ -28,13 +28,8 @@ const CreateMerchants = ({
   clearAlertMerchant,
 }) => {
   const [form] = Form.useForm();
-<<<<<<< HEAD
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
-=======
-  const shops = useSelector((state) => state.shop.shops);
-  const navigate = useNavigate();
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,7 +66,6 @@ const CreateMerchants = ({
 
   
   return (
-<<<<<<< HEAD
     <Spin spinning={status.loading}>
       <Layout style={{ margin: "20px" }}>
         <Space direction="vertical" size="middle">
@@ -83,50 +77,6 @@ const CreateMerchants = ({
             labelCol={{
               xl: {
                 span: 3
-=======
-    <Layout style={{ margin: "20px" }}>
-      {merchant.error.length > 0 ? (
-        <Alert
-          message="Errors"
-          description={merchant.error}
-          type="error"
-          showIcon
-          closable
-        />
-      ) : null}
-
-      {merchant.isSuccess && (
-        <Alert message="Successfully Created" type="success" showIcon />
-      )}
-
-      <Space direction="vertical" size="middle">
-        <Title style={{ textAlign: "center" }} level={3}>
-          ကုန်သည်အချက်အလက်သွင်းရန်စာမျက်နှာ
-        </Title>
-        <Form
-        colon={false}
-          labelCol={{
-            xl: {
-              span: 3
-            }
-          }}
-          wrapperCol={{
-            span: 24
-          }}
-          initialValues={{
-            remember: true
-          }}
-          onFinish={onFinish}
-          form={form}
-        >
-          <Form.Item
-            name="code"
-            label="ကုတ်"
-            rules={[
-              {
-                required: true,
-                message: "ကျေးဇူးပြု၍ ကုတ်ထည့်ပါ"
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
               }
             }}
             wrapperCol={{

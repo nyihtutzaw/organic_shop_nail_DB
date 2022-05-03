@@ -92,27 +92,6 @@ export const deleteVouchers = (id) => {
   };
 };
 
-<<<<<<< HEAD
-=======
-export const deleteVouchers = (id) => {
-  return async (dispatch) => {
-    try {
-      const response = await axios.delete(
-        `${apiUrl}invoices/${id}`
-      );
-      console.log(response.data.data)
-      if (response.status === 204) {
-        dispatch(filterVouchers(id));
-      }
-    } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(setVoucherErrors(error.response.data.data));
-      }
-    }
-  };
-};
-
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 // export const getItem = (id) => {
 //   return async (dispatch) => {

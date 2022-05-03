@@ -88,6 +88,7 @@ import ShowPurchases from "../pages/buy_merchants_purchase/ShowPurchases";
 import EditBadItem from "../pages/bad_items/EditBadItem";
 import ChangePassword from "../pages/change_password/ChangePassword";
 import PurchaseReport from "../pages/reports/PurchaseReport";
+import DailyAttendance from "../pages/staffs/DailyAttendance";
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -595,10 +596,10 @@ const Admin = ({ logout }) => {
                 element={<CreateBuyMerchants />}
               />
               <Route path="show-buy-merchants" element={<ShowBuyMerchants />} />
-              <Route
+              {/* <Route
                 path="detail-buy-merchants/:id"
                 element={<DetailMerchant />}
-              />
+              /> */}
               <Route
                 path="edit-buy-merchants/:id"
                 element={<EditBuyMerchants />}

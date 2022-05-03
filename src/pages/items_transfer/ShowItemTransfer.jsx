@@ -72,17 +72,6 @@ const ShowItemTransfer = ({
     };
   }, [getItemTransfers]);
 
-<<<<<<< HEAD
-=======
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Deleted Your Data",
-      description: "Your data have been deleted.",
-      duration: 3
-    });
-  };
-
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
   const handleDelete = async (record) => {
     await deleteItemTransfers(record.id);
   };

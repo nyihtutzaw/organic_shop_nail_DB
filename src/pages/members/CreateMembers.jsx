@@ -5,14 +5,8 @@ import {
   Typography,
   Space,
   Button,
-<<<<<<< HEAD
   message,
   Spin
-=======
-  InputNumber,
-  Select,
-  notification
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
@@ -25,7 +19,6 @@ import { successCreateMessage } from "../../util/messages";
 
 const { Title } = Typography;
 
-<<<<<<< HEAD
 const CreateMembers = ({ saveMembers, getShops, clearAlertMember }) => {
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
@@ -34,12 +27,6 @@ const CreateMembers = ({ saveMembers, getShops, clearAlertMember }) => {
   useEffect(() => {
     store.dispatch(clearAlertMember());
   }, []);
-=======
-const CreateMembers = ({ shop, saveMembers, getShops }) => {
-  const shops = useSelector((state) => state.shop.shops);
-  const navigate = useNavigate();
-  const [form] = Form.useForm();
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +38,6 @@ const CreateMembers = ({ shop, saveMembers, getShops }) => {
     };
   }, [getShops]);
 
-<<<<<<< HEAD
 
   useEffect(() => {
     error.message !== null && message.error(error.message);
@@ -71,19 +57,6 @@ const CreateMembers = ({ shop, saveMembers, getShops }) => {
   const onFinish = async (values) => {
     await saveMembers(values);
     form.resetFields();
-=======
-  const openNotificationWithIcon = (type) => {
-    notification[type]({
-      message: "Saved Your Data",
-      description: "Your data have been saved.",
-      duration: 3
-    });
-  };
-  const onFinish = async (values) => {
-    await saveMembers(values);
-    form.resetFields();
-    openNotificationWithIcon("success");
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
   };
 
   //for barcode
@@ -101,11 +74,7 @@ const CreateMembers = ({ shop, saveMembers, getShops }) => {
           Member စာရင်းသွင်းခြင်း စာမျက်နှာ
         </Title>
         <Form
-<<<<<<< HEAD
           colon={false}
-=======
-        colon={false}
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
           labelCol={{
             xl: {
               span: 3
@@ -218,14 +187,8 @@ const mapStateToProps = (store) => ({
   shop: store.shop
 });
 
-<<<<<<< HEAD
 export default connect(mapStateToProps, {
   saveMembers,
   getShops,
   clearAlertMember
 })(CreateMembers);
-=======
-export default connect(mapStateToProps, { saveMembers, getShops })(
-  CreateMembers
-);
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4

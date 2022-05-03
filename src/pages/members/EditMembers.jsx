@@ -35,11 +35,8 @@ const EditMembers = ({
   const navigate = useNavigate();
   const member = useSelector((state) => state.member.member);
   const shops = useSelector((state) => state.shop.shops);
-<<<<<<< HEAD
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
-=======
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
   useEffect(() => {
     const fetchData = async () => {

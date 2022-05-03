@@ -214,48 +214,7 @@ const CreateBuyMerchants = ({
           <Title style={{ textAlign: "center" }} level={3}>
             အဝယ်စာရင်းသွင်းရန်
           </Title>
-<<<<<<< HEAD
         </Space>
-        <Form
-<<<<<<< HEAD
-          colon={false}
-=======
-        colon={false}
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
-          labelCol={{
-            xl: {
-              span: 3
-            }
-          }}
-          wrapperCol={{
-            span: 24
-          }}
-          initialValues={{
-            remember: true
-          }}
-          onFinish={onFinish}
-          form={form}
-        >
-          <Form.Item
-            name="item_id"
-            label="ပစ္စည်း"
-            rules={[
-              {
-                required: true,
-                message: "ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
-              }
-            ]}
-=======
-          <Space
-            direction="horizontal"
-            style={{
-              width: "100%",
-              justifyContent: "center",
-              marginBottom: "10px"
-            }}
-            size="large"
->>>>>>> Last
-          >
             <Text type="secondary">ကုန်သည်အမည်ရွေးပါ</Text>
             <Select
               showSearch
@@ -275,7 +234,7 @@ const CreateBuyMerchants = ({
                 </Option>
               ))}
             </Select>
-          </Space>
+          
           <Space
             direction="horizontal"
             style={{ width: "100%", justifyContent: "center" }}
@@ -438,7 +397,6 @@ const CreateBuyMerchants = ({
               သိမ်းမည်
             </Button>
           </Space>
-        </Space>
       </Layout>
     </Spin>
   );
