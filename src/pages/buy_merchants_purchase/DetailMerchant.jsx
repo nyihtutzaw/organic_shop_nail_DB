@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import { Typography, Space, Row, Col, Button, Table } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { PlusSquareOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
 import { getPurchase } from "../../store/actions";
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 const DetailMerchant = ({ getPurchase }) => {
   const navigate = useNavigate();
