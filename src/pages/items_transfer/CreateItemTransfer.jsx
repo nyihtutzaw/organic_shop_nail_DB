@@ -190,7 +190,7 @@ const CreateItemTransfer = ({
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
               value={buyShop}
-              onChange={value => setBuyShop(value)}
+              onChange={(value) => setBuyShop(value)}
               allowClear={true}
               size="large"
               style={{ borderRadius: "10px" }}
@@ -233,6 +233,7 @@ const CreateItemTransfer = ({
               ]}
             >
               <Select
+                name="name"
                 // showSearch
                 placeholder="ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
                 optionFilterProp="children"
@@ -246,7 +247,7 @@ const CreateItemTransfer = ({
               >
                 {stocks.map((item) => (
                   <Option key={item.id} value={item.id}>
-                    {item.item.name} ({item.quantity})
+                    {item.item.name}
                   </Option>
                 ))}
               </Select>
