@@ -1,19 +1,6 @@
 import axios from "axios";
-<<<<<<< HEAD
-import {
-  SET_REPORTS,
-  ADD_ERROR,
-  REMOVE_ERROR,
-  SET_LOADING,
-  SET_SUCCESS
-} from "../type";
-import { serverErrorMessage } from "../../util/messages";
-
-
-=======
 import { SET_REPORTS } from "../type";
 import { apiUrl } from "../../constants/url";
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 export const setReport = (report) => ({
   type: SET_REPORTS,
   report

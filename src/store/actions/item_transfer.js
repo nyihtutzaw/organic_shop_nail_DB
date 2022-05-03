@@ -12,12 +12,7 @@ import {
   SET_SUCCESS
 } from "../type";
 import axios from "axios";
-<<<<<<< HEAD
-import { serverErrorMessage } from "../../util/messages";
-
-=======
 import { apiUrl } from "../../constants/url";
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showItemTransfers = (itemTransfers) => ({
   type: SHOW_ITEMS_TRANSFER,

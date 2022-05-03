@@ -12,12 +12,7 @@ import {
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
-<<<<<<< HEAD
-import { serverErrorMessage } from "../../util/messages";
-
-=======
 import { apiUrl } from "../../constants/url";
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showOwners = (owners) => ({
   type: SHOW_OWNERS,

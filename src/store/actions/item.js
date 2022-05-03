@@ -5,20 +5,9 @@ import {
   CREATE_ITEMS,
   UPDATE_ITEMS,
   FILTER_ITEMS,
-<<<<<<< HEAD
-  ERROR_ITEM,
-  
-  ADD_ERROR,
-  REMOVE_ERROR,
-  SET_LOADING,
-  SET_SUCCESS
-} from "../type";
-import { serverErrorMessage } from "../../util/messages";
-=======
   ERROR_ITEM
 } from "../type";
 import { apiUrl } from "../../constants/url";
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showItems = (items) => ({
   type: SHOW_ITEMS,
@@ -58,19 +47,12 @@ export const getItems = () => {
       const response = await axios.get(
         `${apiUrl}items`
       );
-<<<<<<< HEAD
-      const result = response.data.data.map((d) => ({
-        ...d,
-        key: Math.random() * 100
-      }));
-=======
       const result = response.data.data.map((item) => {
         return {
           ...item,
           key: item.id
         };
       });
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       // console.log(result)
       if (response.status === 200) {
         dispatch(showItems(result));
@@ -148,26 +130,12 @@ export const saveItems = (data) => {
         `${apiUrl}items/batchInsert`,
         data
       );
-<<<<<<< HEAD
-      const result = response.data.data.map((d) => ({
-        ...d,
-        key: d.id
-      }));
-      if (response.status === 201) {
-        dispatch(createItems(result));
-        dispatch({ type: SET_SUCCESS, payload: true });
-        dispatch({
-          type: REMOVE_ERROR
-        });
-      }
-=======
       const result = {
         ...response.data.data,
         key: response.data.data.id
       };
       // console.log(result)
       dispatch(createItems(result));
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
     } catch (error) {
       const { status, data } = error.response;
       if (status === 401) {

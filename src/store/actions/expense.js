@@ -13,12 +13,7 @@ import {
   SET_LOADING,
   SET_SUCCESS
 } from "../type";
-<<<<<<< HEAD
-import { serverErrorMessage } from "../../util/messages";
-
-=======
 import { apiUrl } from "../../constants/url";
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
 
 export const showExpenses = (expenses) => ({
   type: SHOW_EXPENSES,
@@ -73,26 +68,8 @@ export const getExpenses = () => {
         })
       }
     } catch (error) {
-<<<<<<< HEAD
-      const { status, data } = error.response;
-
-      if (status === 401) {
-        localStorage.removeItem("jwtToken");
-        dispatch({
-          type: ADD_ERROR,
-          payload: data.message
-        });
-      }
-
-      if (status >= 400) {
-        dispatch({
-          type: ADD_ERROR,
-          payload: serverErrorMessage
-        });
-=======
       if (error.response.status === 404) {
         dispatch(setExpenseError(error.response.data.data));
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
       }
     }
     dispatch({ type: SET_LOADING });
@@ -241,28 +218,9 @@ export const editExpenses = (id, data) => {
         });
       }
     } catch (error) {
-<<<<<<< HEAD
-      const { status, data } = error.response;
-
-      if (status === 401) {
-        localStorage.removeItem("jwtToken");
-        dispatch({
-          type: ADD_ERROR,
-          payload: data.message
-        });
-      }
-
-      if (status >= 400) {
-        dispatch({
-          type: ADD_ERROR,
-          payload: serverErrorMessage
-        });
-      }
-=======
       if (error.response.status === 404) {
         dispatch(setExpenseError(error.response.data.data));
       } 
->>>>>>> 8724a57e2006ec90da33b9eee00e2e1dc7e0c1d4
     }
     dispatch({ type: SET_SUCCESS, payload: false });
     dispatch({ type: SET_LOADING });
