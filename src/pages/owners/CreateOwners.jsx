@@ -11,8 +11,6 @@ import {
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import dateFormat from "dateformat";
 import { saveOwners, getStocks } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
@@ -136,7 +134,7 @@ const CreateOwners = ({ saveOwners, getStocks }) => {
             >
               {allStocks.map((stock) => (
                 <Option key={stock.id} value={stock.id}>
-                  {stock.name} ({stock.quantity})
+                  {stock.name}
                 </Option>
               ))}
             </Select>
