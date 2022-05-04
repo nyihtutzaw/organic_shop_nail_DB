@@ -668,12 +668,12 @@ const Sale = ({
                           {stock.item.code}
                         </Text>
                         <Image
-                          width={130}
+                          width={100}
                           preview={false}
                           src={stock.item.image}
                           height={100}
                           style={{
-                            padding: "10px"
+                            padding: "5px"
                           }}
                         />
                         <Text style={{ color: "var(--black-color)" }}>
