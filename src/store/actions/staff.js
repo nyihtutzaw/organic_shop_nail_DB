@@ -86,7 +86,6 @@ export const getStaffs = () => {
           key: item.id
         };
       });
-      // console.log(response.status)
       if (response.status === 200) {
         dispatch(showStaffs(result));
         dispatch({
@@ -125,7 +124,6 @@ export const saveStaffs = (data) => {
         `${apiUrl}staffs`,
         data
       );
-      // console.log(response.data.data);
       const result = response.data.data;
       if (response.status === 201) {
         dispatch(createStaffs(result));

@@ -20,7 +20,6 @@ import { connect } from "react-redux";
 import store from "../../store";
 import { successCreateMessage } from "../../util/messages";
 
-
 const { Title, Text } = Typography;
 
 const CreateStaff = ({ saveStaffs, clearAlertStaffs, staff }) => {

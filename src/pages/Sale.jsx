@@ -668,9 +668,13 @@ const Sale = ({
                           {stock.item.code}
                         </Text>
                         <Image
-                          width={130}
+                          width={100}
                           preview={false}
                           src={stock.item.image}
+                          height={100}
+                          style={{
+                            padding: "5px"
+                          }}
                         />
                         <Text style={{ color: "var(--black-color)" }}>
                           {stock.item.name}
@@ -702,11 +706,15 @@ const Sale = ({
                         >
                           {service.code}
                         </Text>
-                        {/* <Image
-                        width={130}
-                        preview={false}
-                        src={`${window.location.origin}/image.png`}
-                      /> */}
+                        <Text
+                          width={130}
+                          preview={false}
+                          height={200}
+                          style={{
+                            padding: "10px"
+                          }}
+                          // src={`${window.location.origin}/image.png`}
+                        />
                         <Text style={{ color: "var(--black-color)" }}>
                           {service.category}
                         </Text>
