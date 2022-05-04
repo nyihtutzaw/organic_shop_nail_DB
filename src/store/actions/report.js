@@ -1,11 +1,18 @@
 import axios from "axios";
-import { SET_REPORTS } from "../type";
+import {
+  SET_REPORTS,
+  ADD_ERROR,
+  REMOVE_ERROR,
+  SET_LOADING,
+  SET_SUCCESS
+} from "../type";
 import { apiUrl } from "../../constants/url";
+import { serverErrorMessage } from "../../util/messages";
+
 export const setReport = (report) => ({
   type: SET_REPORTS,
   report
 });
-
 
 export const getReport = (query) => {
   return async (dispatch) => {
@@ -13,9 +20,7 @@ export const getReport = (query) => {
 
     try {
       const response = await axios.get(
-        `${apiUrl}report/sale?${new URLSearchParams(
-          query
-        ).toString()}`
+        `${apiUrl}report/sale?${new URLSearchParams(query).toString()}`
       );
       const result = {
         ...response.data,
