@@ -15,7 +15,6 @@ import {
 } from "../type";
 import { serverErrorMessage } from "../../util/messages";
 
-
 export const showBadItems = (baditems) => ({
   type: SHOW_BADITEMS,
   baditems
