@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-
 // ant design styles
 import {
   Layout,
@@ -21,7 +20,6 @@ import { useSelector } from "react-redux";
 
 const { Header } = Layout;
 const { Title } = Typography;
-
 
 const PrintSale = () => {
   const navigate = useNavigate();
