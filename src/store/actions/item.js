@@ -6,7 +6,6 @@ import {
   UPDATE_ITEMS,
   FILTER_ITEMS,
   ERROR_ITEM,
-  
   ADD_ERROR,
   REMOVE_ERROR,
   SET_LOADING,
@@ -146,7 +145,14 @@ export const saveItems = (data) => {
       }
     } catch (error) {
       const { status, data } = error.response;
-      if (status === 401) {
+      // console.log(data.data[Object.keys(data.data)])
+
+      if (status === 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.data[Object.keys(data.data)]
+        });
+      } else if (status === 401) {
         localStorage.removeItem("jwtToken");
         dispatch({
           type: ADD_ERROR,
@@ -161,6 +167,9 @@ export const saveItems = (data) => {
     }
     dispatch({ type: SET_SUCCESS, payload: false });
     dispatch({ type: SET_LOADING });
+    dispatch({
+      type: REMOVE_ERROR
+    });
   };
 };
 
@@ -303,6 +312,5 @@ export const getBestItem = (query) => {
       }
     }
     dispatch({ type: SET_LOADING });
-
   };
 };
