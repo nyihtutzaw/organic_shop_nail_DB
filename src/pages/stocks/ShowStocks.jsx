@@ -57,7 +57,7 @@ const ShowStocks = ({ stock, getStocks }) => {
         title: "ပစ္စည်းပုံ",
         dataIndex: "item",
         render: (_, record) => (
-          <img src={record.item.image} alt="ပစ္စည်းပုံ" width={80} height={80} />
+          <img src={record.item.image} alt="ပစ္စည်းပုံ" width={70} height={70} />
         )
       },
       {
@@ -116,7 +116,7 @@ const ShowStocks = ({ stock, getStocks }) => {
         title: "ပစ္စည်းပုံ",
         dataIndex: "item",
         render: (_, record) => (
-          <img src={record.item.image} alt="ပစ္စည်းပုံ" width={80} height={80} />
+          <img src={record.item.image} alt="ပစ္စည်းပုံ" width={70} height={70} />
         )
       },
       {
