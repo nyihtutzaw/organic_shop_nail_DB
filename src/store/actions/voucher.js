@@ -1,9 +1,6 @@
 import axios from "axios";
 import {
   SHOW_VOUCHERS,
-  SHOW_VOUCHER,
-  CREATE_VOUCHERS,
-  UPDATE_VOUCHERS,
   FILTER_VOUCHERS,
   ERROR_VOUCHERS,
 

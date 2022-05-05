@@ -3,15 +3,11 @@
 import axios from "axios";
 import {
   SHOW_STOCKS,
-  CREATE_PURCHASES,
-  UPDATE_PURCHASES,
-  FILTER_PURCHASES,
   ERROR_STOCKS,
 
   ADD_ERROR,
   REMOVE_ERROR,
   SET_LOADING,
-  SET_SUCCESS
 } from "../type";
 import { serverErrorMessage } from "../../util/messages";
 
