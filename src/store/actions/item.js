@@ -53,7 +53,7 @@ export const getItems = () => {
       );
       const result = response.data.data.map((d) => ({
         ...d,
-        key: Math.random() * 100
+        key: d.id
       }));
       // console.log(result)
       if (response.status === 200) {
@@ -136,6 +136,7 @@ export const saveItems = (data) => {
         ...d,
         key: d.id
       }));
+      console.log(result)
       if (response.status === 201) {
         dispatch(createItems(result));
         dispatch({ type: SET_SUCCESS, payload: true });
@@ -225,8 +226,8 @@ export const editItems = (id, data) => {
         ...response.data.data,
         key: response.data.data.id
       };
-      // console.log(result);
-      if (response.status === 204) {
+      // console.log(response);
+      if (response.status === 201) {
         dispatch(updateItems(result));
         dispatch({ type: SET_SUCCESS, payload: true });
         dispatch({

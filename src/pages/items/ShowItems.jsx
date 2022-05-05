@@ -80,94 +80,93 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
   };
 
   let columns = [];
-if(user?.position === "owner"){
-  columns = [
-    {
-      title: "ပစ္စည်းပုံ",
-      dataIndex: "image",
-      render: (_, record) => (
-        <img src={record.image} alt="ပစ္စည်းပုံ" width={80} height={80} />
-      )
-    },
-    {
-      title: "ပစ္စည်းကုတ်",
-      dataIndex: "code"
-    },
-    {
-      title: "ပစ္စည်းအမည်",
-      dataIndex: "name"
-    },
-    {
-      title: "ဝယ်ဈေး",
-      dataIndex: "buy_price"
-    },
-    {
-      title: "ရောင်းဈေး",
-      dataIndex: "sale_price"
-    },
+  if (user?.position === "owner") {
+    columns = [
+      {
+        title: "ပစ္စည်းပုံ",
+        dataIndex: "image",
+        render: (_, record) => (
+          <img src={record.image} alt="ပစ္စည်းပုံ" width={70} height={70} />
+        )
+      },
+      {
+        title: "ပစ္စည်းကုတ်",
+        dataIndex: "code"
+      },
+      {
+        title: "ပစ္စည်းအမည်",
+        dataIndex: "name"
+      },
+      {
+        title: "ဝယ်ဈေး",
+        dataIndex: "buy_price"
+      },
+      {
+        title: "ရောင်းဈေး",
+        dataIndex: "sale_price"
+      },
 
-    {
-      title: "Actions",
-      dataIndex: "action",
-      render: (_, record) => (
-        <Space direction="horizontal">
-          {user?.position !== "owner" && (
-            <Button type="primary" onClick={() => handleClick(record)}>
-              <EditOutlined />
+      {
+        title: "Actions",
+        dataIndex: "action",
+        render: (_, record) => (
+          <Space direction="horizontal">
+            {user?.position !== "owner" && (
+              <Button type="primary" onClick={() => handleClick(record)}>
+                <EditOutlined />
+              </Button>
+            )}
+            <Button type="primary" danger onClick={() => handleDelete(record)}>
+              <DeleteOutlined />
             </Button>
-          )}
-          <Button type="primary" danger onClick={() => handleDelete(record)}>
-            <DeleteOutlined />
-          </Button>
-        </Space>
-      )
-    }
-  ];
-}else{
-  columns = [
-    {
-      title: "ပစ္စည်းပုံ",
-      dataIndex: "image",
-      render: (_, record) => (
-        <img src={record.image} alt="ပစ္စည်းပုံ" width={80} height={80} />
-      )
-    },
-    {
-      title: "ပစ္စည်းကုတ်",
-      dataIndex: "code"
-    },
-    {
-      title: "ပစ္စည်းအမည်",
-      dataIndex: "name"
-    },
-    // {
-    //   title: "ဝယ်ဈေး",
-    //   dataIndex: "buy_price"
-    // },
-    {
-      title: "ရောင်းဈေး",
-      dataIndex: "sale_price"
-    },
+          </Space>
+        )
+      }
+    ];
+  } else {
+    columns = [
+      {
+        title: "ပစ္စည်းပုံ",
+        dataIndex: "image",
+        render: (_, record) => (
+          <img src={record.image} alt="ပစ္စည်းပုံ" width={70} height={70} />
+        )
+      },
+      {
+        title: "ပစ္စည်းကုတ်",
+        dataIndex: "code"
+      },
+      {
+        title: "ပစ္စည်းအမည်",
+        dataIndex: "name"
+      },
+      // {
+      //   title: "ဝယ်ဈေး",
+      //   dataIndex: "buy_price"
+      // },
+      {
+        title: "ရောင်းဈေး",
+        dataIndex: "sale_price"
+      },
 
-    {
-      title: "Actions",
-      dataIndex: "action",
-      render: (_, record) => (
-        <Space direction="horizontal">
-          {user?.position !== "owner" && (
-            <Button type="primary" onClick={() => handleClick(record)}>
-              <EditOutlined />
+      {
+        title: "Actions",
+        dataIndex: "action",
+        render: (_, record) => (
+          <Space direction="horizontal">
+            {user?.position !== "owner" && (
+              <Button type="primary" onClick={() => handleClick(record)}>
+                <EditOutlined />
+              </Button>
+            )}
+            <Button type="primary" danger onClick={() => handleDelete(record)}>
+              <DeleteOutlined />
             </Button>
-          )}
-          <Button type="primary" danger onClick={() => handleDelete(record)}>
-            <DeleteOutlined />
-          </Button>
-        </Space>
-      )
-    }
-  ];
-}
-  
+          </Space>
+        )
+      }
+    ];
+  }
 
   return (
     <Spin spinning={status.loading}>
@@ -201,7 +200,8 @@ if(user?.position === "owner"){
             bordered
             columns={columns}
             pagination={{ defaultPageSize: 10 }}
-            dataSource={item.items}
+            dataSource={allItems}
+            // size="small"
           />
         </Space>
       </Layout>
