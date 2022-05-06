@@ -18,13 +18,14 @@ const StaffComession = ({ getDailyStaffs }) => {
   const location = useLocation();
   const staffs = useSelector((state) => state.staff.staffs);
   const dailyStaffsFree = useSelector((state) => state.daily.dailys);
+  // const dailyStaffsFrees = useSelector((state) => state);
+  // console.log(dailyStaffsFrees)
   const status = useSelector((state) => state.status);
+
   const start_date = new URLSearchParams(window.location.search).get(
     "start_date"
   );
   const end_date = new URLSearchParams(window.location.search).get("end_date");
-
-
 
 
   useEffect(() => {
