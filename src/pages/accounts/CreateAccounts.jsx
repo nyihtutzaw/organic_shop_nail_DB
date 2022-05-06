@@ -6,14 +6,12 @@ import {
   Space,
   Button,
   Select,
-  notification,
   Spin,
   message
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { saveAccounts, getShops } from "../../store/actions";
 import { connect } from "react-redux";
 import { successCreateMessage } from "../../util/messages";

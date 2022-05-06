@@ -22,7 +22,6 @@ import {
   DeleteOutlined,
   SaveOutlined,
   PrinterOutlined,
-  EditOutlined
 } from "@ant-design/icons";
 import Sider from "antd/lib/layout/Sider";
 import { useNavigate } from "react-router-dom";
@@ -66,8 +65,8 @@ const Sale = ({
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
   //for edit price
-  const [form] = Form.useForm();
-  const [prices, setPrices] = useState(null);
+  // const [form] = Form.useForm();
+  // const [prices, setPrices] = useState(null);
 
   //for edit price
   const navigate = useNavigate();
