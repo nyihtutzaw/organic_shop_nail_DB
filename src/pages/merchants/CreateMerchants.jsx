@@ -64,7 +64,6 @@ const CreateMerchants = ({
     await saveMerchants(values);
   };
 
-  
   return (
     <Spin spinning={status.loading}>
       <Layout style={{ margin: "20px" }}>

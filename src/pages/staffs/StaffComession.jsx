@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Space, Row, Col, Table, Select, DatePicker, Spin, message } from "antd";
+import {
+  Typography,
+  Space,
+  Row,
+  Col,
+  Table,
+  Select,
+  DatePicker,
+  Spin,
+  message
+} from "antd";
 import Layout from "antd/lib/layout/layout";
 import queryString from "query-string";
 import { getStaffReport, getDailyStaffs } from "../../store/actions";
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import { connect, useDispatch, useSelector } from "react-redux";
-
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -26,7 +35,6 @@ const StaffComession = ({ getDailyStaffs }) => {
     "start_date"
   );
   const end_date = new URLSearchParams(window.location.search).get("end_date");
-
 
   useEffect(() => {
     const fetchData = () => {
@@ -178,38 +186,37 @@ const StaffComession = ({ getDailyStaffs }) => {
 
   return (
     <Spin spinning={status.loading}>
+      <Layout style={{ margin: "20px" }}>
+        <Space direction="vertical" size="middle">
+          <Row gutter={[16, 16]}>
+            <Col span={10}>
+              <Title level={3}>၀န်ထမ်းလခနှင့်ကော်မရှင်စုစုပေါင်း</Title>
+            </Col>
+            <Col span={5}>
+              <p
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  padding: "10px",
+                  color: "var(--white-color)"
+                }}
+              >
+                Start Date= {start_date}
+              </p>
+            </Col>
 
-    <Layout style={{ margin: "20px" }}>
-      <Space direction="vertical" size="middle">
-        <Row gutter={[16, 16]}>
-          <Col span={10}>
-            <Title level={3}>၀န်ထမ်းလခနှင့်ကော်မရှင်စုစုပေါင်း</Title>
-          </Col>
-          <Col span={5}>
-            <p
-              style={{
-                backgroundColor: "var(--primary-color)",
-                padding: "10px",
-                color: "var(--white-color)"
-              }}
-            >
-              Start Date= {start_date}
-            </p>
-          </Col>
-
-          <Col span={5}>
-            <p
-              style={{
-                backgroundColor: "var(--primary-color)",
-                padding: "10px",
-                color: "var(--white-color)"
-              }}
-            >
-              End Date= {end_date}
-            </p>
-          </Col>
-          <Col span={3}>
-            {/* <Button
+            <Col span={5}>
+              <p
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  padding: "10px",
+                  color: "var(--white-color)"
+                }}
+              >
+                End Date= {end_date}
+              </p>
+            </Col>
+            <Col span={3}>
+              {/* <Button
               style={{
                 backgroundColor: "var(--primary-color)",
                 color: "var(--white-color)",
@@ -220,71 +227,72 @@ const StaffComession = ({ getDailyStaffs }) => {
               <ExportOutlined />
               Export
             </Button> */}
-            {/* <ExportToExcel apiData={result} fileName={fileName} /> */}
-          </Col>
-        </Row>
-        <Row>
-          <Col span={8}>
-            <Space direction="vertical" size={12}>
-              <RangePicker
-                onChange={(val) => {
-                  if (queryString.parse(location.search).best) {
-                    window.location = `/admin/show-staff-commession?best=true&start_date=${dayjs(
-                      val[0]
-                    ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
-                      "YYYY-MM-DD"
-                    )}`;
-                  } else {
-                    window.location = `/admin/show-staff-commession?start_date=${dayjs(
-                      val[0]
-                    ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
-                      "YYYY-MM-DD"
-                    )}`;
-                  }
+              {/* <ExportToExcel apiData={result} fileName={fileName} /> */}
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <Space direction="vertical" size={12}>
+                <RangePicker
+                  onChange={(val) => {
+                    if (queryString.parse(location.search).best) {
+                      window.location = `/admin/show-staff-commession?best=true&start_date=${dayjs(
+                        val[0]
+                      ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                        "YYYY-MM-DD"
+                      )}`;
+                    } else {
+                      window.location = `/admin/show-staff-commession?start_date=${dayjs(
+                        val[0]
+                      ).format("YYYY-MM-DD")}&end_date=${dayjs(val[1]).format(
+                        "YYYY-MM-DD"
+                      )}`;
+                    }
+                  }}
+                />
+              </Space>
+            </Col>
+            <Col span={8}>
+              <Select
+                showSearch
+                placeholder="ကျေးဇူးပြု၍ ဝန်ထမ်းအမည်ရွေးပါ"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+                allowClear={true}
+                onChange={(value) => handleOnChange(value)}
+                size="large"
+                style={{ borderRadius: "10px" }}
+              >
+                {staffs.map((staff) => (
+                  <Option value={staff.id} key={staff.id}>
+                    {staff.name}
+                  </Option>
+                ))}
+              </Select>
+            </Col>
+            <Col span={8}>
+              <Text
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  padding: "10px",
+                  color: "var(--white-color)"
                 }}
-              />
-            </Space>
-          </Col>
-          <Col span={8}>
-            <Select
-              showSearch
-              placeholder="ကျေးဇူးပြု၍ ဝန်ထမ်းအမည်ရွေးပါ"
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              allowClear={true}
-              onChange={(value) => handleOnChange(value)}
-              size="large"
-              style={{ borderRadius: "10px" }}
-            >
-              {staffs.map((staff) => (
-                <Option value={staff.id} key={staff.id}>
-                  {staff.name}
-                </Option>
-              ))}
-            </Select>
-          </Col>
-          <Col span={8}>
-            <Text
-              style={{
-                backgroundColor: "var(--primary-color)",
-                padding: "10px",
-                color: "var(--white-color)"
-              }}
-            >
-              စုစုပေါင်း = {total}
-            </Text>
-          </Col>
-        </Row>
-        <Table
-          bordered
-          columns={columns}
-          pagination={{ defaultPageSize: 10 }}
-          dataSource={filterStaffs}
-        />
-      </Space>
-    </Layout>
+              >
+                စုစုပေါင်း = {total}
+              </Text>
+            </Col>
+          </Row>
+          <Table
+            bordered
+            columns={columns}
+            pagination={{ defaultPageSize: 10 }}
+            dataSource={filterStaffs}
+          />
+        </Space>
+      </Layout>
     </Spin>
   );
 };
