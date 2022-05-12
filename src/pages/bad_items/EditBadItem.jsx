@@ -46,7 +46,10 @@ const EditBadItem = ({
   const badItems = useSelector((state) => state.bad_item.bad_item);
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
+  const [form] = Form.useForm();
 
+  const [is_sale, setIsSale] = useState(null);
+ 
   const param = useParams();
   const navigate = useNavigate();
   const allStocks = stocks.map((stock) => {
@@ -76,9 +79,10 @@ const EditBadItem = ({
     form.setFieldsValue({ quantity: badItems?.quantity });
     form.setFieldsValue({ stock_id: editBadItem?.id });
     form.setFieldsValue({ is_sale: badItems?.is_sale });
+    setIsSale(badItems?.is_sale == 0 ? false : true)
   }, [badItems]);
 
-  const [form] = Form.useForm();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,14 +100,21 @@ const EditBadItem = ({
     store.dispatch(clearAlert());
   }, []);
 
+  const handleChange = (value) => {
+    setIsSale(!is_sale)
+  }
+
+
   const onFinish = async (values) => {
     const result = {
       ...values,
       date: dateFormat(now, "yyyy-mm-dd"),
-      is_sale: values.is_sale == 0 ? 0 : 1
+      // is_sale: values.is_sale == 0 ? 0 : 1
+      is_sale: is_sale
     };
     await editBadItems(param?.id, result);
-    navigate("/admin/show-bad-item/")
+    // navigate("/admin/show-bad-item/")
+    console.log("onfinished",result)
   };
 
   return (
@@ -205,6 +216,8 @@ const EditBadItem = ({
               parseInt(badItems?.is_sale) === 1 ? "checked" : "unchecked"
             }
             wrapperCol={{ offset: 3, span: 16 }}
+            value={is_sale}
+            onChange={(value) => handleChange(value)}
           >
             <Checkbox>ရောင်းပြီးသားပစ္စည်းလာလဲခြင်းလား</Checkbox>
           </Form.Item>
