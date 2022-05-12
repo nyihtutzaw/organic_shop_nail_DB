@@ -119,7 +119,7 @@ const PurchaseReport = ({ getPurchaseReport, getMerchants }) => {
           : record?.merchant?.company_name
     },
     {
-      title: "စုစုပေါင်",
+      title: "စုစုပေါင်း",
       dataIndex: "whole_total"
     }
   ];
