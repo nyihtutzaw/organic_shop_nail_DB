@@ -1,5 +1,15 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, notification, Spin, message } from "antd";
+import {
+  Typography,
+  Space,
+  Row,
+  Col,
+  Button,
+  Table,
+  notification,
+  Spin,
+  message
+} from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +17,6 @@ import { getStocks } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 import { successDeleteMessage } from "../../util/messages";
-
 
 const { Title } = Typography;
 
@@ -51,13 +60,18 @@ const ShowStocks = ({ stock, getStocks }) => {
 
   let columns = [];
 
-  if(user?.position === "owner"){
+  if (user?.position === "owner") {
     columns = [
       {
         title: "ပစ္စည်းပုံ",
         dataIndex: "item",
         render: (_, record) => (
-          <img src={record.item.image} alt="ပစ္စည်းပုံ" width={70} height={70} />
+          <img
+            src={record.item.image}
+            alt="ပစ္စည်းပုံ"
+            width={70}
+            height={70}
+          />
         )
       },
       {
@@ -78,13 +92,15 @@ const ShowStocks = ({ stock, getStocks }) => {
           else return <span>{record.item.name}</span>;
         }
       },
-  
+
       {
         title: "ဝယ်ဈေး",
         dataIndex: "buy_price",
         render: (_, record) => {
           if (record.quantity < 10)
-            return <span style={{ color: "red" }}>{record.item.buy_price}</span>;
+            return (
+              <span style={{ color: "red" }}>{record.item.buy_price}</span>
+            );
           else return <span>{record.item.buy_price}</span>;
         }
       },
@@ -93,7 +109,9 @@ const ShowStocks = ({ stock, getStocks }) => {
         dataIndex: "sale_price",
         render: (_, record) => {
           if (record.quantity < 10)
-            return <span style={{ color: "red" }}>{record.item.sale_price}</span>;
+            return (
+              <span style={{ color: "red" }}>{record.item.sale_price}</span>
+            );
           else return <span>{record.item.sale_price}</span>;
         }
       },
@@ -110,13 +128,18 @@ const ShowStocks = ({ stock, getStocks }) => {
         render: (_, record) => record?.shop?.name
       }
     ];
-  }else{
+  } else {
     columns = [
       {
         title: "ပစ္စည်းပုံ",
         dataIndex: "item",
         render: (_, record) => (
-          <img src={record.item.image} alt="ပစ္စည်းပုံ" width={70} height={70} />
+          <img
+            src={record.item.image}
+            alt="ပစ္စည်းပုံ"
+            width={70}
+            height={70}
+          />
         )
       },
       {
@@ -151,7 +174,9 @@ const ShowStocks = ({ stock, getStocks }) => {
         dataIndex: "sale_price",
         render: (_, record) => {
           if (record.quantity < 10)
-            return <span style={{ color: "red" }}>{record.item.sale_price}</span>;
+            return (
+              <span style={{ color: "red" }}>{record.item.sale_price}</span>
+            );
           else return <span>{record.item.sale_price}</span>;
         }
       },
@@ -169,45 +194,44 @@ const ShowStocks = ({ stock, getStocks }) => {
       }
     ];
   }
-  
 
   return (
     <Spin spinning={status.loading}>
-
-    <Layout style={{ margin: "20px" }}>
-      <Space direction="vertical" size="middle">
-        <Row gutter={[16, 16]}>
-          <Col span={16}>
-            <Title level={3}>Stock စာရင်း</Title>
-          </Col>
-          <Col span={4}>
-          {user?.position !== "owner" && (
-            <Button
-              style={{
-                backgroundColor: "var(--secondary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-              onClick={() => navigate("/admin/create-buy-merchants")}
-            >
-              <PlusSquareOutlined />
-              အသစ်ထည့်မည်
-            </Button>
-          )}
-          </Col>
-          <Col span={4}>
-            <ExportToExcel apiData={result} fileName={fileName} />
-          </Col>
-        </Row>
-        <Table
-          bordered
-          columns={columns}
-          dataSource={stockAll}
-          pagination={{ defaultPageSize: 6 }}
-        />
-      </Space>
-    </Layout>
+      <Layout style={{ margin: "20px" }}>
+        <Space direction="vertical" size="middle">
+          <Row gutter={[16, 16]}>
+            <Col span={16}>
+              <Title level={3}>Stock စာရင်း</Title>
+            </Col>
+            <Col span={4}>
+              {user?.position !== "owner" && (
+                <Button
+                  style={{
+                    backgroundColor: "var(--secondary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                  size="middle"
+                  // onClick={() => navigate("/admin/create-buy-merchants")}
+                  onClick={() => navigate("/admin/create-stocks")}
+                >
+                  <PlusSquareOutlined />
+                  အသစ်ထည့်မည်
+                </Button>
+              )}
+            </Col>
+            <Col span={4}>
+              <ExportToExcel apiData={result} fileName={fileName} />
+            </Col>
+          </Row>
+          <Table
+            bordered
+            columns={columns}
+            dataSource={stockAll}
+            pagination={{ defaultPageSize: 6 }}
+          />
+        </Space>
+      </Layout>
     </Spin>
   );
 };
