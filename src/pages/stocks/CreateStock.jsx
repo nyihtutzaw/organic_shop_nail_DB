@@ -89,7 +89,8 @@ const CreateStock = ({
       ...buys,
       {
         ...values,
-        subtotal: values.quantity * values.price,
+        // subtotal: values.quantity * values.price,
+        subtotal: values.quantity * data?.sale_price,
         key: buys.length + 1,
         data: date
       }
@@ -100,13 +101,15 @@ const CreateStock = ({
         ...values,
         item_id: data.id,
         item_name: data.name,
-        subtotal: values.quantity * values.price,
+        subtotal: values.quantity * data?.sale_price,
         key: buys.length + 1,
         data: date
       }
     ]);
     form.resetFields();
   };
+
+  console.log(buys);
 
   let allTotal = [];
   buys.forEach((buy) => allTotal.push(parseInt(buy.subtotal)));
@@ -138,13 +141,16 @@ const CreateStock = ({
   // };
 
   const handleSave = async () => {
-    if (buyMerchant === null) {
-      message.error("ကျေးဇူးပြု၍ ကုန်သည်အချက်အလက်ထည့်ပါ");
-    } else if (buys.length === 0) {
-      message.error("ကျေးဇူးပြု၍ ဝယ်ရန်ထည့်ပါ");
-    } else if (paid === null) {
-      message.error("ကျေးဇူးပြု၍ ပေးငွေထည့်ပါ");
-    } else {
+    // if (buyMerchant === null) {
+    //   message.error("ကျေးဇူးပြု၍ ကုန်သည်အချက်အလက်ထည့်ပါ");
+    // } else 
+    
+    // if (buys.length === 0) {
+    //   message.error("ကျေးဇူးပြု၍ ဝယ်ရန်ထည့်ပါ");
+    // } else if (paid === null) {
+    //   message.error("ကျေးဇူးပြု၍ ပေးငွေထည့်ပါ");
+    // } else {
+
       const purchase_items = buys.map((buy) => {
         return {
           item_id: buy.item_id,
@@ -156,9 +162,9 @@ const CreateStock = ({
 
       const saveBuy = {
         purchase_items: purchase_items,
-        merchant_id: buyMerchant.id,
-        paid: paid,
-        credit: credit,
+        // merchant_id: buyMerchant.id,
+        // paid: paid,
+        // credit: credit,
         whole_total: result,
         date: date
       };
@@ -170,12 +176,16 @@ const CreateStock = ({
       // setPaid(0)
       // result = 0;
       navigate("/admin/show-buy-merchants");
-    }
+    // }
   };
 
   const handlePayment = (value) => {
     setCredit(result - value);
     setPaid(value);
+  };
+
+  const handleChange = (item) => {
+    console.log(item.id);
   };
 
   const columns = [
@@ -188,14 +198,10 @@ const CreateStock = ({
       title: "အရေအတွက်",
       dataIndex: "quantity"
     },
-    {
-      title: "တစ်ခုဈေးနှုန်း",
-      dataIndex: "price"
-    },
-    {
-      title: "စုစုပေါင်းပမာဏ",
-      dataIndex: "subtotal"
-    },
+    // {
+    //   title: "စုစုပေါင်းပမာဏ",
+    //   dataIndex: "subtotal"
+    // },
     {
       title: "Actions",
       dataIndex: "action",
@@ -222,9 +228,7 @@ const CreateStock = ({
               marginBottom: "10px"
             }}
             size="large"
-          >
-            
-          </Space>
+          ></Space>
           <Space
             direction="horizontal"
             style={{ width: "100%", justifyContent: "center" }}
@@ -274,13 +278,16 @@ const CreateStock = ({
                 style={{ borderRadius: "10px" }}
               >
                 {allItems.map((item) => (
-                  <Option key={item.id} value={item.id}>
+                  <Option
+                    key={item.id}
+                    value={item.id}
+                    onChange={(item) => handleChange(item)}
+                  >
                     {item.name}
                   </Option>
                 ))}
               </Select>
             </Form.Item>
-
             <Form.Item
               name="quantity"
               label="အရေအတွက်"
@@ -298,24 +305,6 @@ const CreateStock = ({
                 size="large"
               />
             </Form.Item>
-            <Form.Item
-              name="price"
-              label="တစ်ခုဈေးနှုန်း"
-              rules={[
-                {
-                  required: true,
-                  message: "ကျေးဇူးပြု၍ တစ်ခုဈေးနှုန်းထည့်ပါ"
-                }
-              ]}
-            >
-              <InputNumber
-                placeholder="တစ်ခုဈေးနှုန်းထည့်ပါ"
-                prefix={<EditOutlined />}
-                style={{ borderRadius: "10px", width: "100%" }}
-                size="large"
-              />
-            </Form.Item>
-
             <Form.Item style={{ textAlign: "right" }}>
               <Button
                 style={{
@@ -337,7 +326,7 @@ const CreateStock = ({
             dataSource={dataMerchant}
             pagination={{ position: ["none", "none"] }}
           />
-          <Row>
+          {/* <Row>
             <Col span={17} style={{ textAlign: "right" }}>
               <Title level={4}>စုစုပေါင်း</Title>
             </Col>
@@ -369,7 +358,7 @@ const CreateStock = ({
             <Col span={5}>
               <Title level={4}>{credit} Ks</Title>
             </Col>
-          </Row>
+          </Row> */}
           <Space
             direction="horizontal"
             style={{ width: "100%", justifyContent: "right" }}

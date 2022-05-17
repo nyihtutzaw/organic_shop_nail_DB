@@ -212,8 +212,8 @@ const ShowStocks = ({ stock, getStocks }) => {
                     borderRadius: "5px"
                   }}
                   size="middle"
-                  // onClick={() => navigate("/admin/create-buy-merchants")}
-                  onClick={() => navigate("/admin/create-stocks")}
+                  onClick={() => navigate("/admin/create-buy-merchants")}
+                  // onClick={() => navigate("/admin/create-stocks")}
                 >
                   <PlusSquareOutlined />
                   အသစ်ထည့်မည်
