@@ -21,7 +21,7 @@ import {
   PlusSquareOutlined,
   DeleteOutlined,
   SaveOutlined,
-  PrinterOutlined,
+  PrinterOutlined
 } from "@ant-design/icons";
 import Sider from "antd/lib/layout/Sider";
 import { useNavigate } from "react-router-dom";
@@ -141,35 +141,39 @@ const Sale = ({
   // console.log("datasource", dataSource);
 
   const handleAddSaleService = (service) => {
-    const index = sales.findIndex(
-      (sale) => sale.sale_id === service.id && !sale.is_item
-    );
-    if (index === -1) {
-      const sale = {
-        key: sales.length === 0 ? 1 : sales[sales.length - 1].id + 1,
-        id: sales.length === 0 ? 1 : sales[sales.length - 1].id + 1,
-        sale_id: service.id,
-        code: service.code,
-        name: service.category,
-        capital: 0,
-        price: service.price,
-        quantity: 1,
-        subtotal: service.price * 1,
-        is_item: false,
-        staff_id: undefined
-      };
+    // const index = sales.findIndex(
+    //   (sale) => sale.sale_id === service.id && !sale.is_item
+    // );
+    // if (index === -1) {
+    //   console.log(index)
 
-      setSales([...sales, sale]);
-    } else {
-      let cloneSales = [...sales];
+    const sale = {
+      key: sales.length === 0 ? 1 : sales[sales.length - 1].id + 1,
+      id: sales.length === 0 ? 1 : sales[sales.length - 1].id + 1,
+      sale_id: service.id,
+      code: service.code,
+      name: service.category,
+      capital: 0,
+      price: service.price,
+      quantity: 1,
+      subtotal: service.price * 1,
+      is_item: false,
+      staff_id: undefined
+    };
 
-      cloneSales[index] = {
-        ...cloneSales[index],
-        quantity: cloneSales[index].quantity + 1,
-        subtotal: cloneSales[index].price * (cloneSales[index].quantity + 1)
-      };
-      setSales(cloneSales);
-    }
+    setSales([...sales, sale]);
+    // }
+
+    // else {
+    //   let cloneSales = [...sales];
+
+    //   cloneSales[index] = {
+    //     ...cloneSales[index],
+    //     quantity: cloneSales[index].quantity + 1,
+    //     subtotal: cloneSales[index].price * (cloneSales[index].quantity + 1)
+    //   };
+    //   setSales(cloneSales);
+    // }
   };
 
   const handleDelete = (record) => {
@@ -564,9 +568,9 @@ const Sale = ({
                     size="large"
                     style={{ borderRadius: "10px" }}
                   >
-                    {member.members.map((member) => (
+                    {member?.members.map((member) => (
                       <Option value={member.id} key={member.id}>
-                        {member.name}
+                        {member?.name}
                       </Option>
                     ))}
                   </Select>
