@@ -54,12 +54,7 @@ const ShowBuyMerchants = ({
     Credit: purchase.credit,
     Paid: purchase.paid
   }));
-
-  const [myPurchase, setMyPurchase] = useState([]);
-  useEffect(() => {
-    setMyPurchase([...myPurchase, ...allPurchases]);
-  }, []);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       await getMerchants();
@@ -80,6 +75,13 @@ const ShowBuyMerchants = ({
       fetchData();
     };
   }, [getPurchases]);
+
+  const [myPurchase, setMyPurchase] = useState([]);
+  useEffect(() => {
+    setMyPurchase([...myPurchase, ...allPurchases]);
+  }, []);
+
+
 
   useEffect(() => {
     error.message !== null && message.error(error.message);

@@ -148,6 +148,7 @@ const CreateBuyMerchants = ({
     } else if (paid === null) {
       message.error("ကျေးဇူးပြု၍ ပေးငွေထည့်ပါ");
     } else {
+      
       const purchase_items = buys.map((buy) => {
         return {
           item_id: buy.item_id,
@@ -158,7 +159,7 @@ const CreateBuyMerchants = ({
       });
 
       const saveBuy = {
-        purchase_items: purchase_items,
+        // purchase_items: purchase_items,
         merchant_id: buyMerchant.id,
         // merchant_id: 39,
         paid: paid,

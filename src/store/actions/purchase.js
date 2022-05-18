@@ -7,7 +7,6 @@ import {
   UPDATE_PURCHASES,
   FILTER_PURCHASES,
   ERROR_PURCHASES,
-  
   ADD_ERROR,
   REMOVE_ERROR,
   SET_LOADING,
@@ -165,7 +164,7 @@ export const savePurchases = (data) => {
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases",
         data
       );
-      // console.log(response);
+      console.log(response);
       dispatch({ type: SET_SUCCESS, payload: true });
       dispatch({
         type: REMOVE_ERROR
@@ -307,6 +306,5 @@ export const getPurchaseReport = () => {
       }
     }
     dispatch({ type: SET_LOADING });
-
   };
 };
