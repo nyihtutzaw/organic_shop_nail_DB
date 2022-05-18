@@ -116,7 +116,9 @@ const ShowBuyMerchants = ({
   // };
 
   let allCredit = [];
-  allPurchases?.forEach((purchase) => allCredit.push(parseInt(purchase.credit)));
+  allPurchases?.forEach((purchase) =>
+    allCredit.push(parseInt(purchase.credit))
+  );
   const finalCredit = allCredit.reduce((a, b) => a + b, 0);
 
   let allCreditGet = [];
@@ -179,7 +181,7 @@ const ShowBuyMerchants = ({
           >
             <ReadOutlined />
           </Button>
-          {(record.credit != 0 && user?.position !== "owner") ? (
+          {record.credit != 0 && user?.position !== "owner" ? (
             <Button
               type="primary"
               style={{ backgroundColor: "#ad6800" }}
@@ -196,93 +198,95 @@ const ShowBuyMerchants = ({
 
   return (
     <Spin spinning={status.loading}>
-
-    <Layout style={{ margin: "20px" }}>
-      <Space direction="vertical" size="middle">
-        <Row gutter={[16, 16]}>
-          <Col span={16}>
-            <Title level={3}>အဝယ်စာရင်း</Title>
-          </Col>
-          <Col span={4}>
-          {user?.position !== "owner" && (
-            <Button
-              style={{
-                backgroundColor: "var(--secondary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-              onClick={() => navigate("/admin/create-buy-merchants")}
-            >
-              <PlusSquareOutlined />
-              အသစ်ထည့်မည်
-            </Button>
-          )}
-          </Col>
-          <Col span={4}>
-            <ExportToExcel apiData={result} fileName={fileName} />
-          </Col>
-        </Row>
-        <Row gutter={[16, 16]}>
-          <Col span={15}>
-            <Space
-              direction="horizontal"
-              style={{
-                width: "100%",
-                marginBottom: "10px"
-              }}
-              size="large"
-            >
-              <Text type="secondary">ကုန်သည်လုပ်ငန်းအမည်ရွေးပါ</Text>
-              <Select
-                showSearch
-                placeholder="ကျေးဇူးပြု၍ ကုန်သည်လုပ်ငန်းအမည်ရွေးပါ"
-                optionFilterProp="children"
-                onChange={onChange}
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                  0
-                }
-                allowClear={true}
-                size="large"
-                style={{ borderRadius: "10px" }}
-              >
-                {merchant.merchants.map((mer) => (
-                  <Option key={mer.id} value={mer.id}>
-                    {mer.name}
-                  </Option>
-                ))}
-              </Select>
-            </Space>
-          </Col>
-          <Col span={9}>
-            <Space
-              direction="horizontal"
-              style={{ width: "100%", justifyContent: "right" }}
-              size="large"
-            >
-              <Text
+      <Layout style={{ margin: "20px" }}>
+        <Space direction="vertical" size="middle">
+          <Row gutter={[16, 16]}>
+            <Col span={16}>
+              <Title level={3}>အဝယ်စာရင်း</Title>
+            </Col>
+            <Col span={4}>
+              {user?.position !== "owner" && (
+                <Button
+                  style={{
+                    backgroundColor: "var(--secondary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                  size="middle"
+                  onClick={() => navigate("/admin/create-buy-merchants")}
+                >
+                  <PlusSquareOutlined />
+                  အသစ်ထည့်မည်
+                </Button>
+              )}
+            </Col>
+            <Col span={4}>
+              <ExportToExcel apiData={result} fileName={fileName} />
+            </Col>
+          </Row>
+          <Row gutter={[16, 16]}>
+            <Col span={15}>
+              <Space
+                direction="horizontal"
                 style={{
-                  backgroundColor: "var(--primary-color)",
-                  padding: "10px",
-                  color: "var(--white-color)",
-                  borderRadius: "5px"
+                  width: "100%",
+                  marginBottom: "10px"
                 }}
+                size="large"
               >
-                ပေးရန်ကျန်ငွေစုစုပေါင်း ={" "}
-                {showBuyMerchant != null ? finalCreditGet : finalCredit} Ks
-              </Text>
-            </Space>
-          </Col>
-        </Row>
-        <Table
-          bordered
-          columns={columns}
-          dataSource={showBuyMerchant != null ? showBuyMerchant : allPurchases}
-          pagination={{ defaultPageSize: 10 }}
-        />
-      </Space>
-    </Layout>
+                <Text type="secondary">ကုန်သည်လုပ်ငန်းအမည်ရွေးပါ</Text>
+                <Select
+                  showSearch
+                  placeholder="ကျေးဇူးပြု၍ ကုန်သည်လုပ်ငန်းအမည်ရွေးပါ"
+                  optionFilterProp="children"
+                  onChange={onChange}
+                  filterOption={(input, option) =>
+                    option.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }
+                  allowClear={true}
+                  size="large"
+                  style={{ borderRadius: "10px" }}
+                >
+                  {merchant.merchants.map((mer) => (
+                    <Option key={mer.id} value={mer.id}>
+                      {mer.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Space>
+            </Col>
+            <Col span={9}>
+              <Space
+                direction="horizontal"
+                style={{ width: "100%", justifyContent: "right" }}
+                size="large"
+              >
+                <Text
+                  style={{
+                    backgroundColor: "var(--primary-color)",
+                    padding: "10px",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                >
+                  ပေးရန်ကျန်ငွေစုစုပေါင်း ={" "}
+                  {showBuyMerchant != null ? finalCreditGet : finalCredit} Ks
+                </Text>
+              </Space>
+            </Col>
+          </Row>
+          <Table
+            bordered
+            columns={columns}
+            dataSource={
+              showBuyMerchant != null ? showBuyMerchant : allPurchases
+            }
+            pagination={{ defaultPageSize: 10 }}
+          />
+        </Space>
+      </Layout>
     </Spin>
   );
 };

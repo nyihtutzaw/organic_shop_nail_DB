@@ -19,7 +19,12 @@ import {
   PlusSquareOutlined
 } from "@ant-design/icons";
 import { connect, useSelector } from "react-redux";
-import { getMerchants, getItems, savePurchases } from "../../store/actions";
+import {
+  getMerchants,
+  getItems,
+  savePurchases,
+  saveStocks
+} from "../../store/actions";
 import { useNavigate } from "react-router-dom";
 import dateFormat from "dateformat";
 import { successCreateMessage } from "../../util/messages";
@@ -27,20 +32,12 @@ import { successCreateMessage } from "../../util/messages";
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-const CreateStock = ({
-  item,
-  merchant,
-  getMerchants,
-  getItems,
-  savePurchases
-}) => {
+const CreateStock = ({ item, getMerchants, getItems, saveStocks }) => {
   const [buys, setBuys] = useState([]);
   const [dataMerchant, setDataMerchant] = useState([]);
-  const [credit, setCredit] = useState(0);
-  const [paid, setPaid] = useState(null);
-  const [buyMerchant, setBuyMerchant] = useState(null);
   const allItems = item.items;
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
 
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
@@ -75,6 +72,8 @@ const CreateStock = ({
   useEffect(() => {
     if (status.success) {
       message.success(successCreateMessage);
+      setDataMerchant([]);
+      // navigate("/admin/show-stocks");
     }
 
     return () => status.success;
@@ -89,10 +88,8 @@ const CreateStock = ({
       ...buys,
       {
         ...values,
-        // subtotal: values.quantity * values.price,
-        subtotal: values.quantity * data?.sale_price,
         key: buys.length + 1,
-        data: date
+        shop_id: user.shop.id
       }
     ]);
     setDataMerchant([
@@ -107,23 +104,6 @@ const CreateStock = ({
       }
     ]);
     form.resetFields();
-  };
-
-  console.log(buys);
-
-  let allTotal = [];
-  buys.forEach((buy) => allTotal.push(parseInt(buy.subtotal)));
-  const result = allTotal.reduce((a, b) => a + b, 0);
-
-  const onChange = (value) => {
-    if (value === undefined) {
-      setBuyMerchant(null);
-    } else {
-      const filterBuyMerchant = merchant.merchants.find(
-        (mer) => mer.id === value
-      );
-      setBuyMerchant(filterBuyMerchant);
-    }
   };
 
   const handleDelete = (record) => {
@@ -143,45 +123,31 @@ const CreateStock = ({
   const handleSave = async () => {
     // if (buyMerchant === null) {
     //   message.error("ကျေးဇူးပြု၍ ကုန်သည်အချက်အလက်ထည့်ပါ");
-    // } else 
-    
+    // } else
+
     // if (buys.length === 0) {
     //   message.error("ကျေးဇူးပြု၍ ဝယ်ရန်ထည့်ပါ");
     // } else if (paid === null) {
     //   message.error("ကျေးဇူးပြု၍ ပေးငွေထည့်ပါ");
     // } else {
 
-      const purchase_items = buys.map((buy) => {
+    if (buys.length === 0) {
+      message.error("ကျေးဇူးပြု၍ ဝယ်ရန်ထည့်ပါ");
+    } else {
+      const stocksAll = buys.map((buy) => {
         return {
           item_id: buy.item_id,
           quantity: buy.quantity,
-          price: buy.price,
-          subtotal: buy.subtotal
+          shop_id: buy.shop_id
         };
       });
 
       const saveBuy = {
-        purchase_items: purchase_items,
-        // merchant_id: buyMerchant.id,
-        // paid: paid,
-        // credit: credit,
-        whole_total: result,
-        date: date
+        stocks: stocksAll
       };
-      // console.log(saveBuy);
-      await savePurchases(saveBuy);
-      // openNotificationWithIcon("success");
-      // setDataMerchant([]);
-      // setCredit(0);
-      // setPaid(0)
-      // result = 0;
-      navigate("/admin/show-buy-merchants");
-    // }
-  };
-
-  const handlePayment = (value) => {
-    setCredit(result - value);
-    setPaid(value);
+      await saveStocks(saveBuy);
+      
+    }
   };
 
   const handleChange = (item) => {
@@ -198,10 +164,6 @@ const CreateStock = ({
       title: "အရေအတွက်",
       dataIndex: "quantity"
     },
-    // {
-    //   title: "စုစုပေါင်းပမာဏ",
-    //   dataIndex: "subtotal"
-    // },
     {
       title: "Actions",
       dataIndex: "action",
@@ -233,12 +195,7 @@ const CreateStock = ({
             direction="horizontal"
             style={{ width: "100%", justifyContent: "center" }}
             size="large"
-          >
-            {/* <Title level={4}>ကုန်သည်လုပ်ငန်းအမည် - </Title>
-          <Title level={4}>
-            {buyMerchant === null ? "-" : buyMerchant.company_name}
-          </Title> */}
-          </Space>
+          ></Space>
           <Form
             colon={false}
             labelCol={{
@@ -326,39 +283,6 @@ const CreateStock = ({
             dataSource={dataMerchant}
             pagination={{ position: ["none", "none"] }}
           />
-          {/* <Row>
-            <Col span={17} style={{ textAlign: "right" }}>
-              <Title level={4}>စုစုပေါင်း</Title>
-            </Col>
-            <Col span={2}></Col>
-            <Col span={5}>
-              <Title level={4}>{result} Ks</Title>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={17} style={{ textAlign: "right" }}>
-              <Title level={4}>ပေးငွေ</Title>
-            </Col>
-            <Col span={2}></Col>
-            <Col span={5}>
-              <InputNumber
-                placeholder="ပေးငွေ"
-                prefix={<EditOutlined />}
-                style={{ borderRadius: "10px", width: "100%" }}
-                size="large"
-                onChange={(value) => handlePayment(value)}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col span={17} style={{ textAlign: "right" }}>
-              <Title level={4}>ပေးရန်ကျန်ငွေ</Title>
-            </Col>
-            <Col span={2}></Col>
-            <Col span={5}>
-              <Title level={4}>{credit} Ks</Title>
-            </Col>
-          </Row> */}
           <Space
             direction="horizontal"
             style={{ width: "100%", justifyContent: "right" }}
@@ -390,5 +314,6 @@ const mapStateToProps = (store) => ({
 export default connect(mapStateToProps, {
   getMerchants,
   getItems,
-  savePurchases
+  savePurchases,
+  saveStocks
 })(CreateStock);

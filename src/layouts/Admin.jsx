@@ -383,12 +383,12 @@ const Admin = ({ logout }) => {
               <Menu.Item key="ShowStocks" icon={<UnorderedListOutlined />}>
                 <Link to="/admin/show-stocks">Stockစာရင်း</Link>
               </Menu.Item>
-              {/* <Menu.Item
+              <Menu.Item
                 key="ShowBuyMerchants"
                 icon={<UnorderedListOutlined />}
               >
                 <Link to="/admin/show-buy-merchants">အဝယ်သွင်းရန်</Link>
-              </Menu.Item> */}
+              </Menu.Item>
 
               <Menu.Item
                 key="ShowItemTransfer"
@@ -476,12 +476,12 @@ const Admin = ({ logout }) => {
                 <Menu.Item key="ReportScreem" icon={<UnorderedListOutlined />}>
                   <Link to="/admin/report-screem">Report Screen</Link>
                 </Menu.Item>
-                {/* <Menu.Item
+                <Menu.Item
                   key="PurchaseReport"
                   icon={<UnorderedListOutlined />}
                 >
                   <Link to="/admin/purchase-report">Purchase</Link>
-                </Menu.Item> */}
+                </Menu.Item>
               </SubMenu>
             ) : (
               <SubMenu

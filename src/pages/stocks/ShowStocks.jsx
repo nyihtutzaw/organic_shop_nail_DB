@@ -122,11 +122,12 @@ const ShowStocks = ({ stock, getStocks }) => {
             return <span style={{ color: "red" }}>{record.quantity}</span>;
           else return <span>{record.quantity}</span>;
         }
-      },
-      {
-        title: "ဆိုင်အမည်",
-        render: (_, record) => record?.shop?.name
       }
+      // {
+      //   title: "ဆိုင်အမည်",
+      //   // render: (_, record) => record?.shop?.name
+      //   render: (_, record) => console.log(record)
+      // }
     ];
   } else {
     columns = [
@@ -187,11 +188,13 @@ const ShowStocks = ({ stock, getStocks }) => {
             return <span style={{ color: "red" }}>{record.quantity}</span>;
           else return <span>{record.quantity}</span>;
         }
-      },
-      {
-        title: "ဆိုင်အမည်",
-        render: (_, record) => record?.shop?.name
       }
+      // {
+      //   title: "ဆိုင်အမည်",
+      //   // render: (_, record) => record?.shop?.name
+      //   render: (_, record) => console.log(record)
+
+      // }
     ];
   }
 
@@ -212,8 +215,8 @@ const ShowStocks = ({ stock, getStocks }) => {
                     borderRadius: "5px"
                   }}
                   size="middle"
-                  onClick={() => navigate("/admin/create-buy-merchants")}
-                  // onClick={() => navigate("/admin/create-stocks")}
+                  // onClick={() => navigate("/admin/create-buy-merchants")}
+                  onClick={() => navigate("/admin/create-stocks")}
                 >
                   <PlusSquareOutlined />
                   အသစ်ထည့်မည်

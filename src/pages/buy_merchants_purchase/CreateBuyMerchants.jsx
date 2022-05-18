@@ -90,8 +90,8 @@ const CreateBuyMerchants = ({
       {
         ...values,
         price: data?.sale_price,
-        // subtotal: values.quantity * values.price,
-        subtotal: 0,
+        subtotal: values.quantity * values.price,
+        // subtotal: 0,
         key: buys.length + 1,
         data: date
       }
@@ -102,8 +102,8 @@ const CreateBuyMerchants = ({
         ...values,
         item_id: data.id,
         item_name: data.name,
-        // subtotal: values.quantity * values.price,
-        subtotal: 0,
+        subtotal: values.quantity * values.price,
+        // subtotal: 0,
         key: buys.length + 1,
         data: date
       }
@@ -115,16 +115,16 @@ const CreateBuyMerchants = ({
   buys.forEach((buy) => allTotal.push(parseInt(buy.subtotal)));
   const result = allTotal.reduce((a, b) => a + b, 0);
 
-  // const onChange = (value) => {
-  //   if (value === undefined) {
-  //     setBuyMerchant(null);
-  //   } else {
-  //     const filterBuyMerchant = merchant.merchants.find(
-  //       (mer) => mer.id === value
-  //     );
-  //     setBuyMerchant(filterBuyMerchant);
-  //   }
-  // };
+  const onChange = (value) => {
+    if (value === undefined) {
+      setBuyMerchant(null);
+    } else {
+      const filterBuyMerchant = merchant.merchants.find(
+        (mer) => mer.id === value
+      );
+      setBuyMerchant(filterBuyMerchant);
+    }
+  };
 
   const handleDelete = (record) => {
     const filterMerchant = dataMerchant.filter((f) => f.key !== record.key);
@@ -141,47 +141,42 @@ const CreateBuyMerchants = ({
   // };
 
   const handleSave = async () => {
-    // if (buyMerchant === null) {
-    //   message.error("ကျေးဇူးပြု၍ ကုန်သည်အချက်အလက်ထည့်ပါ");
-    // } else
+    if (buyMerchant === null) {
+      message.error("ကျေးဇူးပြု၍ ကုန်သည်အချက်အလက်ထည့်ပါ");
+    } else if (buys.length === 0) {
+      message.error("ကျေးဇူးပြု၍ ဝယ်ရန်ထည့်ပါ");
+    } else if (paid === null) {
+      message.error("ကျေးဇူးပြု၍ ပေးငွေထည့်ပါ");
+    } else {
+      const purchase_items = buys.map((buy) => {
+        return {
+          item_id: buy.item_id,
+          quantity: buy.quantity,
+          price: buy.price,
+          subtotal: buy.subtotal
+        };
+      });
 
-    // if (buys.length === 0) {
-    //   message.error("ကျေးဇူးပြု၍ ဝယ်ရန်ထည့်ပါ");
-    // }
-
-    // else if (paid === null) {
-    //   message.error("ကျေးဇူးပြု၍ ပေးငွေထည့်ပါ");
-    // } else{
-
-    const purchase_items = buys.map((buy) => {
-      return {
-        item_id: buy.item_id,
-        quantity: buy.quantity,
-        price: buy.price,
-        subtotal: buy.subtotal
+      const saveBuy = {
+        purchase_items: purchase_items,
+        merchant_id: buyMerchant.id,
+        // merchant_id: 39,
+        paid: paid,
+        // paid: 0,
+        credit: credit,
+        // credit: 0,
+        whole_total: result,
+        date: date
       };
-    });
-
-    const saveBuy = {
-      purchase_items: purchase_items,
-      // merchant_id: buyMerchant.id,
-      merchant_id: 39,
-      // paid: paid,
-      paid: 0,
-      // credit: credit,
-      credit: 0,
-      whole_total: result,
-      date: date
-    };
-    await savePurchases(saveBuy);
-    // openNotificationWithIcon("success");
-    // setDataMerchant([]);
-    // setCredit(0);
-    // setPaid(0)
-    // result = 0;
-    // navigate("/admin/show-buy-merchants");
-    navigate("/admin/show-stocks");
-    // }
+      await savePurchases(saveBuy);
+      // openNotificationWithIcon("success");
+      // setDataMerchant([]);
+      // setCredit(0);
+      // setPaid(0)
+      // result = 0;
+      navigate("/admin/show-buy-merchants");
+      // navigate("/admin/show-stocks");
+    }
   };
 
   const handlePayment = (value) => {
@@ -199,14 +194,14 @@ const CreateBuyMerchants = ({
       title: "အရေအတွက်",
       dataIndex: "quantity"
     },
-    // {
-    //   title: "တစ်ခုဈေးနှုန်း",
-    //   dataIndex: "price"
-    // },
-    // {
-    //   title: "စုစုပေါင်းပမာဏ",
-    //   dataIndex: "subtotal"
-    // },
+    {
+      title: "တစ်ခုဈေးနှုန်း",
+      dataIndex: "price"
+    },
+    {
+      title: "စုစုပေါင်းပမာဏ",
+      dataIndex: "subtotal"
+    },
     {
       title: "Actions",
       dataIndex: "action",
@@ -223,8 +218,8 @@ const CreateBuyMerchants = ({
       <Layout style={{ margin: "20px" }}>
         <Space direction="vertical" size="middle">
           <Title style={{ textAlign: "center" }} level={3}>
-            {/* အဝယ်စာရင်းသွင်းရန် */}
-            Stock စာရင်းသွင်းရန်
+            အဝယ်စာရင်းသွင်းရန်
+            {/* Stock စာရင်းသွင်းရန် */}
           </Title>
           <Space
             direction="horizontal"
@@ -235,7 +230,7 @@ const CreateBuyMerchants = ({
             }}
             size="large"
           >
-            {/* <Text type="secondary">ကုန်သည်အမည်ရွေးပါ</Text>
+            <Text type="secondary">ကုန်သည်အမည်ရွေးပါ</Text>
             <Select
               showSearch
               placeholder="ကျေးဇူးပြု၍ ကုန်သည်အမည်ရွေးပါ"
@@ -253,7 +248,7 @@ const CreateBuyMerchants = ({
                   {mer.name}
                 </Option>
               ))}
-            </Select> */}
+            </Select>
           </Space>
           <Space
             direction="horizontal"
@@ -327,7 +322,7 @@ const CreateBuyMerchants = ({
                 size="large"
               />
             </Form.Item>
-            {/* <Form.Item
+            <Form.Item
               name="price"
               label="တစ်ခုဈေးနှုန်း"
               rules={[
@@ -343,7 +338,7 @@ const CreateBuyMerchants = ({
                 style={{ borderRadius: "10px", width: "100%" }}
                 size="large"
               />
-            </Form.Item> */}
+            </Form.Item>
 
             <Form.Item style={{ textAlign: "right" }}>
               <Button
@@ -366,7 +361,7 @@ const CreateBuyMerchants = ({
             dataSource={dataMerchant}
             pagination={{ position: ["none", "none"] }}
           />
-          {/* <Row>
+          <Row>
             <Col span={17} style={{ textAlign: "right" }}>
               <Title level={4}>စုစုပေါင်း</Title>
             </Col>
@@ -398,7 +393,7 @@ const CreateBuyMerchants = ({
             <Col span={5}>
               <Title level={4}>{credit} Ks</Title>
             </Col>
-          </Row> */}
+          </Row>
           <Space
             direction="horizontal"
             style={{ width: "100%", justifyContent: "right" }}
