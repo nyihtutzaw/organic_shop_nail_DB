@@ -90,6 +90,7 @@ import ChangePassword from "../pages/change_password/ChangePassword";
 import PurchaseReport from "../pages/reports/PurchaseReport";
 import DailyAttendance from "../pages/staffs/DailyAttendance";
 import DetailMerchant from "../pages/buy_merchants_purchase/DetailMerchant";
+import EditStock from "../pages/stocks/EditStock";
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -206,6 +207,9 @@ const Admin = ({ logout }) => {
       break;
     case "/admin/show-stocks":
       selectedKey = "ShowStocks";
+      break;
+    case "/admin/edit-stocks":
+      selectedKey = "EditStocks";
       break;
 
     case "/admin/create-item-transfer":
@@ -541,6 +545,7 @@ const Admin = ({ logout }) => {
 
               <Route path="create-stocks" element={<CreateStock />} />
               <Route path="show-stocks" element={<ShowStocks />} />
+              <Route path="edit-stocks/:id" element={<EditStock />} />
 
               <Route
                 path="create-item-transfer"

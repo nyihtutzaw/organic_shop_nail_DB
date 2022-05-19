@@ -164,7 +164,7 @@ export const savePurchases = (data) => {
         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/purchases",
         data
       );
-      console.log(response);
+      // console.log(response);
       dispatch({ type: SET_SUCCESS, payload: true });
       dispatch({
         type: REMOVE_ERROR

@@ -43,7 +43,6 @@ const ShowMembers = ({
   const user = useSelector((state) => state.auth.user);
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
-
   const fileName = "Members"; // here enter filename for your excel file
 
   const result = members.map((member) => ({

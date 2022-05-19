@@ -5,7 +5,6 @@ export const SET_LOADING = "SET_LOADING";
 export const SET_SUCCESS = "SET_SUCCESS";
 export const SET_DELETE = "SET_DELETE";
 
-
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 // export const ADD_ERROR = "ADD_ERROR";
 // export const REMOVE_ERROR = "REMOVE_ERROR";
@@ -38,8 +37,6 @@ export const FILTER_MEMBERS = "FILTER_MEMBERS";
 export const IS_SUCCESS_MEMBER = "IS_SUCCESS_MEMBER";
 export const ERROR_MEMBER = "ERROR_MEMBER";
 export const CLEAR_ALERT_MEMBER = "CLEAR_ALERT_MEMBER";
-
-  
 
 export const CREATE_EXPENSES = "CREATE_EXPENSES";
 export const SHOW_EXPENSES = "SHOW_EXPENSES";
@@ -144,4 +141,8 @@ export const ERROR_PURCHASE_CREDITS = "ERROR_PURCHASE_CREDITS";
 export const IS_SUCCESS_PURCHASE_CREDITS = "IS_SUCCESS_PURCHASE_CREDITS";
 
 export const SHOW_STOCKS = "SHOW_STOCKS";
+export const SHOW_STOCK = "SHOW_STOCK";
+export const FILTER_STOCKS = "FILTER_STOCKS";
+export const UPDATE_STOCKS = "UPDATE_STOCKS";
+
 export const SET_REPORTS = "SET_REPORTS";

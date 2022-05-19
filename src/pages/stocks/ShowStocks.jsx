@@ -10,21 +10,25 @@ import {
   message
 } from "antd";
 import Layout from "antd/lib/layout/layout";
-import { PlusSquareOutlined } from "@ant-design/icons";
+import {
+  PlusSquareOutlined,
+  EditOutlined,
+  DeleteOutlined
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { getStocks, getShops } from "../../store/actions";
+import { getStocks, getShops, deleteStocks } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 import { successDeleteMessage } from "../../util/messages";
 
 const { Title } = Typography;
 
-const ShowStocks = ({ stock, getStocks, getShops }) => {
+const ShowStocks = ({ stock, getStocks, getShops, deleteStocks }) => {
   const navigate = useNavigate();
   const stockAll = stock.stocks;
   const user = useSelector((state) => state.auth.user);
   const shopAll = useSelector((state) => state.shop.shops);
-  const status = useSelector((state) => state.status);
+  const status = useSelector((state) => state.status);  
   const error = useSelector((state) => state.error);
   const fileName = "Stocks"; // here enter filename for your excel file
   const result = stockAll.map((stock) => ({
@@ -58,6 +62,14 @@ const ShowStocks = ({ stock, getStocks, getShops }) => {
       fetchData();
     };
   }, [getStocks, getShops]);
+
+  const handleDelete = async (record) => {
+    await deleteStocks(record.id);
+  };
+
+  const handleClick = async (record) => {
+    navigate(`/admin/edit-stocks/${record.id}`);
+  };
 
   let columns = [];
 
@@ -192,13 +204,23 @@ const ShowStocks = ({ stock, getStocks, getShops }) => {
             return <span style={{ color: "red" }}>{record.quantity}</span>;
           else return <span>{record.quantity}</span>;
         }
+      },
+      {
+        title: "Actions",
+        dataIndex: "action",
+        render: (_, record) => (
+          <Space direction="horizontal">
+            {/* {user?.position !== "owner" && ( */}
+            <Button type="primary" onClick={() => handleClick(record)}>
+              <EditOutlined />
+            </Button>
+            {/* )} */}
+            <Button type="primary" danger onClick={() => handleDelete(record)}>
+              <DeleteOutlined />
+            </Button>
+          </Space>
+        )
       }
-      // {
-      //   title: "ဆိုင်အမည်",
-      //   // render: (_, record) => record?.shop?.name
-      //   render: (_, record) => console.log(record)
-
-      // }
     ];
   }
 
@@ -247,4 +269,6 @@ const mapStateToProps = (store) => ({
   stock: store.stock
 });
 
-export default connect(mapStateToProps, { getStocks, getShops })(ShowStocks);
+export default connect(mapStateToProps, { getStocks, getShops, deleteStocks })(
+  ShowStocks
+);

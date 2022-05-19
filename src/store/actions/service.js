@@ -145,7 +145,6 @@ export const getServices = () => {
 export const getService = (id) => {
   return async (dispatch) => {
     dispatch({ type: SET_LOADING });
-
     try {
       const response = await axios.get(
         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/services/${id}`
