@@ -6,24 +6,24 @@ import {
   Col,
   Button,
   Table,
-  notification,
   Spin,
   message
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import { PlusSquareOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { getStocks } from "../../store/actions";
+import { getStocks, getShops } from "../../store/actions";
 import { connect, useSelector } from "react-redux";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 import { successDeleteMessage } from "../../util/messages";
 
 const { Title } = Typography;
 
-const ShowStocks = ({ stock, getStocks }) => {
+const ShowStocks = ({ stock, getStocks, getShops }) => {
   const navigate = useNavigate();
   const stockAll = stock.stocks;
   const user = useSelector((state) => state.auth.user);
+  const shopAll = useSelector((state) => state.shop.shops);
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
   const fileName = "Stocks"; // here enter filename for your excel file
@@ -50,13 +50,14 @@ const ShowStocks = ({ stock, getStocks }) => {
   useEffect(() => {
     const fetchData = async () => {
       await getStocks();
+      await getShops();
     };
 
     fetchData();
     return () => {
       fetchData();
     };
-  }, [getStocks]);
+  }, [getStocks, getShops]);
 
   let columns = [];
 
@@ -92,18 +93,17 @@ const ShowStocks = ({ stock, getStocks }) => {
           else return <span>{record.item.name}</span>;
         }
       },
-
-      {
-        title: "ဝယ်ဈေး",
-        dataIndex: "buy_price",
-        render: (_, record) => {
-          if (record.quantity < 10)
-            return (
-              <span style={{ color: "red" }}>{record.item.buy_price}</span>
-            );
-          else return <span>{record.item.buy_price}</span>;
-        }
-      },
+      // {
+      //   title: "ဝယ်ဈေး",
+      //   dataIndex: "buy_price",
+      //   render: (_, record) => {
+      //     if (record.quantity < 10)
+      //       return (
+      //         <span style={{ color: "red" }}>{record.item.buy_price}</span>
+      //       );
+      //     else return <span>{record.item.buy_price}</span>;
+      //   }
+      // },
       {
         title: "ရောင်းဈေး",
         dataIndex: "sale_price",
@@ -122,12 +122,16 @@ const ShowStocks = ({ stock, getStocks }) => {
             return <span style={{ color: "red" }}>{record.quantity}</span>;
           else return <span>{record.quantity}</span>;
         }
+      },
+      {
+        title: "ဆိုင်အမည်",
+        render: (_, record) => {
+          const getShopps = shopAll.find(
+            (s) => s.id === Number(record?.shop_id)
+          );
+          return getShopps?.name;
+        }
       }
-      // {
-      //   title: "ဆိုင်အမည်",
-      //   // render: (_, record) => record?.shop?.name
-      //   render: (_, record) => console.log(record)
-      // }
     ];
   } else {
     columns = [
@@ -243,4 +247,4 @@ const mapStateToProps = (store) => ({
   stock: store.stock
 });
 
-export default connect(mapStateToProps, { getStocks })(ShowStocks);
+export default connect(mapStateToProps, { getStocks, getShops })(ShowStocks);
