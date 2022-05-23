@@ -45,6 +45,7 @@ const EditItems = ({ editItems, getItem }) => {
     };
   }, [getItem]);
 
+  
   useEffect(() => {
     form.setFieldsValue({ code: item?.code });
     form.setFieldsValue({ name: item?.name });

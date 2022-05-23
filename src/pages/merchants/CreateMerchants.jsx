@@ -53,6 +53,7 @@ const CreateMerchants = ({
 
   useEffect(() => {
     if (status.success) {
+      form.resetFields();
       message.success(successCreateMessage);
     }
 
@@ -61,10 +62,8 @@ const CreateMerchants = ({
 
   const onFinish = async (values) => {
     await saveMerchants(values);
-    form.resetFields();
   };
 
-  
   return (
     <Spin spinning={status.loading}>
       <Layout style={{ margin: "20px" }}>

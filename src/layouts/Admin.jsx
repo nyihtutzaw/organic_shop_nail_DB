@@ -206,6 +206,9 @@ const Admin = ({ logout }) => {
     case "/admin/show-stocks":
       selectedKey = "ShowStocks";
       break;
+    case "/admin/edit-stocks":
+      selectedKey = "EditStocks";
+      break;
 
     case "/admin/create-item-transfer":
       selectedKey = "ShowItemTransfer";
@@ -386,6 +389,7 @@ const Admin = ({ logout }) => {
               >
                 <Link to="/admin/show-buy-merchants">အဝယ်သွင်းရန်</Link>
               </Menu.Item>
+
               <Menu.Item
                 key="ShowItemTransfer"
                 icon={<UnorderedListOutlined />}
@@ -537,6 +541,7 @@ const Admin = ({ logout }) => {
 
               <Route path="create-stocks" element={<CreateStock />} />
               <Route path="show-stocks" element={<ShowStocks />} />
+              <Route path="edit-stocks/:id" element={<EditStock />} />
 
               <Route
                 path="create-item-transfer"

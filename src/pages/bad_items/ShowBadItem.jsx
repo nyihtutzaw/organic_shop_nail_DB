@@ -26,6 +26,7 @@ const { Title } = Typography;
 
 const ShowBadItem = ({ getBadItems, deleteBadItems, getBadItem }) => {
   const badItems = useSelector((state) => state.bad_item.bad_items);
+  // console.log(badItems)
   const user = useSelector((state) => state.auth.user);
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
@@ -92,6 +93,13 @@ const ShowBadItem = ({ getBadItems, deleteBadItems, getBadItem }) => {
     {
       title: "	အရေအတွက်",
       dataIndex: "quantity"
+    },
+    {
+      title: "ရောင်းပြီးသားပစ္စည်းလဲခြင်း",
+      dataIndex: "is_sale",
+      render:(_,record) => {
+        return record?.is_sale == 0 ? "ရောင်းပြီးသားလဲခြင်း"  : "မရောင်းပြီးသားလဲခြင်း"
+      }
     },
     {
       title: "Actions",

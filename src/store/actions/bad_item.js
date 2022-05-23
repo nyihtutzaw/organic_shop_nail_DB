@@ -16,7 +16,6 @@ import {
 import { apiUrl } from "../../constants/url";
 import { serverErrorMessage } from "../../util/messages";
 
-
 export const showBadItems = (baditems) => ({
   type: SHOW_BADITEMS,
   baditems

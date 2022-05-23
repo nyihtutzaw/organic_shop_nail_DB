@@ -36,9 +36,7 @@ import {
         return {
           ...state,
           owners: filterOwners
-         
         };
-        
       case UPDATE_OWNERS:
         const index = state.owners.findIndex(
           (owner) => owner.id === action.data.id

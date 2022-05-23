@@ -3,8 +3,6 @@ import {
   SHOW_TRANSFER,
   CREATE_ITEMS_TRANSFER,
   FILTER_ITEMS_TRANSFER,
-  UPDATE_ITEMS_TRANSFER,
-  ERROR_TRANSFERS
 } from "../type";
 
 const initialState = {

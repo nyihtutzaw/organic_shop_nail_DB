@@ -6,43 +6,61 @@ import {
   Button,
   InputNumber,
   Select,
-  Table,
-  Row,
-  Col,
   message,
   Spin
 } from "antd";
 import Layout from "antd/lib/layout/layout";
-import {
-  EditOutlined,
-  SaveOutlined,
-  PlusSquareOutlined
-} from "@ant-design/icons";
+import { EditOutlined, PlusSquareOutlined } from "@ant-design/icons";
 import { connect, useSelector } from "react-redux";
 import {
   getMerchants,
   getItems,
   savePurchases,
-  saveStocks
+  saveStocks,
+  getStock,
+  editStocks
 } from "../../store/actions";
-import { useNavigate } from "react-router-dom";
-import dateFormat from "dateformat";
+import { useNavigate, useParams } from "react-router-dom";
 import { successCreateMessage } from "../../util/messages";
+import { successEditMessage } from "../../util/messages";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 const { Option } = Select;
 
-const CreateStock = ({ item, getMerchants, getItems, saveStocks }) => {
-  const [buys, setBuys] = useState([]);
-  const [dataMerchant, setDataMerchant] = useState([]);
+const EditStock = ({
+  item,
+  getStock,
+  editStocks,
+  getMerchants,
+  getItems,
+  saveStocks
+}) => {
+  const param = useParams();
   const allItems = item.items;
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
-
   const status = useSelector((state) => state.status);
-  const error = useSelector((state) => state.error);
 
+  const error = useSelector((state) => state.error);
+  const stock = useSelector((state) => state.stock.stock);
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await getStock(param?.id);
+    };
+
+    fetchData();
+    return () => {
+      fetchData();
+    };
+  }, [getStock]);
+
+  useEffect(() => {
+    form.setFieldsValue({ quantity: stock.quantity });
+    form.setFieldsValue({ item_id: stock?.item?.id });
+  }, [stock]);
+
   useEffect(() => {
     const fetchData = async () => {
       await getMerchants();
@@ -71,109 +89,20 @@ const CreateStock = ({ item, getMerchants, getItems, saveStocks }) => {
 
   useEffect(() => {
     if (status.success) {
-      message.success(successCreateMessage);
-      setDataMerchant([]);
-      // navigate("/admin/show-stocks");
+      message.success(successEditMessage);
     }
 
     return () => status.success;
   }, [status.success]);
 
-  const now = new Date();
-  const date = dateFormat(now, "yyyy-mm-dd");
-
-  const onFinish = (values) => {
-    const data = allItems.find((item) => item.id == values.item_id);
-    setBuys([
-      ...buys,
-      {
-        ...values,
-        key: buys.length + 1,
-        shop_id: user.shop.id
-      }
-    ]);
-    setDataMerchant([
-      ...dataMerchant,
-      {
-        ...values,
-        item_id: data.id,
-        item_name: data.name,
-        subtotal: values.quantity * data?.sale_price,
-        key: buys.length + 1,
-        data: date
-      }
-    ]);
-    form.resetFields();
-  };
-
-  const handleDelete = (record) => {
-    const filterMerchant = dataMerchant.filter((f) => f.key !== record.key);
-    setDataMerchant(filterMerchant);
-    setBuys(filterMerchant);
-  };
-
-  // const openNotificationWithIcon = (type) => {
-  //   notification[type]({
-  //     message: "Saved Your Data",
-  //     description: "Your data have been saved.",
-  //     duration: 3
-  //   });
-  // };
-
-  const handleSave = async () => {
-    // if (buyMerchant === null) {
-    //   message.error("ကျေးဇူးပြု၍ ကုန်သည်အချက်အလက်ထည့်ပါ");
-    // } else
-
-    // if (buys.length === 0) {
-    //   message.error("ကျေးဇူးပြု၍ ဝယ်ရန်ထည့်ပါ");
-    // } else if (paid === null) {
-    //   message.error("ကျေးဇူးပြု၍ ပေးငွေထည့်ပါ");
-    // } else {
-
-    if (buys.length === 0) {
-      message.error("ကျေးဇူးပြု၍ ဝယ်ရန်ထည့်ပါ");
-    } else {
-      const stocksAll = buys.map((buy) => {
-        return {
-          item_id: buy.item_id,
-          quantity: buy.quantity,
-          shop_id: buy.shop_id
-        };
-      });
-
-      const saveBuy = {
-        stocks: stocksAll
-      };
-      await saveStocks(saveBuy);
-      
-    }
+  const onFinish = async (values) => {
+    await editStocks(param?.id, { ...values, shop_id: user.shop.id });
+    navigate("/admin/show-stocks");
   };
 
   const handleChange = (item) => {
-    console.log(item.id);
+    // console.log(item.id);
   };
-
-  const columns = [
-    {
-      title: "ပစ္စည်းအမည်",
-      dataIndex: "item_id",
-      render: (_, record) => record.item_name
-    },
-    {
-      title: "အရေအတွက်",
-      dataIndex: "quantity"
-    },
-    {
-      title: "Actions",
-      dataIndex: "action",
-      render: (_, record) => (
-        <Button type="primary" danger onClick={() => handleDelete(record)}>
-          Delete
-        </Button>
-      )
-    }
-  ];
 
   return (
     <Spin spinning={status.loading}>
@@ -265,7 +194,7 @@ const CreateStock = ({ item, getMerchants, getItems, saveStocks }) => {
             <Form.Item style={{ textAlign: "right" }}>
               <Button
                 style={{
-                  backgroundColor: "var(--secondary-color)",
+                  backgroundColor: "var(--primary-color)",
                   color: "var(--white-color)",
                   borderRadius: "10px"
                 }}
@@ -273,17 +202,12 @@ const CreateStock = ({ item, getMerchants, getItems, saveStocks }) => {
                 htmlType="submit"
               >
                 <PlusSquareOutlined />
-                အသစ်ထည့်မည်
+                {/* အသစ်ထည့်မည် */}
+                သိမ်းမည်
               </Button>
             </Form.Item>
           </Form>
-          <Table
-            bordered
-            columns={columns}
-            dataSource={dataMerchant}
-            pagination={{ position: ["none", "none"] }}
-          />
-          <Space
+          {/* <Space
             direction="horizontal"
             style={{ width: "100%", justifyContent: "right" }}
           >
@@ -299,7 +223,7 @@ const CreateStock = ({ item, getMerchants, getItems, saveStocks }) => {
               <SaveOutlined />
               သိမ်းမည်
             </Button>
-          </Space>
+          </Space> */}
         </Space>
       </Layout>
     </Spin>
@@ -315,5 +239,7 @@ export default connect(mapStateToProps, {
   getMerchants,
   getItems,
   savePurchases,
-  saveStocks
-})(CreateStock);
+  saveStocks,
+  getStock,
+  editStocks
+})(EditStock);

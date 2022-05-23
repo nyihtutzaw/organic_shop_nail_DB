@@ -6,7 +6,6 @@ import {
   Col,
   Button,
   Table,
-  notification,
   Spin,
   message
 } from "antd";

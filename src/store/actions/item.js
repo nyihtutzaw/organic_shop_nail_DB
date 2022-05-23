@@ -6,7 +6,10 @@ import {
   UPDATE_ITEMS,
   FILTER_ITEMS,
   ERROR_ITEM,
+<<<<<<< HEAD
 
+=======
+>>>>>>> Last
   ADD_ERROR,
   REMOVE_ERROR,
   SET_LOADING,
@@ -53,12 +56,19 @@ export const getItems = () => {
       const response = await axios.get(
         `${apiUrl}items`
       );
+<<<<<<< HEAD
       const result = response.data.data.map((item) => {
         return {
           ...item,
           key: item.id
         };
       });
+=======
+      const result = response.data.data.map((d) => ({
+        ...d,
+        key: d.id
+      }));
+>>>>>>> Last
       // console.log(result)
       if (response.status === 200) {
         dispatch(showItems(result));
@@ -136,15 +146,37 @@ export const saveItems = (data) => {
         `${apiUrl}items/batchInsert`,
         data
       );
+<<<<<<< HEAD
       const result = {
         ...response.data.data,
         key: response.data.data.id
       };
       // console.log(result)
       dispatch(createItems(result));
+=======
+      const result = response.data.data.map((d) => ({
+        ...d,
+        key: d.id
+      }));
+      console.log(result)
+      if (response.status === 201) {
+        dispatch(createItems(result));
+        dispatch({ type: SET_SUCCESS, payload: true });
+        dispatch({
+          type: REMOVE_ERROR
+        });
+      }
+>>>>>>> Last
     } catch (error) {
       const { status, data } = error.response;
-      if (status === 401) {
+      // console.log(data.data[Object.keys(data.data)])
+
+      if (status === 400) {
+        dispatch({
+          type: ADD_ERROR,
+          payload: data.data[Object.keys(data.data)]
+        });
+      } else if (status === 401) {
         localStorage.removeItem("jwtToken");
         dispatch({
           type: ADD_ERROR,
@@ -159,6 +191,9 @@ export const saveItems = (data) => {
     }
     dispatch({ type: SET_SUCCESS, payload: false });
     dispatch({ type: SET_LOADING });
+    dispatch({
+      type: REMOVE_ERROR
+    });
   };
 };
 
@@ -214,8 +249,8 @@ export const editItems = (id, data) => {
         ...response.data.data,
         key: response.data.data.id
       };
-      // console.log(result);
-      if (response.status === 204) {
+      // console.log(response);
+      if (response.status === 201) {
         dispatch(updateItems(result));
         dispatch({ type: SET_SUCCESS, payload: true });
         dispatch({
@@ -301,6 +336,5 @@ export const getBestItem = (query) => {
       }
     }
     dispatch({ type: SET_LOADING });
-
   };
 };

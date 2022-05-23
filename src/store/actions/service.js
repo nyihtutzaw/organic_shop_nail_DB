@@ -124,7 +124,6 @@ export const getServices = () => {
 export const getService = (id) => {
   return async (dispatch) => {
     dispatch({ type: SET_LOADING });
-
     try {
       const response = await axios.get(
         `${apiUrl}services/${id}`

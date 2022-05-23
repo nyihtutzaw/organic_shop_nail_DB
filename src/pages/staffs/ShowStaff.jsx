@@ -1,5 +1,14 @@
 import React, { useEffect } from "react";
-import { Typography, Space, Row, Col, Button, Table, Spin, message } from "antd";
+import {
+  Typography,
+  Space,
+  Row,
+  Col,
+  Button,
+  Table,
+  Spin,
+  message
+} from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
   PlusSquareOutlined,
@@ -46,7 +55,6 @@ const ShowStaff = ({ getStaffs, deleteStaffs, clearAlertStaffs }) => {
     return () => status.success;
   }, [status.success]);
 
-
   useEffect(() => {
     store.dispatch(clearAlertStaffs());
   }, []);
@@ -73,14 +81,14 @@ const ShowStaff = ({ getStaffs, deleteStaffs, clearAlertStaffs }) => {
 
   const handleDailyRecord = async (record) => {
     navigate(`/admin/dailyAttendance-staff/${record.id}`);
-  }
+  };
 
   const columns = [
     {
       title: "ဓါတ်ပုံ",
       dataIndex: "image",
       render: (_, record) => (
-        <img src={`${record.image}`} width={80} height={80} />
+        <img src={`${record.image}`} width={70} height={70} />
       )
     },
     {
@@ -103,22 +111,27 @@ const ShowStaff = ({ getStaffs, deleteStaffs, clearAlertStaffs }) => {
       title: "ဘဏ်အကောင့်",
       dataIndex: "bank_account"
     },
-    
+
     {
       title: "Actions",
       dataIndex: "action",
       render: (_, record) => (
         <Space direction="horizontal">
-           {user?.position !== "owner" && (
-          <Button type="primary" onClick={() => handleClick(record)}>
-            {" "}
-            <EditOutlined />
-          </Button>
-            )}
+          {user?.position !== "owner" && (
+            <Button type="primary" onClick={() => handleClick(record)}>
+              {" "}
+              <EditOutlined />
+            </Button>
+          )}
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
-          <Button type="primary" style={{ backgroundColor: "#ad6800" }} danger onClick={() => handleDailyRecord(record)}>
+          <Button
+            type="primary"
+            style={{ backgroundColor: "#ad6800" }}
+            danger
+            onClick={() => handleDailyRecord(record)}
+          >
             ရက်မှန်ကြေးထည့်ရန်
           </Button>
         </Space>
@@ -126,46 +139,46 @@ const ShowStaff = ({ getStaffs, deleteStaffs, clearAlertStaffs }) => {
     }
   ];
 
-
   return (
     <Spin spinning={status.loading}>
-    <Layout style={{ margin: "20px" }}>
-      
-      <Space direction="vertical" size="middle">
-        <Row gutter={[16, 16]}>
-          <Col span={16}>
-            <Title level={3}>ဝန်ထမ်းစာရင်း</Title>
-          </Col>
-          <Col span={4}>
-          {user?.position !== "owner" && (
-            <Button
-              style={{
-                backgroundColor: "var(--secondary-color)",
-                color: "var(--white-color)",
-                borderRadius: "5px"
-              }}
-              size="middle"
-              onClick={() => navigate("/admin/create-staff")}
-            >
-              <PlusSquareOutlined />
-              အသစ်ထည့်မည်
-            </Button>
-            )}
-          </Col>
-          <Col span={4}>
-            <ExportToExcel apiData={result} fileName={fileName} />
-          </Col>
-        </Row>
-        <Table
-          bordered
-          columns={columns}
-          pagination={{ defaultPageSize: 10 }}
-          dataSource={staffs}
-        />
-      </Space>
-    </Layout>
+      <Layout style={{ margin: "20px" }}>
+        <Space direction="vertical" size="middle">
+          <Row gutter={[16, 16]}>
+            <Col span={16}>
+              <Title level={3}>ဝန်ထမ်းစာရင်း</Title>
+            </Col>
+            <Col span={4}>
+              {user?.position !== "owner" && (
+                <Button
+                  style={{
+                    backgroundColor: "var(--secondary-color)",
+                    color: "var(--white-color)",
+                    borderRadius: "5px"
+                  }}
+                  size="middle"
+                  onClick={() => navigate("/admin/create-staff")}
+                >
+                  <PlusSquareOutlined />
+                  အသစ်ထည့်မည်
+                </Button>
+              )}
+            </Col>
+            <Col span={4}>
+              <ExportToExcel apiData={result} fileName={fileName} />
+            </Col>
+          </Row>
+          <Table
+            bordered
+            columns={columns}
+            pagination={{ defaultPageSize: 10 }}
+            dataSource={staffs}
+          />
+        </Space>
+      </Layout>
     </Spin>
   );
 };
 
-export default connect(null, { getStaffs, deleteStaffs, clearAlertStaffs })(ShowStaff);
+export default connect(null, { getStaffs, deleteStaffs, clearAlertStaffs })(
+  ShowStaff
+);

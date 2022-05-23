@@ -4,7 +4,6 @@ import {
   ADD_ERROR,
   REMOVE_ERROR,
   SET_LOADING,
-  SET_SUCCESS
 } from "../type";
 import { apiUrl } from "../../constants/url";
 import { serverErrorMessage } from "../../util/messages";

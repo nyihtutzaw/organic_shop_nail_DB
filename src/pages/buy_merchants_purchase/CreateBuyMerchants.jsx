@@ -89,7 +89,9 @@ const CreateBuyMerchants = ({
       ...buys,
       {
         ...values,
+        price: data?.sale_price,
         subtotal: values.quantity * values.price,
+        // subtotal: 0,
         key: buys.length + 1,
         data: date
       }
@@ -101,6 +103,7 @@ const CreateBuyMerchants = ({
         item_id: data.id,
         item_name: data.name,
         subtotal: values.quantity * values.price,
+        // subtotal: 0,
         key: buys.length + 1,
         data: date
       }
@@ -170,6 +173,7 @@ const CreateBuyMerchants = ({
       // setPaid(0)
       // result = 0;
       navigate("/admin/show-buy-merchants");
+      // navigate("/admin/show-stocks");
     }
   };
 
@@ -213,6 +217,7 @@ const CreateBuyMerchants = ({
         <Space direction="vertical" size="middle">
           <Title style={{ textAlign: "center" }} level={3}>
             အဝယ်စာရင်းသွင်းရန်
+            {/* Stock စာရင်းသွင်းရန် */}
           </Title>
         </Space>
             <Text type="secondary">ကုန်သည်အမည်ရွေးပါ</Text>
@@ -290,7 +295,6 @@ const CreateBuyMerchants = ({
                 ))}
               </Select>
             </Form.Item>
-
             <Form.Item
               name="quantity"
               label="အရေအတွက်"
