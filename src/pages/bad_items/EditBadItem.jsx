@@ -82,8 +82,6 @@ const EditBadItem = ({
     setIsSale(badItems?.is_sale == 0 ? false : true)
   }, [badItems]);
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       await getStocks();
