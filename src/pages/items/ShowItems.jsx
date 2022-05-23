@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Space,
@@ -8,7 +8,8 @@ import {
   Table,
   notification,
   message,
-  Spin
+  Spin,
+  Select
 } from "antd";
 import Layout from "antd/lib/layout/layout";
 import {
@@ -23,6 +24,7 @@ import { ExportToExcel } from "../../excel/ExportToExcel";
 import { successDeleteMessage } from "../../util/messages";
 
 const { Title } = Typography;
+const { Option } = Select;
 
 const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
   const allItems = useSelector((state) => state.item.items);
@@ -74,6 +76,21 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
   //     duration: 3
   //   });
   // };
+
+  // const itemsUnique = [];
+  // stockAll.forEach((i) => itemsUnique.push(i?.item?.name));
+  // let unique = [...new Set(itemsUnique)];
+  // console.log("uu", unique);
+
+  const [showBuyMerchant, setshowBuyMerchant] = useState(null);
+  const onChange = (value) => {
+    if (value === undefined) {
+      setshowBuyMerchant(allItems);
+    } else {
+      const filterBuyMerchant = allItems.filter((mer) => mer.name === value);
+      setshowBuyMerchant(filterBuyMerchant);
+    }
+  };
 
   const handleDelete = async (record) => {
     await deleteItems(record.id);
@@ -173,8 +190,40 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
       <Layout style={{ margin: "20px" }}>
         <Space direction="vertical" size="middle">
           <Row gutter={[16, 16]}>
-            <Col span={16}>
+            <Col span={10}>
               <Title level={3}>ပစ္စည်းစာရင်း</Title>
+            </Col>
+            <Col span={6}>
+              <Space
+                direction="horizontal"
+                style={{
+                  width: "100%",
+                  marginBottom: "10px"
+                }}
+                size="large"
+              >
+                {/* <Text type="secondary">ပစ္စည်းအမည်ရွေးပါ</Text> */}
+                <Select
+                  showSearch
+                  placeholder="ကျေးဇူးပြု၍ ပစ္စည်းအမည်ရွေးပါ"
+                  optionFilterProp="children"
+                  onChange={onChange}
+                  filterOption={(input, option) =>
+                    option.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }
+                  allowClear={true}
+                  size="large"
+                  style={{ borderRadius: "10px" }}
+                >
+                  {allItems.map((item) => (
+                    <Option key={Math.random() * 100} value={item.name}>
+                      {item.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Space>
             </Col>
             <Col span={4}>
               {user?.position !== "owner" && (
@@ -200,7 +249,7 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
             bordered
             columns={columns}
             pagination={{ defaultPageSize: 10 }}
-            dataSource={allItems}
+            dataSource={showBuyMerchant != null ? showBuyMerchant : allItems}
             // size="small"
           />
         </Space>
