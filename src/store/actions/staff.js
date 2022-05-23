@@ -157,6 +157,7 @@ export const saveStaffs = (data) => {
   };
 };
 
+
 export const deleteStaffs = (id) => {
   return async (dispatch) => {
     dispatch({ type: SET_SUCCESS, payload: false });
