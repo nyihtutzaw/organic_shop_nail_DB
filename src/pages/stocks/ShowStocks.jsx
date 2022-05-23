@@ -72,7 +72,6 @@ const ShowStocks = ({ stock, getStocks, getShops, deleteStocks }) => {
   };
 
 
-<<<<<<< HEAD
   const columns = [
     {
       title: "ပစ္စည်းပုံ",
@@ -132,9 +131,6 @@ const ShowStocks = ({ stock, getStocks, getShops, deleteStocks }) => {
     }
   ];
   if(user?.position === "owner"){
-=======
-  if (user?.position === "owner") {
->>>>>>> Last
     columns = [
       {
         title: "ပစ္စည်းပုံ",

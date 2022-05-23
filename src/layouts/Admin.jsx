@@ -89,6 +89,7 @@ import EditBadItem from "../pages/bad_items/EditBadItem";
 import ChangePassword from "../pages/change_password/ChangePassword";
 import PurchaseReport from "../pages/reports/PurchaseReport";
 import DailyAttendance from "../pages/staffs/DailyAttendance";
+import EditStock from "../pages/stocks/EditStock";
 
 const { Header, Footer, Sider, Content } = Layout;
 
