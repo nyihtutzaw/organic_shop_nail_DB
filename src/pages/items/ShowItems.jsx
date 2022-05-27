@@ -194,14 +194,14 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
               <Title level={3}>ပစ္စည်းစာရင်း</Title>
             </Col>
             <Col span={6}>
-              <Space
+              {/* <Space
                 direction="horizontal"
                 style={{
                   width: "100%",
                   marginBottom: "10px"
                 }}
                 size="large"
-              >
+              > */}
                 {/* <Text type="secondary">ပစ္စည်းအမည်ရွေးပါ</Text> */}
                 <Select
                   showSearch
@@ -223,7 +223,7 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
                     </Option>
                   ))}
                 </Select>
-              </Space>
+              {/* </Space> */}
             </Col>
             <Col span={4}>
               {user?.position !== "owner" && (
