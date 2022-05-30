@@ -151,7 +151,7 @@ const CreateStock = ({ item, getMerchants, getItems, saveStocks }) => {
   };
 
   const handleChange = (item) => {
-    console.log(item.id);
+    // console.log(item.id);
   };
 
   const onChange = (value) => {
