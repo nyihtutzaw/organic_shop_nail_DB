@@ -163,7 +163,6 @@ const CreateStock = ({ item, getMerchants, getItems, saveStocks }) => {
     }
   };
 
-  console.log(buyMerchant);
 
   const columns = [
     {
