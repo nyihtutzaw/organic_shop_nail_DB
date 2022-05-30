@@ -38,7 +38,7 @@ const CreateStock = ({ item, getMerchants, getItems, saveStocks }) => {
   const allItems = item.items;
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
-
+  const [buyMerchant, setBuyMerchant] = useState(null);
   const status = useSelector((state) => state.status);
   const error = useSelector((state) => state.error);
 
@@ -73,6 +73,7 @@ const CreateStock = ({ item, getMerchants, getItems, saveStocks }) => {
     if (status.success) {
       message.success(successCreateMessage);
       setDataMerchant([]);
+      setBuyMerchant([]);
       // navigate("/admin/show-stocks");
     }
 
@@ -146,13 +147,23 @@ const CreateStock = ({ item, getMerchants, getItems, saveStocks }) => {
         stocks: stocksAll
       };
       await saveStocks(saveBuy);
-      
     }
   };
 
   const handleChange = (item) => {
     console.log(item.id);
   };
+
+  const onChange = (value) => {
+    if (value === undefined) {
+      setBuyMerchant(null);
+    } else {
+      const filterBuyMerchant = allItems.find((mer) => mer.id === value);
+      setBuyMerchant(filterBuyMerchant);
+    }
+  };
+
+  console.log(buyMerchant);
 
   const columns = [
     {
@@ -226,6 +237,7 @@ const CreateStock = ({ item, getMerchants, getItems, saveStocks }) => {
                 showSearch
                 placeholder="ကျေးဇူးပြု၍ ပစ္စည်းအမည်ထည့်ပါ"
                 optionFilterProp="children"
+                onChange={onChange}
                 filterOption={(input, option) =>
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >=
                   0
@@ -262,6 +274,17 @@ const CreateStock = ({ item, getMerchants, getItems, saveStocks }) => {
                 size="large"
               />
             </Form.Item>
+            <Space
+              direction="horizontal"
+              style={{ width: "100%", justifyContent: "center" }}
+              size="large"
+            >
+              <Title level={4}>စျေးနှုန်း - </Title>
+              <Title level={4}>
+                {buyMerchant === null ? "0" : buyMerchant.sale_price} Ks
+              </Title>
+            </Space>
+
             <Form.Item style={{ textAlign: "right" }}>
               <Button
                 style={{
