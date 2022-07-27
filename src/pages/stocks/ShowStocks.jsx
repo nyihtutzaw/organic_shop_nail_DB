@@ -1,5 +1,15 @@
-import React, { useEffect } from 'react'
-import { Typography, Space, Row, Col, Button, Table, Spin, message } from 'antd'
+import React, { useEffect, useState } from 'react'
+import {
+  Typography,
+  Space,
+  Row,
+  Col,
+  Button,
+  Table,
+  Spin,
+  message,
+  Select,
+} from 'antd'
 import Layout from 'antd/lib/layout/layout'
 import {
   PlusSquareOutlined,
@@ -7,16 +17,24 @@ import {
   DeleteOutlined,
 } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
-import { getStocks, getShops, deleteStocks } from '../../store/actions'
+import {
+  getStocks,
+  getShops,
+  deleteStocks,
+  getItems,
+} from '../../store/actions'
 import { connect, useSelector } from 'react-redux'
 import { ExportToExcel } from '../../excel/ExportToExcel'
 import { successDeleteMessage } from '../../util/messages'
 
 const { Title } = Typography
+const { Option } = Select
 
-const ShowStocks = ({ getStocks, getShops, deleteStocks }) => {
+const ShowStocks = ({ getStocks, getShops, deleteStocks, getItems }) => {
   const navigate = useNavigate()
+  const items = useSelector((state) => state.item.items)
   const stockAll = useSelector((state) => state.stock.stocks)
+  const [stocks, setStocks] = useState([])
   const user = useSelector((state) => state.auth.user)
   const shopAll = useSelector((state) => state.shop.shops)
   const status = useSelector((state) => state.status)
@@ -46,6 +64,8 @@ const ShowStocks = ({ getStocks, getShops, deleteStocks }) => {
     const fetchData = async () => {
       await getStocks()
       await getShops()
+      await getItems()
+      setStocks(stockAll)
     }
 
     fetchData()
@@ -60,6 +80,22 @@ const ShowStocks = ({ getStocks, getShops, deleteStocks }) => {
 
   const handleClick = async (record) => {
     navigate(`/admin/edit-stocks/${record.id}`)
+  }
+
+  const onChange = (id) => {
+    if (id === undefined) {
+      setStocks(stockAll)
+    } else {
+      const filterStocks = stockAll.filter((stock) => stock.item.id === id)
+
+      setStocks(filterStocks)
+    }
+  }
+
+  const handleLessStock = () => {
+    const filterStocks = stockAll.filter((stock) => stock.quantity < 10)
+
+    setStocks(filterStocks)
   }
 
   let columns = [
@@ -276,8 +312,29 @@ const ShowStocks = ({ getStocks, getShops, deleteStocks }) => {
       <Layout style={{ margin: '20px' }}>
         <Space direction="vertical" size="middle">
           <Row gutter={[16, 16]}>
-            <Col span={16}>
+            <Col span={10}>
               <Title level={3}>Stock စာရင်း</Title>
+            </Col>
+            <Col span={6}>
+              <Select
+                showSearch
+                placeholder="ကျေးဇူးပြု၍ ပစ္စည်းအမည်ရွေးပါ"
+                optionFilterProp="children"
+                onChange={onChange}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+                allowClear={true}
+                size="large"
+                style={{ borderRadius: '10px' }}
+              >
+                {items.map((item) => (
+                  <Option key={item.id} value={item.id}>
+                    {item.name}
+                  </Option>
+                ))}
+              </Select>
             </Col>
             <Col span={4}>
               {user?.position !== 'owner' && (
@@ -300,10 +357,38 @@ const ShowStocks = ({ getStocks, getShops, deleteStocks }) => {
               <ExportToExcel apiData={result} fileName={fileName} />
             </Col>
           </Row>
+          <Row gutter={[16, 16]}>
+            <Col span={4}>
+              <Button
+                style={{
+                  backgroundColor: 'var(--secondary-color)',
+                  color: 'var(--white-color)',
+                  borderRadius: '5px',
+                }}
+                size="middle"
+                onClick={() => setStocks(stockAll)}
+              >
+                All
+              </Button>
+            </Col>
+            <Col span={4}>
+              <Button
+                style={{
+                  backgroundColor: 'var(--secondary-color)',
+                  color: 'var(--white-color)',
+                  borderRadius: '5px',
+                }}
+                size="middle"
+                onClick={handleLessStock}
+              >
+                လက်ကျန်နဲသော
+              </Button>
+            </Col>
+          </Row>
           <Table
             bordered
             columns={columns}
-            dataSource={stockAll}
+            dataSource={stocks}
             pagination={{ defaultPageSize: 6 }}
           />
         </Space>
@@ -316,6 +401,9 @@ const mapStateToProps = (store) => ({
   stock: store.stock,
 })
 
-export default connect(mapStateToProps, { getStocks, getShops, deleteStocks })(
-  ShowStocks,
-)
+export default connect(mapStateToProps, {
+  getStocks,
+  getShops,
+  deleteStocks,
+  getItems,
+})(ShowStocks)

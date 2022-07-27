@@ -34,11 +34,13 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
   // console.log("ii", allItems);
   const fileName = "Items"; // here enter filename for your excel file
   const result = allItems.map((item) => ({
-    Name: item.name,
+    Id: item.id,
+    uuid: item.uuid,
     Code: item.code,
+    Name: item.name,
+    Image: item.image,
     Buy_Price: item.buy_price,
     Sale_Price: item.sale_price,
-    key: item.id
   }));
 
   useEffect(() => {
