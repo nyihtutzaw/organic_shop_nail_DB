@@ -16,6 +16,7 @@ import {
   message,
   Spin,
   Form,
+  Switch,
 } from 'antd'
 import {
   PlusSquareOutlined,
@@ -46,6 +47,7 @@ const Sale = ({
   getMembers,
 }) => {
   // const [value, setValue] = useState(null);
+  const [statusPrice, setStatusPrice] = useState(true)
   const [MemberOnChanges, setMemberOnChanges] = useState(null)
   const [sales, setSales] = useState([])
   const [customerName, setCustomerName] = useState('')
@@ -121,6 +123,41 @@ const Sale = ({
           price: stock.item.sale_price,
           quantity: 1,
           subtotal: stock.item.sale_price * 1,
+          is_item: true,
+          // staff_id: 6 // not need staff id for item. so, we need to change api
+        }
+        setSales([...sales, sale])
+      }
+    } else {
+      let cloneSales = [...sales]
+      if (cloneSales[index].quantity + 1 <= stock.quantity) {
+        cloneSales[index] = {
+          ...cloneSales[index],
+          quantity: cloneSales[index].quantity + 1,
+          subtotal: cloneSales[index].price * (cloneSales[index].quantity + 1),
+        }
+        setSales(cloneSales)
+      }
+    }
+  }
+
+  const handleAddWholeSaleItem = (stock) => {
+    const index = sales.findIndex(
+      (sale) => sale.sale_id === parseInt(stock.id) && sale.is_item,
+    )
+
+    if (index === -1) {
+      if (stock.quantity > 0) {
+        const sale = {
+          key: sales.length === 0 ? 1 : sales[sales.length - 1].id + 1,
+          id: sales.length === 0 ? 1 : sales[sales.length - 1].id + 1,
+          sale_id: stock.id,
+          code: stock.item.code,
+          name: stock.item.name,
+          capital: stock.item.buy_price,
+          price: stock.item.wholesale_price,
+          quantity: 1,
+          subtotal: stock.item.wholesale_price * 1,
           is_item: true,
           // staff_id: 6 // not need staff id for item. so, we need to change api
         }
@@ -373,7 +410,11 @@ const Sale = ({
       const item = stock.stocks.find((s) => s.item.code === e.target.value)
 
       if (item) {
-        handleAddSaleItem(item)
+        if (statusPrice) {
+          handleAddSaleItem(item)
+        } else {
+          handleAddWholeSaleItem(item)
+        }
         updateBarcodeInputValue('')
       } else {
         const item = service.services.find((s) => s.code === e.target.value)
@@ -399,7 +440,7 @@ const Sale = ({
     )
     setServices(serviceFilterByName)
 
-    setSearchName("")
+    setSearchName('')
   }
 
   const handleMember = () => {
@@ -670,6 +711,18 @@ const Sale = ({
             </Col>
             <Col span={12}></Col>
           </Row>
+          <Row gutter={[12, 12]} style={{ marginBottom: '10px' }}>
+            <Col span={12}>
+              <Switch
+                style={{ margin: '10px' }}
+                unCheckedChildren="လက်ကား"
+                checkedChildren="လက်လီ"
+                defaultChecked
+                onChange={(value) => setStatusPrice(value)}
+              />
+            </Col>
+            <Col span={12}></Col>
+          </Row>
           <Layout style={{ display: 'flex', flexDirection: 'row' }}>
             <Sider
               width={380}
@@ -692,7 +745,11 @@ const Sale = ({
                           backgroundColor: 'var(--white-color)',
                           marginBottom: '12px',
                         }}
-                        onClick={() => handleAddSaleItem(stock)}
+                        onClick={() =>
+                          statusPrice
+                            ? handleAddSaleItem(stock)
+                            : handleAddWholeSaleItem(stock)
+                        }
                       >
                         <Text
                           style={{
