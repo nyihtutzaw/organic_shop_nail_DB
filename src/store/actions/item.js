@@ -177,7 +177,7 @@ export const deleteItems = (id) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.delete(
-        `${apiUrl}/items/${id}`
+        `${apiUrl}items/${id}`
       );
       // console.log(response)
       if (response.status === 204) {

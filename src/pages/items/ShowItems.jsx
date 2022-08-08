@@ -121,10 +121,13 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
         dataIndex: "buy_price"
       },
       {
-        title: "ရောင်းဈေး",
+        title: "လက်လီရောင်းဈေး",
         dataIndex: "sale_price"
       },
-
+      {
+        title: "လက်ကားရောင်းဈေး",
+        dataIndex: "wholesale_price"
+      },
       {
         title: "Actions",
         dataIndex: "action",
@@ -164,10 +167,13 @@ const ShowItems = ({ item, getItems, deleteItems, editItems, getItem }) => {
       //   dataIndex: "buy_price"
       // },
       {
-        title: "ရောင်းဈေး",
+        title: "လက်လီရောင်းဈေး",
         dataIndex: "sale_price"
       },
-
+      {
+        title: "လက်ကားရောင်းဈေး",
+        dataIndex: "wholesale_price"
+      },
       {
         title: "Actions",
         dataIndex: "action",
