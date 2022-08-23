@@ -1,5 +1,5 @@
-export const Positions = {
-  OWNER: "Owner",
-  MANAGER: "Manager",
-  STAFF: "Staff",
-};
+export const OWNER = 'owner'
+export const MANAGER = 'manager'
+export const CASHIER = 'cashier'
+export const SALE_STAFF = 'sale staff'
+export const SERVICE_STAFF = 'service staff'

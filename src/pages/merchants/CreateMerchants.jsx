@@ -158,12 +158,6 @@ const CreateMerchants = ({
             <Form.Item
               name="other"
               label="အခြားအချက်လက်"
-              rules={[
-                {
-                  required: true,
-                  message: "ကျေးဇူးပြု၍ အခြားအချက်လက်ထည့်ပါ"
-                }
-              ]}
             >
               <Input
                 placeholder="အခြားအချက်လက်ထည့်ပါ"

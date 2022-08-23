@@ -244,6 +244,7 @@ const CreateItemTransfer = ({
                 allowClear={true}
                 size="large"
                 style={{ borderRadius: "10px" }}
+                showSearch={true}
               >
                 {stocks.map((item) => (
                   <Option key={item.id} value={item.id}>

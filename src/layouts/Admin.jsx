@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   Link,
   Routes,
   Route,
   useLocation,
   Navigate,
-  useNavigate
-} from "react-router-dom";
+  useNavigate,
+} from 'react-router-dom'
 // ant design styles
-import { Layout, Menu, Avatar, Space, Popover, Button } from "antd";
-import Title from "antd/lib/typography/Title";
+import { Layout, Menu, Avatar, Space, Popover, Button } from 'antd'
+import Title from 'antd/lib/typography/Title'
 
 // ant design icons
 import {
@@ -27,92 +27,93 @@ import {
   ContactsOutlined,
   FolderAddOutlined,
   FlagOutlined,
-  LockOutlined
-} from "@ant-design/icons";
-import Dashboard from "../pages/Dashboard";
-import SubMenu from "antd/lib/menu/SubMenu";
-import CreateMerchants from "../pages/merchants/CreateMerchants";
-import ShowMerchants from "../pages/merchants/ShowMerchants";
-import CreateMembers from "../pages/members/CreateMembers";
-import ShowMembers from "../pages/members/ShowMembers";
-import CreateItems from "../pages/items/CreateItems";
-import ShowItems from "../pages/items/ShowItems";
-import CreateBuyMerchants from "../pages/buy_merchants_purchase/CreateBuyMerchants";
-import ShowBuyMerchants from "../pages/buy_merchants_purchase/ShowBuyMerchants";
-import CreateExpenses from "../pages/expenses/CreateExpenses";
-import ShowExpenses from "../pages/expenses/ShowExpenses";
-import CreateExpenseNames from "../pages/expense_names/CreateExpenseNames";
-import ShowExpenseNames from "../pages/expense_names/ShowExpenseNames";
-import CreateShops from "../pages/shops/CreateShops";
-import ShowShops from "../pages/shops/ShowShops";
-import CreateAccounts from "../pages/accounts/CreateAccounts";
-import ShowAccounts from "../pages/accounts/ShowAccounts";
-import CreateBuyItems from "../pages/buy_items/CreateBuyItems";
-import ShowBuyItems from "../pages/buy_items/ShowBuyItems";
-import ShowStocks from "../pages/stocks/ShowStocks";
-import CreateSupplier from "../pages/supplier/CreateSupplier";
-import ShowSupplier from "../pages/supplier/ShowSupplier";
-import CreateStock from "../pages/stocks/CreateStock";
-import CreateItemTransfer from "../pages/items_transfer/CreateItemTransfer";
-import ShowItemTransfer from "../pages/items_transfer/ShowItemTransfer";
-import ShowItemChangeList from "../pages/items_transfer/ShowItemChangeList";
-import CreateBadItem from "../pages/bad_items/CreateBadItem";
-import ShowBadItem from "../pages/bad_items/ShowBadItem";
-import CreateStaff from "../pages/staffs/CreateStaff";
-import ShowStaff from "../pages/staffs/ShowStaff";
-import CreateService from "../pages/services/CreateService";
-import ShowService from "../pages/services/ShowService";
-import StaffComession from "../pages/staffs/StaffComession";
-import DetailMembers from "../pages/members/DetailMembers";
-import CreateOwners from "../pages/owners/CreateOwners";
-import ShowOwners from "../pages/owners/ShowOwners";
-import ItemsReports from "../pages/reports/ItemsReports";
-import VoucherReports from "../pages/reports/VoucherReports";
-import ServicesReport from "../pages/reports/ServicesReport";
-import ReportScreem from "../pages/reports/ReportScreem";
-import EditItems from "../pages/items/EditItems";
-import EditSupplier from "../pages/supplier/EditSupplier";
-import EditMembers from "../pages/members/EditMembers";
-import EditService from "../pages/services/EditService";
-import EditStaff from "../pages/staffs/EditStaff";
-import EditShops from "../pages/shops/EditShops";
-import EditOwners from "../pages/owners/EditOwners";
-import EditAccounts from "../pages/accounts/EditAccounts";
-import { logout } from "../store/actions";
-import { connect, useSelector } from "react-redux";
-import EditExpenseNames from "../pages/expense_names/EditExpenseNames";
-import EditMerchants from "../pages/merchants/EditMerchants";
-import EditExpenses from "../pages/expenses/EditExpenses";
-import EditBuyMerchants from "../pages/buy_merchants_purchase/EditBuyMerchants";
-import ShowPurchases from "../pages/buy_merchants_purchase/ShowPurchases";
-import EditBadItem from "../pages/bad_items/EditBadItem";
-import ChangePassword from "../pages/change_password/ChangePassword";
-import PurchaseReport from "../pages/reports/PurchaseReport";
-import DailyAttendance from "../pages/staffs/DailyAttendance";
-import EditStock from "../pages/stocks/EditStock";
+  LockOutlined,
+} from '@ant-design/icons'
+import Dashboard from '../pages/Dashboard'
+import SubMenu from 'antd/lib/menu/SubMenu'
+import CreateMerchants from '../pages/merchants/CreateMerchants'
+import ShowMerchants from '../pages/merchants/ShowMerchants'
+import CreateMembers from '../pages/members/CreateMembers'
+import ShowMembers from '../pages/members/ShowMembers'
+import CreateItems from '../pages/items/CreateItems'
+import ShowItems from '../pages/items/ShowItems'
+import CreateBuyMerchants from '../pages/buy_merchants_purchase/CreateBuyMerchants'
+import ShowBuyMerchants from '../pages/buy_merchants_purchase/ShowBuyMerchants'
+import CreateExpenses from '../pages/expenses/CreateExpenses'
+import ShowExpenses from '../pages/expenses/ShowExpenses'
+import CreateExpenseNames from '../pages/expense_names/CreateExpenseNames'
+import ShowExpenseNames from '../pages/expense_names/ShowExpenseNames'
+import CreateShops from '../pages/shops/CreateShops'
+import ShowShops from '../pages/shops/ShowShops'
+import CreateAccounts from '../pages/accounts/CreateAccounts'
+import ShowAccounts from '../pages/accounts/ShowAccounts'
+import CreateBuyItems from '../pages/buy_items/CreateBuyItems'
+import ShowBuyItems from '../pages/buy_items/ShowBuyItems'
+import ShowStocks from '../pages/stocks/ShowStocks'
+import CreateSupplier from '../pages/supplier/CreateSupplier'
+import ShowSupplier from '../pages/supplier/ShowSupplier'
+import CreateStock from '../pages/stocks/CreateStock'
+import CreateItemTransfer from '../pages/items_transfer/CreateItemTransfer'
+import ShowItemTransfer from '../pages/items_transfer/ShowItemTransfer'
+import ShowItemChangeList from '../pages/items_transfer/ShowItemChangeList'
+import CreateBadItem from '../pages/bad_items/CreateBadItem'
+import ShowBadItem from '../pages/bad_items/ShowBadItem'
+import CreateStaff from '../pages/staffs/CreateStaff'
+import ShowStaff from '../pages/staffs/ShowStaff'
+import CreateService from '../pages/services/CreateService'
+import ShowService from '../pages/services/ShowService'
+import StaffComession from '../pages/staffs/StaffComession'
+import DetailMembers from '../pages/members/DetailMembers'
+import CreateOwners from '../pages/owners/CreateOwners'
+import ShowOwners from '../pages/owners/ShowOwners'
+import ItemsReports from '../pages/reports/ItemsReports'
+import VoucherReports from '../pages/reports/VoucherReports'
+import ServicesReport from '../pages/reports/ServicesReport'
+import ReportScreem from '../pages/reports/ReportScreem'
+import EditItems from '../pages/items/EditItems'
+import EditSupplier from '../pages/supplier/EditSupplier'
+import EditMembers from '../pages/members/EditMembers'
+import EditService from '../pages/services/EditService'
+import EditStaff from '../pages/staffs/EditStaff'
+import EditShops from '../pages/shops/EditShops'
+import EditOwners from '../pages/owners/EditOwners'
+import EditAccounts from '../pages/accounts/EditAccounts'
+import { logout } from '../store/actions'
+import { connect, useSelector } from 'react-redux'
+import EditExpenseNames from '../pages/expense_names/EditExpenseNames'
+import EditMerchants from '../pages/merchants/EditMerchants'
+import EditExpenses from '../pages/expenses/EditExpenses'
+import EditBuyMerchants from '../pages/buy_merchants_purchase/EditBuyMerchants'
+import ShowPurchases from '../pages/buy_merchants_purchase/ShowPurchases'
+import EditBadItem from '../pages/bad_items/EditBadItem'
+import ChangePassword from '../pages/change_password/ChangePassword'
+import PurchaseReport from '../pages/reports/PurchaseReport'
+import DailyAttendance from '../pages/staffs/DailyAttendance'
+import EditStock from '../pages/stocks/EditStock'
+import { CASHIER, MANAGER, OWNER, SALE_STAFF, SERVICE_STAFF } from '../util/positions'
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Footer, Sider, Content } = Layout
 
 const text = (
-  <Title level={4} style={{ textAlign: "center" }}>
+  <Title level={4} style={{ textAlign: 'center' }}>
     Profile
   </Title>
-);
+)
 
 const Admin = ({ logout }) => {
-  const [collapsed, setCollapsed] = useState(false);
-  const { pathname } = useLocation();
-  const user = useSelector((state) => state.auth.user);
+  const [collapsed, setCollapsed] = useState(false)
+  const { pathname } = useLocation()
+  const user = useSelector((state) => state.auth.user)
   // console.log(user.position)
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleLogout = () => {
-    logout();
-    navigate("/auth/login", { replace: true });
-  };
+    logout()
+    navigate('/auth/login', { replace: true })
+  }
 
   const content = (
-    <Space direction="vertical" style={{ textAlign: "center", width: "100%" }}>
+    <Space direction="vertical" style={{ textAlign: 'center', width: '100%' }}>
       <Title level={5}>
         {user?.name} ({user?.position})
       </Title>
@@ -121,175 +122,175 @@ const Admin = ({ logout }) => {
         Logout
       </Button>
     </Space>
-  );
+  )
 
-  let selectedKey;
+  let selectedKey
   switch (pathname) {
-    case "/admin/dashboard":
-      selectedKey = "Dashboard";
-      break;
-    case "/admin/change-password":
-      selectedKey = "ChangePassword";
-      break;
-    case "/admin/create-accounts":
-      selectedKey = "CreateAccounts";
-      break;
-    case "/admin/show-accounts":
-      selectedKey = "ShowAccounts";
-      break;
-    case "/admin/create-merchants":
-      selectedKey = "CreateMerchants";
-      break;
+    case '/admin/dashboard':
+      selectedKey = 'Dashboard'
+      break
+    case '/admin/change-password':
+      selectedKey = 'ChangePassword'
+      break
+    case '/admin/create-accounts':
+      selectedKey = 'CreateAccounts'
+      break
+    case '/admin/show-accounts':
+      selectedKey = 'ShowAccounts'
+      break
+    case '/admin/create-merchants':
+      selectedKey = 'CreateMerchants'
+      break
 
-    case "/admin/show-merchants":
-      selectedKey = "ShowMerchants";
-      break;
+    case '/admin/show-merchants':
+      selectedKey = 'ShowMerchants'
+      break
 
-    case "/admin/create-members":
-      selectedKey = "CreateMembers";
-      break;
-    case "/admin/show-members":
-      selectedKey = "ShowMembers";
-      break;
-    case "/admin/edit-members":
-      selectedKey = "EditMembers";
-      break;
+    case '/admin/create-members':
+      selectedKey = 'CreateMembers'
+      break
+    case '/admin/show-members':
+      selectedKey = 'ShowMembers'
+      break
+    case '/admin/edit-members':
+      selectedKey = 'EditMembers'
+      break
 
-    case "/admin/create-items":
-      selectedKey = "CreateItems";
-      break;
-    case "/admin/show-items":
-      selectedKey = "ShowItems";
-      break;
-    case "/admin/edit-items":
-      selectedKey = "EditItems";
-      break;
-    case "/admin/create-buy-merchants":
-      selectedKey = "CreateBuyMerchants";
-      break;
-    case "/admin/show-buy-merchants":
-      selectedKey = "ShowBuyMerchants";
-      break;
-    case "/admin/create-expenses":
-      selectedKey = "CreateExpenses";
-      break;
-    case "/admin/show-expenses":
-      selectedKey = "ShowExpenses";
-      break;
-    case "/admin/create-expense-names":
-      selectedKey = "CreateExpenseNames";
-      break;
-    case "/admin/show-expense-names":
-      selectedKey = "ShowExpenseNames";
-      break;
-    case "/admin/create-shops":
-      selectedKey = "CreateShops";
-      break;
-    case "/admin/show-shops":
-      selectedKey = "ShowShops";
-      break;
-    case "/admin/create-buy-items":
-      selectedKey = "ShowBuyItems";
-      break;
-    case "/admin/create-supplier":
-      selectedKey = "CreateSupplier";
-      break;
-    case "/admin/show-supplier":
-      selectedKey = "ShowSupplier";
-      break;
-    case "/admin/edit-supplier/:id":
-      selectedKey = "EditSupplier";
-      break;
+    case '/admin/create-items':
+      selectedKey = 'CreateItems'
+      break
+    case '/admin/show-items':
+      selectedKey = 'ShowItems'
+      break
+    case '/admin/edit-items':
+      selectedKey = 'EditItems'
+      break
+    case '/admin/create-buy-merchants':
+      selectedKey = 'CreateBuyMerchants'
+      break
+    case '/admin/show-buy-merchants':
+      selectedKey = 'ShowBuyMerchants'
+      break
+    case '/admin/create-expenses':
+      selectedKey = 'CreateExpenses'
+      break
+    case '/admin/show-expenses':
+      selectedKey = 'ShowExpenses'
+      break
+    case '/admin/create-expense-names':
+      selectedKey = 'CreateExpenseNames'
+      break
+    case '/admin/show-expense-names':
+      selectedKey = 'ShowExpenseNames'
+      break
+    case '/admin/create-shops':
+      selectedKey = 'CreateShops'
+      break
+    case '/admin/show-shops':
+      selectedKey = 'ShowShops'
+      break
+    case '/admin/create-buy-items':
+      selectedKey = 'ShowBuyItems'
+      break
+    case '/admin/create-supplier':
+      selectedKey = 'CreateSupplier'
+      break
+    case '/admin/show-supplier':
+      selectedKey = 'ShowSupplier'
+      break
+    case '/admin/edit-supplier/:id':
+      selectedKey = 'EditSupplier'
+      break
     //
-    case "/admin/create-stocks":
-      selectedKey = "CreateStocks";
-      break;
-    case "/admin/show-stocks":
-      selectedKey = "ShowStocks";
-      break;
-    case "/admin/edit-stocks":
-      selectedKey = "EditStocks";
-      break;
+    case '/admin/create-stocks':
+      selectedKey = 'CreateStocks'
+      break
+    case '/admin/show-stocks':
+      selectedKey = 'ShowStocks'
+      break
+    case '/admin/edit-stocks':
+      selectedKey = 'EditStocks'
+      break
 
-    case "/admin/create-item-transfer":
-      selectedKey = "ShowItemTransfer";
-      break;
-    case "/admin/show-item-transfer":
-      selectedKey = "CreateItemTransfer";
-      break;
-    case "/admin/show-item-change-list":
-      selectedKey = "ShowItemChangeList";
-      break;
+    case '/admin/create-item-transfer':
+      selectedKey = 'ShowItemTransfer'
+      break
+    case '/admin/show-item-transfer':
+      selectedKey = 'CreateItemTransfer'
+      break
+    case '/admin/show-item-change-list':
+      selectedKey = 'ShowItemChangeList'
+      break
 
-    case "/admin/create-bad-item":
-      selectedKey = "CreateBadItems";
-      break;
-    case "/admin/show-bad-item":
-      selectedKey = "ShowBadItems";
-      break;
+    case '/admin/create-bad-item':
+      selectedKey = 'CreateBadItems'
+      break
+    case '/admin/show-bad-item':
+      selectedKey = 'ShowBadItems'
+      break
 
-    case "/admin/create-staff":
-      selectedKey = "CreateStaff";
-      break;
-    case "/admin/show-staff":
-      selectedKey = "ShowStaff";
-      break;
-    case "/admin/edit-staff":
-      selectedKey = "EditStaff";
-      break;
-    case "/admin/show-staff-commession":
-      selectedKey = "StaffCommession";
-      break;
-    case "/admin/create-service":
-      selectedKey = "CreateService";
-      break;
-    case "/admin/show-service":
-      selectedKey = "ShowService";
-      break;
-    case "/admin/create-owner":
-      selectedKey = "CreateOwner";
-      break;
-    case "/admin/show-owner":
-      selectedKey = "ShowOwner";
-      break;
+    case '/admin/create-staff':
+      selectedKey = 'CreateStaff'
+      break
+    case '/admin/show-staff':
+      selectedKey = 'ShowStaff'
+      break
+    case '/admin/edit-staff':
+      selectedKey = 'EditStaff'
+      break
+    case '/admin/show-staff-commession':
+      selectedKey = 'StaffCommession'
+      break
+    case '/admin/create-service':
+      selectedKey = 'CreateService'
+      break
+    case '/admin/show-service':
+      selectedKey = 'ShowService'
+      break
+    case '/admin/create-owner':
+      selectedKey = 'CreateOwner'
+      break
+    case '/admin/show-owner':
+      selectedKey = 'ShowOwner'
+      break
 
-    case "/admin/item-report":
-      selectedKey = "ItemsReports";
-      break;
-    case "/admin/voucher-report":
-      selectedKey = "VouchersReports";
-      break;
-    case "/admin/service-report":
-      selectedKey = "ServicesReports";
-      break;
-    case "/admin/report-screem":
-      selectedKey = "ReportScreem";
-      break;
-    case "/admin/purchase-report":
-      selectedKey = "PurchaseReport";
-      break;
+    case '/admin/item-report':
+      selectedKey = 'ItemsReports'
+      break
+    case '/admin/voucher-report':
+      selectedKey = 'VouchersReports'
+      break
+    case '/admin/service-report':
+      selectedKey = 'ServicesReports'
+      break
+    case '/admin/report-screem':
+      selectedKey = 'ReportScreem'
+      break
+    case '/admin/purchase-report':
+      selectedKey = 'PurchaseReport'
+      break
     //end start
     default:
-      selectedKey = "Dashboard";
-      break;
+      selectedKey = 'Dashboard'
+      break
   }
 
   return (
     <Layout>
       <Header
-        style={{ paddingTop: "13px", backgroundColor: "var(--white-color)" }}
+        style={{ paddingTop: '13px', backgroundColor: 'var(--white-color)' }}
       >
         <Button
           onClick={() => setCollapsed(!collapsed)}
           style={{
-            float: "left",
-            backgroundColor: "var(--primary-color)",
-            color: "var(--white-color)",
-            marginRight: "3px"
+            float: 'left',
+            backgroundColor: 'var(--primary-color)',
+            color: 'var(--white-color)',
+            marginRight: '3px',
           }}
         >
           {React.createElement(
-            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
+            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
           )}
         </Button>
         <Popover
@@ -299,19 +300,19 @@ const Admin = ({ logout }) => {
           trigger="click"
         >
           <Avatar
-            style={{ float: "right", backgroundColor: "var(--primary-color)" }}
+            style={{ float: 'right', backgroundColor: 'var(--primary-color)' }}
             icon={<UserOutlined />}
             size="large"
           />
         </Popover>
-        <Title style={{ color: "var(--primary-color)" }} level={3}>
+        <Title style={{ color: 'var(--primary-color)' }} level={3}>
           Organic Nail Shop
         </Title>
       </Header>
       <Layout>
         <Sider
           collapsed={collapsed}
-          style={{ backgroundColor: "var(--white-color)" }}
+          style={{ backgroundColor: 'var(--white-color)' }}
         >
           <Menu defaultSelectedKeys={[selectedKey]} mode="inline">
             <Menu.Item key="Dashboard" icon={<DashboardOutlined />}>
@@ -323,7 +324,7 @@ const Admin = ({ logout }) => {
             <Menu.Item key="ChangePassword" icon={<LockOutlined />}>
               <Link to="/admin/change-password">Change Password</Link>
             </Menu.Item>
-            {(user?.position === "owner" || user?.position === "manager") && (
+            {(user?.position === OWNER || user?.position === MANAGER) && (
               <SubMenu
                 key="Accounts"
                 title="အကောင့်များ"
@@ -332,89 +333,117 @@ const Admin = ({ logout }) => {
                 <Menu.Item key="ShowAccounts" icon={<UnorderedListOutlined />}>
                   <Link to="/admin/show-accounts">စာရင်း</Link>
                 </Menu.Item>
-                {user?.position === "manager" ||
-                  user?.position === "cashier" ||
-                  user?.position === "owner" ||
-                  (user?.position === "staff" && (
-                    <Menu.Item key="CreateAccounts" icon={<SaveOutlined />}>
-                      <Link to="/admin/create-accounts">အသစ်ဖန်တီးရန်</Link>
-                    </Menu.Item>
-                  ))}
+
+                <Menu.Item key="CreateAccounts" icon={<SaveOutlined />}>
+                  <Link to="/admin/create-accounts">အသစ်ဖန်တီးရန်</Link>
+                </Menu.Item>
+
                 <Menu.Item key="ShowShops" icon={<UnorderedListOutlined />}>
                   <Link to="/admin/show-shops">ဆိုင်များ</Link>
                 </Menu.Item>
               </SubMenu>
             )}
-            <SubMenu
-              key="Merchants"
-              title="ကုန်သည်များ"
-              icon={<UsergroupAddOutlined />}
-            >
-              <Menu.Item key="ShowMerchants" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-merchants">စာရင်း</Link>
-              </Menu.Item>
-              {user?.position !== "owner" && (
-                <Menu.Item key="CreateMerchants" icon={<SaveOutlined />}>
-                  <Link to="/admin/create-merchants">အသစ်ဖန်တီးရန်</Link>
-                </Menu.Item>
-              )}
-            </SubMenu>
-            <SubMenu
-              key="Members"
-              title="မန်ဘာများ"
-              icon={<UsergroupAddOutlined />}
-            >
-              <Menu.Item key="ShowMembers" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-members">စာရင်း</Link>
-              </Menu.Item>
-              {user?.position !== "owner" && (
-                <Menu.Item key="CreateMembers" icon={<SaveOutlined />}>
-                  <Link to="/admin/create-members">အသစ်ဖန်တီးရန်</Link>
-                </Menu.Item>
-              )}
-            </SubMenu>
-            <SubMenu
-              key="Items"
-              title="ပစ္စည်းများ"
-              icon={<DatabaseOutlined />}
-            >
-              <Menu.Item key="ShowItems" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-items">ပစ္စည်းများစာရင်း</Link>
-              </Menu.Item>
-              <Menu.Item key="ShowStocks" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-stocks">Stockစာရင်း</Link>
-              </Menu.Item>
-              <Menu.Item
-                key="ShowBuyMerchants"
-                icon={<UnorderedListOutlined />}
+            {user?.position !== SERVICE_STAFF && (
+              <SubMenu
+                key="Merchants"
+                title="ကုန်သည်များ"
+                icon={<UsergroupAddOutlined />}
               >
-                <Link to="/admin/show-buy-merchants">အဝယ်သွင်းရန်</Link>
-              </Menu.Item>
+                <Menu.Item key="ShowMerchants" icon={<UnorderedListOutlined />}>
+                  <Link to="/admin/show-merchants">စာရင်း</Link>
+                </Menu.Item>
+                {user?.position !== OWNER && (
+                  <Menu.Item key="CreateMerchants" icon={<SaveOutlined />}>
+                    <Link to="/admin/create-merchants">အသစ်ဖန်တီးရန်</Link>
+                  </Menu.Item>
+                )}
+              </SubMenu>
+            )}
 
-              <Menu.Item
-                key="ShowItemTransfer"
-                icon={<UnorderedListOutlined />}
+            {user?.position !== SALE_STAFF && user?.position !== SERVICE_STAFF && (
+              <SubMenu
+                key="Members"
+                title="မန်ဘာများ"
+                icon={<UsergroupAddOutlined />}
               >
-                <Link to="/admin/show-item-transfer">လွှဲပြောင်းရန်</Link>
-              </Menu.Item>
-              <Menu.Item key="ShowOwner" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-owner">ထုတ်သုံးခြင်:</Link>
-              </Menu.Item>
-              <Menu.Item key="CreateBadItems" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-bad-item">ချို့ယွင်းချက်ရှိ</Link>
-              </Menu.Item>
-            </SubMenu>
-            <SubMenu key="Service" title="ဝန်ဆောင်မှု" icon={<FlagOutlined />}>
-              {user?.position !== "owner" && (
-                <Menu.Item key="CreateService" icon={<SaveOutlined />}>
-                  <Link to="/admin/create-service">အသစ်ဖန်တီးရန်</Link>
+                <Menu.Item key="ShowMembers" icon={<UnorderedListOutlined />}>
+                  <Link to="/admin/show-members">စာရင်း</Link>
                 </Menu.Item>
-              )}
-              <Menu.Item key="ShowService" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-service">စာရင်း</Link>
+                {user?.position !== OWNER && (
+                  <Menu.Item key="CreateMembers" icon={<SaveOutlined />}>
+                    <Link to="/admin/create-members">အသစ်ဖန်တီးရန်</Link>
+                  </Menu.Item>
+                )}
+              </SubMenu>
+            )}
+
+            {user?.position !== SERVICE_STAFF && (
+              <SubMenu
+                key="Items"
+                title="ပစ္စည်းများ"
+                icon={<DatabaseOutlined />}
+              >
+                <Menu.Item key="ShowItems" icon={<UnorderedListOutlined />}>
+                  <Link to="/admin/show-items">ပစ္စည်းများစာရင်း</Link>
+                </Menu.Item>
+                <Menu.Item key="ShowStocks" icon={<UnorderedListOutlined />}>
+                  <Link to="/admin/show-stocks">Stockစာရင်း</Link>
+                </Menu.Item>
+
+                {user?.position !== SALE_STAFF && (
+                  <>
+                    <Menu.Item
+                      key="ShowBuyMerchants"
+                      icon={<UnorderedListOutlined />}
+                    >
+                      <Link to="/admin/show-buy-merchants">အဝယ်သွင်းရန်</Link>
+                    </Menu.Item>
+
+                    <Menu.Item
+                      key="ShowItemTransfer"
+                      icon={<UnorderedListOutlined />}
+                    >
+                      <Link to="/admin/show-item-transfer">လွှဲပြောင်းရန်</Link>
+                    </Menu.Item>
+                    <Menu.Item key="ShowOwner" icon={<UnorderedListOutlined />}>
+                      <Link to="/admin/show-owner">ထုတ်သုံးခြင်:</Link>
+                    </Menu.Item>
+                    <Menu.Item
+                      key="CreateBadItems"
+                      icon={<UnorderedListOutlined />}
+                    >
+                      <Link to="/admin/show-bad-item">ချို့ယွင်းချက်ရှိ</Link>
+                    </Menu.Item>
+                  </>
+                )}
+              </SubMenu>
+            )}
+
+            {user?.position !== SALE_STAFF && user?.position !== SERVICE_STAFF && (
+              <SubMenu
+                key="Service"
+                title="ဝန်ဆောင်မှု"
+                icon={<FlagOutlined />}
+              >
+                {user?.position !== OWNER && (
+                  <Menu.Item key="CreateService" icon={<SaveOutlined />}>
+                    <Link to="/admin/create-service">အသစ်ဖန်တီးရန်</Link>
+                  </Menu.Item>
+                )}
+                <Menu.Item key="ShowService" icon={<UnorderedListOutlined />}>
+                  <Link to="/admin/show-service">စာရင်း</Link>
+                </Menu.Item>
+              </SubMenu>
+            )}
+
+            {(user?.position === SALE_STAFF ||
+              user?.position === SERVICE_STAFF) && (
+              <Menu.Item key="StaffCommession" icon={<UnorderedListOutlined />}>
+                <Link to="/admin/show-staff-commession">လခနှင့်ကော်မရှင်</Link>
               </Menu.Item>
-            </SubMenu>
-            {(user?.position === "owner" || user?.position === "manager") && (
+            )}
+
+            {(user?.position === OWNER || user?.position === MANAGER) && (
               <SubMenu
                 key="Staff"
                 title="ဝန်ထမ်းစာရင်း"
@@ -438,22 +467,24 @@ const Admin = ({ logout }) => {
                 </Menu.Item>
               </SubMenu>
             )}
-            <SubMenu
-              key="Expenses"
-              title="ကုန်ကျစရိတ်များ"
-              icon={<CalculatorOutlined />}
-            >
-              <Menu.Item key="ShowExpenses" icon={<UnorderedListOutlined />}>
-                <Link to="/admin/show-expenses">ကုန်ကျစရိတ်များ</Link>
-              </Menu.Item>
-              <Menu.Item
-                key="ShowExpenseNames"
-                icon={<UnorderedListOutlined />}
+            {user?.position !== SALE_STAFF && user?.position !== SERVICE_STAFF && (
+              <SubMenu
+                key="Expenses"
+                title="ကုန်ကျစရိတ်များ"
+                icon={<CalculatorOutlined />}
               >
-                <Link to="/admin/show-expense-names">အမည်များ</Link>
-              </Menu.Item>
-            </SubMenu>
-            {user?.position === "owner" || user?.position === "manager" ? (
+                <Menu.Item key="ShowExpenses" icon={<UnorderedListOutlined />}>
+                  <Link to="/admin/show-expenses">ကုန်ကျစရိတ်များ</Link>
+                </Menu.Item>
+                <Menu.Item
+                  key="ShowExpenseNames"
+                  icon={<UnorderedListOutlined />}
+                >
+                  <Link to="/admin/show-expense-names">အမည်များ</Link>
+                </Menu.Item>
+              </SubMenu>
+            )}
+            {user?.position === OWNER || user?.position === MANAGER ? (
               <SubMenu
                 key="Reports"
                 title="Reports"
@@ -490,36 +521,24 @@ const Admin = ({ logout }) => {
                 title="Reports"
                 icon={<FolderAddOutlined />}
               >
-                {/* <Menu.Item key="ItemsReports" icon={<SaveOutlined />}>
-                  <Link to="/admin/item-report">Item</Link>
-                </Menu.Item> */}
+                {(user?.position === SALE_STAFF || user?.position === CASHIER) && (
+                  <Menu.Item key="ItemsReports" icon={<SaveOutlined />}>
+                    <Link to="/admin/item-report">Item</Link>
+                  </Menu.Item>
+                )}
+
                 <Menu.Item
                   key="VouchersReports"
                   icon={<UnorderedListOutlined />}
                 >
                   <Link to="/admin/voucher-report">Voucher</Link>
                 </Menu.Item>
-                {/* <Menu.Item
-                  key="ServicesReports"
-                  icon={<UnorderedListOutlined />}
-                >
-                  <Link to="/admin/service-report">Service</Link>
-                </Menu.Item>
-                <Menu.Item key="ReportScreem" icon={<UnorderedListOutlined />}>
-                  <Link to="/admin/report-screem">Report Screen</Link>
-                </Menu.Item>
-                <Menu.Item
-                  key="PurchaseReport"
-                  icon={<UnorderedListOutlined />}
-                >
-                  <Link to="/admin/purchase-report">Purchase</Link>
-                </Menu.Item> */}
               </SubMenu>
             )}
           </Menu>
         </Sider>
         <Layout>
-          <Content style={{ minHeight: "520px" }}>
+          <Content style={{ minHeight: '520px' }}>
             <Routes>
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="change-password" element={<ChangePassword />} />
@@ -634,10 +653,10 @@ const Admin = ({ logout }) => {
           </Content>
           <Footer
             style={{
-              backgroundColor: "var(--white-color)",
-              textAlign: "center",
-              fontWeight: "bold",
-              color: "var(--primary-color)"
+              backgroundColor: 'var(--white-color)',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              color: 'var(--primary-color)',
             }}
           >
             DEVELOP BY RCS
@@ -645,7 +664,7 @@ const Admin = ({ logout }) => {
         </Layout>
       </Layout>
     </Layout>
-  );
-};
+  )
+}
 
-export default connect(null, { logout })(Admin);
+export default connect(null, { logout })(Admin)

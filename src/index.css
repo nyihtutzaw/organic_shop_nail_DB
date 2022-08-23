@@ -35,6 +35,14 @@ a {
   margin-right: 4px !important;
   border-radius: 10px;
 }
+.ant-form-item-no-colon {
+  color: var(--white-color) !important;
+  background-color: var(--primary-color);
+  padding: 4px !important;
+  margin-top: 4px !important;
+  margin-right: 4px !important;
+  border-radius: 10px;
+}
 
 /* menu style override */
 .ant-tooltip-inner a {

@@ -1,45 +1,43 @@
-import React, { useEffect } from "react";
-import { Form, Input, Typography, Space, Button, Select } from "antd";
-import Layout from "antd/lib/layout/layout";
-import { EditOutlined, SaveOutlined } from "@ant-design/icons";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from 'react'
+import { Form, Input, Typography, Space, Button, Select } from 'antd'
+import Layout from 'antd/lib/layout/layout'
+import { EditOutlined, SaveOutlined } from '@ant-design/icons'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
-const { Title } = Typography;
-const { Option } = Select;
+const { Title } = Typography
+const { Option } = Select
 
 const EditAccounts = () => {
-  const { id } = useParams();
-  const accounts = useSelector((state) => state.AccountReducer);
-  const currentAccount = accounts.find((account) => account.id === parseInt(id));
+  const { id } = useParams()
+  const accounts = useSelector((state) => state.AccountReducer)
+  const currentAccount = accounts.find((account) => account.id === parseInt(id))
   // console.log("AC", currentAccount)
   useEffect(() => {
-     
-      form.setFieldsValue({ name: currentAccount.name });
-      form.setFieldsValue({ row: currentAccount.row });
-      form.setFieldsValue({ shop: currentAccount.shop });
-    
-  }, [currentAccount]);
+    form.setFieldsValue({ name: currentAccount.name })
+    form.setFieldsValue({ row: currentAccount.row })
+    form.setFieldsValue({ shop: currentAccount.shop })
+  }, [currentAccount])
 
-  const [form] = Form.useForm();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [form] = Form.useForm()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const onFinish = async (values) => {
     const data = {
       id: parseInt(id),
       key: parseInt(id),
-      ...values
-    };
-    dispatch({ type: "UPDATE_ACCOUNTS", payload: data });
+      ...values,
+    }
+    dispatch({ type: 'UPDATE_ACCOUNTS', payload: data })
     // console.log("data", data);
-    form.resetFields();
-    navigate("/admin/show-accounts");
-  };
+    form.resetFields()
+    navigate('/admin/show-accounts')
+  }
 
   return (
-    <Layout style={{ margin: "20px" }}>
+    <Layout style={{ margin: '20px' }}>
       <Space direction="vertical" size="middle">
-        <Title style={{ textAlign: "center" }} level={3}>
+        <Title style={{ textAlign: 'center' }} level={3}>
           အကောင့် ဖွင့်ခြင်း စာမျက်နှာ {id}
         </Title>
         <Form
@@ -61,14 +59,14 @@ const EditAccounts = () => {
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ အမည်ထည့်ပါ",
+                message: 'ကျေးဇူးပြု၍ အမည်ထည့်ပါ',
               },
             ]}
           >
             <Input
               placeholder="အမည်ထည့်ပါ"
               prefix={<EditOutlined />}
-              style={{ borderRadius: "10px" }}
+              style={{ borderRadius: '10px' }}
               size="large"
             />
           </Form.Item>
@@ -78,7 +76,7 @@ const EditAccounts = () => {
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ ရာထူးရွေးပါ",
+                message: 'ကျေးဇူးပြု၍ ရာထူးရွေးပါ',
               },
             ]}
           >
@@ -91,11 +89,12 @@ const EditAccounts = () => {
               }
               allowClear={true}
               size="large"
-              style={{ borderRadius: "10px" }}
+              style={{ borderRadius: '10px' }}
             >
-              <Option value="owner444">Owner</Option>
+              <Option value="manager">Manager</Option>
               <Option value="cashier">Cashier</Option>
-              <Option value="staff">Staff</Option>
+              <Option value="sale staff">Sale Staff</Option>
+              <Option value="service staff">Service Staff</Option>
             </Select>
           </Form.Item>
           <Form.Item
@@ -104,7 +103,7 @@ const EditAccounts = () => {
             rules={[
               {
                 required: true,
-                message: "ကျေးဇူးပြု၍ ဆိုင်ရွေးပါ",
+                message: 'ကျေးဇူးပြု၍ ဆိုင်ရွေးပါ',
               },
             ]}
           >
@@ -117,19 +116,19 @@ const EditAccounts = () => {
               }
               allowClear={true}
               size="large"
-              style={{ borderRadius: "10px" }}
+              style={{ borderRadius: '10px' }}
             >
               <Option value="Joker One">Joker One</Option>
               <Option value="Joker Two">Joker Two</Option>
               <Option value="Joker Three">Joker Three</Option>
             </Select>
           </Form.Item>
-          <Form.Item style={{ textAlign: "right" }}>
+          <Form.Item style={{ textAlign: 'right' }}>
             <Button
               style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "10px",
+                backgroundColor: 'var(--primary-color)',
+                color: 'var(--white-color)',
+                borderRadius: '10px',
               }}
               size="large"
               htmlType="submit"
@@ -141,7 +140,7 @@ const EditAccounts = () => {
         </Form>
       </Space>
     </Layout>
-  );
-};
+  )
+}
 
-export default EditAccounts;
+export default EditAccounts
