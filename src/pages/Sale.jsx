@@ -54,6 +54,7 @@ const Sale = ({
   const [customerPhone, setCustomerPhone] = useState('')
   const [memberId, setMemberId] = useState()
   const [discount, setDiscount] = useState(0)
+  const [kpayPercent, setKpayPercent] = useState(0)
   const [paid, setPaid] = useState(0)
   const [payMethod, setPayMethod] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -276,7 +277,9 @@ const Sale = ({
 
   const discountAmount = salesTotal * (discount / 100)
 
-  const finalTotal = salesTotal - discountAmount
+  const kpayPercentAmount = salesTotal * (kpayPercent / 100)
+
+  const finalTotal = salesTotal - discountAmount + kpayPercentAmount
 
   const credit = finalTotal - paid
 
@@ -370,6 +373,7 @@ const Sale = ({
           setCustomerPhone('')
           setMemberId(undefined)
           setDiscount(0)
+          setKpayPercent(0)
           setPaid(0)
           setPayMethod(null)
           // setValue(null);
@@ -868,6 +872,30 @@ const Sale = ({
                   </Col>
                   <Col span={3}></Col>
                 </Row>
+                {payMethod === 'Kpay' && (
+                  <Row gutter={[16, 16]}>
+                    <Col span={15} style={{ textAlign: 'right' }}>
+                      <Title level={5}>Kpay ရာခိုင်နှုန်း</Title>
+                    </Col>
+                    <Col span={3} style={{ textAlign: 'center' }}>
+                      <InputNumber
+                        min={0}
+                        value={kpayPercent}
+                        onChange={(value) => setKpayPercent(value)}
+                        addonAfter="%"
+                        style={{
+                          width: '100px',
+                          backgroundColor: 'var(--white-color)',
+                          color: 'var(--black-color)',
+                        }}
+                      />
+                    </Col>
+                    <Col span={3} style={{ textAlign: 'right' }}>
+                      <Title level={5}>{kpayPercentAmount}</Title>
+                    </Col>
+                    <Col span={3}></Col>
+                  </Row>
+                )}
                 <Row gutter={[16, 16]}>
                   <Col span={15} style={{ textAlign: 'right' }}>
                     <Title level={5}>ပေးချေရမည့်စုစုပေါင်း</Title>
@@ -973,7 +1001,10 @@ const Sale = ({
                             .toLowerCase()
                             .indexOf(input.toLowerCase()) >= 0
                         }
-                        onChange={(value) => setPayMethod(value)}
+                        onChange={(value) => {
+                          setPayMethod(value)
+                          setKpayPercent(0)
+                        }}
                         value={payMethod}
                         // onChange={setValue}
                         allowClear={true}
