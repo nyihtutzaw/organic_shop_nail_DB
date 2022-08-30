@@ -146,3 +146,11 @@ export const FILTER_STOCKS = "FILTER_STOCKS";
 export const UPDATE_STOCKS = "UPDATE_STOCKS";
 
 export const SET_REPORTS = "SET_REPORTS";
+
+export const SHOW_COMMERCIALS = "SHOW_COMMERCIALS";
+export const SHOW_COMMERCIAL = "SHOW_COMMERCIAL";
+export const DELETE_COMMERCIAL = "DELETE_COMMERCIAL";
+
+export const SHOW_FINES = "SHOW_FINES";
+export const SHOW_FINE = "SHOW_FINE";
+export const DELETE_FINE = "DELETE_FINE";

@@ -90,7 +90,19 @@ import ChangePassword from '../pages/change_password/ChangePassword'
 import PurchaseReport from '../pages/reports/PurchaseReport'
 import DailyAttendance from '../pages/staffs/DailyAttendance'
 import EditStock from '../pages/stocks/EditStock'
-import { CASHIER, MANAGER, OWNER, SALE_STAFF, SERVICE_STAFF } from '../util/positions'
+import {
+  CASHIER,
+  MANAGER,
+  OWNER,
+  SALE_STAFF,
+  SERVICE_STAFF,
+} from '../util/positions'
+import CreateCommercials from '../pages/commercials/CreateCommercials'
+import ShowCommercials from '../pages/commercials/ShowCommercials'
+import EditCommercials from '../pages/commercials/EditCommercials'
+import CreateFines from '../pages/fines/CreateFines'
+import ShowFines from '../pages/fines/ShowFines'
+import EditFines from '../pages/fines/EditFines'
 
 const { Header, Footer, Sider, Content } = Layout
 
@@ -268,6 +280,12 @@ const Admin = ({ logout }) => {
       break
     case '/admin/purchase-report':
       selectedKey = 'PurchaseReport'
+      break
+    case '/admin/show-commercials':
+      selectedKey = 'ShowCommercials'
+      break
+    case '/admin/show-fines':
+      selectedKey = 'ShowFines'
       break
     //end start
     default:
@@ -465,6 +483,18 @@ const Admin = ({ logout }) => {
                     လခနှင့်ကော်မရှင်
                   </Link>
                 </Menu.Item>
+                <Menu.Item
+                  key="ShowCommercials"
+                  icon={<UnorderedListOutlined />}
+                >
+                  <Link to="/admin/show-commercials">ကော်မရှင်များ</Link>
+                </Menu.Item>
+                <Menu.Item
+                  key="ShowFines"
+                  icon={<UnorderedListOutlined />}
+                >
+                  <Link to="/admin/show-fines">ဒဏ်ကြေးများ</Link>
+                </Menu.Item>
               </SubMenu>
             )}
             {user?.position !== SALE_STAFF && user?.position !== SERVICE_STAFF && (
@@ -521,7 +551,8 @@ const Admin = ({ logout }) => {
                 title="Reports"
                 icon={<FolderAddOutlined />}
               >
-                {(user?.position === SALE_STAFF || user?.position === CASHIER) && (
+                {(user?.position === SALE_STAFF ||
+                  user?.position === CASHIER) && (
                   <Menu.Item key="ItemsReports" icon={<SaveOutlined />}>
                     <Link to="/admin/item-report">Item</Link>
                   </Menu.Item>
@@ -648,6 +679,24 @@ const Admin = ({ logout }) => {
               <Route path="edit-shops/:id" element={<EditShops />} />
               <Route path="create-buy-items" element={<CreateBuyItems />} />
               <Route path="show-buy-items" element={<ShowBuyItems />} />
+              <Route
+                path="create-commercials"
+                element={<CreateCommercials />}
+              />
+              <Route path="show-commercials" element={<ShowCommercials />} />
+              <Route
+                path="edit-commercials/:id"
+                element={<EditCommercials />}
+              />
+              <Route
+                path="create-fines"
+                element={<CreateFines />}
+              />
+              <Route path="show-fines" element={<ShowFines />} />
+              <Route
+                path="edit-fines/:id"
+                element={<EditFines />}
+              />
               <Route path="*" element={<Navigate to="dashboard" />} />
             </Routes>
           </Content>

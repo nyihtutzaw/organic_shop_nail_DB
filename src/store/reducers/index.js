@@ -20,7 +20,8 @@ import report from "./report";
 import daily from "./daily";
 import status from "./status";
 import error from "./error";
-
+import commercial from './commercial';
+import fine from './fine'
 
 const reducers = combineReducers({
   merchant,
@@ -43,7 +44,9 @@ const reducers = combineReducers({
   report,
   daily,
   status,
-  error
+  error,
+  commercial,
+  fine,
 });
 
 export default reducers;
