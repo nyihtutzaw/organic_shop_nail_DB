@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Form,
   Input,
@@ -8,18 +8,29 @@ import {
   message,
   Select,
   Spin,
-  InputNumber
+  InputNumber,
 } from 'antd'
 import Layout from 'antd/lib/layout/layout'
 import { EditOutlined, SaveOutlined } from '@ant-design/icons'
 import { connect } from 'react-redux'
 import { createCommercial, getStaffs } from '../../store/actions'
-import { successCreateMessage } from '../../util/messages'
+import { serverErrorMessage, successCreateMessage } from '../../util/messages'
+import { call } from '../../services/api'
 
 const { Title } = Typography
 const { Option } = Select
 
-const CreateCommercials = ({ status, error, staff, createCommercial, getStaffs }) => {
+const CreateCommercials = ({
+  status,
+  error,
+  staff,
+  createCommercial,
+  getStaffs,
+}) => {
+  const [staffId, setStaffId] = useState(null)
+  const [month, setMonth] = useState(null)
+  const [year, setYear] = useState(null)
+
   const [form] = Form.useForm()
 
   useEffect(() => {
@@ -45,6 +56,23 @@ const CreateCommercials = ({ status, error, staff, createCommercial, getStaffs }
 
   const onFinish = async (values) => {
     await createCommercial(values)
+  }
+
+  const handleCalCommercial = async () => {
+    if(staffId && month && year){
+      try {
+        const result = await call('post', 'cal-commercials', {
+          'staff_id': staffId,
+          'month': month,
+          'year': year
+        })
+        form.setFieldsValue({ amount: result })
+      }catch(error){
+        message.error(serverErrorMessage)
+      }
+    }else {
+      message.error('ဝန်ထမ်းအမည် ၊ လ ၊ ခုနှစ် ထည့်ပါ')
+    }
   }
 
   return (
@@ -92,6 +120,7 @@ const CreateCommercials = ({ status, error, staff, createCommercial, getStaffs }
                 allowClear={true}
                 size="large"
                 style={{ borderRadius: '10px' }}
+                onChange={(value) => setStaffId(value)}
               >
                 {staff.staffs.map((staff) => (
                   <Option value={staff.id} key={staff.id}>
@@ -121,6 +150,7 @@ const CreateCommercials = ({ status, error, staff, createCommercial, getStaffs }
                 allowClear={true}
                 size="large"
                 style={{ borderRadius: '10px' }}
+                onChange={(value) => setMonth(value)}
               >
                 <Option value="01">01</Option>
                 <Option value="02">02</Option>
@@ -151,8 +181,21 @@ const CreateCommercials = ({ status, error, staff, createCommercial, getStaffs }
                 prefix={<EditOutlined />}
                 style={{ borderRadius: '10px', width: '100%' }}
                 size="large"
+                onChange={(value) => setYear(value)}
               />
             </Form.Item>
+            <Button
+              style={{
+                backgroundColor: 'var(--secondary-color)',
+                color: 'var(--white-color)',
+                borderRadius: '10px',
+                marginBottom: '10px',
+                marginLeft: '60px'
+              }}
+              onClick={handleCalCommercial}
+            >
+              ကော်မရှင် တွက်မည်
+            </Button>
             <Form.Item
               name="amount"
               label="ပမာဏ"

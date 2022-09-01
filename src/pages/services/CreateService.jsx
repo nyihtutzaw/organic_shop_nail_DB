@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react'
 import {
   Form,
   Input,
@@ -7,62 +7,62 @@ import {
   Button,
   Table,
   message,
-  Spin
-} from "antd";
-import Layout from "antd/lib/layout/layout";
+  Spin,
+  Checkbox,
+} from 'antd'
+import Layout from 'antd/lib/layout/layout'
 import {
   EditOutlined,
   SaveOutlined,
-  PlusSquareOutlined
-} from "@ant-design/icons";
-import { useSelector } from "react-redux";
-import {
-  getServices,
-  saveServices,
-} from "../../store/actions";
-import { connect } from "react-redux";
-import store from "../../store";
-import { successCreateMessage } from "../../util/messages";
+  PlusSquareOutlined,
+} from '@ant-design/icons'
+import { useSelector } from 'react-redux'
+import { getServices, saveServices } from '../../store/actions'
+import { connect } from 'react-redux'
+import store from '../../store'
+import { successCreateMessage } from '../../util/messages'
 
-const { Title } = Typography;
+const { Title } = Typography
 
 const CreateService = ({ getServices, saveServices }) => {
-  const status = useSelector((state) => state.status);
-  const error = useSelector((state) => state.error);
+  const [bonus, setBonus] = useState(false)
+  const status = useSelector((state) => state.status)
+  const error = useSelector((state) => state.error)
 
   useEffect(() => {
     const fetchData = async () => {
-      await getServices();
-    };
-    fetchData();
+      await getServices()
+    }
+    fetchData()
     return () => {
-      fetchData();
-    };
-  }, [getServices]);
+      fetchData()
+    }
+  }, [getServices])
 
   // useEffect(() => {
   //   store.dispatch(clearAlertServices());
   // }, []);
 
   useEffect(() => {
-    error.message !== null && message.error(error.message);
+    error.message !== null && message.error(error.message)
 
-    return () => error.message;
-  }, [error.message]);
+    return () => error.message
+  }, [error.message])
 
   useEffect(() => {
     if (status.success) {
-      message.success(successCreateMessage);
+      message.success(successCreateMessage)
     }
 
-    return () => status.success;
-  }, [status.success]);
+    return () => status.success
+  }, [status.success])
 
-  const [supplierTable, setSupplierTable] = useState({ services: [] });
+  const [supplierTable, setSupplierTable] = useState({ services: [] })
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm()
 
   const onFinish = (values) => {
+    let commercial = parseInt(values.price) * (parseInt(values.percentage) / 100);
     setSupplierTable({
       services: [
         ...supplierTable.services,
@@ -71,84 +71,91 @@ const CreateService = ({ getServices, saveServices }) => {
           ...values,
           percentage: values.percentage,
           price: values.price,
+          bonus: bonus ? 1 : 0,
           commercial:
-            parseInt(values.price) * (parseInt(values.percentage) / 100)
-        }
-      ]
-    });
-    form.resetFields();
-  };
+            bonus ? commercial + 1000 : commercial,
+        },
+      ],
+    })
+    setBonus(false)
+    form.resetFields()
+  }
 
   const handleSave = async () => {
     if (supplierTable.services.length === 0) {
-      message.error("ကျေးဇူးပြု၍ဝန်ဆောင်မှုအချက်အလက်များထည့်ပါ");
+      message.error('ကျေးဇူးပြု၍ဝန်ဆောင်မှုအချက်အလက်များထည့်ပါ')
     } else {
-      await saveServices(supplierTable);
-      setSupplierTable([]);
+      await saveServices(supplierTable)
+      setSupplierTable([])
     }
-  };
+  }
 
   const handleDelete = (record) => {
     const filterSuppliers = supplierTable.services.filter(
-      (supplier) => supplier.key !== record.key
-    );
+      (supplier) => supplier.key !== record.key,
+    )
     setSupplierTable({
-      services: [...filterSuppliers]
-    });
-  };
+      services: [...filterSuppliers],
+    })
+  }
 
   const columns = [
     {
-      title: "ကုတ်",
-      dataIndex: "code"
+      title: 'ကုတ်',
+      dataIndex: 'code',
     },
 
     {
-      title: "အမျိုးအစား",
-      dataIndex: "category"
+      title: 'အမျိုးအစား',
+      dataIndex: 'category',
     },
     {
-      title: "ကျသင့်ငွေ",
-      dataIndex: "price"
+      title: 'ကျသင့်ငွေ',
+      dataIndex: 'price',
     },
     {
-      title: "ရာခိုင်နှုန်း",
-      dataIndex: "percentage"
+      title: 'အပိုဆုကြေး',
+      dataIndex: 'bonus',
+      render: (bonus) => (bonus ? 'ပေး' : 'မပေး'),
     },
     {
-      title: "ကော်မရှင်",
-      dataIndex: "commercial"
+      title: 'ရာခိုင်နှုန်း',
+      dataIndex: 'percentage',
     },
     {
-      title: "Actions",
-      dataIndex: "action",
+      title: 'ကော်မရှင်',
+      dataIndex: 'commercial',
+    },
+    {
+      title: 'Actions',
+      dataIndex: 'action',
       render: (_, record) => (
         <Button type="primary" danger onClick={() => handleDelete(record)}>
           Delete
         </Button>
-      )
-    }
-  ];
+      ),
+    },
+  ]
 
   return (
     <Spin spinning={status.loading}>
-      <Layout style={{ margin: "20px" }}>
+      <Layout style={{ margin: '20px' }}>
         <Space direction="vertical" size="middle">
-          <Title style={{ textAlign: "center" }} level={3}>
+          <Title style={{ textAlign: 'center' }} level={3}>
             ဝန်ဆောင်မှုအချက်အလက်သွင်းရန်စာမျက်နှာ
           </Title>
           <Form
             colon={false}
             labelCol={{
               xl: {
-                span: 3
-              }
+                span: 3,
+              },
             }}
             wrapperCol={{
-              span: 24
+              span: 24,
             }}
             initialValues={{
-              remember: true
+              remember: true,
             }}
             onFinish={onFinish}
             form={form}
@@ -156,9 +163,9 @@ const CreateService = ({ getServices, saveServices }) => {
             <Space
               direction="vertical"
               style={{
-                width: "100%",
-                alignItems: "center",
-                marginBottom: "10px"
+                width: '100%',
+                alignItems: 'center',
+                marginBottom: '10px',
               }}
             ></Space>
             <Form.Item
@@ -167,14 +174,14 @@ const CreateService = ({ getServices, saveServices }) => {
               rules={[
                 {
                   required: true,
-                  message: "ကျေးဇူးပြု၍ ကုတ်ထည့်ပါ"
-                }
+                  message: 'ကျေးဇူးပြု၍ ကုတ်ထည့်ပါ',
+                },
               ]}
             >
               <Input
                 placeholder="ကုတ်ထည့်ပါ"
                 prefix={<EditOutlined />}
-                style={{ borderRadius: "10px", width: "100%" }}
+                style={{ borderRadius: '10px', width: '100%' }}
                 size="large"
               />
             </Form.Item>
@@ -184,14 +191,14 @@ const CreateService = ({ getServices, saveServices }) => {
               rules={[
                 {
                   required: true,
-                  message: "ကျေးဇူးပြု၍ အမျိုးအစားထည့်ပါ"
-                }
+                  message: 'ကျေးဇူးပြု၍ အမျိုးအစားထည့်ပါ',
+                },
               ]}
             >
               <Input
                 placeholder="အမျိုးအစားထည့်ပါ"
                 prefix={<EditOutlined />}
-                style={{ borderRadius: "10px" }}
+                style={{ borderRadius: '10px' }}
                 size="large"
               />
             </Form.Item>
@@ -202,14 +209,14 @@ const CreateService = ({ getServices, saveServices }) => {
               rules={[
                 {
                   required: true,
-                  message: "ကျေးဇူးပြု၍ ကျသင့်ငွေထည့်ပါ"
-                }
+                  message: 'ကျေးဇူးပြု၍ ကျသင့်ငွေထည့်ပါ',
+                },
               ]}
             >
               <Input
                 placeholder="ကျသင့်ငွေထည့်ပါ"
                 prefix={<EditOutlined />}
-                style={{ borderRadius: "10px", width: "100%" }}
+                style={{ borderRadius: '10px', width: '100%' }}
                 size="large"
               />
             </Form.Item>
@@ -219,18 +226,22 @@ const CreateService = ({ getServices, saveServices }) => {
               rules={[
                 {
                   required: true,
-                  message: "ကျေးဇူးပြု၍ ရာခိုင်နှုန်းထည့်ပါ"
-                }
+                  message: 'ကျေးဇူးပြု၍ ရာခိုင်နှုန်းထည့်ပါ',
+                },
               ]}
             >
               <Input
                 placeholder="ရာခိုင်နှုန်းထည့်ပါ"
                 prefix={<EditOutlined />}
-                style={{ borderRadius: "10px", width: "100%" }}
+                style={{ borderRadius: '10px', width: '100%' }}
                 size="large"
               />
             </Form.Item>
-
+            <Form.Item
+              wrapperCol={{ offset: 3, span: 16 }}
+            >
+              <Checkbox checked={bonus} onChange={(value) => setBonus(value)}>အပိုဆုကြေး</Checkbox>
+            </Form.Item>
             {/* <Form.Item
             name="commercial"
             label="ကော်မရှင်"
@@ -249,12 +260,12 @@ const CreateService = ({ getServices, saveServices }) => {
               value={2000}
             />
           </Form.Item> */}
-            <Form.Item style={{ textAlign: "right" }}>
+            <Form.Item style={{ textAlign: 'right' }}>
               <Button
                 style={{
-                  backgroundColor: "var(--secondary-color)",
-                  color: "var(--white-color)",
-                  borderRadius: "10px"
+                  backgroundColor: 'var(--secondary-color)',
+                  color: 'var(--white-color)',
+                  borderRadius: '10px',
                 }}
                 size="large"
                 htmlType="submit"
@@ -268,17 +279,17 @@ const CreateService = ({ getServices, saveServices }) => {
             bordered
             columns={columns}
             dataSource={supplierTable.services}
-            pagination={{ position: ["none", "none"] }}
+            pagination={{ position: ['none', 'none'] }}
           />
           <Space
             direction="horizontal"
-            style={{ width: "100%", justifyContent: "right" }}
+            style={{ width: '100%', justifyContent: 'right' }}
           >
             <Button
               style={{
-                backgroundColor: "var(--primary-color)",
-                color: "var(--white-color)",
-                borderRadius: "10px"
+                backgroundColor: 'var(--primary-color)',
+                color: 'var(--white-color)',
+                borderRadius: '10px',
               }}
               size="large"
               onClick={handleSave}
@@ -290,9 +301,7 @@ const CreateService = ({ getServices, saveServices }) => {
         </Space>
       </Layout>
     </Spin>
-  );
-};
+  )
+}
 
-export default connect(null, { getServices, saveServices })(
-  CreateService
-);
+export default connect(null, { getServices, saveServices })(CreateService)
