@@ -62,7 +62,8 @@ const CreateService = ({ getServices, saveServices }) => {
   const [form] = Form.useForm()
 
   const onFinish = (values) => {
-    let commercial = parseInt(values.price) * (parseInt(values.percentage) / 100);
+    let commercial =
+      parseInt(values.price) * (parseInt(values.percentage) / 100)
     setSupplierTable({
       services: [
         ...supplierTable.services,
@@ -72,8 +73,7 @@ const CreateService = ({ getServices, saveServices }) => {
           percentage: values.percentage,
           price: values.price,
           bonus: bonus ? 1 : 0,
-          commercial:
-            bonus ? commercial + 1000 : commercial,
+          commercial: bonus ? Number(commercial) + 1000 : commercial,
         },
       ],
     })
@@ -237,10 +237,13 @@ const CreateService = ({ getServices, saveServices }) => {
                 size="large"
               />
             </Form.Item>
-            <Form.Item
-              wrapperCol={{ offset: 3, span: 16 }}
-            >
-              <Checkbox checked={bonus} onChange={(value) => setBonus(value)}>အပိုဆုကြေး</Checkbox>
+            <Form.Item wrapperCol={{ offset: 3, span: 16 }}>
+              <Checkbox
+                checked={bonus}
+                onChange={(event) => setBonus(event.target.checked)}
+              >
+                အပိုဆုကြေး
+              </Checkbox>
             </Form.Item>
             {/* <Form.Item
             name="commercial"
