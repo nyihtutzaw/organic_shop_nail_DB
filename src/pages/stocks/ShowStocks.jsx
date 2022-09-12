@@ -26,6 +26,7 @@ import {
 import { connect, useSelector } from 'react-redux'
 import { ExportToExcel } from '../../excel/ExportToExcel'
 import { successDeleteMessage } from '../../util/messages'
+import { GENERAL_MANAGER, OWNER } from '../../util/positions'
 
 const { Title } = Typography
 const { Option } = Select
@@ -156,7 +157,7 @@ const ShowStocks = ({ getStocks, getShops, deleteStocks, getItems }) => {
       render: (_, record) => record?.shop?.name,
     },
   ]
-  if (user?.position === 'owner') {
+  if (user?.position === OWNER) {
     columns = [
       {
         title: 'ပစ္စည်းပုံ',
@@ -188,17 +189,17 @@ const ShowStocks = ({ getStocks, getShops, deleteStocks, getItems }) => {
           else return <span>{record.item.name}</span>
         },
       },
-      // {
-      //   title: "ဝယ်ဈေး",
-      //   dataIndex: "buy_price",
-      //   render: (_, record) => {
-      //     if (record.quantity < 10)
-      //       return (
-      //         <span style={{ color: "red" }}>{record.item.buy_price}</span>
-      //       );
-      //     else return <span>{record.item.buy_price}</span>;
-      //   }
-      // },
+      {
+        title: "ဝယ်ဈေး",
+        dataIndex: "buy_price",
+        render: (_, record) => {
+          if (record.quantity < 10)
+            return (
+              <span style={{ color: "red" }}>{record.item.buy_price}</span>
+            );
+          else return <span>{record.item.buy_price}</span>;
+        }
+      },
       {
         title: 'ရောင်းဈေး',
         dataIndex: 'sale_price',
@@ -260,15 +261,6 @@ const ShowStocks = ({ getStocks, getShops, deleteStocks, getItems }) => {
           else return <span>{record.item.name}</span>
         },
       },
-      // {
-      //   title: "ဝယ်ဈေး",
-      //   dataIndex: "buy_price",
-      //   render: (_, record) => {
-      //     if (record.quantity < 10)
-      //       return <span style={{ color: "red" }}>{record.item.buy_price}</span>;
-      //     else return <span>{record.item.buy_price}</span>;
-      //   }
-      // },
       {
         title: 'ရောင်းဈေး',
         dataIndex: 'sale_price',
@@ -337,7 +329,7 @@ const ShowStocks = ({ getStocks, getShops, deleteStocks, getItems }) => {
               </Select>
             </Col>
             <Col span={4}>
-              {user?.position !== 'owner' && (
+              {user?.position !== OWNER && user?.position !== GENERAL_MANAGER && (
                 <Button
                   style={{
                     backgroundColor: 'var(--secondary-color)',

@@ -16,6 +16,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { getAccounts, deleteAccounts } from "../../store/actions";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 import { successDeleteMessage } from "../../util/messages";
+import { GENERAL_MANAGER, MANAGER, OWNER } from "../../util/positions";
 
 const { Title } = Typography;
 
@@ -106,7 +107,7 @@ const ShowAccounts = ({ deleteAccounts }) => {
               <Title level={3}>အကောင့်စာရင်း</Title>
             </Col>
             <Col span={4}>
-              {(user?.position === "owner" || user?.position === "manager") && (
+              {(user?.position === OWNER || user?.position === GENERAL_MANAGER || user?.position === MANAGER) && (
                 <Button
                   style={{
                     backgroundColor: "var(--secondary-color)",

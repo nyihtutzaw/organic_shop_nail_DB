@@ -19,7 +19,6 @@ import {
 import { useSelector } from 'react-redux'
 import { getServices, saveServices } from '../../store/actions'
 import { connect } from 'react-redux'
-import store from '../../store'
 import { successCreateMessage } from '../../util/messages'
 
 const { Title } = Typography

@@ -1,5 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Typography, Space, Row, Col, Button, Table, Spin, message } from 'antd'
+import React, { useEffect } from 'react'
+import {
+  Typography,
+  Space,
+  Row,
+  Col,
+  Button,
+  Table,
+  Spin,
+  message,
+  Select,
+} from 'antd'
 import Layout from 'antd/lib/layout/layout'
 import {
   PlusSquareOutlined,
@@ -10,13 +20,16 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { getServices, deleteServices, getService } from '../../store/actions'
 import { connect } from 'react-redux'
-import { notification } from 'antd'
 import { ExportToExcel } from '../../excel/ExportToExcel'
 import { successDeleteMessage } from '../../util/messages'
+import { useState } from 'react'
+import { GENERAL_MANAGER, OWNER } from '../../util/positions'
 
 const { Title } = Typography
+const { Option } = Select
 
 const ShowService = ({ getServices, deleteServices, getService }) => {
+  const [filterService, setFilterServices] = useState(null)
   const allServices = useSelector((state) => state.service.services)
   const user = useSelector((state) => state.auth.user)
   const status = useSelector((state) => state.status)
@@ -34,18 +47,6 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
 
   const navigate = useNavigate()
 
-  const mountedRef = React.useRef(true)
-  const getShopYearly = async () => {
-    if (!mountedRef.current) return null
-    try {
-      const response = await getServices()
-      const result = response.data
-      // setGetData(result);
-    } catch (error) {
-      // console.log(error.response);
-    }
-  }
-
   useEffect(() => {
     error.message !== null && message.error(error.message)
 
@@ -60,12 +61,9 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
     return () => status.success
   }, [status.success])
 
-  React.useEffect(() => {
-    getShopYearly()
-    return () => {
-      mountedRef.current = false
-    }
-  }, [])
+  useEffect(() => {
+    getServices()
+  }, [getServices])
 
   const handleClick = async (record) => {
     await getService(record.id)
@@ -74,6 +72,15 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
 
   const handleDelete = async (record) => {
     await deleteServices(record.id)
+  }
+
+  const handleFilter = (value) => {
+    if (value === undefined) {
+      setFilterServices(allServices)
+    } else {
+      const filterItems = allServices.filter((service) => service.id === value)
+      setFilterServices(filterItems)
+    }
   }
 
   const columns = [
@@ -92,7 +99,7 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
     {
       title: 'အပိုဆုကြေး',
       dataIndex: 'bonus',
-      render: (bonus) => (bonus === "1" ? 'ပေး' : 'မပေး'),
+      render: (bonus) => (bonus === '1' ? 'ပေး' : 'မပေး'),
     },
     {
       title: 'ရာခိုင်နှုန်း',
@@ -129,7 +136,7 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
               <Title level={3}>ဝန်ဆောင်မှုစာရင်း</Title>
             </Col>
             <Col span={4}>
-              {user?.position !== 'owner' && (
+              {user?.position !== OWNER && user?.position !== GENERAL_MANAGER && (
                 <Button
                   style={{
                     backgroundColor: 'var(--secondary-color)',
@@ -148,11 +155,34 @@ const ShowService = ({ getServices, deleteServices, getService }) => {
               <ExportToExcel apiData={result} fileName={fileName} />
             </Col>
           </Row>
+          <Row gutter={[16, 16]}>
+            <Col>
+              <Select
+                showSearch
+                placeholder="ကျေးဇူးပြု၍ အမျိုးအစားရွေးပါ"
+                optionFilterProp="children"
+                onChange={handleFilter}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+                allowClear={true}
+                size="large"
+                style={{ borderRadius: '10px' }}
+              >
+                {allServices.map((service) => (
+                  <Option key={service.id} value={service.id}>
+                    {service.category}
+                  </Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
           <Table
             bordered
             columns={columns}
             pagination={{ defaultPageSize: 10 }}
-            dataSource={allServices}
+            dataSource={filterService === null ? allServices : filterService}
           />
         </Space>
       </Layout>

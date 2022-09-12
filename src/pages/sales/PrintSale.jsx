@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from 'react'
 // ant design styles
 import {
   Layout,
@@ -8,40 +8,40 @@ import {
   Button,
   Table,
   Image,
-  Divider
-} from "antd";
-import { PrinterOutlined } from "@ant-design/icons";
-import { useNavigate, useParams } from "react-router-dom";
-import { useReactToPrint } from "react-to-print";
-import { call } from "../../services/api";
-import { getDate } from "../../uitls/convertToDate";
-import organic from "./images/organic.jpg";
-import { useSelector } from "react-redux";
+  Divider,
+} from 'antd'
+import { PrinterOutlined } from '@ant-design/icons'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useReactToPrint } from 'react-to-print'
+import { call } from '../../services/api'
+import { getDate } from '../../uitls/convertToDate'
+import organic from './images/organic.jpg'
+import { useSelector } from 'react-redux'
 
-const { Header } = Layout;
-const { Title } = Typography;
+const { Header } = Layout
+const { Title } = Typography
 
 const PrintSale = () => {
-  const navigate = useNavigate();
-  const componentRef = useRef();
-  const [sales, setSales] = useState([]);
-  const [sale, setSale] = useState();
-  const param = useParams();
-  const user = useSelector((state) => state.auth.user);
+  const navigate = useNavigate()
+  const componentRef = useRef()
+  const [sales, setSales] = useState([])
+  const [sale, setSale] = useState()
+  const param = useParams()
+  const user = useSelector((state) => state.auth.user)
 
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current
-  });
+    content: () => componentRef.current,
+  })
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await call("get", `invoices/${param.id}`);
+      const response = await call('get', `invoices/${param.id}`)
 
-      if (response.status === "success") {
-        const data = response.data;
-        setSale(data);
+      if (response.status === 'success') {
+        const data = response.data
+        setSale(data)
 
-        const transformSales = [];
+        const transformSales = []
 
         data.items.forEach((item) => {
           transformSales.push({
@@ -51,9 +51,9 @@ const PrintSale = () => {
             name: item.stock.item.name,
             price: item.price,
             quantity: item.quantity,
-            subtotal: item.subtotal
-          });
-        });
+            subtotal: item.subtotal,
+          })
+        })
 
         data.services.forEach((service) => {
           transformSales.push({
@@ -63,62 +63,60 @@ const PrintSale = () => {
             name: service.service.category,
             price: service.price,
             quantity: service.quantity,
-            subtotal: service.subtotal
-          });
-        });
+            subtotal: service.subtotal,
+          })
+        })
 
-        setSales(transformSales);
+        setSales(transformSales)
         // console.log(transformSales);
       }
-    };
+    }
 
-    fetchData();
+    fetchData()
     return () => {
-      fetchData();
-    };
-  }, [param]);
-
-
+      fetchData()
+    }
+  }, [param])
 
   const columns = [
     {
-      title: "စဥ်",
-      dataIndex: "id"
+      title: 'စဥ်',
+      dataIndex: 'id',
     },
     {
-      title: "ကုတ်နံပါတ်",
-      dataIndex: "code"
+      title: 'ကုတ်နံပါတ်',
+      dataIndex: 'code',
     },
     {
-      title: "ပစ္စည်း/ဝန်ဆောင်မှုအမည်",
-      dataIndex: "name"
+      title: 'ပစ္စည်း/ဝန်ဆောင်မှုအမည်',
+      dataIndex: 'name',
     },
     {
-      title: "ဈေးနှုန်း",
-      dataIndex: "price",
-      align: "right"
+      title: 'ဈေးနှုန်း',
+      dataIndex: 'price',
+      align: 'right',
     },
     {
-      title: "အရေအတွက်",
-      dataIndex: "quantity",
-      align: "right"
+      title: 'အရေအတွက်',
+      dataIndex: 'quantity',
+      align: 'right',
     },
     {
-      title: "ကျသင့်ငွေ",
-      dataIndex: "subtotal",
-      align: "right"
-    }
-  ];
+      title: 'ကျသင့်ငွေ',
+      dataIndex: 'subtotal',
+      align: 'right',
+    },
+  ]
 
   if (!sale) {
     return (
       <Layout>
-        <Header style={{ backgroundColor: "var(--primary-color)" }}>
+        <Header style={{ backgroundColor: 'var(--primary-color)' }}>
           <Title
             style={{
-              color: "var(--white-color)",
-              textAlign: "center",
-              marginTop: "13px"
+              color: 'var(--white-color)',
+              textAlign: 'center',
+              marginTop: '13px',
             }}
             level={3}
           >
@@ -126,23 +124,25 @@ const PrintSale = () => {
           </Title>
         </Header>
       </Layout>
-    );
+    )
   }
 
-  const discountAmount = sale.total * (sale.discount / 100);
+  const discountAmount = sale.total * (sale.discount / 100)
+
+  const kpayAmount = sale.total * (sale.kpay_percent / 100)
 
   const handleDashboard = () => {
-    navigate("/admin/sale");
-  };
+    navigate('/admin/sale')
+  }
 
   return (
     <Layout>
-      <Header style={{ backgroundColor: "var(--primary-color)" }}>
+      <Header style={{ backgroundColor: 'var(--primary-color)' }}>
         <Title
           style={{
-            color: "var(--white-color)",
-            textAlign: "center",
-            marginTop: "13px"
+            color: 'var(--white-color)',
+            textAlign: 'center',
+            marginTop: '13px',
           }}
           level={3}
         >
@@ -151,11 +151,11 @@ const PrintSale = () => {
       </Header>
       <Row>
         <Col span={10}></Col>
-        <Col span={2} style={{ textAlign: "center" }}>
+        <Col span={2} style={{ textAlign: 'center' }}>
           <Button
             style={{
-              backgroundColor: "var(--primary-color)",
-              color: "var(--white-color)"
+              backgroundColor: 'var(--primary-color)',
+              color: 'var(--white-color)',
             }}
             size="large"
             onClick={handlePrint}
@@ -167,8 +167,8 @@ const PrintSale = () => {
         <Col span={2}>
           <Button
             style={{
-              backgroundColor: "var(--primary-color)",
-              color: "var(--white-color)"
+              backgroundColor: 'var(--primary-color)',
+              color: 'var(--white-color)',
             }}
             size="large"
             onClick={handleDashboard}
@@ -178,13 +178,13 @@ const PrintSale = () => {
         </Col>
         <Col span={10}></Col>
       </Row>
-      <div style={{ width: "909px", margin: "30px 0px" }} ref={componentRef}>
+      <div style={{ width: '909px', margin: '30px 0px' }} ref={componentRef}>
         <Row gutter={16}>
           <Col className="gutter-row" span={6}></Col>
           <Col
             className="gutter-row"
             span={12}
-            style={{ textAlign: "center", marginBottom: "20px" }}
+            style={{ textAlign: 'center', marginBottom: '20px' }}
           >
             <Title level={2}>Organic Nail Shop</Title>
             <Image width={100} src={organic} />
@@ -303,10 +303,10 @@ const PrintSale = () => {
           <Col span={22}>
             <Divider
               style={{
-                height: "2px",
-                color: "gray",
-                borderWidth: "0",
-                backgroundColor: "gray"
+                height: '2px',
+                color: 'gray',
+                borderWidth: '0',
+                backgroundColor: 'gray',
               }}
             />
           </Col>
@@ -318,12 +318,12 @@ const PrintSale = () => {
             <Title
               level={2}
               style={{
-                marginBottom: "15px",
-                marginTop: "1px",
-                textAlign: "center"
+                marginBottom: '15px',
+                marginTop: '1px',
+                textAlign: 'center',
               }}
             >
-              Invoice{" "}
+              Invoice{' '}
             </Title>
           </Col>
           <Col span={10}></Col>
@@ -386,68 +386,83 @@ const PrintSale = () => {
           columns={columns}
           dataSource={sales}
           // pagination={{ position: ["none", "none"] }}
-          pagination={{ defaultPageSize: 20, position: ["none", "none"] }}
-          style={{ margin: "10px 20px" }}
+          pagination={{ defaultPageSize: 20, position: ['none', 'none'] }}
+          style={{ margin: '10px 20px' }}
           size="small"
         />
         <Row gutter={[16, 16]}>
-          <Col span={17} style={{ textAlign: "right" }}>
+          <Col span={17} style={{ textAlign: 'right' }}>
             <Title level={5}>စုစုပေါင်း</Title>
           </Col>
           <Col span={1}></Col>
-          <Col span={5} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px" }}>
+          <Col span={5} style={{ textAlign: 'right' }}>
+            <Title level={5} style={{ fontSize: '11.5px' }}>
               {sale.total}
             </Title>
           </Col>
           <Col span={1}></Col>
         </Row>
         <Row gutter={[16, 16]}>
-          <Col span={17} style={{ textAlign: "right" }}>
+          <Col span={17} style={{ textAlign: 'right' }}>
             <Title level={5}>လျော့ဈေး</Title>
           </Col>
-          <Col span={1} style={{ textAlign: "left" }}>
+          <Col span={1} style={{ textAlign: 'left' }}>
             <Title level={5}>{sale.discount}%</Title>
           </Col>
 
-          <Col span={4} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px" }}>
+          <Col span={4} style={{ textAlign: 'right' }}>
+            <Title level={5} style={{ fontSize: '11.5px' }}>
               {discountAmount}
             </Title>
           </Col>
           <Col span={1}></Col>
         </Row>
         <Row gutter={[16, 16]}>
-          <Col span={17} style={{ textAlign: "right" }}>
+          <Col span={17} style={{ textAlign: 'right' }}>
+            <Title level={5}>KPay</Title>
+          </Col>
+          <Col span={1} style={{ textAlign: 'left' }}>
+            <Title level={5}>{sale.kpay_percent}%</Title>
+          </Col>
+
+          <Col span={4} style={{ textAlign: 'right' }}>
+            <Title level={5} style={{ fontSize: '11.5px' }}>
+              {kpayAmount}
+            </Title>
+          </Col>
+          <Col span={1}></Col>
+        </Row>
+        <Row gutter={[16, 16]}>
+          <Col span={17} style={{ textAlign: 'right' }}>
             <Title level={5}>ပေးချေရမည့်စုစုပေါင်း</Title>
           </Col>
           <Col span={1}></Col>
-          <Col span={5} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px" }}>
+          <Col span={5} style={{ textAlign: 'right' }}>
+            <Title level={5} style={{ fontSize: '11.5px' }}>
               {sale.final_total}
             </Title>
           </Col>
           <Col span={1}></Col>
         </Row>
         <Row gutter={[16, 16]}>
-          <Col span={17} style={{ textAlign: "right" }}>
+          <Col span={17} style={{ textAlign: 'right' }}>
             <Title level={5}>ပေးငွေ</Title>
           </Col>
           <Col span={1}></Col>
-          <Col span={5} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px" }}>
+          <Col span={5} style={{ textAlign: 'right' }}>
+            <Title level={5} style={{ fontSize: '11.5px' }}>
               {sale.paid}
             </Title>
           </Col>
           <Col span={1}></Col>
         </Row>
         <Row gutter={[16, 16]}>
-          <Col span={17} style={{ textAlign: "right" }}>
+          <Col span={17} style={{ textAlign: 'right' }}>
             <Title level={5}>ပေးရန်ကျန်ငွေ</Title>
           </Col>
           <Col span={1}></Col>
-          <Col span={5} style={{ textAlign: "right" }}>
-            <Title level={5} style={{ fontSize: "11.5px" }}>
+          <Col span={5} style={{ textAlign: 'right' }}>
+            <Title level={5} style={{ fontSize: '11.5px' }}>
               {sale.credit}
             </Title>
           </Col>
@@ -455,7 +470,7 @@ const PrintSale = () => {
         </Row>
       </div>
     </Layout>
-  );
-};
+  )
+}
 
-export default PrintSale;
+export default PrintSale

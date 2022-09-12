@@ -92,6 +92,7 @@ import DailyAttendance from '../pages/staffs/DailyAttendance'
 import EditStock from '../pages/stocks/EditStock'
 import {
   CASHIER,
+  GENERAL_MANAGER,
   MANAGER,
   OWNER,
   SALE_STAFF,
@@ -342,7 +343,9 @@ const Admin = ({ logout }) => {
             <Menu.Item key="ChangePassword" icon={<LockOutlined />}>
               <Link to="/admin/change-password">Change Password</Link>
             </Menu.Item>
-            {(user?.position === OWNER || user?.position === MANAGER) && (
+            {(user?.position === OWNER ||
+              user?.position === GENERAL_MANAGER ||
+              user?.position === MANAGER) && (
               <SubMenu
                 key="Accounts"
                 title="အကောင့်များ"
@@ -361,7 +364,7 @@ const Admin = ({ logout }) => {
                 </Menu.Item>
               </SubMenu>
             )}
-            {user?.position !== SERVICE_STAFF && (
+            {user?.position !== SERVICE_STAFF && user?.position !== CASHIER && (
               <SubMenu
                 key="Merchants"
                 title="ကုန်သည်များ"
@@ -370,7 +373,8 @@ const Admin = ({ logout }) => {
                 <Menu.Item key="ShowMerchants" icon={<UnorderedListOutlined />}>
                   <Link to="/admin/show-merchants">စာရင်း</Link>
                 </Menu.Item>
-                {user?.position !== OWNER && (
+                {(user?.position !== OWNER ||
+                  user?.position === GENERAL_MANAGER) && (
                   <Menu.Item key="CreateMerchants" icon={<SaveOutlined />}>
                     <Link to="/admin/create-merchants">အသစ်ဖန်တီးရန်</Link>
                   </Menu.Item>
@@ -387,7 +391,8 @@ const Admin = ({ logout }) => {
                 <Menu.Item key="ShowMembers" icon={<UnorderedListOutlined />}>
                   <Link to="/admin/show-members">စာရင်း</Link>
                 </Menu.Item>
-                {user?.position !== OWNER && (
+                {(user?.position !== OWNER ||
+                  user?.position === GENERAL_MANAGER) && (
                   <Menu.Item key="CreateMembers" icon={<SaveOutlined />}>
                     <Link to="/admin/create-members">အသစ်ဖန်တီးရန်</Link>
                   </Menu.Item>
@@ -443,7 +448,8 @@ const Admin = ({ logout }) => {
                 title="ဝန်ဆောင်မှု"
                 icon={<FlagOutlined />}
               >
-                {user?.position !== OWNER && (
+                {(user?.position !== OWNER ||
+                  user?.position === GENERAL_MANAGER) && (
                   <Menu.Item key="CreateService" icon={<SaveOutlined />}>
                     <Link to="/admin/create-service">အသစ်ဖန်တီးရန်</Link>
                   </Menu.Item>
@@ -461,7 +467,10 @@ const Admin = ({ logout }) => {
               </Menu.Item>
             )}
 
-            {(user?.position === OWNER || user?.position === MANAGER) && (
+            {(user?.position === OWNER ||
+              user?.position === GENERAL_MANAGER ||
+              user?.position === MANAGER ||
+              user?.position === CASHIER) && (
               <SubMenu
                 key="Staff"
                 title="ဝန်ထမ်းစာရင်း"
@@ -489,10 +498,7 @@ const Admin = ({ logout }) => {
                 >
                   <Link to="/admin/show-commercials">ကော်မရှင်များ</Link>
                 </Menu.Item>
-                <Menu.Item
-                  key="ShowFines"
-                  icon={<UnorderedListOutlined />}
-                >
+                <Menu.Item key="ShowFines" icon={<UnorderedListOutlined />}>
                   <Link to="/admin/show-fines">ဒဏ်ကြေးများ</Link>
                 </Menu.Item>
               </SubMenu>
@@ -514,7 +520,9 @@ const Admin = ({ logout }) => {
                 </Menu.Item>
               </SubMenu>
             )}
-            {user?.position === OWNER || user?.position === MANAGER ? (
+            {user?.position === OWNER ||
+            user?.position === GENERAL_MANAGER ||
+            user?.position === MANAGER ? (
               <SubMenu
                 key="Reports"
                 title="Reports"
@@ -688,15 +696,9 @@ const Admin = ({ logout }) => {
                 path="edit-commercials/:id"
                 element={<EditCommercials />}
               />
-              <Route
-                path="create-fines"
-                element={<CreateFines />}
-              />
+              <Route path="create-fines" element={<CreateFines />} />
               <Route path="show-fines" element={<ShowFines />} />
-              <Route
-                path="edit-fines/:id"
-                element={<EditFines />}
-              />
+              <Route path="edit-fines/:id" element={<EditFines />} />
               <Route path="*" element={<Navigate to="dashboard" />} />
             </Routes>
           </Content>

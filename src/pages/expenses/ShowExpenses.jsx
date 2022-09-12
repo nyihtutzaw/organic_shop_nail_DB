@@ -22,6 +22,7 @@ import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 import Text from "antd/lib/typography/Text";
 import { successDeleteMessage } from "../../util/messages";
+import { GENERAL_MANAGER, OWNER } from "../../util/positions";
 
 const { Title } = Typography;
 
@@ -129,7 +130,7 @@ const ShowExpenses = ({ getExpenses, deleteExpenses, getExpense }) => {
               <Title level={3}>ကုန်ကျစရိတ်စာရင်း</Title>
             </Col>
             <Col span={4}>
-              {user?.position !== "owner" && (
+              {user?.position !== OWNER && user?.position !== GENERAL_MANAGER && (
                 <Button
                   style={{
                     backgroundColor: "var(--secondary-color)",

@@ -28,6 +28,7 @@ import { connect } from "react-redux";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 import store from "../../store";
 import { successDeleteMessage } from "../../util/messages";
+import { GENERAL_MANAGER, OWNER } from "../../util/positions";
 
 const { Title } = Typography;
 
@@ -154,7 +155,7 @@ const ShowMembers = ({
               <Title level={3}>Member စာရင်း</Title>
             </Col>
             <Col span={4}>
-              {user?.position !== "owner" && (
+              {user?.position !== OWNER && user?.position !== GENERAL_MANAGER && (
                 <Button
                   style={{
                     backgroundColor: "var(--secondary-color)",

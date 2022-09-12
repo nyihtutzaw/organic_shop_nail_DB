@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 import {
   Typography,
   Space,
@@ -9,28 +9,29 @@ import {
   Select,
   notification,
   Spin,
-  message
-} from "antd";
-import Layout from "antd/lib/layout/layout";
+  message,
+} from 'antd'
+import Layout from 'antd/lib/layout/layout'
 import {
   PlusSquareOutlined,
   DeleteOutlined,
-  ReadOutlined
-} from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-import { connect, useSelector } from "react-redux";
+  ReadOutlined,
+} from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
+import { connect, useSelector } from 'react-redux'
 import {
   getMerchants,
   getPurchases,
   deletePurchases,
-  getPurchase
-} from "../../store/actions";
-import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
-import { ExportToExcel } from "../../excel/ExportToExcel";
-import { successDeleteMessage } from "../../util/messages";
+  getPurchase,
+} from '../../store/actions'
+import { getReadableDateDisplay } from '../../uitls/convertToHumanReadableTime'
+import { ExportToExcel } from '../../excel/ExportToExcel'
+import { successDeleteMessage } from '../../util/messages'
+import { GENERAL_MANAGER, OWNER } from '../../util/positions'
 
-const { Title, Text } = Typography;
-const { Option } = Select;
+const { Title, Text } = Typography
+const { Option } = Select
 
 const ShowBuyMerchants = ({
   purchase,
@@ -38,76 +39,74 @@ const ShowBuyMerchants = ({
   getMerchants,
   getPurchases,
   deletePurchases,
-  getPurchase
+  getPurchase,
 }) => {
-  const navigate = useNavigate();
-  const allPurchases = useSelector((state) => state.purchase.purchases);
-  const user = useSelector((state) => state.auth.user);
-  const status = useSelector((state) => state.status);
-  const error = useSelector((state) => state.error);
+  const navigate = useNavigate()
+  const allPurchases = useSelector((state) => state.purchase.purchases)
+  const user = useSelector((state) => state.auth.user)
+  const status = useSelector((state) => state.status)
+  const error = useSelector((state) => state.error)
 
-  const fileName = "Purchases"; // here enter filename for your excel file
+  const fileName = 'Purchases' // here enter filename for your excel file
   const result = allPurchases?.map((purchase) => ({
     Date: purchase.date,
     Company_Name: purchase.merchant.company_name,
     Whole_Total: purchase.whole_total,
     Credit: purchase.credit,
-    Paid: purchase.paid
-  }));
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      await getMerchants();
-    };
-    fetchData();
-    return () => {
-      fetchData();
-    };
-  }, [getMerchants]);
+    Paid: purchase.paid,
+  }))
 
   useEffect(() => {
     const fetchData = async () => {
-      await getPurchases();
-    };
-    fetchData();
+      await getMerchants()
+    }
+    fetchData()
+    return () => {
+      fetchData()
+    }
+  }, [getMerchants])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await getPurchases()
+    }
+    fetchData()
 
     return () => {
-      fetchData();
-    };
-  }, [getPurchases]);
+      fetchData()
+    }
+  }, [getPurchases])
 
-  const [myPurchase, setMyPurchase] = useState([]);
+  const [myPurchase, setMyPurchase] = useState([])
   useEffect(() => {
-    setMyPurchase([...myPurchase, ...allPurchases]);
-  }, []);
-
-
+    setMyPurchase([...myPurchase, ...allPurchases])
+  }, [])
 
   useEffect(() => {
-    error.message !== null && message.error(error.message);
+    error.message !== null && message.error(error.message)
 
-    return () => error.message;
-  }, [error.message]);
+    return () => error.message
+  }, [error.message])
 
   useEffect(() => {
     if (status.success) {
-      message.success(successDeleteMessage);
+      message.success(successDeleteMessage)
     }
 
-    return () => status.success;
-  }, [status.success]);
+    return () => status.success
+  }, [status.success])
 
-  const [showBuyMerchant, setshowBuyMerchant] = useState(null);
+  const [showBuyMerchant, setshowBuyMerchant] = useState(null)
   const onChange = (value) => {
     if (value === undefined) {
-      setshowBuyMerchant(allPurchases);
+      setshowBuyMerchant(allPurchases)
     } else {
       const filterBuyMerchant = allPurchases?.filter(
-        (mer) => mer.merchant.id === value
-      );
-      setshowBuyMerchant(filterBuyMerchant);
+        (mer) => mer.merchant.id === value,
+      )
+      setshowBuyMerchant(filterBuyMerchant)
     }
-  };
+  }
 
   // const openNotificationWithIcon = (type) => {
   //   notification[type]({
@@ -117,11 +116,9 @@ const ShowBuyMerchants = ({
   //   });
   // };
 
-  let allCredit = [];
-  allPurchases?.forEach((purchase) =>
-    allCredit.push(parseInt(purchase.credit))
-  );
-  const finalCredit = allCredit.reduce((a, b) => a + b, 0);
+  let allCredit = []
+  allPurchases?.forEach((purchase) => allCredit.push(parseInt(purchase.credit)))
+  const finalCredit = allCredit.reduce((a, b) => a + b, 0)
 
   // let allCreditGet = [];
   // showBuyMerchant?.forEach((mr) => allCreditGet.push(parseInt(mr.credit)));
@@ -131,70 +128,72 @@ const ShowBuyMerchants = ({
   // allPurchases.forEach((purchase) => allCredit.push(parseInt(purchase.credit)));
   // const finalCredit = allCredit.reduce((a, b) => a + b, 0);
 
-  let allCreditGet = [];
-  showBuyMerchant?.forEach((mr) => allCreditGet.push(parseInt(mr.credit)));
-  const finalCreditGet = allCreditGet.reduce((a, b) => a + b, 0);
+  let allCreditGet = []
+  showBuyMerchant?.forEach((mr) => allCreditGet.push(parseInt(mr.credit)))
+  const finalCreditGet = allCreditGet.reduce((a, b) => a + b, 0)
 
   const handleDelete = async (record) => {
     const filterMyPurchase = myPurchase.filter(
-      (purchase) => purchase.id !== record.id
-    );
-    setMyPurchase(filterMyPurchase);
-    await deletePurchases(record.id);
+      (purchase) => purchase.id !== record.id,
+    )
+    setMyPurchase(filterMyPurchase)
+    await deletePurchases(record.id)
     // openNotificationWithIcon("error");
-  };
+  }
 
   const handleDetail = async (record) => {
-    navigate(`/admin/show-purchase/${record.id}`);
-  };
+    navigate(`/admin/show-purchase/${record.id}`)
+  }
 
   const handleDetailShow = (record) => {
-    navigate(`/admin/detail-buy-merchants/${record.id}`);
-  };
+    navigate(`/admin/detail-buy-merchants/${record.id}`)
+  }
 
   const columns = [
     {
-      title: "ရက်စွဲ",
+      title: 'ရက်စွဲ',
       dataIndex: `created_at`,
-      render: (_, record) => getReadableDateDisplay(record.created_at)
+      render: (_, record) => getReadableDateDisplay(record.created_at),
     },
     {
-      title: "ကုန်သည်လုပ်ငန်းအမည်",
-      dataIndex: "merchant_name",
+      title: 'ကုန်သည်လုပ်ငန်းအမည်',
+      dataIndex: 'merchant_name',
       // render: (_, record) => console.log(record.merchant_name)
       render: (_, record) =>
         showBuyMerchant === null
           ? record?.merchant?.company_name
-          : record?.merchant?.company_name
+          : record?.merchant?.company_name,
     },
     {
-      title: "ကနဦးပေးချေခဲ့သည့်ပမာဏ",
-      dataIndex: "paid"
+      title: 'ကနဦးပေးချေခဲ့သည့်ပမာဏ',
+      dataIndex: 'paid',
     },
     {
-      title: "ပေးရန်ကျန်ငွေ",
-      dataIndex: "credit"
+      title: 'ပေးရန်ကျန်ငွေ',
+      dataIndex: 'credit',
     },
     {
-      title: "Actions",
-      dataIndex: "action",
+      title: 'Actions',
+      dataIndex: 'action',
       render: (_, record) => (
         <Space direction="horizontal">
           <Button type="primary" danger onClick={() => handleDelete(record)}>
             <DeleteOutlined />
           </Button>
           <Button
-            style={{ background: "#5b8c00", borderColor: "yellow" }}
+            style={{ background: '#5b8c00', borderColor: 'yellow' }}
             type="primary"
             danger
             onClick={() => handleDetailShow(record)}
           >
             <ReadOutlined />
           </Button>
-          {record.credit != 0 && user?.position !== "owner" ? (
+          {record.credit != 0 &&
+          user?.position !== OWNER &&
+          user?.position !== GENERAL_MANAGER ? (
             <Button
               type="primary"
-              style={{ backgroundColor: "#ad6800" }}
+              style={{ backgroundColor: '#ad6800' }}
               danger
               onClick={() => handleDetail(record)}
             >
@@ -202,28 +201,28 @@ const ShowBuyMerchants = ({
             </Button>
           ) : null}
         </Space>
-      )
-    }
-  ];
+      ),
+    },
+  ]
 
   return (
     <Spin spinning={status.loading}>
-      <Layout style={{ margin: "20px" }}>
+      <Layout style={{ margin: '20px' }}>
         <Space direction="vertical" size="middle">
           <Row gutter={[16, 16]}>
             <Col span={16}>
               <Title level={3}>အဝယ်စာရင်း</Title>
             </Col>
             <Col span={4}>
-              {user?.position !== "owner" && (
+              {user?.position !== OWNER && user?.position !== GENERAL_MANAGER && (
                 <Button
                   style={{
-                    backgroundColor: "var(--secondary-color)",
-                    color: "var(--white-color)",
-                    borderRadius: "5px"
+                    backgroundColor: 'var(--secondary-color)',
+                    color: 'var(--white-color)',
+                    borderRadius: '5px',
                   }}
                   size="middle"
-                  onClick={() => navigate("/admin/create-buy-merchants")}
+                  onClick={() => navigate('/admin/create-buy-merchants')}
                 >
                   <PlusSquareOutlined />
                   အသစ်ထည့်မည်
@@ -239,8 +238,8 @@ const ShowBuyMerchants = ({
               <Space
                 direction="horizontal"
                 style={{
-                  width: "100%",
-                  marginBottom: "10px"
+                  width: '100%',
+                  marginBottom: '10px',
                 }}
                 size="large"
               >
@@ -257,7 +256,7 @@ const ShowBuyMerchants = ({
                   }
                   allowClear={true}
                   size="large"
-                  style={{ borderRadius: "10px" }}
+                  style={{ borderRadius: '10px' }}
                 >
                   {merchant.merchants.map((mer) => (
                     <Option key={mer.id} value={mer.id}>
@@ -270,18 +269,18 @@ const ShowBuyMerchants = ({
             <Col span={9}>
               <Space
                 direction="horizontal"
-                style={{ width: "100%", justifyContent: "right" }}
+                style={{ width: '100%', justifyContent: 'right' }}
                 size="large"
               >
                 <Text
                   style={{
-                    backgroundColor: "var(--primary-color)",
-                    padding: "10px",
-                    color: "var(--white-color)",
-                    borderRadius: "5px"
+                    backgroundColor: 'var(--primary-color)',
+                    padding: '10px',
+                    color: 'var(--white-color)',
+                    borderRadius: '5px',
                   }}
                 >
-                  ပေးရန်ကျန်ငွေစုစုပေါင်း ={" "}
+                  ပေးရန်ကျန်ငွေစုစုပေါင်း ={' '}
                   {showBuyMerchant != null ? finalCreditGet : finalCredit} Ks
                 </Text>
               </Space>
@@ -298,17 +297,17 @@ const ShowBuyMerchants = ({
         </Space>
       </Layout>
     </Spin>
-  );
-};
+  )
+}
 
 const mapStateToProps = (store) => ({
   merchant: store.merchant,
-  purchase: store.purchase
-});
+  purchase: store.purchase,
+})
 
 export default connect(mapStateToProps, {
   getMerchants,
   getPurchases,
   deletePurchases,
-  getPurchase
-})(ShowBuyMerchants);
+  getPurchase,
+})(ShowBuyMerchants)

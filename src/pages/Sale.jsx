@@ -348,6 +348,7 @@ const Sale = ({
         total: salesTotal,
         discount: discount,
         paid: paid,
+        kpay_percent: kpayPercent,
         payment_method: payMethod,
         customer_name: customerName,
         customer_phone_no: customerPhone,

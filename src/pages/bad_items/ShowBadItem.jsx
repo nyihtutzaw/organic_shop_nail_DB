@@ -21,6 +21,7 @@ import { getBadItems, deleteBadItems, getBadItem } from "../../store/actions";
 import { connect } from "react-redux";
 import { useSelector } from "react-redux";
 import { successDeleteMessage } from "../../util/messages";
+import { GENERAL_MANAGER, OWNER } from "../../util/positions";
 
 const { Title } = Typography;
 
@@ -128,7 +129,7 @@ const ShowBadItem = ({ getBadItems, deleteBadItems, getBadItem }) => {
               <Title level={3}>ချို့ယွင်းချက်ရှိပစ္စည်:များစာရင်း</Title>
             </Col>
             <Col span={3}>
-              {user?.position !== "owner" && (
+              {(user?.position !== OWNER && user?.position !== GENERAL_MANAGER) && (
                 <Button
                   style={{
                     backgroundColor: "var(--secondary-color)",

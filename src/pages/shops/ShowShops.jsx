@@ -26,6 +26,7 @@ import {
 import store from "../../store";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 import { successDeleteMessage } from "../../util/messages";
+import { GENERAL_MANAGER, MANAGER, OWNER } from "../../util/positions";
 
 const { Title } = Typography;
 
@@ -112,7 +113,7 @@ const ShowShops = ({ shop, getShops, deleteShops, getShop, clearAlert }) => {
               <Title level={3}>ဆိုင်အမည်စာရင်း</Title>
             </Col>
             <Col span={4}>
-            {(user?.position === "owner" || user?.position === "manager") && (
+            {(user?.position === OWNER || user?.position === MANAGER || user?.position === GENERAL_MANAGER) && (
                 <Button
                   style={{
                     backgroundColor: "var(--secondary-color)",

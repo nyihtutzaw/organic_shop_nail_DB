@@ -22,6 +22,7 @@ import {
 import { getReadableDateDisplay } from "../../uitls/convertToHumanReadableTime";
 import { ExportToExcel } from "../../excel/ExportToExcel";
 import { successDeleteMessage } from "../../util/messages";
+import { GENERAL_MANAGER, OWNER } from "../../util/positions";
 
 const { Title } = Typography;
 
@@ -126,7 +127,7 @@ const ShowItemTransfer = ({
               <Title level={3}>လွှဲပြောင်းခဲ့သောပစ္စည်းများ</Title>
             </Col>
             <Col span={3}>
-              {user?.position !== "owner" && (
+              {user?.position !== OWNER && user?.position !== GENERAL_MANAGER && (
                 <Button
                   style={{
                     backgroundColor: "var(--secondary-color)",
