@@ -1,4 +1,4 @@
-// http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/stocks
+// ${apiUrl}stocks
 
 import axios from "axios";
 import {
@@ -10,34 +10,34 @@ import {
   ADD_ERROR,
   REMOVE_ERROR,
   SET_LOADING,
-  SET_SUCCESS
+  SET_SUCCESS,
 } from "../type";
 import { apiUrl } from "../../constants/url";
 import { serverErrorMessage } from "../../util/messages";
 
 export const showStocks = (stocks) => ({
   type: SHOW_STOCKS,
-  stocks
+  stocks,
 });
 
 export const showStock = (stock) => ({
   type: SHOW_STOCK,
-  stock
+  stock,
 });
 
 export const filterStocks = (id) => ({
   type: FILTER_STOCKS,
-  id
+  id,
 });
 
 export const updateStocks = (data) => ({
   type: UPDATE_STOCKS,
-  data
+  data,
 });
 
 export const setStockError = (error) => ({
   type: ERROR_STOCKS,
-  error
+  error,
 });
 
 export const getStocks = () => {
@@ -45,13 +45,11 @@ export const getStocks = () => {
     // dispatch({ type: SET_SUCCESS, payload: false });
     dispatch({ type: SET_LOADING });
     try {
-      const response = await axios.get(
-        `${apiUrl}stocks`
-      );
+      const response = await axios.get(`${apiUrl}stocks`);
       const result = response.data.data.map((stock) => {
         return {
           ...stock,
-          key: stock.id
+          key: stock.id,
         };
       });
       // console.log(response.status)
@@ -59,7 +57,7 @@ export const getStocks = () => {
         dispatch(showStocks(result));
         // dispatch({ type: SET_SUCCESS, payload: true });
         dispatch({
-          type: REMOVE_ERROR
+          type: REMOVE_ERROR,
         });
       }
     } catch (error) {
@@ -69,13 +67,13 @@ export const getStocks = () => {
         localStorage.removeItem("jwtToken");
         dispatch({
           type: ADD_ERROR,
-          payload: data.message
+          payload: data.message,
         });
       }
       if (status >= 400) {
         dispatch({
           type: ADD_ERROR,
-          payload: serverErrorMessage
+          payload: serverErrorMessage,
         });
       }
     }
@@ -88,14 +86,12 @@ export const getStock = (id) => {
   return async (dispatch) => {
     dispatch({ type: SET_LOADING });
     try {
-      const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/stocks/${id}`
-      );
+      const response = await axios.get(`${apiUrl}stocks/${id}`);
       const result = response.data.data;
       if (response.status === 200) {
         dispatch(showStock(result));
         dispatch({
-          type: REMOVE_ERROR
+          type: REMOVE_ERROR,
         });
       }
     } catch (error) {
@@ -105,14 +101,14 @@ export const getStock = (id) => {
         localStorage.removeItem("jwtToken");
         dispatch({
           type: ADD_ERROR,
-          payload: data.message
+          payload: data.message,
         });
       }
 
       if (status >= 400) {
         dispatch({
           type: ADD_ERROR,
-          payload: serverErrorMessage
+          payload: serverErrorMessage,
         });
       }
     }
@@ -125,13 +121,10 @@ export const saveStocks = (data) => {
     dispatch({ type: SET_SUCCESS, payload: false });
     dispatch({ type: SET_LOADING });
     try {
-      const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/stocks",
-        data
-      );
+      const response = await axios.post("${apiUrl}stocks", data);
       dispatch({ type: SET_SUCCESS, payload: true });
       dispatch({
-        type: REMOVE_ERROR
+        type: REMOVE_ERROR,
       });
     } catch (error) {
       const { status, data } = error.response;
@@ -139,12 +132,12 @@ export const saveStocks = (data) => {
         localStorage.removeItem("jwtToken");
         dispatch({
           type: ADD_ERROR,
-          payload: data.message
+          payload: data.message,
         });
       } else if (status >= 400) {
         dispatch({
           type: ADD_ERROR,
-          payload: serverErrorMessage
+          payload: serverErrorMessage,
         });
       }
     }
@@ -158,14 +151,12 @@ export const deleteStocks = (id) => {
     dispatch({ type: SET_SUCCESS, payload: false });
     dispatch({ type: SET_LOADING });
     try {
-      const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/stocks/${id}`
-      );
+      const response = await axios.delete(`${apiUrl}stocks/${id}`);
       if (response.status === 204) {
         dispatch(filterStocks(id));
         dispatch({ type: SET_SUCCESS, payload: true });
         dispatch({
-          type: REMOVE_ERROR
+          type: REMOVE_ERROR,
         });
       }
     } catch (error) {
@@ -175,14 +166,14 @@ export const deleteStocks = (id) => {
         localStorage.removeItem("jwtToken");
         dispatch({
           type: ADD_ERROR,
-          payload: data.message
+          payload: data.message,
         });
       }
 
       if (status >= 400) {
         dispatch({
           type: ADD_ERROR,
-          payload: serverErrorMessage
+          payload: serverErrorMessage,
         });
       }
     }
@@ -197,12 +188,12 @@ export const editStocks = (id, data) => {
     dispatch({ type: SET_LOADING });
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/stocks/${id}?_method=put`,
+        `${apiUrl}stocks/${id}?_method=put`,
         data
       );
       const result = {
         ...response.data.data,
-        key: response.data.data.id
+        key: response.data.data.id,
       };
       // console.log(result);
 
@@ -210,7 +201,7 @@ export const editStocks = (id, data) => {
         dispatch(updateStocks(result));
         dispatch({ type: SET_SUCCESS, payload: true });
         dispatch({
-          type: REMOVE_ERROR
+          type: REMOVE_ERROR,
         });
       }
     } catch (error) {
@@ -220,14 +211,14 @@ export const editStocks = (id, data) => {
         localStorage.removeItem("jwtToken");
         dispatch({
           type: ADD_ERROR,
-          payload: data.message
+          payload: data.message,
         });
       }
 
       if (status >= 400) {
         dispatch({
           type: ADD_ERROR,
-          payload: serverErrorMessage
+          payload: serverErrorMessage,
         });
       }
     }

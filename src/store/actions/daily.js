@@ -5,44 +5,45 @@ import {
   UPDATE_DAILY_STAFFS,
   FILTER_DAILY_STAFFS,
   ERROR_DAILY_STAFFS,
-  SHOW_DAILY_STAFF
+  SHOW_DAILY_STAFF,
 } from "../type";
+import { apiUrl } from "../../constants/url";
 
 export const showDailyStaffs = (staffs) => ({
   type: SHOW_DAILY_STAFFS,
-  staffs
+  staffs,
 });
 
 export const showDailyStaff = (staff) => ({
   type: SHOW_DAILY_STAFF,
-  staff
+  staff,
 });
 
 export const createDailyStaffs = (staff) => ({
   type: CREATE_DAILY_STAFFS,
-  staff
+  staff,
 });
 
 export const filterDailyStaffs = (id) => ({
   type: FILTER_DAILY_STAFFS,
-  id
+  id,
 });
 
 export const updateDailyStaffs = (data) => ({
   type: UPDATE_DAILY_STAFFS,
-  data
+  data,
 });
 
 export const setDailyStaffErrors = (error) => ({
   type: ERROR_DAILY_STAFFS,
-  error
+  error,
 });
 
 // export const getBestDailyStaff = (query) => {
 //   return async (dispatch) => {
 //     try {
 //       const response = await axios.get(
-//         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/daily-fees/bestDaily?${new URLSearchParams(
+//         `${apiUrl}daily-fees/bestDaily?${new URLSearchParams(
 //           query
 //         ).toString()}`
 //       );
@@ -62,17 +63,14 @@ export const setDailyStaffErrors = (error) => ({
 //   };
 // };
 
-
 export const getDailyStaffs = () => {
   return async (dispatch) => {
     try {
-      const response = await axios.get(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/daily-fees"
-      );
+      const response = await axios.get("${apiUrl}daily-fees");
       const result = response.data.data.map((item) => {
         return {
           ...item,
-          key: item.id
+          key: item.id,
         };
       });
       if (response.status === 200) {
@@ -91,9 +89,7 @@ export const getDailyStaffs = () => {
 export const getDailyStaff = (id) => {
   return async (dispatch) => {
     try {
-      const response = await axios.get(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/daily-fees/${id}`
-      );
+      const response = await axios.get(`${apiUrl}daily-fees/${id}`);
       const result = response.data.data;
       //   console.log(result);
       if (response.status === 200) {
@@ -112,10 +108,7 @@ export const getDailyStaff = (id) => {
 export const saveDailyStaffs = (data) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post(
-        "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/daily-fees",
-        data
-      );
+      const response = await axios.post("${apiUrl}daily-fees", data);
       console.log(response);
       //   if (response.status === 201) {
       //     dispatch(createDailyStaffs(result));
@@ -133,9 +126,7 @@ export const saveDailyStaffs = (data) => {
 export const deleteDailyStaffs = (id) => {
   return async (dispatch) => {
     try {
-      const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/daily-fees/${id}`
-      );
+      const response = await axios.delete(`${apiUrl}daily-fees/${id}`);
       if (response.status === 204) {
         dispatch(filterDailyStaffs(id));
       }
@@ -153,7 +144,7 @@ export const editDailyStaffs = (id, data) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/daily-fees/${id}?_method=put`,
+        `${apiUrl}daily-fees/${id}?_method=put`,
         data
       );
       console.log(response);
@@ -176,7 +167,7 @@ export const editDailyStaffs = (id, data) => {
 //   return async (dispatch) => {
 //     try {
 //       const response = await axios.get(
-//         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/staffReport?${new URLSearchParams(
+//         `${apiUrl}staffReport?${new URLSearchParams(
 //           query
 //         ).toString()}`
 //       );

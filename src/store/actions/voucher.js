@@ -3,29 +3,27 @@ import {
   SHOW_VOUCHERS,
   FILTER_VOUCHERS,
   ERROR_VOUCHERS,
-
   ADD_ERROR,
   REMOVE_ERROR,
   SET_LOADING,
-  SET_SUCCESS
+  SET_SUCCESS,
 } from "../type";
 import { apiUrl } from "../../constants/url";
 import { serverErrorMessage } from "../../util/messages";
 
-
 export const showVouchers = (vouchers) => ({
   type: SHOW_VOUCHERS,
-  vouchers
+  vouchers,
 });
 
 export const filterVouchers = (id) => ({
   type: FILTER_VOUCHERS,
-  id
+  id,
 });
 
 export const setVoucherErrors = (error) => ({
   type: ERROR_VOUCHERS,
-  error
+  error,
 });
 
 export const getVouchers = (query) => {
@@ -39,14 +37,14 @@ export const getVouchers = (query) => {
       const result = response.data.data.map((voucher) => {
         return {
           ...voucher,
-          key: voucher.id
+          key: voucher.id,
         };
       });
-    //   console.log("rr",result)
+      //   console.log("rr",result)
       if (response.status === 200) {
         dispatch(showVouchers(result));
         dispatch({
-          type: REMOVE_ERROR
+          type: REMOVE_ERROR,
         });
       }
     } catch (error) {
@@ -56,19 +54,18 @@ export const getVouchers = (query) => {
         localStorage.removeItem("jwtToken");
         dispatch({
           type: ADD_ERROR,
-          payload: data.message
+          payload: data.message,
         });
       }
 
       if (status >= 400) {
         dispatch({
           type: ADD_ERROR,
-          payload: serverErrorMessage
+          payload: serverErrorMessage,
         });
       }
     }
     dispatch({ type: SET_LOADING });
-
   };
 };
 
@@ -77,15 +74,13 @@ export const deleteVouchers = (id) => {
     dispatch({ type: SET_SUCCESS, payload: false });
     dispatch({ type: SET_LOADING });
     try {
-      const response = await axios.delete(
-        `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/invoices/${id}`
-      );
-      console.log(response.data.data)
+      const response = await axios.delete(`${apiUrl}invoices/${id}`);
+      console.log(response.data.data);
       if (response.status === 204) {
         dispatch(filterVouchers(id));
         dispatch({ type: SET_SUCCESS, payload: true });
         dispatch({
-          type: REMOVE_ERROR
+          type: REMOVE_ERROR,
         });
       }
     } catch (error) {
@@ -95,14 +90,14 @@ export const deleteVouchers = (id) => {
         localStorage.removeItem("jwtToken");
         dispatch({
           type: ADD_ERROR,
-          payload: data.message
+          payload: data.message,
         });
       }
 
       if (status >= 400) {
         dispatch({
           type: ADD_ERROR,
-          payload: serverErrorMessage
+          payload: serverErrorMessage,
         });
       }
     }
@@ -111,13 +106,12 @@ export const deleteVouchers = (id) => {
   };
 };
 
-
 // export const getItem = (id) => {
 //   return async (dispatch) => {
 //     try {
 //       // console.log(id);
 //       const response = await axios.get(
-//         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}`
+//         `${apiUrl}items/${id}`
 //       );
 //       const result = response.data.data;
 //       // console.log(result)
@@ -138,7 +132,7 @@ export const deleteVouchers = (id) => {
 //   return async (dispatch) => {
 //     try {
 //       const response = await axios.post(
-//         "http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/batchInsert",
+//         "${apiUrl}items/batchInsert",
 //         data
 //       );
 //       // console.log(response.data.data)
@@ -164,7 +158,7 @@ export const deleteVouchers = (id) => {
 //   return async (dispatch) => {
 //     try {
 //       const response = await axios.delete(
-//         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}`
+//         `${apiUrl}items/${id}`
 //       );
 //       // console.log(response)
 //       if (response.status === 204) {
@@ -184,7 +178,7 @@ export const deleteVouchers = (id) => {
 //   return async (dispatch) => {
 //     try {
 //       const response = await axios.post(
-//         `http://organicapi.92134691-30-20190705152935.webstarterz.com/api/v1/items/${id}?_method=put`,
+//         `${apiUrl}items/${id}?_method=put`,
 //         data
 //       );
 //       const result = {
